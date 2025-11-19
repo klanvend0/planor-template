@@ -1,0 +1,5 @@
+{
+  "welcome": "Welcome to Planor App",
+  "supabase_connected": "Supabase Connected",
+  "supabase_not_connected": "Supabase Not Connected"
+}
