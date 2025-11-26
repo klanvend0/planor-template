@@ -10,7 +10,7 @@ A production-ready React Native / Expo template built for speed and scalability.
 - **Backend**: [Supabase](https://supabase.com/) (Auth, Database, Edge Functions)
 - **Internationalization**: [i18n-js](https://github.com/fnando/i18n-js) + [expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)
 - **Analytics**: [PostHog](https://posthog.com/)
-- **Paywalls**: [Superwall](https://superwall.com/)
+- **Paywalls**: [Superwall](https://superwall.com/) _(planned - requires development build)_
 - **Testing**: [Jest](https://jestjs.io/) + [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
 
 ## Getting Started
@@ -38,7 +38,7 @@ EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_KEY=your-anon-key
 EXPO_PUBLIC_POSTHOG_API_KEY=your-posthog-key
 EXPO_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
-EXPO_PUBLIC_SUPERWALL_API_KEY=your-superwall-key
+# EXPO_PUBLIC_SUPERWALL_API_KEY=your-superwall-key  # Optional - for production builds
 ```
 
 ### 3. Supabase Setup

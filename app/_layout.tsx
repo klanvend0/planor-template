@@ -13,16 +13,11 @@ export {
 } from 'expo-router';
 
 import { posthog } from '@/lib/posthog';
-import { configureSuperwall } from '@/lib/superwall';
+// import { configureSuperwall } from '@/lib/superwall'; // Disabled - doesn't work with Expo Go
 import { PostHogProvider } from 'posthog-react-native';
-import { useEffect } from 'react';
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
-
-  useEffect(() => {
-    configureSuperwall();
-  }, []);
 
   return (
     <PostHogProvider client={posthog}>

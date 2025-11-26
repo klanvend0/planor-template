@@ -45,7 +45,6 @@
     "@rn-primitives/toggle-group": "^1.2.0",
     "@rn-primitives/tooltip": "^1.2.0",
     "@supabase/supabase-js": "^2.83.0",
-    "@superwall/react-native-superwall": "^2.1.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "^54.0.0",
