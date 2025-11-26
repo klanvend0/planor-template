@@ -3,15 +3,16 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "setup": "node scripts/setup.js",
     "dev": "expo start -c",
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
     "supabase:login": "npx supabase login",
-    "supabase:init": "npx supabase init",
     "supabase:link": "npx supabase link",
     "supabase:gen-types": "npx supabase gen types typescript --linked > lib/database.types.ts",
+    "supabase:migration:new": "npx supabase migration new",
     "supabase:pull": "npx supabase db pull",
     "supabase:push": "npx supabase db push",
     "test": "jest"
