@@ -1,199 +1,202 @@
 # OAuth Setup Guide
 
-This guide explains how to configure Google Sign-In and Apple Sign-In for your Planor app.
+This guide explains how to configure Google Sign-In and Apple Sign-In for your app. Follow each step carefully.
 
 ## Prerequisites
 
-Before setting up OAuth, ensure you have:
+Before starting, ensure you have:
 
 1. A Supabase project with Auth enabled
-2. Access to Google Cloud Console (for Google Sign-In)
-3. Access to Apple Developer Portal (for Apple Sign-In)
+2. Access to [Google Cloud Console](https://console.cloud.google.com/) (for Google Sign-In)
+3. Access to [Apple Developer Portal](https://developer.apple.com/) (for Apple Sign-In, requires $99/year membership)
 
 ---
 
 ## Google Sign-In Setup
 
-### 1. Create Google Cloud Project
+### Step 1: Create Google Cloud Project
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
 3. Enable the **Google+ API** or **Google Identity Services**
 
-### 2. Configure OAuth Consent Screen
+### Step 2: Configure OAuth Consent Screen
 
 1. Navigate to **APIs & Services > OAuth consent screen**
-2. Choose **External** user type (or Internal for G Suite)
+2. Choose **External** user type
 3. Fill in the required fields:
-   - App name
-   - User support email
-   - Developer contact information
+   - App name: Your app name
+   - User support email: Your email
+   - Developer contact information: Your email
 4. Add scopes: `email`, `profile`, `openid`
 5. Add test users if in testing mode
+6. Click **Save and Continue**
 
-### 3. Create OAuth 2.0 Client ID
+### Step 3: Create OAuth 2.0 Client ID
 
 1. Navigate to **APIs & Services > Credentials**
 2. Click **Create Credentials > OAuth client ID**
-3. Select **Web Application**:
-   - Name: `Planor App`
-   - Authorized JavaScript origins:
-     - `https://<your-project-ref>.supabase.co`
-   - Authorized redirect URIs:
-     - `https://<your-project-ref>.supabase.co/auth/v1/callback`
-4. Copy the **Client ID** and **Client Secret**
+3. Select **Web Application**
+4. Fill in:
+   - **Name**: `Your App Name`
+   - **Authorized JavaScript origins**: `https://<your-project-ref>.supabase.co`
+   - **Authorized redirect URIs**: `https://<your-project-ref>.supabase.co/auth/v1/callback`
+5. Click **Create**
+6. Copy the **Client ID** and **Client Secret**
 
-> **Note:** Replace `<your-project-ref>` with your Supabase project reference (found in your Supabase dashboard URL).
+> **Note:** Find your `<your-project-ref>` in your Supabase Dashboard URL (e.g., `abcdefghijkl` from `https://abcdefghijkl.supabase.co`)
 
-### 4. Configure Supabase
+### Step 4: Configure Supabase Google Provider
 
-1. Go to your Supabase Dashboard
-2. Navigate to **Authentication > Providers**
-3. Enable **Google**
-4. Add your **Google Client ID** and **Client Secret**
-5. Save the configuration
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project
+3. Navigate to **Authentication > Providers**
+4. Find **Google** and click to enable
+5. Enter your **Client ID** and **Client Secret** from Step 3
+6. Click **Save**
 
-### 5. Configure Supabase Redirect URLs
+### Step 5: Configure Supabase Redirect URLs
 
 1. Go to **Authentication > URL Configuration**
 2. Set **Site URL** to: `__APP_SLUG__://`
 3. Add to **Redirect URLs**:
    - `__APP_SLUG__://auth/callback`
-   - `__APP_SLUG__://**` (wildcard for flexibility)
+4. Click **Save**
 
 ---
 
-## Apple Sign-In Setup
+## Apple Sign-In Setup (iOS Only)
 
-### 1. Apple Developer Account Requirements
+> **Note:** Apple Sign-In works natively on iOS devices only. Android users will not see the Apple Sign-In button.
 
-- Active Apple Developer Program membership ($99/year)
-- Access to [Apple Developer Portal](https://developer.apple.com/)
+### Step 1: Create App ID with Sign In with Apple
 
-### 2. Enable Sign In with Apple
+1. Go to [Apple Developer Portal](https://developer.apple.com/)
+2. Navigate to **Certificates, Identifiers & Profiles**
+3. Select **Identifiers** from the sidebar
+4. Click **+** to create a new identifier
+5. Select **App IDs** and click **Continue**
+6. Select **App** and click **Continue**
+7. Fill in:
+   - **Description**: Your app name
+   - **Bundle ID**: `__BUNDLE_ID__` (Explicit)
+8. Scroll down to **Capabilities**
+9. Check ✅ **Sign In with Apple**
+10. Click **Continue**, then **Register**
 
-1. Go to **Certificates, Identifiers & Profiles**
-2. Select **Identifiers**
-3. Select your App ID or create one
-4. Enable **Sign In with Apple** capability
-5. Configure the capability:
-   - Enable as Primary App ID
-   - Configure domains and return URLs (for web)
+### Step 2: Create a Key for Apple Sign-In
 
-### 3. Create a Service ID (for Android/Web support)
-
-1. Go to **Identifiers > Service IDs**
-2. Click **+** to create a new Service ID
-3. Fill in:
-   - Description: `Planor App Sign-In`
-   - Identifier: `__BUNDLE_ID__.signin` (example)
-4. Enable **Sign In with Apple**
-5. Configure:
-   - Domains: Your Supabase project URL domain
-   - Return URLs: `https://your-project.supabase.co/auth/v1/callback`
-
-### 4. Create a Key for Apple Sign-In
-
-1. Go to **Keys**
+1. Go to **Keys** in the sidebar
 2. Click **+** to create a new key
-3. Name: `Planor App Sign-In Key`
-4. Enable **Sign In with Apple**
-5. Configure and download the key file (`.p8`)
-6. Note the **Key ID**
+3. Fill in:
+   - **Key Name**: `Your App Sign-In Key`
+4. Check ✅ **Sign In with Apple**
+5. Click **Configure** next to Sign In with Apple
+6. Select your **Primary App ID** (the one you created in Step 1)
+7. Click **Save**, then **Continue**, then **Register**
+8. **Download** the key file (`.p8`) - you can only download it once!
+9. Note the **Key ID** shown on the page
 
-### 5. Configure Supabase
+### Step 3: Generate Apple Client Secret
 
-1. Go to your Supabase Dashboard
+Apple requires a JWT client secret for OAuth. Use the provided script:
+
+```bash
+npm run generate:apple-secret
+```
+
+The script will ask for:
+
+- **Team ID**: Found in Apple Developer Portal (top right, under your name)
+- **Key ID**: From Step 2
+- **Service ID**: Your bundle ID (e.g., `__BUNDLE_ID__`)
+- **Path to .p8 file**: The key file you downloaded
+
+Copy the generated secret for the next step.
+
+### Step 4: Configure Supabase Apple Provider
+
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
 2. Navigate to **Authentication > Providers**
-3. Enable **Apple**
-4. Add:
-   - Service ID (from Service ID creation)
-   - Secret Key (contents of `.p8` file)
-   - Key ID (from key creation)
-   - Team ID (from Apple Developer account)
-5. Save the configuration
+3. Find **Apple** and click to enable
+4. Fill in:
+   - **Client IDs**: `__BUNDLE_ID__`
+   - **Secret Key**: Paste the JWT secret from Step 3
+5. Click **Save**
 
-### 6. App Configuration (Already Done)
+### Step 5: Configure app.json
 
-The `app.json` is already configured with:
+Open `app.json` and ensure these values are set:
 
 ```json
 {
   "expo": {
     "ios": {
       "bundleIdentifier": "__BUNDLE_ID__",
-      "usesAppleSignIn": true
-    },
-    "plugins": ["expo-apple-authentication"]
+      "usesAppleSignIn": true,
+      "appleTeamId": "__APPLE_TEAM_ID__"
+    }
   }
 }
 ```
 
----
+### Step 6: Build for iOS
 
-## URL Redirect Configuration
+Apple Sign-In requires a development build (not Expo Go):
 
-### Supabase Redirect URLs
-
-1. Go to Supabase Dashboard > Authentication > URL Configuration
-2. Set **Site URL** to: `__APP_SLUG__://`
-3. Add to **Redirect URLs**:
-   - `__APP_SLUG__://auth/callback`
-   - `__APP_SLUG__://**`
-
-> **Important:** The deprecated `auth.expo.io` proxy is no longer recommended. Always use your app's custom URL scheme with Supabase's callback flow.
-
----
-
-## Testing OAuth
-
-### Development Testing
-
-1. For iOS, run on a physical device or simulator:
-
-   ```bash
-   npx expo run:ios
-   ```
-
-2. For Android:
-
-   ```bash
-   npx expo run:android
-   ```
-
-3. For web with Google Sign-In:
-   ```bash
-   npx expo start --web
-   ```
-
-### Common Issues
-
-#### Google Sign-In Issues
-
-- **"idpiframe_initialization_failed"**: Clear browser cookies and cache
-- **"popup_closed_by_user"**: Check redirect URIs match exactly
-- **Invalid Client ID**: Verify the client ID is correct and has proper origins configured
-
-#### Apple Sign-In Issues
-
-- **"Invalid client_id"**: Verify Service ID matches Supabase configuration
-- **"Invalid redirect_uri"**: Check redirect URLs in Apple Developer Portal
-- **Only works on iOS**: Native Apple Sign-In requires iOS; use web flow for Android
-
----
-
-## Usage
-
-### Import Components
-
-```tsx
-import { AppleSignInButton, GoogleSignInButton } from '@/components/auth';
+```bash
+npx expo prebuild
+npx expo run:ios --device
 ```
 
-### Basic Usage
+---
+
+## Testing
+
+### iOS Testing
+
+```bash
+# Simulator (Google Sign-In works, Apple Sign-In may not)
+npx expo run:ios
+
+# Physical device (required for Apple Sign-In)
+npx expo run:ios --device
+```
+
+### Android Testing
+
+```bash
+npx expo run:android
+```
+
+> **Note:** Apple Sign-In button will not appear on Android.
+
+---
+
+## Troubleshooting
+
+### Google Sign-In Issues
+
+| Error                         | Solution                                      |
+| ----------------------------- | --------------------------------------------- |
+| Invalid Client ID             | Verify Client ID matches Google Cloud Console |
+| Redirect URI mismatch         | Check Supabase redirect URLs match exactly    |
+| Sign-in cancelled immediately | Check Supabase URL Configuration              |
+
+### Apple Sign-In Issues
+
+| Error                | Solution                                                         |
+| -------------------- | ---------------------------------------------------------------- |
+| Authorization failed | Run on physical device, not simulator                            |
+| Invalid client_id    | Verify Bundle ID matches Apple Developer Portal                  |
+| Secret key expired   | Regenerate with `npm run generate:apple-secret` (every 6 months) |
+
+---
+
+## Usage Example
 
 ```tsx
-import { Alert } from 'react-native';
+import { Alert, View, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { AppleSignInButton, GoogleSignInButton } from '@/components/auth';
 
@@ -209,42 +212,22 @@ function LoginScreen() {
   return (
     <View>
       <GoogleSignInButton onSuccess={handleSuccess} onError={handleError} />
-      <AppleSignInButton onSuccess={handleSuccess} onError={handleError} />
+      {Platform.OS === 'ios' && (
+        <AppleSignInButton onSuccess={handleSuccess} onError={handleError} />
+      )}
     </View>
   );
 }
 ```
 
-### Using Auth Service Directly
-
-```tsx
-import { signInWithApple, signInWithGoogle, signOut } from '@/lib/auth';
-
-// Google Sign-In (opens browser for OAuth)
-const googleResult = await signInWithGoogle();
-if (googleResult.success) {
-  // Session will be handled by onAuthStateChange
-}
-
-// Apple Sign-In (iOS only, native flow)
-const appleResult = await signInWithApple();
-if (appleResult.success) {
-  // Session will be handled by onAuthStateChange
-}
-
-// Sign Out
-const logoutResult = await signOut();
-```
-
 ---
 
-## Security Considerations
+## Security Checklist
 
-1. **Never commit** `.env` files with real credentials
-2. **Use HTTPS** for all redirect URLs in production
-3. **Rotate keys** periodically, especially if compromised
-4. **Enable RLS** (Row Level Security) on all Supabase tables
-5. **Validate tokens** server-side when possible
+- [ ] Never commit `.env` files with real credentials
+- [ ] Enable **Row Level Security (RLS)** on all Supabase tables
+- [ ] Regenerate Apple secret before it expires (every 6 months)
+- [ ] Rotate keys if compromised
 
 ---
 
@@ -252,6 +235,5 @@ const logoutResult = await signOut();
 
 - [Supabase Auth Documentation](https://supabase.com/docs/guides/auth)
 - [Expo Apple Authentication](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)
-- [Expo Auth Session](https://docs.expo.dev/versions/latest/sdk/auth-session/)
 - [Google OAuth Documentation](https://developers.google.com/identity/protocols/oauth2)
 - [Apple Sign-In Documentation](https://developer.apple.com/sign-in-with-apple/)

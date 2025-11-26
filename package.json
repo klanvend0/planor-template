@@ -12,9 +12,6 @@
     "supabase:login": "npx supabase login",
     "supabase:link": "npx supabase link",
     "supabase:gen-types": "npx supabase gen types typescript --linked > lib/database.types.ts",
-    "supabase:migration:new": "npx supabase migration new",
-    "supabase:pull": "npx supabase db pull",
-    "supabase:push": "npx supabase db push",
     "generate:apple-secret": "node scripts/generate_apple_secret.js",
     "test": "jest"
   },
