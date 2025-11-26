@@ -1,5 +1,24 @@
 {
   "welcome": "Welcome to Planor App",
   "supabase_connected": "Supabase Connected",
-  "supabase_not_connected": "Supabase Not Connected"
+  "supabase_not_connected": "Supabase Not Connected",
+  "auth": {
+    "sign_in": "Sign In",
+    "sign_out": "Sign Out",
+    "sign_in_with_google": "Sign in with Google",
+    "sign_in_with_apple": "Sign in with Apple",
+    "sign_in_subtitle": "Sign in to continue to your account",
+    "terms_notice": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "google_error": "An error occurred during Google sign-in",
+    "google_no_token": "No ID token received from Google",
+    "google_not_configured": "Google Sign-In is not configured. Please set EXPO_PUBLIC_GOOGLE_CLIENT_ID.",
+    "apple_error": "An error occurred during Apple sign-in",
+    "apple_not_available": "Apple Sign-In is not available on this device",
+    "sign_in_cancelled": "Sign-in was cancelled",
+    "sign_out_error": "An error occurred during sign-out",
+    "continue_with": "Or continue with"
+  },
+  "protected": {
+    "welcome_back": "Welcome Back!"
+  }
 }

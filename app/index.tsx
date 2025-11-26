@@ -1,56 +1,32 @@
-import { View } from 'react-native';
-import { Text } from '@/components/ui/text';
-import { t } from '@/lib/i18n';
-import { supabase } from '@/lib/supabase';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useColorScheme } from 'nativewind';
-import { MoonStarIcon, SunIcon } from 'lucide-react-native';
-import { Icon } from '@/components/ui/icon';
+/**
+ * Root Index Screen
+ *
+ * This screen is a placeholder that redirects based on auth state.
+ * The actual routing is handled by useProtectedRoute in _layout.tsx.
+ *
+ * @module app/index
+ */
 
-export default function Screen() {
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+import { View, ActivityIndicator } from 'react-native';
+import { Redirect } from 'expo-router';
+import { useAuthStore } from '@/stores/auth_store';
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        // A better check might be auth.getSession()
-        const { error: authError } = await supabase.auth.getUser();
-        if (authError) throw authError;
-        setIsConnected(true);
-      } catch (e) {
-        console.log('Supabase connection check failed:', e);
-        setIsConnected(false);
-      }
-    };
-    checkConnection();
-  }, []);
+export default function IndexScreen() {
+  const { isAuthenticated, isLoading } = useAuthStore();
 
-  return (
-    <View className="flex-1 items-center justify-center gap-5 bg-secondary/30 p-6">
-      <View className="absolute right-6 top-12">
-        <ThemeToggle />
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator size="large" />
       </View>
-      <Text className="text-center text-3xl font-bold">{t('welcome')}</Text>
+    );
+  }
 
-      <View className="rounded-lg border border-border bg-card p-4">
-        <Text className="text-foreground">
-          {isConnected ? t('supabase_connected') : t('supabase_not_connected')}
-        </Text>
-      </View>
-    </View>
-  );
-}
+  // Redirect based on auth state
+  if (isAuthenticated) {
+    return <Redirect href="/(protected)" />;
+  }
 
-function ThemeToggle() {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
-
-  return (
-    <Button onPress={toggleColorScheme} size="icon" variant="ghost" className="rounded-full">
-      <Icon
-        as={colorScheme === 'dark' ? MoonStarIcon : SunIcon}
-        className="size-5 text-foreground"
-      />
-    </Button>
-  );
+  return <Redirect href="/(auth)/login" />;
 }
