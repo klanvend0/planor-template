@@ -46,3 +46,13 @@ cli/
 # Supabase
 .env
 supabase/.temp/
+
+# Bundle
+ios/
+android/
+
+# Builds
+
+*.ipa
+*.apk
+*.adb
