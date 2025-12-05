@@ -11,14 +11,17 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 // Import the static app.json configuration
 import appJson from './app.json';
 
+// Type assertion to ensure orientation is correctly typed
+const baseConfig = appJson.expo as ExpoConfig;
+
 export default ({ config }: ConfigContext): ExpoConfig => {
   return {
-    ...appJson.expo,
+    ...baseConfig,
     // Merge any dynamic config from the default config context
     ...config,
     // Ensure the name and slug are always set from app.json
-    name: appJson.expo.name,
-    slug: appJson.expo.slug,
+    name: baseConfig.name,
+    slug: baseConfig.slug,
     // Extra field for runtime environment variables if needed
     extra: {
       ...config.extra,
