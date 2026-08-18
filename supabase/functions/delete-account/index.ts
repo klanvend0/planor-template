@@ -2,16 +2,24 @@
  * Account deletion.
  *
  * App Store Review Guideline 5.1.1(v) requires an app that creates accounts to
- * let people delete them from inside the app. Deleting the `auth.users` row
- * cascades through every table in the schema, so this is the whole story.
+ * let people delete them from inside the app, and Apple additionally requires
+ * apps using Sign in with Apple to revoke the sign-in grant. So this function
+ * does two things, in order:
+ *
+ *   1. revokes the Apple refresh token stored by `apple-token-exchange`;
+ *   2. deletes the `auth.users` row, which cascades through every table in the
+ *      schema (profile, game state, progress, attempts, XP ledger, subscription
+ *      mirror, AI review log, Apple credentials).
  *
  * The caller proves who they are with their own JWT; the service role key is
- * only used to perform the delete they are entitled to.
+ * only used to perform the deletion they are entitled to.
+ *
+ * Secrets: APPLE_CLIENT_ID, APPLE_CLIENT_SECRET (see apple-token-exchange).
  *
  * @module supabase/functions/delete-account
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -19,11 +27,58 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
+const APPLE_CLIENT_ID = Deno.env.get('APPLE_CLIENT_ID') ?? '';
+const APPLE_CLIENT_SECRET = Deno.env.get('APPLE_CLIENT_SECRET') ?? '';
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
   });
+}
+
+/**
+ * Revoke the learner's Sign in with Apple grant.
+ *
+ * @returns `revoked` when Apple accepted, `skipped` when there is nothing to
+ * revoke or the credentials are not configured, `failed` when Apple refused.
+ */
+async function revokeAppleGrant(
+  admin: SupabaseClient,
+  userId: string
+): Promise<'revoked' | 'skipped' | 'failed'> {
+  if (!APPLE_CLIENT_ID || !APPLE_CLIENT_SECRET) return 'skipped';
+
+  const { data } = await admin
+    .from('apple_credentials')
+    .select('refresh_token')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  const refreshToken = data?.refresh_token;
+  if (!refreshToken) return 'skipped';
+
+  try {
+    const response = await fetch('https://appleid.apple.com/auth/revoke', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: APPLE_CLIENT_ID,
+        client_secret: APPLE_CLIENT_SECRET,
+        token: refreshToken,
+        token_type_hint: 'refresh_token',
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('[delete-account] apple revoke failed', response.status, await response.text());
+      return 'failed';
+    }
+    return 'revoked';
+  } catch (error) {
+    console.error('[delete-account] apple revoke threw', error);
+    return 'failed';
+  }
 }
 
 Deno.serve(async (request: Request) => {
@@ -43,14 +98,16 @@ Deno.serve(async (request: Request) => {
   const user = data?.user;
   if (error || !user) return json({ error: 'unauthorized' }, 401);
 
+  const appleRevocation = await revokeAppleGrant(admin, user.id);
+
   // Every table references auth.users with `on delete cascade`, so one delete
   // removes the profile, game state, progress, attempts, XP ledger, the
-  // subscription mirror and the AI review log.
+  // subscription mirror, the AI review log and the Apple credentials.
   const { error: deleteError } = await admin.auth.admin.deleteUser(user.id);
   if (deleteError) {
     console.error('[delete-account] delete failed', deleteError);
     return json({ error: 'delete_failed' }, 500);
   }
 
-  return json({ ok: true });
+  return json({ ok: true, apple: appleRevocation });
 });

@@ -3,7 +3,6 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "setup": "node scripts/setup.js",
     "dev": "expo start -c --dev-client",
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
@@ -13,7 +12,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "content:check": "node scripts/check_content.mts",
-    "content:seed": "node scripts/generate_content_seed.mts",
     "icon:build": "node scripts/build_icons.mts",
     "supabase:login": "npx supabase login",
     "supabase:link": "npx supabase link",
@@ -25,13 +23,13 @@
     "supabase:secrets:set": "npx supabase secrets set",
     "generate:apple-secret": "node scripts/generate_apple_secret.js",
     "expo:doctor": "npx expo-doctor",
-    "test": "jest"
+    "test": "jest",
+    "content:seed": "node scripts/generate_content_seed.mts"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/jetbrains-mono": "^0.4.1",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "@react-navigation/native": "^7.3.16",
     "@rn-primitives/accordion": "^1.5.2",
     "@rn-primitives/alert-dialog": "^1.5.2",
     "@rn-primitives/aspect-ratio": "^1.5.2",
@@ -108,14 +106,14 @@
     "@babel/core": "^7.29.7",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
-    "@types/react": "~19.2.18",
+    "@types/react": "~19.2.2",
     "jest": "^29.7.0",
     "jest-expo": "~57.0.4",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "react-test-renderer": "19.2.3",
     "supabase": "^2.115.0",
-    "typescript": "~5.9.3"
+    "typescript": "~6.0.3"
   },
   "private": true
 }

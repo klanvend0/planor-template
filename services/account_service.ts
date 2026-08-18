@@ -1,0 +1,34 @@
+/**
+ * Account lifecycle.
+ *
+ * Deleting an account has to happen server-side (it needs the service role key,
+ * which never ships in the bundle) and has to revoke the Sign in with Apple
+ * grant, so it goes through the `delete-account` edge function.
+ *
+ * @module services/account_service
+ */
+
+import { FunctionsHttpError } from '@supabase/supabase-js';
+
+import { AppError } from '@/lib/errors';
+import { supabase } from '@/lib/supabase';
+
+/**
+ * Permanently delete the signed-in learner's account and every row that hangs
+ * off it, then clear the local session.
+ *
+ * @throws {AppError} when the backend refuses; the caller shows a support hint.
+ */
+export async function deleteAccount(): Promise<void> {
+  const { error } = await supabase.functions.invoke('delete-account', { body: {} });
+
+  if (error) {
+    if (error instanceof FunctionsHttpError && error.context.status === 401) {
+      throw new AppError('auth', 'Session expired, sign in again to delete the account');
+    }
+    throw new AppError('unknown', error.message ?? 'Account deletion failed', error);
+  }
+
+  // The auth row is gone; drop the local session so the app returns to sign-in.
+  await supabase.auth.signOut();
+}

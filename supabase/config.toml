@@ -41,3 +41,6 @@ verify_jwt = false
 
 [functions.delete-account]
 verify_jwt = true
+
+[functions.apple-token-exchange]
+verify_jwt = true

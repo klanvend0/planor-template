@@ -13,14 +13,18 @@
  * Secrets:
  *   REVENUECAT_WEBHOOK_SECRET - shared secret, required
  *   REVENUECAT_ENTITLEMENT    - entitlement id to track, default "pro"
+ *   REVENUECAT_API_KEY        - v1 secret key, only needed to resolve TRANSFER
  *
- * The function is deployed with `verify_jwt = false` (see supabase/config.toml)
- * because RevenueCat authenticates with the shared secret, not a Supabase JWT.
+ * Deployment note: RevenueCat sends its shared secret in the `Authorization`
+ * header, which Supabase would otherwise try to parse as a Supabase JWT and
+ * reject before this code runs. The function is therefore declared
+ * `verify_jwt = false` in supabase/config.toml (deploy with `--no-verify-jwt`)
+ * and checks the secret itself.
  *
  * @module supabase/functions/revenuecat-webhook
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2';
 
 type RevenueCatEvent = {
   type?: string;
@@ -52,6 +56,7 @@ type SubscriptionStatus =
 
 const WEBHOOK_SECRET = Deno.env.get('REVENUECAT_WEBHOOK_SECRET') ?? '';
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
+const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -62,7 +67,7 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-/** Constant-time-ish comparison so the secret cannot be probed byte by byte. */
+/** Constant-time comparison so the secret cannot be probed byte by byte. */
 function secretMatches(header: string | null): boolean {
   if (!WEBHOOK_SECRET) return false;
   const provided = (header ?? '').replace(/^Bearer\s+/i, '');
@@ -78,9 +83,9 @@ function secretMatches(header: string | null): boolean {
  * Map an event type onto a status.
  *
  * CANCELLATION deliberately does NOT revoke access: the store keeps serving the
- * subscription until it expires, so only EXPIRATION flips a learner back to free.
- * BILLING_ISSUE maps to `grace` for the same reason — the retry window is still
- * paid time.
+ * subscription until it expires, so only EXPIRATION flips a learner back to
+ * free. BILLING_ISSUE maps to `grace` for the same reason — the retry window is
+ * still paid time, and RevenueCat sends EXPIRATION if the retries fail.
  *
  * @returns The new status, or null when the event carries no status change.
  */
@@ -98,7 +103,8 @@ function statusForEvent(event: RevenueCatEvent): SubscriptionStatus | null {
     case 'TEMPORARY_ENTITLEMENT_GRANT':
       return isTrial ? 'trialing' : 'active';
     case 'CANCELLATION':
-      // Auto-renew was turned off; access continues until the period ends.
+      // Auto-renew was turned off (or a refund was issued); access continues
+      // until the period ends.
       return expired ? 'cancelled' : isTrial ? 'trialing' : 'active';
     case 'BILLING_ISSUE':
       return expired ? 'expired' : 'grace';
@@ -106,8 +112,6 @@ function statusForEvent(event: RevenueCatEvent): SubscriptionStatus | null {
       return 'paused';
     case 'EXPIRATION':
       return 'expired';
-    case 'TRANSFER':
-      return null;
     default:
       return null;
   }
@@ -117,6 +121,80 @@ function statusForEvent(event: RevenueCatEvent): SubscriptionStatus | null {
 function candidateUserIds(event: RevenueCatEvent): string[] {
   const ids = [event.app_user_id, event.original_app_user_id, ...(event.aliases ?? [])];
   return [...new Set(ids.filter((id): id is string => !!id && UUID_PATTERN.test(id)))];
+}
+
+/**
+ * Read a subscriber's live entitlement state from the RevenueCat REST API.
+ *
+ * TRANSFER events carry no entitlement data at all — only the ids involved — so
+ * the receiving account's state has to be fetched rather than guessed.
+ */
+async function fetchSubscriberState(appUserId: string): Promise<{
+  status: SubscriptionStatus;
+  productId: string | null;
+  expiresAt: string | null;
+  periodType: string | null;
+} | null> {
+  if (!REVENUECAT_API_KEY) return null;
+
+  try {
+    const response = await fetch(
+      `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(appUserId)}`,
+      { headers: { Authorization: `Bearer ${REVENUECAT_API_KEY}` } }
+    );
+    if (!response.ok) return null;
+
+    const payload = await response.json();
+    const entitlement = payload?.subscriber?.entitlements?.[ENTITLEMENT];
+    if (!entitlement) {
+      return { status: 'expired', productId: null, expiresAt: null, periodType: null };
+    }
+
+    const expiresAt: string | null = entitlement.expires_date ?? null;
+    const active = !expiresAt || new Date(expiresAt).getTime() > Date.now();
+    const productId: string | null = entitlement.product_identifier ?? null;
+    const periodType: string | null =
+      payload?.subscriber?.subscriptions?.[productId ?? '']?.period_type ?? null;
+
+    return {
+      status: active ? (periodType === 'trial' ? 'trialing' : 'active') : 'expired',
+      productId,
+      expiresAt,
+      periodType,
+    };
+  } catch (error) {
+    console.error('[revenuecat-webhook] subscriber lookup failed', error);
+    return null;
+  }
+}
+
+/**
+ * Decide whether an event should be applied.
+ *
+ * Events are retried and can arrive out of order, so a duplicate is dropped and
+ * a late event never overwrites a newer one.
+ */
+async function shouldApply(
+  client: SupabaseClient,
+  userId: string,
+  event: RevenueCatEvent
+): Promise<{ apply: boolean; reason?: string }> {
+  const { data } = await client
+    .from('subscriptions')
+    .select('rc_event_id, last_event_at')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (!data) return { apply: true };
+  if (event.id && data.rc_event_id === event.id) return { apply: false, reason: 'duplicate_event' };
+
+  if (event.event_timestamp_ms && data.last_event_at) {
+    const incoming = new Date(event.event_timestamp_ms).getTime();
+    const applied = new Date(data.last_event_at).getTime();
+    if (incoming < applied) return { apply: false, reason: 'stale_event' };
+  }
+
+  return { apply: true };
 }
 
 Deno.serve(async (request: Request) => {
@@ -140,8 +218,8 @@ Deno.serve(async (request: Request) => {
   if (!event?.type) return json({ error: 'missing_event' }, 400);
 
   const entitlements = event.entitlement_ids ?? (event.entitlement_id ? [event.entitlement_id] : []);
-  // Events for other entitlements (or none at all, e.g. TEST) are acknowledged
-  // and ignored: returning non-2xx would make RevenueCat retry them forever.
+  // Events for other entitlements (or none, e.g. TEST) are acknowledged and
+  // ignored: a non-2xx would make RevenueCat retry them forever.
   if (entitlements.length > 0 && !entitlements.includes(ENTITLEMENT)) {
     return json({ ok: true, ignored: 'other_entitlement' });
   }
@@ -152,35 +230,57 @@ Deno.serve(async (request: Request) => {
     { auth: { persistSession: false } }
   );
 
-  // A transfer moves the entitlement between accounts: revoke, then grant.
-  if ((event.type ?? '').toUpperCase() === 'TRANSFER') {
+  const eventAt = event.event_timestamp_ms
+    ? new Date(event.event_timestamp_ms).toISOString()
+    : new Date().toISOString();
+  const eventType = (event.type ?? '').toUpperCase();
+
+  // A transfer moves the entitlement between accounts and carries no state, so
+  // the losing ids are revoked and the winning id is re-read from the API.
+  if (eventType === 'TRANSFER' || eventType === 'SUBSCRIBER_ALIAS') {
     const from = (event.transferred_from ?? []).filter((id) => UUID_PATTERN.test(id));
     const to = (event.transferred_to ?? []).filter((id) => UUID_PATTERN.test(id));
 
     if (from.length > 0) {
       await client
         .from('subscriptions')
-        .update({ status: 'expired', will_renew: false, updated_at: new Date().toISOString() })
+        .update({
+          status: 'expired',
+          will_renew: false,
+          rc_event_id: event.id ?? null,
+          last_event_at: eventAt,
+          updated_at: new Date().toISOString(),
+        })
         .in('user_id', from);
     }
-    if (to.length > 0) {
+
+    for (const userId of to) {
+      const state = await fetchSubscriberState(userId);
+      if (!state) {
+        console.warn('[revenuecat-webhook] transfer target left untouched (no API key)', userId);
+        continue;
+      }
       await client.from('subscriptions').upsert(
-        to.map((userId) => ({
+        {
           user_id: userId,
           rc_app_user_id: userId,
           entitlement: ENTITLEMENT,
-          status: 'active' as SubscriptionStatus,
-          product_id: event.product_id ?? null,
-          store: event.store ?? null,
+          product_id: state.productId,
+          status: state.status,
+          period_type: state.periodType,
+          current_period_end: state.expiresAt,
+          will_renew: state.status === 'active' || state.status === 'trialing',
           environment: event.environment ?? null,
-          will_renew: true,
+          rc_event_id: event.id ?? null,
+          last_event_at: eventAt,
           updated_at: new Date().toISOString(),
           raw_event: event as unknown as Record<string, unknown>,
-        })),
+        },
         { onConflict: 'user_id' }
       );
     }
-    return json({ ok: true, handled: 'transfer' });
+
+    return json({ ok: true, handled: 'transfer', from: from.length, to: to.length });
   }
 
   const status = statusForEvent(event);
@@ -192,13 +292,17 @@ Deno.serve(async (request: Request) => {
     return json({ ok: true, ignored: 'anonymous_app_user_id' });
   }
 
+  const userId = userIds[0];
+  const decision = await shouldApply(client, userId, event);
+  if (!decision.apply) return json({ ok: true, ignored: decision.reason });
+
   const expiresAt = event.expiration_at_ms ? new Date(event.expiration_at_ms).toISOString() : null;
   const isTrial = (event.period_type ?? '').toUpperCase() === 'TRIAL';
 
   const { error } = await client.from('subscriptions').upsert(
     {
-      user_id: userIds[0],
-      rc_app_user_id: event.app_user_id ?? userIds[0],
+      user_id: userId,
+      rc_app_user_id: event.app_user_id ?? userId,
       entitlement: ENTITLEMENT,
       product_id: event.product_id ?? null,
       store: event.store ?? null,
@@ -206,10 +310,10 @@ Deno.serve(async (request: Request) => {
       period_type: event.period_type ?? null,
       current_period_end: expiresAt,
       trial_end: isTrial ? expiresAt : null,
-      will_renew: !['EXPIRATION', 'CANCELLATION', 'SUBSCRIPTION_PAUSED'].includes(
-        (event.type ?? '').toUpperCase()
-      ),
+      will_renew: !['EXPIRATION', 'CANCELLATION', 'SUBSCRIPTION_PAUSED'].includes(eventType),
       environment: event.environment ?? null,
+      rc_event_id: event.id ?? null,
+      last_event_at: eventAt,
       updated_at: new Date().toISOString(),
       raw_event: event as unknown as Record<string, unknown>,
     },
@@ -218,9 +322,9 @@ Deno.serve(async (request: Request) => {
 
   if (error) {
     console.error('[revenuecat-webhook] upsert failed', error);
-    // 500 makes RevenueCat retry, which is what we want for a transient failure.
+    // 500 makes RevenueCat retry, which is what a transient failure needs.
     return json({ error: 'persist_failed' }, 500);
   }
 
-  return json({ ok: true, status, user_id: userIds[0] });
+  return json({ ok: true, status, user_id: userId });
 });

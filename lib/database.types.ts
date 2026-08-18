@@ -248,6 +248,10 @@ export interface Database {
         Args: Record<never, never>;
         Returns: number;
       };
+      record_practice: {
+        Args: { p_course_id: string; p_correct: number; p_total: number };
+        Returns: { xp_awarded: number; total_xp: number; daily_xp: number }[];
+      };
       get_mistake_questions: {
         Args: { p_course_id: string; p_limit?: number };
         Returns: { question_id: string; lesson_id: string; missed_at: string }[];

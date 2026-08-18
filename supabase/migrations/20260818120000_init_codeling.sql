@@ -141,6 +141,11 @@ create table if not exists public.subscriptions (
   trial_end timestamptz,
   will_renew boolean not null default false,
   environment text,
+  -- Webhook idempotency: RevenueCat retries events and can deliver them out of
+  -- order, so the last applied event id and its timestamp are kept to drop
+  -- duplicates and refuse to apply an older event over a newer one.
+  rc_event_id text,
+  last_event_at timestamptz,
   updated_at timestamptz not null default now(),
   raw_event jsonb
 );
@@ -660,3 +665,158 @@ grant execute on function public.has_active_subscription(uuid) to authenticated;
 
 revoke execute on function public.settle_hearts(uuid) from public, anon, authenticated;
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
+/**
+ * Records a practice run (mistakes deck or quick review).
+ *
+ * Practice is deliberately cheaper than a lesson: 5 XP per correct answer,
+ * capped at 50 XP a day, so grinding old questions cannot outpace learning new
+ * ones. It never touches hearts, stars or the streak.
+ */
+create or replace function public.record_practice(
+  p_course_id text,
+  p_correct integer,
+  p_total integer
+)
+returns table (xp_awarded integer, total_xp integer, daily_xp integer)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_today date := (now() at time zone 'utc')::date;
+  v_already integer;
+  v_award integer;
+  v_total integer;
+  v_daily integer;
+begin
+  if v_user is null then
+    raise exception 'authentication required' using errcode = '28000';
+  end if;
+  if p_total <= 0 or p_correct < 0 or p_correct > p_total or p_total > 50 then
+    raise exception 'implausible practice payload';
+  end if;
+
+  select coalesce(sum(amount), 0)::integer into v_already
+    from public.xp_events
+    where user_id = v_user and source = 'practice' and earned_on = v_today;
+
+  v_award := greatest(0, least(p_correct * 5, 50 - v_already));
+
+  if v_award > 0 then
+    insert into public.xp_events (user_id, amount, source) values (v_user, v_award, 'practice');
+    update public.game_state
+      set total_xp = total_xp + v_award, updated_at = now()
+      where user_id = v_user;
+  end if;
+
+  select gs.total_xp into v_total from public.game_state gs where gs.user_id = v_user;
+  select coalesce(sum(amount), 0)::integer into v_daily
+    from public.xp_events where user_id = v_user and earned_on = v_today;
+
+  return query select v_award, coalesce(v_total, 0), v_daily;
+end;
+$$;
+
+grant execute on function public.record_practice(text, integer, integer) to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- AI grading quota
+-- ---------------------------------------------------------------------------
+
+/**
+ * Rolling quota for AI-graded explanations.
+ *
+ * Counting rows in `ai_reviews` would let a scripted client fire many requests
+ * before the first one is logged, so the slot is claimed atomically here before
+ * any tokens are spent. Edge function isolates are ephemeral and horizontally
+ * scaled, so an in-memory limiter would not hold.
+ */
+create table if not exists public.ai_review_quota (
+  user_id uuid not null references auth.users (id) on delete cascade,
+  window_start timestamptz not null,
+  used integer not null default 0 check (used >= 0),
+  primary key (user_id, window_start)
+);
+
+alter table public.ai_review_quota enable row level security;
+
+create policy "quota is readable by its owner"
+  on public.ai_review_quota for select to authenticated
+  using (auth.uid() = user_id);
+
+/**
+ * Claim one AI grading slot for a user.
+ *
+ * @param p_user_id  The learner asking for feedback.
+ * @param p_hourly   Maximum gradings inside the current hour.
+ * @param p_daily    Maximum gradings inside the current day.
+ * @returns True when the slot was granted; false when a limit is reached.
+ */
+create or replace function public.claim_ai_review(
+  p_user_id uuid,
+  p_hourly integer default 30,
+  p_daily integer default 200
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_hour timestamptz := date_trunc('hour', now());
+  v_day timestamptz := date_trunc('day', now());
+  v_hour_used integer;
+  v_day_used integer;
+begin
+  insert into public.ai_review_quota (user_id, window_start, used)
+  values (p_user_id, v_hour, 1)
+  on conflict (user_id, window_start)
+    do update set used = public.ai_review_quota.used + 1
+  returning used into v_hour_used;
+
+  insert into public.ai_review_quota (user_id, window_start, used)
+  values (p_user_id, v_day, 1)
+  on conflict (user_id, window_start)
+    do update set used = public.ai_review_quota.used + 1
+  returning used into v_day_used;
+
+  if v_hour_used > p_hourly or v_day_used > p_daily then
+    -- Give the slot back so a rejected request does not consume quota.
+    update public.ai_review_quota set used = greatest(0, used - 1)
+      where user_id = p_user_id and window_start in (v_hour, v_day);
+    return false;
+  end if;
+
+  delete from public.ai_review_quota
+    where user_id = p_user_id and window_start < now() - interval '2 days';
+
+  return true;
+end;
+$$;
+
+revoke execute on function public.claim_ai_review(uuid, integer, integer) from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Sign in with Apple token revocation
+-- ---------------------------------------------------------------------------
+
+/**
+ * Apple refresh tokens, needed to revoke the Sign in with Apple grant when a
+ * learner deletes their account — Apple requires the app to call the REST
+ * revoke endpoint, and Supabase does not do it for us.
+ *
+ * Deliberately unreachable from the `authenticated` role: only the edge
+ * functions (service role) ever read or write this table.
+ */
+create table if not exists public.apple_credentials (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  refresh_token text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.apple_credentials enable row level security;
+
+comment on table public.apple_credentials is
+  'Service-role only. Apple refresh tokens used solely to revoke the sign-in grant on account deletion.';

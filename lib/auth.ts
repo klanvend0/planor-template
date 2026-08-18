@@ -1,93 +1,95 @@
 /**
- * Social Authentication Service
+ * Social authentication.
  *
- * This module provides Google and Apple OAuth authentication functions
- * that integrate with Supabase Auth. It uses Expo's official packages
- * for authentication flows:
- * - expo-apple-authentication for Apple Sign-In (iOS)
- * - expo-auth-session with expo-web-browser for Google Sign-In
+ * Google and Apple sign-in on top of Supabase Auth, using Expo's own packages
+ * (`expo-apple-authentication`, `expo-auth-session`, `expo-web-browser`).
+ *
+ * Apple-specific constraint: the app must be able to revoke the Sign in with
+ * Apple grant when an account is deleted, which requires a refresh token that
+ * can only be obtained from the one-time `authorizationCode` handed over at
+ * sign-in. That code is therefore posted to the `apple-token-exchange` edge
+ * function immediately, before it expires.
  *
  * @module lib/auth
  */
 
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { makeRedirectUri } from 'expo-auth-session';
 import * as Crypto from 'expo-crypto';
 import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri } from 'expo-auth-session';
 
 import { supabase } from './supabase';
 
-// Ensure WebBrowser sessions are completed properly on Android
+// Ensure WebBrowser sessions are completed properly on Android.
 WebBrowser.maybeCompleteAuthSession();
 
-/**
- * Type definitions for authentication result
- */
+/** URL scheme registered in app.json; also used for the OAuth redirect. */
+const APP_SCHEME = 'codeling';
+
 export type AuthResult = {
   success: boolean;
+  /** Machine-readable reason, for mapping to a translated message. */
+  reason?: 'cancelled' | 'unavailable' | 'failed';
   error?: string;
 };
 
 /**
- * Generate a random nonce for PKCE security
- * Used to prevent replay attacks in OAuth flows
+ * Generate a random nonce for the OAuth flow.
  *
- * @returns A random nonce string
+ * @returns A 32-character hex nonce.
  */
 export async function generateNonce(): Promise<string> {
   const randomBytes = await Crypto.getRandomBytesAsync(16);
-  const nonce = Array.from(new Uint8Array(randomBytes))
+  return Array.from(new Uint8Array(randomBytes))
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
-  return nonce;
 }
 
 /**
- * Hash a nonce using SHA-256
- * Required for Apple Sign-In to verify the nonce
- *
- * @param nonce - The raw nonce string to hash
- * @returns SHA-256 hash of the nonce
+ * SHA-256 hash of a nonce, which is what Apple is given so the raw value can be
+ * used to prove the token belongs to this request.
  */
 export async function hashNonce(nonce: string): Promise<string> {
-  const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, nonce);
-  return hash;
+  return Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, nonce);
+}
+
+/** The redirect URI Supabase sends the browser back to. */
+export function getRedirectUri(): string {
+  return makeRedirectUri({ scheme: APP_SCHEME, path: 'auth/callback' });
 }
 
 /**
- * Apple Sign-In handler for iOS
+ * Hand Apple's one-time authorization code to the backend, which exchanges it
+ * for a refresh token used only to revoke the grant on account deletion.
  *
- * Performs native Apple Sign-In using expo-apple-authentication
- * and authenticates with Supabase using the returned ID token.
+ * Failures are logged and swallowed: sign-in has already succeeded, and the
+ * worst case is that deletion cannot revoke the Apple grant.
+ */
+async function storeAppleAuthorizationCode(authorizationCode: string): Promise<void> {
+  try {
+    const { error } = await supabase.functions.invoke('apple-token-exchange', {
+      body: { authorizationCode },
+    });
+    if (error) console.warn('[auth] apple token exchange failed', error.message);
+  } catch (error) {
+    console.warn('[auth] apple token exchange threw', error);
+  }
+}
+
+/**
+ * Native Apple Sign-In (iOS).
  *
- * @returns AuthResult indicating success or failure with error message
- *
- * @example
- * ```ts
- * const result = await signInWithApple();
- * if (result.success) {
- *   // Navigate to home screen
- * } else {
- *   console.error(result.error);
- * }
- * ```
+ * @returns Whether the learner is now signed in, and why not if they are not.
  */
 export async function signInWithApple(): Promise<AuthResult> {
   try {
-    // Check if Apple authentication is available
-    const isAvailable = await AppleAuthentication.isAvailableAsync();
-    if (!isAvailable) {
-      return {
-        success: false,
-        error: 'Apple Sign-In is not available on this device',
-      };
+    if (!(await AppleAuthentication.isAvailableAsync())) {
+      return { success: false, reason: 'unavailable', error: 'Apple Sign-In is unavailable' };
     }
 
-    // Generate a nonce for security
     const rawNonce = await generateNonce();
     const hashedNonce = await hashNonce(rawNonce);
 
-    // Perform Apple Sign-In request
     const credential = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -96,86 +98,40 @@ export async function signInWithApple(): Promise<AuthResult> {
       nonce: hashedNonce,
     });
 
-    // Verify we received an identity token
     if (!credential.identityToken) {
-      return {
-        success: false,
-        error: 'No identity token received from Apple',
-      };
+      return { success: false, reason: 'failed', error: 'No identity token received from Apple' };
     }
 
-    // Sign in with Supabase using the Apple ID token
-    const { data, error } = await supabase.auth.signInWithIdToken({
+    const { error } = await supabase.auth.signInWithIdToken({
       provider: 'apple',
       token: credential.identityToken,
       nonce: rawNonce,
     });
 
-    if (error) {
-      console.error('Supabase Apple sign-in error:', error);
-      return {
-        success: false,
-        error: error.message,
-      };
+    if (error) return { success: false, reason: 'failed', error: error.message };
+
+    if (credential.authorizationCode) {
+      await storeAppleAuthorizationCode(credential.authorizationCode);
     }
 
-    console.log('Apple sign-in successful:', data.user?.email);
     return { success: true };
   } catch (error) {
-    // Handle user cancellation gracefully
-    if (error instanceof Error && error.message.includes('cancelled')) {
-      return {
-        success: false,
-        error: 'Sign-in was cancelled',
-      };
+    const appleError = error as { code?: string; message?: string };
+    if (
+      appleError.code === 'ERR_REQUEST_CANCELED' ||
+      appleError.message?.toLowerCase().includes('cancel')
+    ) {
+      return { success: false, reason: 'cancelled' };
     }
-
-    // Check for AppleAuthenticationError with code property
-    const appleError = error as { code?: string };
-    if (appleError.code === 'ERR_REQUEST_CANCELED') {
-      return {
-        success: false,
-        error: 'Sign-in was cancelled',
-      };
-    }
-
-    console.error('Apple sign-in error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
-    };
+    console.error('[auth] apple sign-in failed', error);
+    return { success: false, reason: 'failed', error: appleError.message ?? 'Unknown error' };
   }
 }
 
 /**
- * Generate the redirect URI for OAuth flows
- * This creates a proper URI based on the app's scheme and platform
+ * Google sign-in through Supabase's OAuth flow in an in-app browser.
  *
- * @returns The redirect URI string
- */
-export function getRedirectUri(): string {
-  return makeRedirectUri({
-    scheme: '__APP_SLUG__',
-    path: 'auth/callback',
-  });
-}
-
-/**
- * Google Sign-In handler using Supabase OAuth flow
- *
- * Opens a web browser for Google authentication through Supabase.
- * After successful authentication, Supabase redirects back to the app
- * using the configured deep link (__APP_SLUG__://auth/callback).
- *
- * @returns AuthResult indicating success or failure with error message
- *
- * @example
- * ```ts
- * const result = await signInWithGoogle();
- * if (result.success) {
- *   // User will be redirected, session handled by Supabase
- * }
- * ```
+ * @returns Whether the learner is now signed in, and why not if they are not.
  */
 export async function signInWithGoogle(): Promise<AuthResult> {
   try {
@@ -183,164 +139,81 @@ export async function signInWithGoogle(): Promise<AuthResult> {
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo,
-        skipBrowserRedirect: true,
-      },
+      options: { redirectTo, skipBrowserRedirect: true },
     });
 
-    if (error) {
-      console.error('Supabase Google OAuth error:', error);
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-
+    if (error) return { success: false, reason: 'failed', error: error.message };
     if (!data.url) {
-      return {
-        success: false,
-        error: 'No OAuth URL returned from Supabase',
-      };
+      return { success: false, reason: 'failed', error: 'No OAuth URL returned from Supabase' };
     }
 
-    console.log('Opening OAuth URL:', data.url);
-    console.log('Redirect URI:', redirectTo);
-
-    // Open the OAuth URL in a web browser
     const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
 
-    console.log('OAuth result:', result.type, result.type === 'success' ? (result as any).url : '');
-
-    if (result.type === 'success' && result.url) {
-      // Extract tokens from the callback URL
-      // The URL format is: __APP_SLUG__://auth/callback#access_token=...&refresh_token=...
-      const url = result.url;
-      const hashParams = url.split('#')[1];
-
-      if (hashParams) {
-        const params = new URLSearchParams(hashParams);
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
-
-        if (accessToken && refreshToken) {
-          // Set the session with the tokens
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-
-          if (sessionError) {
-            console.error('Error setting session:', sessionError);
-            return {
-              success: false,
-              error: sessionError.message,
-            };
-          }
-
-          console.log('Google sign-in successful, session set');
-          return { success: true };
-        }
-      }
-
-      // Check for error in URL
-      const errorDesc = url.includes('error_description=')
-        ? decodeURIComponent(url.split('error_description=')[1]?.split('&')[0] || '')
-        : null;
-
-      if (errorDesc) {
-        return {
-          success: false,
-          error: errorDesc,
-        };
-      }
-
-      return {
-        success: false,
-        error: 'No authentication tokens received',
-      };
-    } else if (result.type === 'cancel' || result.type === 'dismiss') {
-      return {
-        success: false,
-        error: 'Sign-in was cancelled',
-      };
+    if (result.type === 'cancel' || result.type === 'dismiss') {
+      return { success: false, reason: 'cancelled' };
+    }
+    if (result.type !== 'success' || !result.url) {
+      return { success: false, reason: 'failed', error: 'Authentication did not complete' };
     }
 
+    // Supabase returns the session in the URL fragment:
+    // codeling://auth/callback#access_token=...&refresh_token=...
+    const fragment = result.url.split('#')[1];
+    if (fragment) {
+      const params = new URLSearchParams(fragment);
+      const accessToken = params.get('access_token');
+      const refreshToken = params.get('refresh_token');
+
+      if (accessToken && refreshToken) {
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (sessionError) {
+          return { success: false, reason: 'failed', error: sessionError.message };
+        }
+        return { success: true };
+      }
+    }
+
+    const description = new URLSearchParams(result.url.split('?')[1] ?? '').get('error_description');
     return {
       success: false,
-      error: 'Authentication failed',
+      reason: 'failed',
+      error: description ?? 'No authentication tokens received',
     };
   } catch (error) {
-    console.error('Google sign-in error:', error);
+    console.error('[auth] google sign-in failed', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      reason: 'failed',
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
 
 /**
- * Google Sign-In with ID Token (for native flows)
+ * Sign in with a Google ID token obtained by a native SDK.
  *
- * Used when you already have a Google ID token from a native SDK.
- *
- * @param idToken - The Google ID token from the auth response
- * @param accessToken - Optional access token for additional API calls
- * @returns AuthResult indicating success or failure with error message
+ * Kept for a future native Google Sign-In flow; unused by the current UI.
  */
 export async function signInWithGoogleToken(
   idToken: string,
   accessToken?: string
 ): Promise<AuthResult> {
-  try {
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token: idToken,
-      access_token: accessToken,
-    });
+  const { error } = await supabase.auth.signInWithIdToken({
+    provider: 'google',
+    token: idToken,
+    access_token: accessToken,
+  });
 
-    if (error) {
-      console.error('Supabase Google sign-in error:', error);
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-
-    console.log('Google sign-in successful:', data.user?.email);
-    return { success: true };
-  } catch (error) {
-    console.error('Google sign-in error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
-    };
-  }
+  if (error) return { success: false, reason: 'failed', error: error.message };
+  return { success: true };
 }
 
-/**
- * Sign out the current user from Supabase
- *
- * @returns AuthResult indicating success or failure
- */
+/** Sign the learner out of Supabase. */
 export async function signOut(): Promise<AuthResult> {
-  try {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error('Sign-out error:', error);
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error('Sign-out error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
-    };
-  }
+  const { error } = await supabase.auth.signOut();
+  if (error) return { success: false, reason: 'failed', error: error.message };
+  return { success: true };
 }

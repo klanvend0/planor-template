@@ -157,6 +157,32 @@ export async function completeLesson(params: {
   };
 }
 
+/**
+ * Record a practice run over old questions.
+ *
+ * Worth less than a lesson on purpose (5 XP per correct answer, 50 XP a day) so
+ * grinding the mistakes deck cannot replace learning something new.
+ */
+export async function recordPractice(params: {
+  courseId: CourseId;
+  correct: number;
+  total: number;
+}): Promise<{ xpAwarded: number; totalXp: number; dailyXp: number }> {
+  const { data, error } = await supabase.rpc('record_practice', {
+    p_course_id: params.courseId,
+    p_correct: params.correct,
+    p_total: params.total,
+  });
+  if (error) throw toAppError(error);
+
+  const row = data?.[0];
+  return {
+    xpAwarded: row?.xp_awarded ?? 0,
+    totalXp: row?.total_xp ?? 0,
+    dailyXp: row?.daily_xp ?? 0,
+  };
+}
+
 /** Refill hearts. Free once per day; unlimited for subscribers. */
 export async function refillHearts(): Promise<number> {
   const { data, error } = await supabase.rpc('refill_hearts');
