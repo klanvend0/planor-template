@@ -83,7 +83,7 @@
         {
           "id": "py-u04-l1-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "easy",
           "prompt": {
             "en": "Write code that calculates 18 divided by 3 and prints the result.",
             "tr": "18'i 3'e bölen ve sonucu yazdıran kod yaz."
@@ -138,7 +138,7 @@
           },
           "sampleAnswer": {
             "en": "It stores a price of 12 and a quantity of 3 in two variables, multiplies them together to get 36, and prints that total.",
-            "tr": "12 fiyatı ve 3 miktarını iki değişkende saklar, onları çarparak 36 elde eder ve bu toplamı yazdırır."
+            "tr": "Fiyatı 12, miktarı 3 olarak iki değişkende saklar, ikisini çarparak 36 sonucunu elde eder ve bu toplamı yazdırır."
           },
           "explanation": {
             "en": "Multiplication combines price and quantity into a total cost. Variables let you store values by name and reuse them in calculations.",
@@ -155,13 +155,13 @@
         "headline": { "en": "// gives whole-number division, % finds the remainder", "tr": "// tam bölme verir, % kalanı bulur" },
         "body": {
           "en": "When you want to divide but keep only the whole-number part, use //. It drops any decimal. The % operator (modulo) gives you the remainder left over after division. These operators are very useful for finding patterns in numbers — for instance, % can tell you if a number is even or odd.",
-          "tr": "Sadece tam sayı kısmı istiyorsan // kullan. Ondalıkları atar. % işleci (modulo) bölmeden sonra kalan miktarını verir. Bu işleçler sayılardaki desenleri bulmak için çok yararlıdır; örneğin % bir sayının tek mi çift mi olduğunu söyleyebilir."
+          "tr": "Bölme yapıp sadece tam sayı kısmını almak istediğinde // kullan; ondalık kısmı atar. % işleci (modulo) ise bölmeden kalan miktarı verir. Bu işleçler sayılardaki desenleri bulmak için çok yararlıdır; örneğin % bir sayının tek mi çift mi olduğunu söyleyebilir."
         },
         "example": {
           "code": "print(17 // 5)\nprint(17 % 5)\nprint(20 % 3)",
           "caption": {
             "en": "17 divided by 5 is 3 with 2 left over (17 // 5 = 3, 17 % 5 = 2).",
-            "tr": "17'yi 5'e bölmek 3 kalıntı 2 verir (17 // 5 = 3, 17 % 5 = 2)."
+            "tr": "17, 5'e bölündüğünde bölüm 3, kalan 2'dir (17 // 5 = 3, 17 % 5 = 2)."
           }
         }
       },
@@ -181,7 +181,7 @@
           "answerId": "a",
           "explanation": {
             "en": "20 divided by 6 is 3 with a remainder (20 / 6 ≈ 3.33, but // drops the decimal part and keeps only 3).",
-            "tr": "20'yi 6'ya bölmek 3 kalıntı verir. // ondalık kısmı atar ve sadece 3'ü tutar."
+            "tr": "20, 6'ya bölündüğünde sonuç yaklaşık 3.33'tür; // ondalık kısmı atar ve sadece tam sayı kısmı olan 3'ü tutar."
           }
         },
         {
@@ -199,7 +199,7 @@
           "answerId": "b",
           "explanation": {
             "en": "25 divided by 7 is 3 with remainder 4 (7 × 3 = 21, and 25 - 21 = 4). The % operator gives you that remainder.",
-            "tr": "25'i 7'ye bölmek 3 kalıntı 4 verir (7 × 3 = 21, ve 25 - 21 = 4). % işleci bu kalanı verir."
+            "tr": "25, 7'ye bölündüğünde bölüm 3, kalan 4'tür (7 × 3 = 21, 25 - 21 = 4). % işleci bu kalanı verir."
           }
         },
         {
@@ -207,17 +207,17 @@
           "type": "fill_blank",
           "difficulty": "easy",
           "prompt": {
-            "en": "Complete the code so it prints 4.",
-            "tr": "Kodu 4 yazdıracak şekilde tamamla."
+            "en": "Complete the code so it prints 7.",
+            "tr": "Kodu 7 yazdıracak şekilde tamamla."
           },
-          "codeTemplate": "print(30 ___ 13)",
+          "codeTemplate": "print(50 ___ 7)",
           "blanks": [
-            { "id": "1", "answer": "%", "distractors": ["//", "/", "-"] }
+            { "id": "1", "answer": "//", "distractors": ["%", "/", "-"] }
           ],
-          "verify": { "stdout": "4\n" },
+          "verify": { "stdout": "7\n" },
           "explanation": {
-            "en": "30 divided by 13 is 2 with remainder 4 (13 × 2 = 26, and 30 - 26 = 4). The % operator finds remainders.",
-            "tr": "30'u 13'e bölmek 2 kalıntı 4 verir. % kalanı bulur."
+            "en": "50 divided by 7 is about 7.14 (50 / 7). The // operator drops the decimal part and keeps only the whole number, 7.",
+            "tr": "50, 7'ye bölündüğünde sonuç yaklaşık 7.14'tür (50 / 7). // ondalık kısmı atar ve sadece tam sayı kısmı olan 7'yi tutar."
           }
         },
         {
@@ -233,7 +233,7 @@
           "verify": { "stdout": "3\n" },
           "explanation": {
             "en": "23 divided by 5 is 4 with remainder 3 (5 × 4 = 20, and 23 - 20 = 3). Use % to calculate remainders.",
-            "tr": "23'ü 5'e bölmek 4 kalıntı 3 verir. Kalanları hesaplamak için % kullan."
+            "tr": "23, 5'e bölündüğünde bölüm 4, kalan 3'tür (5 × 4 = 20, 23 - 20 = 3). Kalanı hesaplamak için % kullan."
           }
         },
         {
@@ -243,11 +243,11 @@
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
           "codeLines": ["x = 19", "print(x / 3)", "print(x // 3)"],
           "buggyLineIndex": 1,
-          "fix": "print(x / 3)",
+          "fix": "print(x // 3)",
           "verify": {},
           "explanation": {
-            "en": "Line 2 uses / instead of //, which gives a decimal result (6.333...) instead of the whole-number division we might expect. It is not wrong by syntax, but wrong for the lesson we are teaching.",
-            "tr": "Satır 2 // yerine / kullanır; ondalık sonuç (6.333...) verir. Sintaks açısından hatalı değil ama dersin konusu için yanlış."
+            "en": "Line 2 uses / instead of //, so it prints a decimal (6.333...) instead of the whole-number result. Fixing it to // gives 6, matching line 3.",
+            "tr": "2. satır // yerine / kullanıyor, bu yüzden ondalık (6.333...) yazdırıyor. // ile düzeltilince satır 3'teki gibi 6 elde edilir."
           }
         },
         {
@@ -259,28 +259,28 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "# Check if age is old enough to vote\nage = 17\nprint(age % 18)",
-            "tr": "# Yaşın oy vermek için yeterli olup olmadığını kontrol et\nage = 17\nprint(age % 18)"
+            "en": "# Check if the number is even\nnumber = 8\nprint(number % 2)",
+            "tr": "# Sayının çift olup olmadığını kontrol et\nnumber = 8\nprint(number % 2)"
           },
           "keyPoints": {
             "en": [
-              "stores age as 17",
-              "calculates the remainder when 17 is divided by 18",
-              "prints that remainder value"
+              "stores the number 8",
+              "calculates the remainder of number divided by 2",
+              "prints 0, since 8 divides evenly with no remainder"
             ],
             "tr": [
-              "yaşı 17 olarak saklar",
-              "17'nin 18'e bölünmesinden kalanı hesaplar",
-              "o kalan değeri yazdırır"
+              "sayıyı 8 olarak saklar",
+              "number'ın 2'ye bölümünden kalanı hesaplar",
+              "kalan 0 olduğu için 0 yazdırır, bu da 8'in çift olduğunu gösterir"
             ]
           },
           "sampleAnswer": {
-            "en": "It stores the age 17, then uses modulo to find the remainder when divided by 18, which is 17 (since 17 is less than 18).",
-            "tr": "Yaş 17'yi saklar, sonra 18'e bölünmeden kalanı bulur; 17 18'den küçük olduğu için kalan 17'dir."
+            "en": "It stores the number 8, computes 8 % 2 to get the remainder after dividing by 2, and prints 0 — a remainder of 0 means the number is even.",
+            "tr": "Sayıyı 8 olarak saklar, 2'ye bölümünden kalanı bulmak için 8 % 2 hesaplar ve 0 yazdırır; kalanın 0 olması sayının çift olduğunu gösterir."
           },
           "explanation": {
-            "en": "The % operator finds remainders. When the first number is smaller than the second (17 < 18), the remainder is just the first number itself.",
-            "tr": "% kalanı bulur. Birinci sayı ikinciden küçük olduğunda (17 < 18), kalan birinci sayının kendisidir."
+            "en": "The % operator finds the remainder after division. A remainder of 0 when dividing by 2 means the number is even; a remainder of 1 means it is odd.",
+            "tr": "% işleci bölümden kalanı bulur. 2'ye bölümde kalan 0 ise sayı çifttir; kalan 1 ise sayı tektir."
           }
         }
       ]
@@ -331,7 +331,7 @@
           "options": [
             { "id": "a", "text": { "en": "14", "tr": "14" } },
             { "id": "b", "text": { "en": "20", "tr": "20" } },
-            { "id": "c", "text": { "en": "8", "tr": "8" } },
+            { "id": "c", "text": { "en": "12", "tr": "12" } },
             { "id": "d", "text": { "en": "9", "tr": "9" } }
           ],
           "answerId": "a",
@@ -384,8 +384,8 @@
           "fix": "print((a + b) ** 2)",
           "verify": {},
           "explanation": {
-            "en": "The code runs without error, but it calculates 10 plus 3 to the power 2 equals 10 plus 9 equals 19, not 10 plus 3 to the power 2 equals 169. The precedence is wrong for the intended calculation.",
-            "tr": "Kod hatasız çalışır ama 10 + (3 üzeri 2) = 10 + 9 = 19 hesaplar; (10 + 3) üzeri 2 = 169 değil. İşlem sırası yapılmak istenenle uyuşmaz."
+            "en": "Exponentiation runs before addition, so a + b ** 2 computes 3 ** 2 = 9 first, then 10 + 9 = 19 — not (a + b) ** 2 = 169. Parentheses force addition first.",
+            "tr": "Üs alma toplamadan önce çalışır; a + b ** 2 önce 3 üzeri 2 = 9'u, sonra 10 + 9 = 19'u hesaplar, (a + b) üzeri 2 = 169 değildir. Önce toplamak için parantez gerekir."
           }
         },
         {
@@ -432,8 +432,8 @@
       "concept": {
         "headline": { "en": "round(), abs() convert numbers; <, >, ==, != compare", "tr": "round(), abs() sayıları dönüştürür; <, >, ==, != karşılaştırır" },
         "body": {
-          "en": "Python has built-in functions to transform numbers: round() smooths a decimal to the nearest integer, and abs() gives the absolute value (distance from zero, always positive). Comparison operators test relationships: <, >, <=, >=, ==, !=. These always return True or False, which is a boolean value.",
-          "tr": "Python sayıları dönüştüren yerleşik fonksiyonlara sahiptir: round() ondalık sayıyı en yakın tamsayıya yuvarlar, abs() mutlak değeri verir. Karşılaştırma işleçleri ilişkileri test eder: <, >, <=, >=, ==, !=. Bunlar her zaman True ya da False döndürür."
+          "en": "Python has built-in functions to transform numbers: round() rounds a decimal to the nearest whole number, and abs() gives the absolute value (distance from zero, always positive). Comparison operators test relationships: <, >, <=, >=, ==, !=. These always return True or False, which is a boolean value.",
+          "tr": "Python sayıları dönüştüren yerleşik fonksiyonlara sahiptir: round() bir ondalık sayıyı en yakın tam sayıya yuvarlar, abs() mutlak değeri (sıfıra olan uzaklığı, her zaman pozitif) verir. Karşılaştırma işleçleri ilişkileri test eder: <, >, <=, >=, ==, !=. Bunlar her zaman True ya da False döndürür."
         },
         "example": {
           "code": "print(round(3.7))\nprint(abs(-5))\nprint(10 > 7)\nprint(10 == 7)",
@@ -458,8 +458,8 @@
           ],
           "answerId": "b",
           "explanation": {
-            "en": "round() rounds 2.6 to the nearest whole number, which is 3. Any decimal from 0.5 and up rounds to the next integer.",
-            "tr": "round() 2.6'yı en yakın tamsayıya yuvarlar; bu 3'tür. 0.5 ve üzeri herhangi bir ondalık sonraki tamsayıya yuvarlanır."
+            "en": "round() rounds to the nearest whole number. 2.6 is closer to 3 than to 2, so it rounds up to 3.",
+            "tr": "round() en yakın tam sayıya yuvarlar. 2.6, 2'den çok 3'e yakın olduğu için yukarı, 3'e yuvarlanır."
           }
         },
         {
@@ -490,28 +490,28 @@
           },
           "codeTemplate": "print(abs(___))",
           "blanks": [
-            { "id": "1", "answer": "-8", "distractors": ["8", "-8.0", "round(-8)"] }
+            { "id": "1", "answer": "-8", "distractors": ["8", "-8.0", "-9"] }
           ],
           "verify": { "stdout": "8\n" },
           "explanation": {
-            "en": "abs() returns the absolute value, which is always positive. abs(-8) is 8, and abs(8) is also 8.",
-            "tr": "abs() mutlak değeri döndürür; her zaman pozitiftir. abs(-8) = 8, abs(8) = 8."
+            "en": "abs() converts a negative number to its positive equivalent. Starting from -8 shows that clearly: abs(-8) equals 8.",
+            "tr": "abs() negatif bir sayıyı pozitif karşılığına çevirir. -8'den başlamak bunu net gösterir: abs(-8) = 8."
           }
         },
         {
           "id": "py-u04-l4-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "hard",
           "prompt": {
-            "en": "Write code that tests whether 20 is greater than 15 and prints the result.",
-            "tr": "20'nin 15'ten büyük olup olmadığını test eden ve sonucu yazdıran kod yaz."
+            "en": "Write code that tests whether abs(-9) is greater than round(3.2) and prints the result.",
+            "tr": "abs(-9)'un round(3.2)'den büyük olup olmadığını test eden ve sonucu yazdıran kod yaz."
           },
-          "expected": "print(20 > 15)",
-          "acceptable": ["print( 20 > 15 )"],
+          "expected": "print(abs(-9) > round(3.2))",
+          "acceptable": ["print( abs(-9) > round(3.2) )"],
           "verify": { "stdout": "True\n" },
           "explanation": {
-            "en": "20 is indeed greater than 15, so the > operator returns True. Comparison operators always return True or False.",
-            "tr": "20 gerçekten 15'ten büyük, bu yüzden > sonuç True'dur. Karşılaştırma işleçleri her zaman True ya da False döner."
+            "en": "abs(-9) evaluates to 9 and round(3.2) evaluates to 3. Functions run before comparison, so this becomes 9 > 3, which is True.",
+            "tr": "abs(-9) sonucu 9, round(3.2) sonucu 3'tür. Fonksiyonlar karşılaştırmadan önce çalışır, yani bu 9 > 3 olur ve sonuç True'dur."
           }
         },
         {
@@ -519,13 +519,13 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["x = -7", "print(abs(x)", "print(x == -7)"],
+          "codeLines": ["x = -7", "print(abs(y))", "print(x == -7)"],
           "buggyLineIndex": 1,
           "fix": "print(abs(x))",
-          "verify": { "raises": "SyntaxError" },
+          "verify": { "raises": "NameError" },
           "explanation": {
-            "en": "The closing parenthesis is missing on the print() call. Python cannot parse this line without it, so it raises a SyntaxError.",
-            "tr": "print() çağrısında kapatma parantezi eksik. Python bunu olmadan ayrıştıramaz; SyntaxError verir."
+            "en": "y is never defined — only x is. Python raises a NameError because it cannot find a variable called y. The fix is to use x instead.",
+            "tr": "y hiç tanımlanmamış, sadece x var. Python y adında bir değişken bulamadığı için NameError verir. Düzeltmesi, y yerine x kullanmaktır."
           }
         },
         {
