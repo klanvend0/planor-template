@@ -284,15 +284,18 @@ export function useLessonSession(
   const finish = useCallback(async () => {
     setIsFinishing(true);
     const correct = firstTryCorrect.current.size;
+    // Read the skipped set rather than the rendered count: skipping the last
+    // question queues a state update that has not landed by the time this runs.
+    const played = Math.max(1, sourceQuestions.length - skipped.current.size);
 
     try {
       if (mode === 'practice') {
         const practice = await recordPractice({
           courseId: location.course.id,
           correct,
-          total,
+          total: played,
         });
-        const score = total === 0 ? 0 : Math.round((correct / total) * 100);
+        const score = Math.round((correct / played) * 100);
         setOutcome({
           totalXp: practice.totalXp,
           xpAwarded: practice.xpAwarded,
@@ -315,7 +318,7 @@ export function useLessonSession(
           unitId: location.unit.id,
           courseId: location.course.id,
           correct,
-          total,
+          total: played,
           baseXp,
         });
         setOutcome(result);
@@ -335,7 +338,6 @@ export function useLessonSession(
     location.unit.id,
     mode,
     sourceQuestions,
-    total,
   ]);
 
   const advance = useCallback(async () => {

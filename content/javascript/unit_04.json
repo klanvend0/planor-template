@@ -4,7 +4,7 @@
   "index": 4,
   "title": { "en": "Making Decisions", "tr": "Kararlar Almak" },
   "description": {
-    "en": "Control program flow with if/else, compare values with ===, combine conditions with && and ||, and use ternary shortcuts.",
+    "en": "Control flow with if/else, compare values with ===, combine conditions with && and ||, and use ternary shortcuts.",
     "tr": "if/else ile akışı kontrol et, === ile karşılaştır, && ve || ile koşulları birleştir, ternary kısayolları kullan."
   },
   "lessons": [
@@ -168,7 +168,7 @@
           "code": "let x = 5;\nconsole.log(x === 5);      // true\nconsole.log(x === \"5\");    // false\nconsole.log(x == \"5\");     // true (confusing!)",
           "caption": {
             "en": "=== is exact; == converts types.",
-            "tr": "=== tam eşlik; == türleri dönüştürür."
+            "tr": "=== tam eşitlik; == türleri dönüştürür."
           }
         }
       },
@@ -419,8 +419,8 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "// Determines discount level\nprice = 100;\nisMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}",
-            "tr": "// İndirim seviyesini belirler\nprice = 100;\nisMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}"
+            "en": "// Determines discount level\nlet price = 100;\nlet isMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}",
+            "tr": "// İndirim seviyesini belirler\nlet price = 100;\nlet isMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}"
           },
           "keyPoints": {
             "en": [
@@ -461,7 +461,7 @@
           "tr": "Ternary operatörü if/else'in kısa versiyonudur: value = condition ? ifTrue : ifFalse. Koşulun doğru veya yanlış olmasına bağlı olarak iki ifadeden birini çalıştırır. Truthiness, JavaScript'te her değerin doğru veya yanlış olarak kabul edilebileceği anlamına gelir: boş metinler, 0, null ve undefined falsy'dir (yanlış gibi davranırlar), boş olmayan metinler ve sıfır dışı sayılar truthy'dir (doğru gibi davranırlar). Bir if koşulunda herhangi bir değeri onu karşılaştırmadan doğrudan kullanabilirsin."
         },
         "example": {
-          "code": "age = 20;\nmessage = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(message);\n\nname = \"Alice\";\nif (name) {\n  console.log(\"Name is set\");  // Runs even without ===\n}",
+          "code": "let age = 20;\nlet message = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(message);\n\nlet name = \"Alice\";\nif (name) {\n  console.log(\"Name is set\");  // Runs even without ===\n}",
           "caption": {
             "en": "Ternary picks a value; truthiness works in if without comparisons.",
             "tr": "Ternary bir değer seçer; truthiness karşılaştırma olmadan if'te çalışır."
@@ -474,7 +474,7 @@
           "type": "multiple_choice",
           "difficulty": "medium",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "age = 25;\nstatus = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(status);",
+          "code": "let age = 25;\nlet status = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(status);",
           "options": [
             { "id": "a", "text": { "en": "Adult", "tr": "Adult" } },
             { "id": "b", "text": { "en": "Minor", "tr": "Minor" } },
@@ -484,7 +484,7 @@
           "answerId": "a",
           "explanation": {
             "en": "The ternary checks if age >= 18 (true), so it picks the first value after the ? which is Adult.",
-            "tr": "Ternary age >= 18 olup olmadığını kontrol eder (doğu), yani ? sonrasındaki ilk değer olan Adult'ı seçer."
+            "tr": "Ternary age >= 18 olup olmadığını kontrol eder (doğru), yani ? sonrasındaki ilk değer olan Adult'u seçer."
           }
         },
         {
@@ -512,7 +512,7 @@
             "en": "Complete the ternary expression to assign High to result if score is more than 80, otherwise Low.",
             "tr": "score 80'den fazlaysa result'a High, aksi takdirde Low atayacak ternary ifadesini tamamla."
           },
-          "codeTemplate": "result = score > 80 ___ \"High\" : \"Low\";",
+          "codeTemplate": "let result = score > 80 ___ \"High\" : \"Low\";",
           "blanks": [{ "id": "1", "answer": "?", "distractors": [":", "?:", "??"] }],
           "explanation": {
             "en": "The ? comes first in a ternary, separating the condition from the true value. The : separates the true value from the false value.",
@@ -524,16 +524,16 @@
           "type": "type_code",
           "difficulty": "hard",
           "prompt": {
-            "en": "Write code that assigns status based on this ternary: if points is at least 100, status is Winner, otherwise Trying.",
-            "tr": "Bu ternary'ye dayalı olarak status'u atayan kodu yaz: points en az 100'se status Winner, aksi takdirde Trying olur."
+            "en": "Write code that assigns status based on this ternary: Winner if points is at least 100, otherwise Trying. Then print status.",
+            "tr": "points en az 100'se status'a Winner, aksi takdirde Trying atayan ternary kodunu yaz, sonra status'u yazdır."
           },
-          "code": "points = 120;",
-          "expected": "status = points >= 100 ? \"Winner\" : \"Trying\";",
-          "acceptable": ["status = (points >= 100) ? \"Winner\" : \"Trying\";"],
-          "verify": { "stdout": "" },
+          "code": "let points = 120;",
+          "expected": "let status = points >= 100 ? \"Winner\" : \"Trying\";\nconsole.log(status);",
+          "acceptable": ["let status = (points >= 100) ? \"Winner\" : \"Trying\";\nconsole.log(status);"],
+          "verify": { "stdout": "Winner\n" },
           "explanation": {
-            "en": "The ternary operator picks between two values based on a condition. This is a short way to assign a value without using if/else.",
-            "tr": "Ternary operatörü bir koşula dayanarak iki değer arasında seçim yapar. Bu if/else kullanmadan bir değer atamak için kısa bir yoldur."
+            "en": "The ternary operator assigns one of two values in a single line, avoiding a longer if/else block; since points 120 is at least 100, status becomes Winner.",
+            "tr": "Ternary operatörü tek satırda iki değerden birini atar ve uzun bir if/else bloğuna gerek kalmaz; points 120 en az 100 olduğundan status Winner olur."
           }
         },
         {
@@ -541,12 +541,16 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["password = \"secret\";", "if (password) {", "  console.log(\"Set\");"],
-          "buggyLineIndex": 2,
-          "fix": "  console.log(\"Set\");\n}",
+          "codeLines": [
+            "let age = 15;",
+            "let label = age >= 18 : \"Adult\" ? \"Minor\";",
+            "console.log(label);"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "let label = age >= 18 ? \"Adult\" : \"Minor\";",
           "explanation": {
-            "en": "The if block is missing its closing brace. Every { needs a matching } at the same indentation level.",
-            "tr": "if bloğunun kapatma süslü parantezi eksik. Her { için aynı girinti seviyesinde eşleşen bir } gerekir."
+            "en": "In a ternary, ? always comes before : (condition ? ifTrue : ifFalse). Swapping their order breaks the syntax and throws a SyntaxError.",
+            "tr": "Ternary'de ? her zaman :'den önce gelir (condition ? ifTrue : ifFalse). Sırasını değiştirmek söz dizimini bozar ve SyntaxError fırlatır."
           }
         },
         {
@@ -558,8 +562,8 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "// Suggests an action based on inventory\ninventory = 5;\nmessage = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}",
-            "tr": "// Envantere dayalı olarak bir eylem önerir\ninventory = 5;\nmessage = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}"
+            "en": "// Suggests an action based on inventory\nlet inventory = 5;\nlet message = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}",
+            "tr": "// Envantere dayalı olarak bir eylem önerir\nlet inventory = 5;\nlet message = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}"
           },
           "keyPoints": {
             "en": [

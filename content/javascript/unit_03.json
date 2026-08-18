@@ -122,7 +122,7 @@
         {
           "id": "js-u03-l1-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "easy",
           "prompt": {
             "en": "Write a line using template literals that prints Good morning, Sam!",
             "tr": "Template literals kullanarak Good morning, Sam! yazdıran satırı yaz."
@@ -333,7 +333,7 @@
     {
       "id": "js-u03-l3",
       "index": 3,
-      "title": { "en": "Math Operators and Order", "tr": "Matematik İşlemleri ve İşlem Sırası" },
+      "title": { "en": "Math Operators and Order", "tr": "Matematik İşlemleri Sırası" },
       "concept": {
         "headline": {
           "en": "Multiply and divide; control order with parentheses",
@@ -513,7 +513,7 @@
           "answerId": "a",
           "explanation": {
             "en": "17 divided by 5 is 3 with remainder 2. The % operator gives the remainder, which is 2.",
-            "tr": "17'yi 5'e böldüğünde 3 çıkıyor 2 kalan. % operatörü kalanı verir, yani 2."
+            "tr": "17'yi 5'e böldüğünde bölüm 3, kalan ise 2'dir. % operatörü kalanı verir, yani 2."
           }
         },
         {
