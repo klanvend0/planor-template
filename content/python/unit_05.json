@@ -4,8 +4,8 @@
   "index": 5,
   "title": { "en": "Making Decisions", "tr": "Kararlar Almak" },
   "description": {
-    "en": "Learn if and else statements to make your code react to different situations with elif chains and boolean logic.",
-    "tr": "Kodunuzun farklı durumlara tepki vermesini sağlamak için if ve else ifadeleri, elif zincirleri ve boolean mantığını öğren."
+    "en": "Learn if/else statements, elif chains, and boolean logic so your code can react to different situations.",
+    "tr": "if/else ifadeleri, elif zincirleri ve and/or/not mantığıyla kodunun farklı durumlara tepki vermesini öğren."
   },
   "lessons": [
     {

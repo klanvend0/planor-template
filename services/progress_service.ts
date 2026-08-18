@@ -211,6 +211,28 @@ export async function fetchLessonProgress(courseId: CourseId): Promise<LessonPro
   }));
 }
 
+/** Every lesson row the learner has, across all courses, for profile stats. */
+export async function fetchAllLessonProgress(): Promise<LessonProgress[]> {
+  const { data, error } = await supabase
+    .from('lesson_progress')
+    .select(
+      'lesson_id, unit_id, course_id, status, best_score, stars, attempts, xp_earned, first_completed_at'
+    );
+  if (error) throw toAppError(error);
+
+  return (data ?? []).map((row) => ({
+    lessonId: row.lesson_id,
+    unitId: row.unit_id,
+    courseId: row.course_id,
+    status: row.status,
+    bestScore: row.best_score,
+    stars: row.stars,
+    attempts: row.attempts,
+    xpEarned: row.xp_earned,
+    firstCompletedAt: row.first_completed_at,
+  }));
+}
+
 /** Question ids the learner got wrong and has not since fixed. */
 export async function fetchMistakeQuestionIds(courseId: CourseId, limit = 20): Promise<string[]> {
   const { data, error } = await supabase.rpc('get_mistake_questions', {
