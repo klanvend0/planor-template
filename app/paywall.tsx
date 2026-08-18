@@ -27,6 +27,7 @@ import { useTranslation } from '@/hooks/use_translation';
 import { track } from '@/lib/analytics';
 import { LINKS, TRIAL_DAYS } from '@/lib/constants';
 import { errorMessageKey } from '@/lib/errors';
+import { localeUpper } from '@/lib/i18n';
 import { openExternal } from '@/lib/links';
 import { packageTrialDays } from '@/services/purchases_service';
 import { cn } from '@/lib/utils';
@@ -64,7 +65,7 @@ function priceKey(
 }
 
 export default function PaywallScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const insets = useSafeAreaInsets();
   const markPaywallSeen = useSettingsStore((state) => state.markPaywallSeen);
 
@@ -214,8 +215,8 @@ export default function PaywallScreen() {
                   accessibilityState={{ selected: isSelected }}
                   onPress={() => setSelectedId(pkg.identifier)}
                   className={cn(
-                    'flex-row items-center gap-4 rounded-2xl border-2 border-border bg-card px-4 py-4',
-                    isSelected && 'border-primary bg-primary/10'
+                    'flex-row items-center gap-4 rounded-xl border-2 border-input bg-card px-4 py-4',
+                    isSelected && 'border-[3px] border-primary bg-primary/10'
                   )}>
                   <View
                     className={cn(
@@ -239,7 +240,7 @@ export default function PaywallScreen() {
                   </View>
 
                   {isAnnual ? (
-                    <View className="rounded-full bg-success/20 px-2.5 py-1">
+                    <View className="rounded-full bg-xp px-2.5 py-1">
                       <Text className="font-strong text-[11px] uppercase tracking-wide text-success">
                         {t('paywall.best_value')}
                       </Text>
@@ -254,7 +255,7 @@ export default function PaywallScreen() {
 
       <View className="gap-3 px-6 pt-2" style={{ paddingBottom: insets.bottom + 12 }}>
         {selected ? (
-          <Text className="text-center text-[13px] leading-5 text-muted-foreground">
+          <Text className="text-center font-mono text-[13px] leading-5 text-accent">
             {eligibleForTrial
               ? t('paywall.trial_line', {
                   days: trialDays,

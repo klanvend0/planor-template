@@ -139,7 +139,9 @@ export function FillBlankView({
                               ? 'border-success bg-success/20'
                               : 'border-destructive bg-destructive/20')
                         )}>
-                        <Text className="font-mono text-[15px]" style={{ color: syntax.plain }}>
+                        <Text
+                          className="font-mono-strong text-[15px]"
+                          style={{ color: syntax.plain }}>
                           {value ?? ' '}
                         </Text>
                       </Pressable>
@@ -157,17 +159,27 @@ export function FillBlankView({
         {bank.map((token, index) => {
           const available = (usedCounts[token] ?? 0) === 0;
           return (
-            <Pressable
+            <View
               key={`${token}-${index}`}
-              disabled={disabled || !available}
-              onPress={() => place(token)}
-              accessibilityRole="button"
-              className={cn(
-                'rounded-xl border-2 border-border bg-card px-3 py-2.5',
-                !available && 'opacity-30'
-              )}>
-              <Text className="font-mono text-[15px] text-foreground">{token}</Text>
-            </Pressable>
+              className={cn('rounded-sm bg-secondary-ledge pb-[3px]', !available && 'pb-0')}>
+              <Pressable
+                disabled={disabled || !available}
+                onPress={() => place(token)}
+                accessibilityRole="button"
+                accessibilityLabel={token}
+                className={cn(
+                  'h-9 items-center justify-center rounded-sm border-2 border-input bg-secondary px-3',
+                  'active:translate-y-[3px]',
+                  // A used chip stays in place so the bank never reflows.
+                  !available && 'opacity-40'
+                )}>
+                <Text
+                  className="font-mono text-[15px] text-secondary-foreground"
+                  maxFontSizeMultiplier={1.4}>
+                  {token}
+                </Text>
+              </Pressable>
+            </View>
           );
         })}
       </View>

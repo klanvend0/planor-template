@@ -70,9 +70,11 @@ export function FeedbackPanel({
 
       <Text className="text-[15px] leading-6 text-foreground">{explanation}</Text>
 
+      {/* After a wrong answer the neutral button leads: the primary action
+          colour never shares a frame with an error state. */}
       <GameButton
         label={continueLabel ?? t('lesson.continue')}
-        variant={isCorrect ? 'success' : 'destructive'}
+        variant={isCorrect ? 'success' : 'secondary'}
         onPress={onContinue}
         busy={busy}
         className="mt-1"

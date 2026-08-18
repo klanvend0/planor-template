@@ -80,7 +80,7 @@ function CodeBlockImpl({
   return (
     <View
       className={cn(
-        'overflow-hidden rounded-xl border border-code-border bg-code',
+        'overflow-hidden rounded-md border-[1.5px] border-code-border bg-code',
         compact ? 'py-2' : 'py-3',
         className
       )}>

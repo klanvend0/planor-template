@@ -334,7 +334,10 @@
     "purchase_cancelled": "Purchase cancelled.",
     "already_pro": "You are already a Pro member.",
     "close": "Not now",
-    "unavailable": "The store is unavailable right now. Please try again later."
+    "unavailable": "The store is unavailable right now. Please try again later.",
+    "period_week": "/ week",
+    "period_month": "/ month",
+    "period_year": "/ year"
   },
   "settings": {
     "title": "Settings",

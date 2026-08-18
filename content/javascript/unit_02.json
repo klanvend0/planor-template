@@ -4,8 +4,8 @@
   "index": 2,
   "title": { "en": "Variables and Types", "tr": "Değişkenler ve Türler" },
   "description": {
-    "en": "Learn to create variables with let and const, understand numbers and strings, check types, convert values, and work with booleans, null, and undefined.",
-    "tr": "let ve const ile değişken oluşturmayı, sayı ve metinleri anlamayı, türleri kontrol etmeyi, değerleri dönüştürmeyi ve boolean, null ile undefined kullanmayı öğren."
+    "en": "Declare variables with let and const, work with numbers and strings, check types with typeof, and use booleans, null, and undefined.",
+    "tr": "let ve const ile değişken tanımlamayı, sayı ve stringlerle çalışmayı, typeof ile tür kontrolünü, boolean, null ve undefined kullanmayı öğren."
   },
   "lessons": [
     {
@@ -14,12 +14,12 @@
       "title": { "en": "let and const", "tr": "let ve const" },
       "concept": {
         "headline": {
-          "en": "let creates a variable you can change, const creates one you cannot",
-          "tr": "let değiştirilebilen bir değişken oluşturur, const ise oluşturmayanı"
+          "en": "let variables can change; const variables cannot",
+          "tr": "let değişkeni değişebilir; const değişkeni değişemez"
         },
         "body": {
           "en": "In JavaScript, let and const both declare variables, but they behave differently. A let variable can be reassigned to a new value at any time. A const variable must be given a value when it is declared, and that value cannot change afterward. You choose const when you want to protect a value from accidental changes, and let when you know it will need to change.",
-          "tr": "JavaScript'te let ve const her ikisi de değişken bildirir ama farklı davranırlar. let değişkeni istediğin zaman yeni bir değerle yeniden atanabilir. const değişkeni bildirilirken bir değer almalı ve o değer sonradan değişemez. Bir değeri yanlışlıktan değişikliğe karşı korumak istediğinde const, değişeceğini bildiğinde ise let seçersin."
+          "tr": "JavaScript'te let ve const her ikisi de değişken bildirir ama farklı davranırlar. let değişkeni istediğin zaman yeni bir değerle yeniden atanabilir. const değişkeni bildirilirken bir değer almalı ve o değer sonradan değişemez. Bir değeri yanlışlıkla değişmesine karşı korumak istediğinde const, değişeceğini bildiğinde ise let seçersin."
         },
         "example": {
           "code": "let age = 25;\nage = 26;\nconst name = \"Alice\";\nconsole.log(age);\nconsole.log(name);",
@@ -77,7 +77,7 @@
             "tr": "Değiştirilebilen bir değişken bildirmek için satırı tamamla, başlangıç değeri 100."
           },
           "codeTemplate": "___ score = 100;",
-          "blanks": [{ "id": "1", "answer": "let", "distractors": ["const", "var", "let score"] }],
+          "blanks": [{ "id": "1", "answer": "let", "distractors": ["const", "var", "int"] }],
           "verify": { "stdout": "" },
           "explanation": {
             "en": "let declares a variable that you can reassign later. const would prevent that, and var is older style.",
@@ -87,31 +87,30 @@
         {
           "id": "js-u02-l1-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "easy",
           "prompt": {
             "en": "Write a line that declares a constant color with the value red.",
             "tr": "red değeri ile bir color sabiti bildiren satırı yaz."
           },
           "expected": "const color = \"red\";",
-          "acceptable": ["const color = 'red';"],
           "verify": { "stdout": "" },
           "explanation": {
-            "en": "const declares a value that will not change. The text red must be in quotes.",
-            "tr": "const değişmeyecek bir değeri bildirir. red metni tırnak içinde olmalı."
+            "en": "const declares a value that will not change. The text red must be in quotes because it is a string, not a keyword.",
+            "tr": "const değişmeyecek bir değeri bildirir. red metni tırnak içinde olmalı çünkü bu bir string, anahtar kelime değil."
           }
         },
         {
           "id": "js-u02-l1-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata vereceği?" },
+          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata verecek?" },
           "codeLines": ["let count = 100;", "console.log(count);", "console.log(cound);"],
           "buggyLineIndex": 2,
           "fix": "console.log(count);",
           "verify": { "raises": "ReferenceError" },
           "explanation": {
             "en": "The variable is named count, but line 3 tries to use cound. JavaScript raises ReferenceError because cound was never declared.",
-            "tr": "Değişken count adında ama satır 3 cound kullanmaya çalışıyor. JavaScript hiç bildirilmediği için ReferenceError verir."
+            "tr": "Değişken count olarak adlandırıldı ama 3. satır cound kullanmaya çalışıyor. cound hiç bildirilmediği için JavaScript ReferenceError verir."
           }
         },
         {
@@ -135,12 +134,12 @@
             "tr": [
               "const principal değişmeyecek bir değer saklar",
               "let balance aynı değerle başlar",
-              "kod o anki balansı yazdırır"
+              "kod o anki bakiyeyi yazdırır"
             ]
           },
           "sampleAnswer": {
             "en": "It sets a constant principal to 1000, copies that value into a changeable variable balance, and prints the balance.",
-            "tr": "Sabit principal'ı 1000'e ayarlar, bu değeri değişebilir balance değişkenine kopyalar ve balansı yazdırır."
+            "tr": "Sabit principal değerini 1000 yapar, bu değeri değişebilen balance değişkenine kopyalar ve güncel bakiyeyi yazdırır."
           },
           "explanation": {
             "en": "const protects the original value, while let allows balance to change independently if needed later.",
@@ -155,12 +154,12 @@
       "title": { "en": "Numbers and Strings", "tr": "Sayılar ve Metinler" },
       "concept": {
         "headline": {
-          "en": "Numbers and strings are different types; operations behave differently on them",
-          "tr": "Sayılar ve metinler farklı türlerdir; işlemler onlarla farklı davranırlar"
+          "en": "Numbers add with +; strings join with + instead",
+          "tr": "Sayılar + ile toplanır; stringler + ile birleşir"
         },
         "body": {
           "en": "In JavaScript, a number is just digits, like 42 or 3.14. A string is text, and must be in quotes, like \"hello\". When you use + with two numbers, JavaScript adds them mathematically. But when you use + with strings, JavaScript glues them together. If you mix a number and a string with +, JavaScript treats the number as text and concatenates them.",
-          "tr": "JavaScript'te sayı sadece rakamlardır, 42 ya da 3.14 gibi. String metin ve tırnak içinde olmalı, \"hello\" gibi. İki sayı ile + kullandığında JavaScript onları matematiksel olarak toplar. Fakat stringler ile + kullandığında JavaScript onları birleştirir. Bir sayı ile stringi + kullanırsan JavaScript sayıyı metin olarak davranır ve birleştirir."
+          "tr": "JavaScript'te sayı sadece rakamlardan oluşur, 42 ya da 3.14 gibi. string ise bir metindir ve tırnak içinde yazılır, \"hello\" gibi. İki sayıyla + kullandığında JavaScript onları matematiksel olarak toplar. Ama iki string'i + ile birleştirdiğinde onları yapıştırır. Bir sayıyla bir string'i + ile birleştirirsen, JavaScript sayıyı metne çevirip stringle birleştirir."
         },
         "example": {
           "code": "const a = 5 + 3;\nconst b = \"5\" + \"3\";\nconst c = 5 + \"3\";\nconsole.log(a);\nconsole.log(b);\nconsole.log(c);",
@@ -185,8 +184,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "The + operator performs addition on numbers. 10 + 5 equals 15.",
-            "tr": "+ operatörü sayılar üzerinde toplama işlemi yapar. 10 + 5 eşittir 15."
+            "en": "The + operator performs addition when both values are numbers. 10 + 5 equals 15, not text.",
+            "tr": "+ operatörü iki değer de sayıyken toplama yapar. 10 + 5 işleminin sonucu 15'tir, metin değil."
           }
         },
         {
@@ -220,7 +219,7 @@
           "verify": { "stdout": "Hello42\n" },
           "explanation": {
             "en": "The + operator joins a string and a number, converting the number to a string. The result is Hello42.",
-            "tr": "+ operatörü string ile sayıyı birleştirir, sayıyı string'e dönüştürerek. Sonuç Hello42'dir."
+            "tr": "+ operatörü, sayıyı string'e dönüştürüp string ile birleştirir. Sonuç Hello42'dir."
           }
         },
         {
@@ -235,8 +234,8 @@
           "acceptable": ["let lucky = 7;"],
           "verify": { "stdout": "" },
           "explanation": {
-            "en": "A number is stored without quotes. Quotes would make it a string instead.",
-            "tr": "Sayı tırnak olmadan saklanır. Tırnak onu string haline getirirdi."
+            "en": "A number is stored without quotes so it stays a number. Quotes would turn 7 into the string \"7\" instead.",
+            "tr": "Sayı tırnaksız saklanır ki sayı olarak kalsın. Tırnak kullanılsaydı 7, \"7\" stringine dönüşürdü."
           }
         },
         {
@@ -284,7 +283,7 @@
           },
           "explanation": {
             "en": "The + operator concatenates strings and converted values, allowing you to build messages from parts.",
-            "tr": "+ operatörü stringleri ve dönüştürülen değerleri birleştirir, parçalardan mesaj oluşturmanıza izin verir."
+            "tr": "+ operatörü stringleri ve dönüştürülen değerleri birleştirir, böylece parçalardan mesaj oluşturabilirsin."
           }
         }
       ]
@@ -295,12 +294,12 @@
       "title": { "en": "typeof and Type Conversion", "tr": "typeof ve Tür Dönüştürme" },
       "concept": {
         "headline": {
-          "en": "Use typeof to check a value's type, and Number() and String() to convert between types",
-          "tr": "Bir değerin türünü kontrol etmek için typeof kullan, türler arasında dönüştürmek için Number() ve String() kullan"
+          "en": "typeof checks a value's type; Number() and String() convert it",
+          "tr": "typeof türü kontrol eder; Number() ve String() dönüştürür"
         },
         "body": {
           "en": "Every value in JavaScript has a type. The typeof operator tells you what it is: \"number\", \"string\", \"boolean\", etc. Sometimes you need to convert one type to another. Number() turns text into a number if it can, and String() turns any value into text. These conversions are useful when you need numbers to do math, or when you need strings to display text.",
-          "tr": "JavaScript'teki her değerin bir türü vardır. typeof operatörü sana ne olduğunu söyler: \"number\", \"string\", \"boolean\" vs. Bazen bir türü başka türe dönüştürmen gerekir. Number() metni sayıya çevirir eğer yapabilirse, String() herhangi bir değeri metne çevirir. Bu dönüştürmeler sayılara ihtiyaç duyduğunda matematiksel işlem yapmak için ya da metne ihtiyaç duyduğunda metin görüntülemek için faydalıdır."
+          "tr": "JavaScript'teki her değerin bir türü vardır. typeof operatörü bu türü sana söyler: \"number\", \"string\", \"boolean\" vb. Bazen bir türü başka bir türe dönüştürmen gerekir. Number() mümkünse metni sayıya çevirir, String() ise herhangi bir değeri metne çevirir. Bu dönüşümler, matematiksel işlem için sayıya ya da ekranda göstermek için metne ihtiyacın olduğunda işine yarar."
         },
         "example": {
           "code": "console.log(typeof 42);\nconsole.log(typeof \"hello\");\nconst str = \"10\";\nconst num = Number(str);\nconsole.log(typeof num);",
@@ -347,7 +346,7 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "The quotes make \"42\" a string, not a number. typeof \"42\" returns \"string\".",
+            "en": "The quotes around 42 make it a string, not a number, so typeof \"42\" returns \"string\" here.",
             "tr": "Tırnaklar \"42\"'yi sayı değil string haline getirir. typeof \"42\" \"string\" döndürür."
           }
         },
@@ -365,8 +364,8 @@
           ],
           "verify": { "stdout": "" },
           "explanation": {
-            "en": "Number() converts text to a number. String() would go the other direction.",
-            "tr": "Number() metni sayıya dönüştürür. String() ters yöne giderdi."
+            "en": "Number() converts text to a number so it can be used in math. String() would do the opposite conversion.",
+            "tr": "Number() metni sayıya dönüştürür, böylece matematikte kullanılabilir. String() ise tam tersini yapardı."
           }
         },
         {
@@ -412,8 +411,8 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını ve neden çalıştığını anlat."
           },
           "code": {
-            "en": "// Combines a number and a string safely\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);",
-            "tr": "// Bir sayı ve stringi güvenle birleştirir\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);"
+            "en": "// Converts the number on purpose before joining\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);",
+            "tr": "// Birleştirmeden önce sayıyı bilerek dönüştürür\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);"
           },
           "keyPoints": {
             "en": [
@@ -423,17 +422,17 @@
             ],
             "tr": [
               "5 sayısını bir değişkende saklar",
-              "String() kullanarak stringhe dönüştürür",
+              "String() kullanarak string'e dönüştürür",
               "bunu \" apples\" ile birleştirerek bir ifade oluşturur"
             ]
           },
           "sampleAnswer": {
-            "en": "It converts the number 5 to a string, then joins it with \" apples\" using +, producing \"5 apples\". String() ensures proper concatenation.",
-            "tr": "5 sayısını string'e dönüştürür, sonra + ile \" apples\" ile birleştirerek \"5 apples\" üretir. String() doğru birleştirmeyi sağlar."
+            "en": "It converts the number 5 to a string, then joins it with \" apples\" using +, producing \"5 apples\". String() makes the conversion explicit.",
+            "tr": "5 sayısını string'e dönüştürür, sonra + ile \" apples\" ile birleştirerek \"5 apples\" üretir. String() dönüşümü açıkça belirtir."
           },
           "explanation": {
-            "en": "Without String(), mixing a number and string with + can give unexpected results. String() makes the intent clear.",
-            "tr": "String() olmadan sayı ile stringi + ile karıştırmak beklenmeyen sonuçlar verebilir. String() amacı açık hale getirir."
+            "en": "JavaScript would convert num automatically here too, but String() spells out the conversion, keeping intent clear even if the code changes later.",
+            "tr": "JavaScript burada num'u zaten otomatik dönüştürürdü, ama String() dönüşümü açıkça belirtir, böylece kod değişse bile amaç net kalır."
           }
         }
       ]
@@ -444,12 +443,12 @@
       "title": { "en": "Booleans, null, and undefined", "tr": "Boolean, null ve undefined" },
       "concept": {
         "headline": {
-          "en": "Booleans are true or false; null and undefined represent empty or missing values",
-          "tr": "Boolean true ya da false; null ve undefined boş ya da eksik değerleri temsil eder"
+          "en": "Booleans are true/false; null and undefined mean no value",
+          "tr": "Boolean true/false'tur; null ve undefined değer yokluğunu belirtir"
         },
         "body": {
-          "en": "A boolean is a value that is either true or false. You use booleans in comparisons and decisions. null is a value you can explicitly assign to mean \"no value here\", intentionally empty. undefined is what JavaScript uses when a variable is declared but never given a value, or a function returns nothing. Both null and undefined represent the absence of a value, but null is intentional while undefined usually means something was not set.",
-          "tr": "Boolean true ya da false olarak bir değerdir. Boolean değerleri karşılaştırmalarda ve kararlar alırken kullanırsın. null, \"burada değer yok\" anlamına gelecek şekilde açıkça atayabileceğin bir değerdir, kasten boş. undefined, bir değişken bildirildiği zaman ama hiç değer verilmediğinde ya da bir fonksiyon hiçbir şey döndürmediğinde JavaScript'in kullandığı şeydir. Hem null hem undefined bir değerin olmayışını temsil eder ama null kasten, undefined genellikle bir şey atanmadı anlamını verir."
+          "en": "A boolean is a value that is either true or false, used in comparisons and decisions. null is a value you assign on purpose to mean \"no value here\". undefined is what a variable holds when it is declared but never given a value. Both represent absence, but null is intentional while undefined usually means something was never set.",
+          "tr": "Boolean, ya true ya da false olan bir değerdir ve karşılaştırmalarda, karar verirken kullanılır. null, \"burada değer yok\" demek için bilerek atadığın bir değerdir. undefined ise bir değişken tanımlanıp değer verilmediğinde tuttuğu değerdir. İkisi de yokluğu gösterir ama null bilinçli bir seçimken, undefined genellikle bir şeyin ayarlanmadığını gösterir."
         },
         "example": {
           "code": "const isReady = true;\nconst isEmpty = false;\nconst nothing = null;\nlet maybe;\nconsole.log(isReady);\nconsole.log(isEmpty);\nconsole.log(nothing);\nconsole.log(maybe);",

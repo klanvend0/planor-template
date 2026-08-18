@@ -1,10 +1,13 @@
 /**
- * The app's primary button.
+ * The app's primary button — the "slab press".
  *
- * A game needs a button that feels physical: it sits on a coloured shelf and
- * presses down into it. Built on `Pressable` so the whole surface is the target
- * (minimum 52pt tall, comfortably above the 44pt floor), with a busy state that
- * keeps the label in place instead of collapsing the layout.
+ * The design system has one depth mechanic and no shadows: the button sits on a
+ * coloured ledge and its face translates down by exactly the ledge height when
+ * pressed, so the control sinks flush and the layout never shifts.
+ *
+ * Sized for thumbs (52pt tall by default, well above the 44pt floor) and for
+ * Turkish, which runs 18-25% longer than English — a CTA may wrap to two lines
+ * rather than truncate, because width cannot grow on a phone.
  *
  * @module components/game_button
  */
@@ -13,15 +16,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ActivityIndicator, Pressable, View, type PressableProps } from 'react-native';
 
 import { Text, TextClassContext } from '@/components/ui/text';
+import { useTranslation } from '@/hooks/use_translation';
 import { pressFeedback } from '@/lib/haptics';
+import { localeUpper } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
-/**
- * The ledge the face presses into. Each variant has its own colour token rather
- * than a translucent tint of the face, so the depth reads the same on every
- * surface the button sits on.
- */
-const shelfVariants = cva('rounded-2xl', {
+const shelfVariants = cva('rounded-lg', {
   variants: {
     variant: {
       primary: 'bg-primary-ledge',
@@ -30,44 +30,48 @@ const shelfVariants = cva('rounded-2xl', {
       secondary: 'bg-secondary-ledge',
       ghost: 'bg-transparent',
     },
+    size: {
+      sm: 'pb-[4px]',
+      md: 'pb-[6px]',
+      lg: 'pb-[6px]',
+    },
   },
-  defaultVariants: { variant: 'primary' },
+  defaultVariants: { variant: 'primary', size: 'md' },
 });
 
-const faceVariants = cva(
-  'w-full flex-row items-center justify-center gap-2 rounded-2xl active:translate-y-[3px]',
-  {
-    variants: {
-      variant: {
-        primary: 'bg-primary',
-        success: 'bg-success',
-        destructive: 'bg-destructive',
-        secondary: 'border border-border bg-card',
-        ghost: 'bg-transparent',
-      },
-      size: {
-        sm: 'h-11 px-4',
-        md: 'h-[52px] px-5',
-        lg: 'h-[58px] px-6',
-      },
+const faceVariants = cva('w-full flex-row items-center justify-center gap-2 rounded-lg', {
+  variants: {
+    variant: {
+      // In light mode a saturated fill needs a defined boundary against the pale
+      // page; in dark mode the fill is already the brightest thing on screen.
+      primary: 'border-2 border-primary-ledge bg-primary dark:border-0',
+      success: 'border-2 border-success-ledge bg-success dark:border-0',
+      destructive: 'border-2 border-destructive-ledge bg-destructive dark:border-0',
+      secondary: 'border-2 border-input bg-secondary',
+      ghost: 'bg-transparent active:bg-secondary',
     },
-    defaultVariants: { variant: 'primary', size: 'md' },
-  }
-);
+    size: {
+      sm: 'min-h-[44px] px-4 active:translate-y-[4px]',
+      md: 'min-h-[52px] px-5 active:translate-y-[6px]',
+      lg: 'min-h-[58px] px-6 active:translate-y-[6px]',
+    },
+  },
+  defaultVariants: { variant: 'primary', size: 'md' },
+});
 
-const labelVariants = cva('font-strong uppercase tracking-wide', {
+const labelVariants = cva('text-center font-strong tracking-[0.6px]', {
   variants: {
     variant: {
       primary: 'text-primary-foreground',
       success: 'text-success-foreground',
       destructive: 'text-destructive-foreground',
-      secondary: 'text-foreground',
+      secondary: 'text-secondary-foreground',
       ghost: 'text-muted-foreground',
     },
     size: {
       sm: 'text-[13px]',
       md: 'text-[15px]',
-      lg: 'text-base',
+      lg: 'text-[17px]',
     },
   },
   defaultVariants: { variant: 'primary', size: 'md' },
@@ -82,7 +86,7 @@ export type GameButtonProps = Omit<PressableProps, 'children' | 'style'> &
     /** Shows a spinner and blocks presses. */
     busy?: boolean;
     className?: string;
-    /** Drop the pressable shelf, e.g. inside a dense list. */
+    /** Drop the ledge, e.g. for a tertiary action inside a dense list. */
     flat?: boolean;
   };
 
@@ -102,10 +106,17 @@ export function GameButton({
   onPress,
   ...props
 }: GameButtonProps) {
+  const { locale } = useTranslation();
   const isDisabled = disabled || busy;
 
   return (
-    <View className={cn(shelfVariants({ variant }), !flat && 'pb-[3px]', className)}>
+    <View
+      className={cn(
+        shelfVariants({ variant, size }),
+        // A dead control has no depth, and a flat one never had any.
+        (flat || isDisabled) && 'pb-0',
+        className
+      )}>
       <Pressable
         accessibilityRole="button"
         accessibilityState={{ disabled: !!isDisabled, busy }}
@@ -118,17 +129,16 @@ export function GameButton({
         {...props}>
         <TextClassContext.Provider value={labelVariants({ variant, size })}>
           {busy ? (
-            <ActivityIndicator
-              size="small"
-              className={
-                variant === 'secondary' || variant === 'ghost' ? 'text-foreground' : 'text-white'
-              }
-            />
+            <ActivityIndicator size="small" />
           ) : (
             <>
               {icon}
-              <Text className={labelVariants({ variant, size })} numberOfLines={1}>
-                {label}
+              <Text
+                className={labelVariants({ variant, size })}
+                // Turkish runs long; two lines beat an ellipsis on a CTA.
+                numberOfLines={2}
+                maxFontSizeMultiplier={1.4}>
+                {localeUpper(label, locale)}
               </Text>
             </>
           )}

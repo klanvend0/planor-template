@@ -63,7 +63,7 @@ export function LessonNode({
         {isCurrent ? (
           <Animated.View
             style={haloStyle}
-            className="absolute h-[76px] w-[76px] rounded-full bg-primary"
+            className="absolute h-[76px] w-[76px] rounded-xl bg-primary/25"
           />
         ) : null}
 
@@ -76,12 +76,13 @@ export function LessonNode({
             onPress();
           }}
           className={cn(
-            'h-16 w-16 items-center justify-center rounded-full border-b-4',
-            status === 'completed' && 'border-success/50 bg-success',
-            status === 'available' && 'border-primary/50 bg-primary',
-            status === 'locked' && 'border-muted-foreground/20 bg-muted',
-            status === 'premium_locked' && 'border-warning/50 bg-warning',
-            'active:translate-y-[3px] active:border-b-0'
+            'h-16 w-16 items-center justify-center rounded-lg border-b-4',
+            'active:translate-y-[4px] active:border-b-0',
+            status === 'completed' && 'border-success-ledge bg-success',
+            status === 'available' && !isCurrent && 'border-2 border-input bg-secondary',
+            status === 'available' && isCurrent && 'border-primary-ledge bg-primary',
+            status === 'locked' && 'border-2 border-input bg-muted',
+            status === 'premium_locked' && 'border-warning/50 bg-warning'
           )}>
           <Icon
             as={
@@ -96,7 +97,7 @@ export function LessonNode({
             size={26}
             className={cn(
               status === 'completed' && 'text-success-foreground',
-              status === 'available' && 'text-primary-foreground',
+              status === 'available' && (isCurrent ? 'text-primary-foreground' : 'text-foreground'),
               status === 'locked' && 'text-muted-foreground',
               status === 'premium_locked' && 'text-warning-foreground'
             )}
@@ -112,7 +113,7 @@ export function LessonNode({
               key={index}
               as={Star}
               size={12}
-              className={index < stars ? 'text-warning' : 'text-muted-foreground/30'}
+              className={index < stars ? 'text-xp' : 'text-muted-foreground/30'}
               fill={index < stars ? 'currentColor' : 'transparent'}
             />
           ))}

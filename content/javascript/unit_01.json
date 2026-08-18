@@ -96,7 +96,7 @@
         {
           "id": "js-u01-l1-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "easy",
           "prompt": {
             "en": "Write a line that prints the number 100.",
             "tr": "100 sayısını yazdıran satırı yaz."
@@ -120,7 +120,7 @@
           "verify": { "raises": "ReferenceError" },
           "explanation": {
             "en": "The variable name was never created, so JavaScript raises ReferenceError. If you meant to print the word name, put it in quotes.",
-            "tr": "name değişkeni hiç oluşturulmadı, bu yüzden JavaScript ReferenceError verir. Eğer name kelimesini yazdırmak istiyorsandı, tırnak içine al."
+            "tr": "name değişkeni hiç oluşturulmadı, bu yüzden JavaScript ReferenceError verir. Eğer name kelimesini yazdırmak istiyorsan, tırnak içine al."
           }
         },
         {
@@ -141,7 +141,7 @@
           },
           "sampleAnswer": {
             "en": "The code calls console.log with a text string, so JavaScript prints Welcome to JavaScript on the screen.",
-            "tr": "Kod console.log'u bir metin dizesiyle çağırır ve JavaScript ekrana Welcome to JavaScript yazdırır."
+            "tr": "Kod console.log'u bir metin dizesiyle çağırır, böylece JavaScript ekrana Welcome to JavaScript yazısını yazdırır."
           },
           "explanation": {
             "en": "console.log is the tool that sends output to the screen; whatever is in quotes appears exactly as written.",

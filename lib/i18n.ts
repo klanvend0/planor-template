@@ -141,6 +141,17 @@ export async function initI18n(): Promise<SupportedLocale> {
   return getLocale();
 }
 
+/**
+ * Uppercase a string the way its language expects.
+ *
+ * Turkish is the reason this exists: a dotted `i` uppercases to `İ`, not `I`,
+ * and CSS `text-transform` (NativeWind's `uppercase`) gets that wrong. Button
+ * and badge labels therefore go through here instead of a class.
+ */
+export function localeUpper(value: string, locale: SupportedLocale): string {
+  return value.toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-US');
+}
+
 /** Subscribe to locale changes. Returns the unsubscribe function. */
 export function subscribeToLocale(listener: () => void): () => void {
   listeners.add(listener);

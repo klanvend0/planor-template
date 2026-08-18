@@ -2,7 +2,8 @@
  * Bottom tab bar.
  *
  * Custom rather than the platform default so the active tab can be as loud as a
- * game needs it to be. Three tabs, safe-area aware, each a 56pt target.
+ * game needs it to be: a tinted well, a coloured icon and label, and a rail
+ * across the top edge. Three tabs, safe-area aware, each a 56pt target.
  *
  * @module components/tab_bar
  */
@@ -28,7 +29,7 @@ export function GameTabBar({ state, descriptors, navigation }: BottomTabBarProps
 
   return (
     <View
-      className="flex-row border-t border-border bg-card px-2 pt-2"
+      className="flex-row border-t-2 border-border bg-card px-2 pt-2"
       style={{ paddingBottom: Math.max(insets.bottom, 10) }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -58,7 +59,14 @@ export function GameTabBar({ state, descriptors, navigation }: BottomTabBarProps
             accessibilityLabel={label}
             onPress={onPress}
             onLongPress={() => navigation.emit({ type: 'tabLongPress', target: route.key })}
-            className="h-14 flex-1 items-center justify-center gap-1 rounded-2xl">
+            className={cn(
+              'h-14 flex-1 items-center justify-center gap-1 rounded-lg',
+              isFocused && 'bg-primary/12'
+            )}>
+            {isFocused ? (
+              <View className="absolute top-0 h-[2px] w-8 rounded-full bg-primary" />
+            ) : null}
+
             <Icon
               as={ICONS[route.name] ?? GraduationCap}
               size={24}
@@ -66,9 +74,10 @@ export function GameTabBar({ state, descriptors, navigation }: BottomTabBarProps
             />
             <Text
               className={cn(
-                'font-strong text-[11px]',
+                'font-strong text-[11px] tracking-[0.6px]',
                 isFocused ? 'text-primary' : 'text-muted-foreground'
-              )}>
+              )}
+              maxFontSizeMultiplier={1.4}>
               {label}
             </Text>
           </Pressable>

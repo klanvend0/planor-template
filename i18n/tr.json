@@ -334,7 +334,10 @@
     "purchase_cancelled": "Satın alma iptal edildi.",
     "already_pro": "Zaten Pro üyesin.",
     "close": "Şimdi değil",
-    "unavailable": "Mağazaya şu an ulaşılamıyor. Lütfen sonra tekrar dene."
+    "unavailable": "Mağazaya şu an ulaşılamıyor. Lütfen sonra tekrar dene.",
+    "period_week": "/ hafta",
+    "period_month": "/ ay",
+    "period_year": "/ yıl"
   },
   "settings": {
     "title": "Ayarlar",
