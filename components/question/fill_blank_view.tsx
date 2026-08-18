@@ -17,7 +17,7 @@ import type { FillBlankQuestion } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
 import { useTranslation } from '@/hooks/use_translation';
 import { tokenize } from '@/lib/syntax';
-import { SYNTAX } from '@/lib/theme';
+import { useSyntax } from '@/hooks/use_syntax';
 import { cn } from '@/lib/utils';
 import { pick, QuestionShell, type QuestionViewProps } from './question_shell';
 
@@ -46,6 +46,7 @@ export function FillBlankView({
   result,
 }: QuestionViewProps<FillBlankQuestion>) {
   const { t } = useTranslation();
+  const syntax = useSyntax();
   const bank = useMemo(() => tokenBank(question), [question]);
 
   const filled: (string | null)[] =
@@ -109,7 +110,7 @@ export function FillBlankView({
                             <Text
                               key={tokenIndex}
                               className="font-mono text-[15px]"
-                              style={{ color: SYNTAX[token.type] }}>
+                              style={{ color: syntax[token.type] }}>
                               {token.text}
                             </Text>
                           ))}
@@ -138,7 +139,7 @@ export function FillBlankView({
                               ? 'border-success bg-success/20'
                               : 'border-destructive bg-destructive/20')
                         )}>
-                        <Text className="font-mono text-[15px]" style={{ color: SYNTAX.plain }}>
+                        <Text className="font-mono text-[15px]" style={{ color: syntax.plain }}>
                           {value ?? ' '}
                         </Text>
                       </Pressable>

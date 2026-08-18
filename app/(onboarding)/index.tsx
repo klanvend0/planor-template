@@ -204,7 +204,7 @@ export default function OnboardingScreen() {
           />
         </View>
 
-        <Text className="w-16 text-right font-semibold text-xs text-muted-foreground">
+        <Text className="w-16 text-right font-strong text-xs text-muted-foreground">
           {t('onboarding.progress', { current: stepIndex + 1, total: STEPS.length })}
         </Text>
       </View>
@@ -276,7 +276,7 @@ export default function OnboardingScreen() {
                         )}>
                         <Text
                           className={cn(
-                            'font-mono-bold text-base',
+                            'font-mono-strong text-base',
                             course === 'python' ? 'text-course-python' : 'text-course-javascript'
                           )}>
                           {course === 'python' ? 'Py' : 'JS'}

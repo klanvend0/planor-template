@@ -65,7 +65,10 @@ function runSnippet(
   language: 'python' | 'javascript',
   code: string
 ): { ok: boolean; stdout: string; stderr: string } {
-  const file = join(RUN_DIR, `snippet_${Math.random().toString(36).slice(2)}.${language === 'python' ? 'py' : 'js'}`);
+  const file = join(
+    RUN_DIR,
+    `snippet_${Math.random().toString(36).slice(2)}.${language === 'python' ? 'py' : 'js'}`
+  );
   writeFileSync(file, code.endsWith('\n') ? code : `${code}\n`);
   try {
     const stdout = execFileSync(language === 'python' ? 'python3' : 'node', [file], {
@@ -82,15 +85,22 @@ function runSnippet(
 
 /** Parse-only check: catches syntax errors without executing side effects. */
 function checkSyntax(language: 'python' | 'javascript', code: string): string | null {
-  const file = join(RUN_DIR, `syntax_${Math.random().toString(36).slice(2)}.${language === 'python' ? 'py' : 'js'}`);
+  const file = join(
+    RUN_DIR,
+    `syntax_${Math.random().toString(36).slice(2)}.${language === 'python' ? 'py' : 'js'}`
+  );
   writeFileSync(file, code.endsWith('\n') ? code : `${code}\n`);
   try {
     if (language === 'python') {
-      execFileSync('python3', ['-c', `import ast,sys; ast.parse(open(${JSON.stringify(file)}).read())`], {
-        encoding: 'utf8',
-        timeout: 10_000,
-        stdio: ['ignore', 'pipe', 'pipe'],
-      });
+      execFileSync(
+        'python3',
+        ['-c', `import ast,sys; ast.parse(open(${JSON.stringify(file)}).read())`],
+        {
+          encoding: 'utf8',
+          timeout: 10_000,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
     } else {
       execFileSync('node', ['--check', file], {
         encoding: 'utf8',
@@ -105,7 +115,12 @@ function checkSyntax(language: 'python' | 'javascript', code: string): string | 
   }
 }
 
-function checkCopy(file: string, where: string, value: { en: string; tr: string }, sentence: boolean): void {
+function checkCopy(
+  file: string,
+  where: string,
+  value: { en: string; tr: string },
+  sentence: boolean
+): void {
   for (const [locale, text] of Object.entries(value)) {
     if (EMOJI.test(text)) fail(file, `${where}.${locale}`, 'contains an emoji');
     if (sentence && MARKDOWN.test(text)) fail(file, `${where}.${locale}`, 'contains markdown/HTML');
@@ -115,7 +130,12 @@ function checkCopy(file: string, where: string, value: { en: string; tr: string 
   }
 }
 
-function checkQuestion(file: string, language: 'python' | 'javascript', lesson: Lesson, question: Question): void {
+function checkQuestion(
+  file: string,
+  language: 'python' | 'javascript',
+  lesson: Lesson,
+  question: Question
+): void {
   const where = `${lesson.id} / ${question.id} (${question.type})`;
 
   checkCopy(file, `${where}.prompt`, question.prompt, true);
@@ -127,7 +147,8 @@ function checkQuestion(file: string, language: 'python' | 'javascript', lesson: 
   switch (question.type) {
     case 'multiple_choice': {
       if (question.code) syntaxTargets.push({ label: 'code', code: question.code });
-      for (const option of question.options) checkCopy(file, `${where}.option:${option.id}`, option.text, false);
+      for (const option of question.options)
+        checkCopy(file, `${where}.option:${option.id}`, option.text, false);
       break;
     }
     case 'fill_blank': {
@@ -179,7 +200,11 @@ function checkQuestion(file: string, language: 'python' | 'javascript', lesson: 
       for (const locale of ['en', 'tr'] as const) {
         const answer = question.sampleAnswer[locale];
         if (answer.length < 60 || answer.length > 260) {
-          fail(file, `${where}.sampleAnswer.${locale}`, `must be 60-260 chars, got ${answer.length}`);
+          fail(
+            file,
+            `${where}.sampleAnswer.${locale}`,
+            `must be 60-260 chars, got ${answer.length}`
+          );
         }
       }
       const stripComments = (code: string) =>
@@ -203,7 +228,11 @@ function checkQuestion(file: string, language: 'python' | 'javascript', lesson: 
     const result = runSnippet(language, runnable.code);
     if (runnable.expectStdout !== undefined) {
       if (!result.ok) {
-        fail(file, `${where}.verify`, `snippet crashed: ${result.stderr.trim().split('\n').slice(-2).join(' ')}`);
+        fail(
+          file,
+          `${where}.verify`,
+          `snippet crashed: ${result.stderr.trim().split('\n').slice(-2).join(' ')}`
+        );
       } else if (result.stdout !== runnable.expectStdout) {
         fail(
           file,
@@ -214,7 +243,11 @@ function checkQuestion(file: string, language: 'python' | 'javascript', lesson: 
     }
     if (runnable.expectRaises) {
       if (result.ok) {
-        fail(file, `${where}.verify.raises`, `expected ${runnable.expectRaises} but the snippet ran fine`);
+        fail(
+          file,
+          `${where}.verify.raises`,
+          `expected ${runnable.expectRaises} but the snippet ran fine`
+        );
       } else if (!result.stderr.includes(runnable.expectRaises)) {
         fail(
           file,
@@ -242,7 +275,8 @@ function checkUnit(file: string, unit: Unit, seenIds: Set<string>): void {
   checkCopy(file, `${unit.id}.description`, unit.description, true);
 
   unit.lessons.forEach((lesson, lessonIndex) => {
-    if (lesson.index !== lessonIndex + 1) fail(file, lesson.id, `lesson index should be ${lessonIndex + 1}`);
+    if (lesson.index !== lessonIndex + 1)
+      fail(file, lesson.id, `lesson index should be ${lessonIndex + 1}`);
     if (lesson.id !== `${unit.id}-l${lesson.index}`) {
       fail(file, lesson.id, `lesson id should be "${unit.id}-l${lesson.index}"`);
     }
@@ -257,7 +291,11 @@ function checkUnit(file: string, unit: Unit, seenIds: Set<string>): void {
     for (const locale of ['en', 'tr'] as const) {
       const body = lesson.concept.body[locale];
       if (body.length < 120 || body.length > 520) {
-        fail(file, `${lesson.id}.concept.body.${locale}`, `must be 120-520 chars, got ${body.length}`);
+        fail(
+          file,
+          `${lesson.id}.concept.body.${locale}`,
+          `must be 120-520 chars, got ${body.length}`
+        );
       }
     }
 
@@ -324,7 +362,9 @@ function main(): void {
   }
 
   for (const [file, list] of byFile) {
-    console.error(`\n${file.replace(`${ROOT}/`, '')}  (${list.length} problem${list.length === 1 ? '' : 's'})`);
+    console.error(
+      `\n${file.replace(`${ROOT}/`, '')}  (${list.length} problem${list.length === 1 ? '' : 's'})`
+    );
     for (const problem of list) console.error(`  - ${problem.where}: ${problem.message}`);
   }
 

@@ -13,8 +13,9 @@ import { memo } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { Text } from '@/components/ui/text';
+import { useSyntax } from '@/hooks/use_syntax';
 import { tokenizeLines, type SyntaxLanguage } from '@/lib/syntax';
-import { SYNTAX } from '@/lib/theme';
+import type { SyntaxPalette } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 export type CodeBlockProps = {
@@ -39,20 +40,22 @@ export type CodeBlockProps = {
 function LineContent({
   line,
   compact,
+  syntax,
 }: {
-  line: { text: string; type: keyof typeof SYNTAX }[];
+  line: { text: string; type: keyof SyntaxPalette }[];
   compact?: boolean;
+  syntax: SyntaxPalette;
 }) {
   return (
     <Text
       className={cn('font-mono leading-6', compact ? 'text-[13px]' : 'text-[15px]')}
-      style={{ color: SYNTAX.plain }}>
+      style={{ color: syntax.plain }}>
       {line.length === 0 ? ' ' : null}
       {line.map((token, index) => (
         <Text
           key={`${index}-${token.text}`}
           className={cn('font-mono', compact ? 'text-[13px]' : 'text-[15px]')}
-          style={{ color: SYNTAX[token.type] }}>
+          style={{ color: syntax[token.type] }}>
           {token.text}
         </Text>
       ))}
@@ -71,6 +74,7 @@ function CodeBlockImpl({
   className,
   compact = false,
 }: CodeBlockProps) {
+  const syntax = useSyntax();
   const lines = tokenizeLines(code.replace(/\s+$/, ''), language);
 
   return (
@@ -103,11 +107,11 @@ function CodeBlockImpl({
                 {showLineNumbers ? (
                   <Text
                     className="mr-3 w-5 text-right font-mono text-[13px]"
-                    style={{ color: SYNTAX.comment }}>
+                    style={{ color: syntax.gutter }}>
                     {index + 1}
                   </Text>
                 ) : null}
-                <LineContent line={line} compact={compact} />
+                <LineContent line={line} compact={compact} syntax={syntax} />
               </View>
             );
 
@@ -139,13 +143,15 @@ export const CodeBlock = memo(CodeBlockImpl);
  * Inline code, for a single token inside a sentence.
  */
 export function InlineCode({ children, className }: { children: string; className?: string }) {
+  const syntax = useSyntax();
+
   return (
     <Text
       className={cn(
         'rounded-md border border-code-border bg-code px-1.5 py-0.5 font-mono text-[13px]',
         className
       )}
-      style={{ color: SYNTAX.plain }}>
+      style={{ color: syntax.plain }}>
       {children}
     </Text>
   );

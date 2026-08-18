@@ -122,7 +122,7 @@ export function LessonNode({
       <Text
         numberOfLines={2}
         className={cn(
-          'mt-1 w-[104px] text-center font-semibold text-xs',
+          'mt-1 w-[104px] text-center font-strong text-xs',
           locked ? 'text-muted-foreground' : 'text-foreground'
         )}>
         {title}

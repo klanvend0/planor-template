@@ -93,11 +93,21 @@ describe('lessonStatus', () => {
 
   it('opens the very first lesson and locks the rest', () => {
     expect(
-      lessonStatus({ byLesson: {}, courseId: 'python', lessonId: lessons[0].lesson.id, hasSubscription: false })
+      lessonStatus({
+        byLesson: {},
+        courseId: 'python',
+        lessonId: lessons[0].lesson.id,
+        hasSubscription: false,
+      })
     ).toBe('available');
 
     expect(
-      lessonStatus({ byLesson: {}, courseId: 'python', lessonId: lessons[1].lesson.id, hasSubscription: false })
+      lessonStatus({
+        byLesson: {},
+        courseId: 'python',
+        lessonId: lessons[1].lesson.id,
+        hasSubscription: false,
+      })
     ).toBe('locked');
   });
 
@@ -107,10 +117,20 @@ describe('lessonStatus', () => {
     };
 
     expect(
-      lessonStatus({ byLesson, courseId: 'python', lessonId: lessons[0].lesson.id, hasSubscription: false })
+      lessonStatus({
+        byLesson,
+        courseId: 'python',
+        lessonId: lessons[0].lesson.id,
+        hasSubscription: false,
+      })
     ).toBe('completed');
     expect(
-      lessonStatus({ byLesson, courseId: 'python', lessonId: lessons[1].lesson.id, hasSubscription: false })
+      lessonStatus({
+        byLesson,
+        courseId: 'python',
+        lessonId: lessons[1].lesson.id,
+        hasSubscription: false,
+      })
     ).toBe('available');
   });
 

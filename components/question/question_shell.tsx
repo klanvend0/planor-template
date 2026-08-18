@@ -57,7 +57,7 @@ export function looksLikeCode(value: Localized): boolean {
 /** Instruction line above every question. */
 export function QuestionPrompt({ children }: { children: string }) {
   return (
-    <Text className="font-bold text-[22px] leading-8 text-foreground" accessibilityRole="header">
+    <Text className="font-strong text-[22px] leading-8 text-foreground" accessibilityRole="header">
       {children}
     </Text>
   );

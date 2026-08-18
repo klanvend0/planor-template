@@ -17,15 +17,17 @@ import type { OrderLinesQuestion } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
 import { useTranslation } from '@/hooks/use_translation';
 import { tokenize } from '@/lib/syntax';
-import { SYNTAX } from '@/lib/theme';
+import { useSyntax } from '@/hooks/use_syntax';
 import { cn } from '@/lib/utils';
 import { pick, QuestionShell, type QuestionViewProps } from './question_shell';
 
 function CodeLine({ text, language }: { text: string; language: 'python' | 'javascript' }) {
+  const syntax = useSyntax();
+
   return (
     <Text className="font-mono text-[15px]">
       {tokenize(text, language).map((token, index) => (
-        <Text key={index} className="font-mono text-[15px]" style={{ color: SYNTAX[token.type] }}>
+        <Text key={index} className="font-mono text-[15px]" style={{ color: syntax[token.type] }}>
           {token.text}
         </Text>
       ))}
@@ -43,6 +45,7 @@ export function OrderLinesView({
   result,
 }: QuestionViewProps<OrderLinesQuestion>) {
   const { t } = useTranslation();
+  const syntax = useSyntax();
   const shuffled = useMemo(() => seededShuffle(question.lines, question.id), [question]);
   const placed = draft?.type === 'order_lines' ? draft.lines : [];
 
@@ -69,7 +72,7 @@ export function OrderLinesView({
             (result.isCorrect ? 'border-solid border-success' : 'border-solid border-destructive')
         )}>
         {placed.length === 0 ? (
-          <Text className="text-center text-sm" style={{ color: SYNTAX.comment }}>
+          <Text className="text-center text-sm" style={{ color: syntax.comment }}>
             {t('lesson.reorder')}
           </Text>
         ) : (
@@ -106,7 +109,7 @@ export function OrderLinesView({
 
       {result && !result.isCorrect ? (
         <View className="gap-1">
-          <Text className="font-semibold text-sm text-muted-foreground">
+          <Text className="font-strong text-sm text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <View className="rounded-xl border border-code-border bg-code px-4 py-3">

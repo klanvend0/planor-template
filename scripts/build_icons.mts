@@ -1,113 +1,172 @@
 /**
- * App icon builder.
+ * App icon builder — "The Indent".
+ *
+ * The mark is two phosphor code lines stepping right with a cursor waiting at
+ * the end of the second: indentation is Python's syntax, the staircase reads as
+ * progress, and the cursor says "your turn". Deliberately not a `>_` terminal
+ * prompt, which is the most crowded mark in the developer category.
  *
  * The icon is vector art defined here rather than a binary someone has to open a
  * design tool to change: run `npm run icon:build` and every variant iOS, Android
- * and the web need is rendered from the same source.
+ * and the web need is rendered from the same geometry.
  *
  * Apple rules the output obeys:
  *  - 1024x1024, fully opaque, no alpha channel (an RGBA icon is rejected);
- *  - no rounded corners baked in — the system applies the mask;
+ *  - no rounded corners baked in — the system applies the squircle;
  *  - separate light, dark and tinted variants (the tinted one is grayscale).
  *
- * Android's adaptive foreground and the splash logo keep their transparency and
- * sit inside the 66% safe zone so nothing is cropped.
+ * The mark's optical centre is exactly (512, 512) and its furthest corner sits
+ * 266px out, so it survives every mask — squircle, circle, or watch.
  *
  * @module scripts/build_icons
  */
 
 import { Resvg } from '@resvg/resvg-js';
 import { writeFileSync } from 'node:fs';
-import { deflateSync } from 'node:zlib';
 import { join, resolve } from 'node:path';
+import { deflateSync } from 'node:zlib';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const OUT = join(ROOT, 'assets', 'images');
 
-type Palette = {
-  /** Background fill; null renders the glyph on transparency. */
-  background: string | null;
-  glyphStart: string;
-  glyphEnd: string;
-  spark: string;
-  cursor: string;
+type Variant = {
+  /** Cabinet gradient stops; null renders the mark on transparency. */
+  ground: [string, string] | null;
+  /** Screen bezel, dropped on the flat variants. */
+  bezel: { fill: string; outer: string; inner: string } | null;
+  bar: string;
+  caret: string;
+  /** Phosphor bloom behind the mark. */
+  glow: boolean;
+  /** CRT scanlines and registration marks. */
+  detail: boolean;
+  /** Scale applied to the mark, for masks that crop (Android adaptive). */
+  scale: number;
 };
 
-const PALETTES: Record<'light' | 'dark' | 'tinted' | 'transparent', Palette> = {
-  // The default icon: the glyph reads as an editor prompt on ink.
-  light: {
-    background: '#141733',
-    glyphStart: '#8B6BFF',
-    glyphEnd: '#3ED0F0',
-    spark: '#FFB74D',
-    cursor: '#3ED0F0',
+const VARIANTS: Record<string, Variant> = {
+  // The default icon: lit screen in a machined cabinet.
+  primary: {
+    ground: ['#0E1A21', '#060F14'],
+    bezel: { fill: '#070E12', outer: '#426F80', inner: '#0E2730' },
+    bar: '#22F1A5',
+    caret: '#2FD7F9',
+    glow: true,
+    detail: true,
+    scale: 1,
   },
+  // iOS dark variant: same geometry, flattened ground, no bloom.
   dark: {
-    background: '#07080F',
-    glyphStart: '#9E86FF',
-    glyphEnd: '#5CDBF5',
-    spark: '#FFC46B',
-    cursor: '#5CDBF5',
+    ground: ['#0B141A', '#0B141A'],
+    bezel: { fill: '#070E12', outer: '#2C4C59', inner: '#0E2730' },
+    bar: '#FFFFFF',
+    caret: '#FFFFFF',
+    glow: false,
+    detail: false,
+    scale: 1,
   },
-  // Apple tints the icon itself, so the artwork must be grayscale.
+  // iOS tinted: Apple applies the colour, so the artwork is grayscale.
   tinted: {
-    background: '#101010',
-    glyphStart: '#F2F2F2',
-    glyphEnd: '#BFBFBF',
-    spark: '#8C8C8C',
-    cursor: '#D9D9D9',
+    ground: ['#101010', '#101010'],
+    bezel: { fill: '#0A0A0A', outer: '#5A5A5A', inner: '#1C1C1C' },
+    bar: '#FFFFFF',
+    caret: '#D6D6D6',
+    glow: false,
+    detail: false,
+    scale: 1,
   },
-  transparent: {
-    background: null,
-    glyphStart: '#8B6BFF',
-    glyphEnd: '#3ED0F0',
-    spark: '#FFB74D',
-    cursor: '#3ED0F0',
+  // Android adaptive foreground: the launcher supplies the background.
+  adaptive: {
+    ground: null,
+    bezel: null,
+    bar: '#22F1A5',
+    caret: '#2FD7F9',
+    glow: true,
+    detail: false,
+    scale: 0.62,
+  },
+  // Splash: the mark alone, over the plugin's background colour.
+  splash: {
+    ground: null,
+    bezel: null,
+    bar: '#22F1A5',
+    caret: '#2FD7F9',
+    glow: false,
+    detail: false,
+    scale: 0.78,
   },
 };
+
+const SIZE = 1024;
 
 /**
- * The artwork: a chevron-and-cursor prompt (`>_`) with a spark.
+ * Draw the icon.
  *
- * @param palette - Colours to draw with.
- * @param inset - Fraction of the canvas to keep clear around the glyph, used for
- * Android's adaptive foreground where the launcher may crop to a circle.
+ * Coordinates come straight from the design spec, so the layers stay readable
+ * against it: ground, bezel, glow, mark, CRT detail.
  */
-function icon(palette: Palette, inset = 0): string {
-  const size = 1024;
-  const scale = 1 - inset;
-  const translate = (size * inset) / 2;
+function icon(variant: Variant): string {
+  const { scale } = variant;
+  const translate = (SIZE * (1 - scale)) / 2;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  // Phosphor bloom: the mark itself, blurred and dimmed underneath the crisp
+  // copy. A real blur rather than stacked rectangles, which read as boxes.
+  const glow = variant.glow
+    ? `
+    <g filter="url(#bloom)" opacity="0.55">
+      <rect x="276" y="390" width="440" height="96" rx="12" fill="${variant.bar}"/>
+      <rect x="368" y="526" width="252" height="96" rx="12" fill="${variant.bar}"/>
+      <rect x="644" y="514" width="104" height="120" rx="8" fill="${variant.caret}"/>
+    </g>`
+    : '';
+
+  const bezel = variant.bezel
+    ? `
+  <rect x="176" y="176" width="672" height="672" rx="104" fill="${variant.bezel.fill}"
+        stroke="${variant.bezel.outer}" stroke-width="10"/>
+  <rect x="190" y="190" width="644" height="644" rx="92" fill="none"
+        stroke="${variant.bezel.inner}" stroke-width="3"/>`
+    : '';
+
+  const detail = variant.detail
+    ? `
+  <rect x="200" y="286" width="624" height="18" fill="#FFFFFF" opacity="0.025"/>
+  <rect x="200" y="712" width="624" height="18" fill="#FFFFFF" opacity="0.025"/>
+  <rect x="242" y="242" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
+  <rect x="762" y="242" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
+  <rect x="242" y="762" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
+  <rect x="762" y="762" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>`
+    : '';
+
+  const ground = variant.ground
+    ? `<rect width="${SIZE}" height="${SIZE}" fill="url(#cabinet)"/>`
+    : '';
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">
   <defs>
-    <linearGradient id="glyph" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${palette.glyphStart}"/>
-      <stop offset="1" stop-color="${palette.glyphEnd}"/>
+    <linearGradient id="cabinet" x1="512" y1="0" x2="512" y2="${SIZE}" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${variant.ground?.[0] ?? '#000000'}"/>
+      <stop offset="1" stop-color="${variant.ground?.[1] ?? '#000000'}"/>
     </linearGradient>
-    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
-      <stop offset="0" stop-color="${palette.background ?? '#000000'}"/>
-      <stop offset="1" stop-color="${palette.background ?? '#000000'}" stop-opacity="0.86"/>
-    </linearGradient>
+    <filter id="bloom" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
   </defs>
 
-  ${palette.background ? `<rect width="${size}" height="${size}" fill="url(#bg)"/>` : ''}
+  ${ground}${bezel}
 
   <g transform="translate(${translate} ${translate}) scale(${scale})">
-    <!-- chevron: the prompt -->
-    <path d="M300 336 L470 512 L300 688"
-          fill="none"
-          stroke="url(#glyph)"
-          stroke-width="86"
-          stroke-linecap="round"
-          stroke-linejoin="round"/>
-
-    <!-- cursor: the underscore waiting for input -->
-    <rect x="536" y="628" width="220" height="72" rx="36" fill="${palette.cursor}"/>
-
-    <!-- spark: the moment something clicks -->
-    <path d="M672 300 L697 366 L763 391 L697 416 L672 482 L647 416 L581 391 L647 366 Z"
-          fill="${palette.spark}"/>
+    ${glow}
+    <!-- the whitespace the second line is indented by -->
+    <rect x="310" y="526" width="8" height="96" fill="${variant.bar}" opacity="0.22"/>
+    <!-- line one -->
+    <rect x="276" y="390" width="440" height="96" rx="12" fill="${variant.bar}"/>
+    <!-- line two, indented -->
+    <rect x="368" y="526" width="252" height="96" rx="12" fill="${variant.bar}"/>
+    <!-- the cursor, waiting -->
+    <rect x="644" y="514" width="104" height="120" rx="8" fill="${variant.caret}"/>
   </g>
+  ${detail}
 </svg>`;
 }
 
@@ -136,7 +195,7 @@ function chunk(type: string, data: Buffer): Buffer {
  * Encode RGBA pixels as a truecolour PNG **without** an alpha channel.
  *
  * App Store Connect rejects an icon that carries one at all (ITMS-90717), even
- * when every pixel is fully opaque, and every rasteriser here emits RGBA — so
+ * when every pixel is fully opaque, and the rasteriser always emits RGBA — so
  * the alpha byte is dropped while writing.
  */
 function encodeOpaquePng(pixels: Buffer, width: number, height: number): Buffer {
@@ -174,7 +233,7 @@ function encodeOpaquePng(pixels: Buffer, width: number, height: number): Buffer 
 /**
  * Render an SVG to PNG.
  *
- * @param opaque - Strip the alpha channel, for icons Apple will inspect.
+ * @param opaque - Strip the alpha channel, for the icons Apple inspects.
  */
 function render(svg: string, width: number, opaque: boolean): Buffer {
   const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: width } });
@@ -184,19 +243,18 @@ function render(svg: string, width: number, opaque: boolean): Buffer {
     : Buffer.from(image.asPng());
 }
 
-const OUTPUTS: { file: string; svg: string; width: number; opaque: boolean }[] = [
-  { file: 'icon.png', svg: icon(PALETTES.light), width: 1024, opaque: true },
-  { file: 'icon-dark.png', svg: icon(PALETTES.dark), width: 1024, opaque: true },
-  { file: 'icon-tinted.png', svg: icon(PALETTES.tinted), width: 1024, opaque: true },
-  // Android draws its own background colour behind this foreground.
-  { file: 'adaptive-icon.png', svg: icon(PALETTES.transparent, 0.32), width: 1024, opaque: false },
-  { file: 'splash-icon.png', svg: icon(PALETTES.transparent, 0.12), width: 512, opaque: false },
-  { file: 'favicon.png', svg: icon(PALETTES.light), width: 96, opaque: true },
+const OUTPUTS: { file: string; variant: Variant; width: number; opaque: boolean }[] = [
+  { file: 'icon.png', variant: VARIANTS.primary, width: 1024, opaque: true },
+  { file: 'icon-dark.png', variant: VARIANTS.dark, width: 1024, opaque: true },
+  { file: 'icon-tinted.png', variant: VARIANTS.tinted, width: 1024, opaque: true },
+  { file: 'adaptive-icon.png', variant: VARIANTS.adaptive, width: 1024, opaque: false },
+  { file: 'splash-icon.png', variant: VARIANTS.splash, width: 512, opaque: false },
+  { file: 'favicon.png', variant: VARIANTS.primary, width: 96, opaque: true },
 ];
 
 function main(): void {
   for (const output of OUTPUTS) {
-    const png = render(output.svg, output.width, output.opaque);
+    const png = render(icon(output.variant), output.width, output.opaque);
     writeFileSync(join(OUT, output.file), png);
     console.log(`${output.file}  ${output.width}px  ${(png.length / 1024).toFixed(1)}KB`);
   }

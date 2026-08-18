@@ -46,7 +46,7 @@ export function ChoiceCard({
       )}>
       {leading}
       <View className="flex-1 gap-0.5">
-        <Text className={cn('font-bold text-[17px] text-foreground')}>{title}</Text>
+        <Text className={cn('font-strong text-[17px] text-foreground')}>{title}</Text>
         {subtitle ? <Text className="text-sm text-muted-foreground">{subtitle}</Text> : null}
       </View>
       {trailing}

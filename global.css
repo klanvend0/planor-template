@@ -3,124 +3,168 @@
 @tailwind utilities;
 
 /**
- * Design tokens.
+ * Design tokens — "Cathode".
  *
- * Every color the app uses is declared once here as an HSL triplet and consumed
- * through Tailwind classes (`bg-background`, `text-xp`, ...). `lib/theme.ts`
- * mirrors the same values for JavaScript consumers — change both together.
+ * The app is a handheld code console: a cool blue-black cabinet housing an
+ * always-on phosphor screen. Every color is declared once here as an HSL
+ * triplet and consumed through Tailwind classes (`bg-background`, `text-xp`).
+ * `lib/theme.ts` mirrors these values for JavaScript consumers (SVG, Reanimated,
+ * the router theme) — change both together.
+ *
+ * Two absolute, inverse rules keep the system safe to extend:
+ *   DARK  — every saturated fill carries INK text (--primary-foreground).
+ *   LIGHT — every saturated fill carries WHITE text.
+ *
+ * `--border` is structure (>=3:1 on background, card and surface-2).
+ * `--input` is every interactive resting outline and is deliberately lighter
+ * than `--border` so a text field is never invisible (>=3.4:1 on every surface).
  */
 @layer base {
   :root {
-    --background: 30 24% 97%;
-    --foreground: 230 26% 12%;
+    /* Surfaces */
+    --background: 180 22% 97%;
+    --foreground: 200 42% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 230 26% 12%;
+    --card-foreground: 200 42% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 230 26% 12%;
+    --popover-foreground: 200 42% 11%;
 
-    --primary: 255 74% 58%;
+    --surface-2: 188 28% 92%;
+
+    /* Brand + action */
+    --primary: 164 92% 26%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 255 42% 95%;
-    --secondary-foreground: 255 45% 32%;
+    --secondary: 188 30% 90%;
+    --secondary-foreground: 200 42% 11%;
 
-    --muted: 30 16% 93%;
-    --muted-foreground: 230 12% 42%;
+    --muted: 190 20% 92%;
+    --muted-foreground: 203 16% 38%;
 
-    --accent: 190 90% 42%;
+    --accent: 196 96% 28%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 2 76% 52%;
+    /* Feedback */
+    --destructive: 352 78% 42%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 62% 36%;
+    --success: 158 90% 26%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 48%;
-    --warning-foreground: 30 40% 10%;
+    --warning: 30 92% 34%;
+    --warning-foreground: 0 0% 100%;
 
-    --xp: 255 74% 58%;
-    --streak: 24 92% 52%;
+    /* Gamification accents */
+    --xp: 38 94% 32%;
+    --xp-foreground: 0 0% 100%;
+    --streak: 16 88% 40%;
+    --streak-foreground: 0 0% 100%;
 
-    /* The code surface stays dark in both themes: a snippet should always read
-       like an editor, never like a paragraph. */
-    --code-bg: 230 28% 14%;
-    --code-border: 230 22% 24%;
-    --code-foreground: 220 22% 92%;
+    /* The code surface. Light mode gets a cool paper panel, not a dark block:
+       it is read outdoors at full brightness, and its edge is a real 3.9:1
+       border rather than a lightness whisper. */
+    --code-bg: 192 32% 89%;
+    --code-border: 200 24% 44%;
+    --code-foreground: 200 32% 13%;
+    --code-gutter: 200 16% 40%;
 
-    --surface-2: 30 20% 94%;
+    /* Slab ledges — the physical depth under every pressable face. */
+    --ledge-primary: 164 94% 14%;
+    --ledge-success: 158 92% 15%;
+    --ledge-destructive: 352 78% 28%;
+    --ledge-secondary: 200 20% 72%;
+    --ledge-card: 200 18% 78%;
 
-    --border: 30 14% 87%;
-    --input: 30 14% 87%;
-    --ring: 255 74% 58%;
+    /* Structure */
+    --border: 200 18% 52%;
+    --input: 200 20% 44%;
+    --ring: 196 96% 28%;
 
-    --course-python: 205 78% 46%;
-    --course-javascript: 45 92% 45%;
+    /* Course accents */
+    --course-python: 206 78% 40%;
+    --course-javascript: 40 96% 30%;
 
     --radius: 1rem;
 
-    --chart-1: 255 74% 58%;
-    --chart-2: 190 90% 42%;
-    --chart-3: 152 62% 36%;
-    --chart-4: 24 92% 52%;
-    --chart-5: 320 70% 55%;
+    --chart-1: 164 92% 26%;
+    --chart-2: 196 96% 28%;
+    --chart-3: 38 94% 32%;
+    --chart-4: 16 88% 40%;
+    --chart-5: 352 78% 42%;
   }
 
   .dark:root {
-    --background: 230 28% 9%;
-    --foreground: 220 22% 94%;
+    /* Surfaces */
+    --background: 204 32% 7%;
+    --foreground: 185 16% 96%;
 
-    --card: 230 25% 13%;
-    --card-foreground: 220 22% 94%;
+    --card: 204 28% 10%;
+    --card-foreground: 185 16% 96%;
 
-    --popover: 230 25% 13%;
-    --popover-foreground: 220 22% 94%;
+    --popover: 204 30% 12%;
+    --popover-foreground: 185 16% 96%;
 
-    --primary: 255 88% 72%;
-    --primary-foreground: 230 30% 10%;
+    --surface-2: 204 26% 14%;
 
-    --secondary: 230 22% 19%;
-    --secondary-foreground: 220 22% 94%;
+    /* Brand + action */
+    --primary: 158 88% 54%;
+    --primary-foreground: 204 45% 8%;
 
-    --muted: 230 20% 18%;
-    --muted-foreground: 225 14% 68%;
+    --secondary: 204 26% 18%;
+    --secondary-foreground: 185 16% 96%;
 
-    --accent: 188 92% 56%;
-    --accent-foreground: 230 30% 10%;
+    --muted: 204 24% 16%;
+    --muted-foreground: 197 16% 70%;
 
-    --destructive: 2 84% 66%;
-    --destructive-foreground: 230 30% 10%;
+    --accent: 190 94% 58%;
+    --accent-foreground: 204 45% 8%;
 
-    --success: 152 66% 52%;
-    --success-foreground: 230 30% 10%;
+    /* Feedback */
+    --destructive: 352 92% 64%;
+    --destructive-foreground: 204 45% 8%;
 
-    --warning: 38 96% 60%;
-    --warning-foreground: 230 30% 10%;
+    --success: 152 76% 50%;
+    --success-foreground: 204 45% 8%;
 
-    --xp: 255 88% 72%;
-    --streak: 24 96% 60%;
+    --warning: 38 96% 56%;
+    --warning-foreground: 204 45% 8%;
 
-    --code-bg: 230 30% 12%;
-    --code-border: 230 20% 22%;
-    --code-foreground: 220 22% 92%;
+    /* Gamification accents */
+    --xp: 44 96% 58%;
+    --xp-foreground: 204 45% 8%;
+    --streak: 20 96% 58%;
+    --streak-foreground: 204 45% 8%;
 
-    --surface-2: 230 24% 16%;
+    /* Code surface: the only plane darker than the app itself. */
+    --code-bg: 205 42% 5%;
+    --code-border: 196 32% 38%;
+    --code-foreground: 196 28% 90%;
+    --code-gutter: 198 16% 48%;
 
-    --border: 230 18% 22%;
-    --input: 230 18% 22%;
-    --ring: 255 88% 72%;
+    /* Slab ledges */
+    --ledge-primary: 158 90% 30%;
+    --ledge-success: 152 78% 28%;
+    --ledge-destructive: 352 80% 38%;
+    --ledge-secondary: 204 30% 9%;
+    --ledge-card: 204 30% 6%;
 
-    --course-python: 205 84% 62%;
-    --course-javascript: 45 96% 60%;
+    /* Structure */
+    --border: 202 20% 43%;
+    --input: 202 18% 46%;
+    --ring: 190 94% 58%;
+
+    /* Course accents */
+    --course-python: 206 84% 62%;
+    --course-javascript: 44 96% 58%;
 
     --radius: 1rem;
 
-    --chart-1: 255 88% 72%;
-    --chart-2: 188 92% 56%;
-    --chart-3: 152 66% 52%;
-    --chart-4: 24 96% 60%;
-    --chart-5: 320 80% 68%;
+    --chart-1: 158 88% 54%;
+    --chart-2: 190 94% 58%;
+    --chart-3: 44 96% 58%;
+    --chart-4: 20 96% 58%;
+    --chart-5: 352 92% 64%;
   }
 }

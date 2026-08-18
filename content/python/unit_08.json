@@ -19,7 +19,7 @@
         },
         "body": {
           "en": "A function is a block of code with a name that you can run whenever you want. You define it once with def, followed by the name and parentheses and a colon, then indent the lines that belong inside. After that, you call it by writing its name with parentheses. Every time you call it, Python runs all the lines inside.",
-          "tr": "Fonksiyon, istediğiniz zaman çalıştırabileceğiniz adlı bir kod bloğudur. Bunu def ile tanımlarsınız, sonra isim ve parantezler ve iki nokta ile devam edersiniz, sonra içine ait satırları girintilersiniz. Bundan sonra onu adıyla parantezler koyarak çağırırsınız. Her çağırdığınızda Python içindeki tüm satırları çalıştırır."
+          "tr": "Fonksiyon, istediğiniz zaman çalıştırabileceğiniz, adı olan bir kod bloğudur. Onu def ile, ardından isim, parantezler ve iki nokta ile tanımlarsınız, sonra içine ait satırları girintili yazarsınız. Daha sonra adını parantezle yazarak çağırırsınız. Her çağırdığınızda Python içindeki tüm satırları çalıştırır."
         },
         "example": {
           "code": "def greet():\n    print(\"Hello!\")\n\ngreet()\ngreet()",
@@ -59,7 +59,7 @@
           "answerId": "b",
           "explanation": {
             "en": "def stands for define, which means to create a new function that you can call later.",
-            "tr": "def define anlamına gelir, yani daha sonra çağırabileceğiniz yeni bir fonksiyon oluşturmak demektir."
+            "tr": "def, İngilizce 'define' (tanımlamak) kelimesinden gelir; daha sonra çağırabileceğiniz yeni bir fonksiyon oluşturmanızı sağlar."
           }
         },
         {
@@ -116,8 +116,8 @@
           "expected": "greet()",
           "verify": { "stdout": "Hi there\n" },
           "explanation": {
-            "en": "To call a function, type its name followed by empty parentheses.",
-            "tr": "Bir fonksiyonu çağırmak için adıyla ve boş parantezle yazarsınız."
+            "en": "greet() has no parameters, so calling it needs only empty parentheses. That runs every line inside the function.",
+            "tr": "greet() hiç parametre almaz, bu yüzden çağırmak için sadece boş parantez yeterlidir. Bu, fonksiyon içindeki her satırı çalıştırır."
           }
         },
         {
@@ -128,6 +128,7 @@
           "codeLines": ["def hello():", "print(\"Hello\")", "hello()"],
           "buggyLineIndex": 1,
           "fix": "    print(\"Hello\")",
+          "verify": { "raises": "IndentationError" },
           "explanation": {
             "en": "The line inside the function must be indented more than the def line. Without indentation, Python doesn't know it belongs inside the function.",
             "tr": "Fonksiyon içindeki satır def satırından daha fazla girinti ile yazılmalıdır. Girinti olmadan Python bunun fonksiyon içine ait olduğunu bilmez."
@@ -179,7 +180,7 @@
         },
         "body": {
           "en": "A parameter is a variable inside a function that receives a value when you call it. You list parameters in the parentheses when you define the function with def. When you call the function, you put the actual values (called arguments) in the parentheses. The function then uses those values inside.",
-          "tr": "Parametre, fonksiyonu çağırdığınızda bir değer alan bir fonksiyon içindeki değişkendir. Parametreleri def ile fonksiyonu tanımlarken parantez içinde listelersiz. Fonksiyonu çağırırken parantez içine gerçek değerleri (argümanlar denir) koyarsınız. Fonksiyon daha sonra bu değerleri içinde kullanır."
+          "tr": "Parametre, fonksiyonu çağırdığınızda bir değer alan, fonksiyon içindeki bir değişkendir. Fonksiyonu def ile tanımlarken parametreleri parantez içinde listelersiniz. Fonksiyonu çağırırken parantez içine gerçek değerleri (argümanlar denir) koyarsınız. Fonksiyon bu değerleri içeride kullanır."
         },
         "example": {
           "code": "def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(\"Alice\")\ngreet(\"Bob\")",
@@ -285,9 +286,10 @@
           "codeLines": ["def add(x, y):", "    total = x + y", "print(total)", "add(3, 4)"],
           "buggyLineIndex": 2,
           "fix": "    print(total)",
+          "verify": { "raises": "NameError" },
           "explanation": {
             "en": "The variable total is created inside the function, so it only exists there. You cannot use it outside the function. Trying to print(total) outside the function causes a NameError.",
-            "tr": "total değişkeni fonksiyon içinde oluşturuldu, bu nedenle sadece orada var. Fonksiyon dışında kullanamaz. Fonksiyon dışında print(total) yapmaya çalışmak NameError verir."
+            "tr": "total değişkeni fonksiyon içinde oluşturuldu, bu nedenle sadece orada vardır. Onu fonksiyon dışında kullanamazsınız. Fonksiyon dışında print(total) yapmaya çalışmak NameError verir."
           }
         },
         {
@@ -507,7 +509,7 @@
         },
         "body": {
           "en": "You can give a parameter a default value so you do not have to provide it every time you call the function. Write the default after an equals sign in the parameter list. Variables created inside a function only exist inside that function (they have function scope). Variables outside functions exist everywhere. Understanding scope helps you avoid errors like using a variable that does not exist where you need it.",
-          "tr": "Bir parametreye varsayılan değer verebilirsiniz, böylece fonksiyonu her çağırdığınızda sağlamak zorunda kalmazsınız. Varsayılanı parametre listesinde eşittir işaretinden sonra yazın. Fonksiyon içinde oluşturulan değişkenler sadece o fonksiyon içinde var olur (fonksiyon kapsamı vardır). Fonksiyon dışındaki değişkenler her yerde var. Kapsamı anlamak, olmayan bir değişkeni kullanma hatalarından kaçınmanıza yardımcı olur."
+          "tr": "Bir parametreye varsayılan değer verebilirsiniz, böylece fonksiyonu her çağırdığınızda onu vermek zorunda kalmazsınız. Varsayılanı parametre listesinde eşittir işaretinden sonra yazarsınız. Fonksiyon içinde oluşturulan değişkenler sadece o fonksiyon içinde var olur (fonksiyon kapsamı vardır). Fonksiyon dışındaki değişkenler her yerde vardır. Kapsamı anlamak, var olmayan bir değişkeni kullanmaktan doğan hatalardan kaçınmanıza yardımcı olur."
         },
         "example": {
           "code": "def greet(name=\"Friend\"):\n    print(\"Hello, \" + name)\n\ngreet()\ngreet(\"Alice\")",
@@ -559,7 +561,7 @@
           "answerId": "b",
           "explanation": {
             "en": "When you define a parameter with a default value, the function can be called without that argument, and it will use the default.",
-            "tr": "Bir parametreyi varsayılan değer ile tanımlandığında, fonksiyon bu argüman olmadan çağrılabilir ve varsayılanı kullanır."
+            "tr": "Bir parametreyi varsayılan bir değerle tanımladığınızda, fonksiyon bu argüman olmadan çağrılabilir ve varsayılanı kullanır."
           }
         },
         {
@@ -572,10 +574,10 @@
           },
           "code": "def show_number(num=5):\n    print(num)\n\nshow_number()\nshow_number(10)",
           "options": [
-            { "id": "a", "text": { "en": "5\\n10", "tr": "5\\n10" } },
-            { "id": "b", "text": { "en": "10\\n5", "tr": "10\\n5" } },
-            { "id": "c", "text": { "en": "5\\n5", "tr": "5\\n5" } },
-            { "id": "d", "text": { "en": "num\\n10", "tr": "num\\n10" } }
+            { "id": "a", "text": { "en": "5\n10", "tr": "5\n10" } },
+            { "id": "b", "text": { "en": "10\n5", "tr": "10\n5" } },
+            { "id": "c", "text": { "en": "5\n5", "tr": "5\n5" } },
+            { "id": "d", "text": { "en": "num\n10", "tr": "num\n10" } }
           ],
           "answerId": "a",
           "explanation": {
@@ -594,8 +596,8 @@
           "codeTemplate": "def multiply(x, y___):\n    return x * y",
           "blanks": [{ "id": "1", "answer": "=2", "distractors": ["==2", "= 2", ": 2"] }],
           "explanation": {
-            "en": "Use = (not ==) to give a parameter a default value in the function definition.",
-            "tr": "Fonksiyon tanımında parametreye varsayılan değer vermek için = (== değil) kullanın."
+            "en": "Use = (not ==) to give a parameter a default value. == is for comparisons, not for assigning defaults in a def line.",
+            "tr": "Parametreye varsayılan değer vermek için = kullanın (== değil). == karşılaştırma içindir, def satırında varsayılan atamak için değil."
           }
         },
         {
@@ -607,7 +609,6 @@
             "tr": "number parametresini alan ve varsayılan olarak 2'nin kuvvetine yükselten, ancak ikinci argüman geçirirseniz farklı bir kuvvete yükseltebilen power adında bir fonksiyon yaz."
           },
           "expected": "def power(x, p=2):\n    return x ** p",
-          "acceptable": ["def power(x, p = 2):\n    return x ** p"],
           "verify": { "stdout": "" },
           "explanation": {
             "en": "A default parameter lets you call the function with fewer arguments. Here power(3) means power(3, 2) and power(3, 3) is different.",

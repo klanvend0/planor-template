@@ -94,7 +94,7 @@ function AlertDialogTitle({
 }: AlertDialogPrimitive.TitleProps & React.RefAttributes<AlertDialogPrimitive.TitleRef>) {
   return (
     <AlertDialogPrimitive.Title
-      className={cn('font-semibold text-lg text-foreground', className)}
+      className={cn('font-strong text-lg text-foreground', className)}
       {...props}
     />
   );

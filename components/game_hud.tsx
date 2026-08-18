@@ -97,7 +97,7 @@ export function HeartsIndicator({
       {unlimited ? (
         <Icon as={InfinityIcon} size={18} className="text-destructive" />
       ) : (
-        <Text className="font-bold text-base text-foreground">{Math.max(0, hearts)}</Text>
+        <Text className="font-num text-base text-foreground">{Math.max(0, hearts)}</Text>
       )}
     </Animated.View>
   );
@@ -141,7 +141,7 @@ export function StreakBadge({
       />
       <Text
         className={cn(
-          'font-bold',
+          'font-num',
           size === 'sm' ? 'text-sm' : 'text-base',
           alive ? 'text-foreground' : 'text-muted-foreground'
         )}>
@@ -156,7 +156,7 @@ export function XpPill({ xp, className }: { xp: number; className?: string }) {
   return (
     <View className={cn('flex-row items-center gap-1.5', className)}>
       <Icon as={Zap} size={18} className="text-xp" fill="currentColor" />
-      <Text className="font-bold text-base text-foreground">{xp}</Text>
+      <Text className="font-num text-base text-foreground">{xp}</Text>
     </View>
   );
 }
@@ -207,7 +207,7 @@ export function LevelRing({
           fill="none"
         />
       </Svg>
-      <Text className="font-display text-lg text-foreground">{level}</Text>
+      <Text className="font-num text-lg text-foreground">{level}</Text>
     </View>
   );
 }

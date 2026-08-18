@@ -16,13 +16,18 @@ import { Text, TextClassContext } from '@/components/ui/text';
 import { pressFeedback } from '@/lib/haptics';
 import { cn } from '@/lib/utils';
 
+/**
+ * The ledge the face presses into. Each variant has its own colour token rather
+ * than a translucent tint of the face, so the depth reads the same on every
+ * surface the button sits on.
+ */
 const shelfVariants = cva('rounded-2xl', {
   variants: {
     variant: {
-      primary: 'bg-primary/40',
-      success: 'bg-success/40',
-      destructive: 'bg-destructive/40',
-      secondary: 'bg-secondary',
+      primary: 'bg-primary-ledge',
+      success: 'bg-success-ledge',
+      destructive: 'bg-destructive-ledge',
+      secondary: 'bg-secondary-ledge',
       ghost: 'bg-transparent',
     },
   },
@@ -50,7 +55,7 @@ const faceVariants = cva(
   }
 );
 
-const labelVariants = cva('font-bold uppercase tracking-wide', {
+const labelVariants = cva('font-strong uppercase tracking-wide', {
   variants: {
     variant: {
       primary: 'text-primary-foreground',

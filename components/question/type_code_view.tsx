@@ -13,7 +13,7 @@ import { Text } from '@/components/ui/text';
 import { CodeBlock } from '@/components/code_block';
 import type { TypeCodeQuestion } from '@/lib/content_schema';
 import { useTranslation } from '@/hooks/use_translation';
-import { SYNTAX } from '@/lib/theme';
+import { useSyntax } from '@/hooks/use_syntax';
 import { cn } from '@/lib/utils';
 import { pick, QuestionShell, type QuestionViewProps } from './question_shell';
 
@@ -27,6 +27,7 @@ export function TypeCodeView({
   result,
 }: QuestionViewProps<TypeCodeQuestion>) {
   const { t } = useTranslation();
+  const syntax = useSyntax();
   const value = draft?.type === 'type_code' ? draft.text : '';
 
   return (
@@ -43,7 +44,7 @@ export function TypeCodeView({
           editable={!disabled}
           onChangeText={(text) => onChange(text.trim() ? { type: 'type_code', text } : null)}
           placeholder={t('lesson.type_here')}
-          placeholderTextColor={SYNTAX.comment}
+          placeholderTextColor={syntax.comment}
           // Everything the keyboard normally "helps" with breaks code.
           autoCapitalize="none"
           autoCorrect={false}
@@ -53,13 +54,13 @@ export function TypeCodeView({
           multiline={question.expected.includes('\n')}
           accessibilityLabel={pick(question.prompt, locale)}
           className="min-h-[28px] font-mono text-[16px]"
-          style={{ color: SYNTAX.plain }}
+          style={{ color: syntax.plain }}
         />
       </View>
 
       {result && !result.isCorrect ? (
         <View className="gap-1">
-          <Text className="font-semibold text-sm text-muted-foreground">
+          <Text className="font-strong text-sm text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <CodeBlock code={question.expected} language={language} compact />

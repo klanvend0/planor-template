@@ -61,7 +61,7 @@ export function FeedbackPanel({
 
       {!isCorrect && correctAnswer ? (
         <View className="gap-0.5">
-          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
+          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <Text className="font-mono text-[15px] text-foreground">{correctAnswer}</Text>

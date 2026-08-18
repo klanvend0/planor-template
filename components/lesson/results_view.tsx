@@ -48,11 +48,11 @@ function StatTile({
             tone === 'streak' && 'text-streak'
           )}
         />
-        <Text className="font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
+        <Text className="font-strong text-[11px] uppercase tracking-wide text-muted-foreground">
           {label}
         </Text>
       </View>
-      <Text className="font-display text-[22px] text-foreground">{value}</Text>
+      <Text className="font-num text-[22px] text-foreground">{value}</Text>
     </View>
   );
 }
@@ -133,7 +133,7 @@ export function ResultsView({
           {!isPractice && result.streakDays > 0 ? (
             <View className="flex-row items-center gap-2 rounded-2xl border-2 border-streak/40 bg-streak/10 px-4 py-3">
               <Icon as={Flame} size={20} className="text-streak" fill="currentColor" />
-              <Text className="flex-1 font-semibold text-[15px] text-foreground">
+              <Text className="flex-1 font-strong text-[15px] text-foreground">
                 {result.streakDays === 1
                   ? t('results.streak_started')
                   : t('results.streak_extended', { count: result.streakDays })}

@@ -85,7 +85,11 @@ export default function LearnScreen() {
     setRefreshing(false);
   };
 
-  const openLesson = (lessonId: string, status: ReturnType<typeof lessonStatus>, unitId: string) => {
+  const openLesson = (
+    lessonId: string,
+    status: ReturnType<typeof lessonStatus>,
+    unitId: string
+  ) => {
     if (status === 'premium_locked') {
       router.push('/paywall');
       return;
@@ -108,10 +112,10 @@ export default function LearnScreen() {
             accessibilityLabel={t('learn.course_switch')}
             onPress={() => setActiveCourse(activeCourse === 'python' ? 'javascript' : 'python')}
             className="flex-row items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-            <Text className="font-mono-bold text-sm text-foreground">
+            <Text className="font-mono-strong text-sm text-foreground">
               {activeCourse === 'python' ? 'Py' : 'JS'}
             </Text>
-            <Text className="font-semibold text-sm text-foreground">
+            <Text className="font-strong text-sm text-foreground">
               {localized(course.title, locale)}
             </Text>
             <Icon as={ChevronDown} size={14} className="text-muted-foreground" />
@@ -132,7 +136,7 @@ export default function LearnScreen() {
 
         <View className="flex-row items-center gap-3">
           <ProgressBar progress={dailyXp / dailyGoal} tone={goalReached ? 'success' : 'xp'} />
-          <Text className="font-semibold text-xs text-muted-foreground">
+          <Text className="font-strong text-xs text-muted-foreground">
             {goalReached
               ? t('learn.daily_goal_done')
               : t('learn.daily_goal_progress', { current: dailyXp, target: dailyGoal })}
@@ -150,7 +154,7 @@ export default function LearnScreen() {
         {/* Continue card */}
         {nextLesson ? (
           <View className="gap-3 rounded-3xl border-2 border-primary/30 bg-primary/10 px-5 py-5">
-            <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+            <Text className="font-strong text-xs uppercase tracking-widest text-primary">
               {t(greetingKey())}
             </Text>
             <Text className="font-display text-[22px] leading-7 text-foreground">

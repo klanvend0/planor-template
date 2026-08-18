@@ -23,7 +23,7 @@ import type { ExplainCodeQuestion } from '@/lib/content_schema';
 import { useTranslation } from '@/hooks/use_translation';
 import type { SupportedLocale } from '@/lib/i18n';
 import type { SyntaxLanguage } from '@/lib/syntax';
-import { SYNTAX } from '@/lib/theme';
+import { useSyntax } from '@/hooks/use_syntax';
 import { cn } from '@/lib/utils';
 import type { ExplanationReview } from '@/services/grading_service';
 import { pick, QuestionPrompt } from './question_shell';
@@ -64,7 +64,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
       <View className="flex-row items-center justify-between">
         <Text
           className={cn(
-            'font-bold text-base',
+            'font-strong text-base',
             tone === 'success' && 'text-success',
             tone === 'warning' && 'text-warning',
             tone === 'destructive' && 'text-destructive'
@@ -75,7 +75,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
               ? t('explain.verdict_partial')
               : t('explain.verdict_incorrect')}
         </Text>
-        <Text className="font-semibold text-sm text-muted-foreground">
+        <Text className="font-strong text-sm text-muted-foreground">
           {t('explain.score', { score: review.score })}
         </Text>
       </View>
@@ -84,7 +84,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.corrections.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
+          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
             {t('explain.corrections')}
           </Text>
           {review.corrections.map((correction, index) => (
@@ -98,7 +98,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.missedPoints.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
+          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
             {t('explain.missed')}
           </Text>
           {review.missedPoints.map((point, index) => (
@@ -127,6 +127,7 @@ export function ExplainCodeView({
   onSkip,
 }: ExplainCodeViewProps) {
   const { t } = useTranslation();
+  const syntax = useSyntax();
   const code = pick(question.code, locale);
   const length = text.trim().length;
   const canSubmit =
@@ -141,7 +142,9 @@ export function ExplainCodeView({
         <View className="gap-3 rounded-2xl border-2 border-primary/40 bg-primary/10 px-4 py-5">
           <View className="flex-row items-center gap-2">
             <Icon as={Lock} size={18} className="text-primary" />
-            <Text className="font-bold text-base text-foreground">{t('explain.locked_title')}</Text>
+            <Text className="font-strong text-base text-foreground">
+              {t('explain.locked_title')}
+            </Text>
           </View>
           <Text className="text-[15px] leading-6 text-muted-foreground">
             {t('explain.locked_body')}
@@ -161,7 +164,7 @@ export function ExplainCodeView({
     <View className="gap-5">
       <View className="flex-row items-center gap-2">
         <Icon as={Sparkles} size={18} className="text-primary" />
-        <Text className="font-bold text-sm uppercase tracking-wide text-primary">
+        <Text className="font-strong text-sm uppercase tracking-wide text-primary">
           {t('explain.title')}
         </Text>
       </View>
@@ -176,7 +179,7 @@ export function ExplainCodeView({
           </View>
           <VerdictBanner review={review} />
           <View className="gap-1">
-            <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
+            <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
               {t('explain.sample_title')}
             </Text>
             <Text className="text-[15px] leading-6 text-muted-foreground">
@@ -194,7 +197,7 @@ export function ExplainCodeView({
               multiline
               maxLength={EXPLANATION_MAX_CHARS + 40}
               placeholder={t('explain.placeholder')}
-              placeholderTextColor={SYNTAX.comment}
+              placeholderTextColor={syntax.comment}
               autoCapitalize="sentences"
               accessibilityLabel={t('explain.instruction')}
               className="min-h-[104px] text-[16px] leading-6 text-foreground"
@@ -204,7 +207,7 @@ export function ExplainCodeView({
               <Text className="text-xs text-muted-foreground">{t('explain.instruction')}</Text>
               <Text
                 className={cn(
-                  'font-semibold text-xs',
+                  'font-strong text-xs',
                   length > EXPLANATION_MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'
                 )}>
                 {t('explain.counter', { count: length })}

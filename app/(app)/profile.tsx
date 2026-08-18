@@ -30,10 +30,10 @@ import { useGameStore } from '@/stores/game_store';
 function StatCell({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-1 gap-1 rounded-2xl border border-border bg-card px-3 py-3">
-      <Text className="font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
+      <Text className="font-strong text-[11px] uppercase tracking-wide text-muted-foreground">
         {label}
       </Text>
-      <Text className="font-display text-[20px] text-foreground">{value}</Text>
+      <Text className="font-num text-[20px] text-foreground">{value}</Text>
     </View>
   );
 }
@@ -88,7 +88,7 @@ export default function ProfileScreen() {
             <Text className="font-display text-[20px] text-foreground" numberOfLines={1}>
               {user?.user_metadata?.full_name ?? user?.email ?? t('app.name')}
             </Text>
-            <Text className="font-semibold text-sm text-muted-foreground">
+            <Text className="font-strong text-sm text-muted-foreground">
               {t('profile.level', { level: level.level })}
             </Text>
             <Text className="text-xs text-muted-foreground">
@@ -109,7 +109,7 @@ export default function ProfileScreen() {
             isPro ? 'border-success/40 bg-success/10' : 'border-border bg-card'
           )}>
           <View className="flex-1 gap-0.5">
-            <Text className="font-bold text-[16px] text-foreground">
+            <Text className="font-strong text-[16px] text-foreground">
               {isPro ? t('profile.pro_member') : t('profile.free_member')}
             </Text>
             <Text className="text-xs text-muted-foreground">
@@ -127,7 +127,7 @@ export default function ProfileScreen() {
 
         {/* Stats */}
         <View className="gap-3">
-          <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
+          <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
             {t('profile.stats')}
           </Text>
           <View className="flex-row gap-3">
@@ -148,10 +148,10 @@ export default function ProfileScreen() {
         {/* League */}
         <View className="gap-3 rounded-3xl border border-border bg-card px-5 py-5">
           <View className="flex-row items-center justify-between">
-            <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
+            <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
               {t('profile.league')}
             </Text>
-            <Text className="font-semibold text-xs text-muted-foreground">
+            <Text className="font-strong text-xs text-muted-foreground">
               {t('profile.league_progress', { xp: gameState?.weeklyXp ?? 0 })}
             </Text>
           </View>
@@ -171,10 +171,10 @@ export default function ProfileScreen() {
         {/* Achievements */}
         <View className="gap-3">
           <View className="flex-row items-center justify-between">
-            <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
+            <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
               {t('profile.achievements')}
             </Text>
-            <Text className="font-semibold text-xs text-muted-foreground">
+            <Text className="font-strong text-xs text-muted-foreground">
               {t('profile.achievements_progress', {
                 unlocked: ACHIEVEMENTS.filter((achievement) => isUnlocked(achievement, stats))
                   .length,
@@ -212,7 +212,7 @@ export default function ProfileScreen() {
                   <Text
                     numberOfLines={2}
                     className={cn(
-                      'text-center font-bold text-[11px] leading-4',
+                      'text-center font-strong text-[11px] leading-4',
                       unlocked ? 'text-foreground' : 'text-muted-foreground'
                     )}>
                     {t(achievement.titleKey)}

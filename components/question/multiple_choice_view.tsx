@@ -65,7 +65,7 @@ export function MultipleChoiceView({
                 )}>
                 <Text
                   className={cn(
-                    'font-bold text-sm text-muted-foreground',
+                    'font-strong text-sm text-muted-foreground',
                     isSelected && !result && 'text-primary-foreground',
                     showCorrect && 'text-success-foreground',
                     showWrong && 'text-destructive-foreground'

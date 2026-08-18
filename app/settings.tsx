@@ -39,7 +39,7 @@ import { useSubscriptionStore } from '@/stores/subscription_store';
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View className="gap-2">
-      <Text className="px-1 font-bold text-xs uppercase tracking-widest text-muted-foreground">
+      <Text className="px-1 font-strong text-xs uppercase tracking-widest text-muted-foreground">
         {title}
       </Text>
       <View className="overflow-hidden rounded-2xl border border-border bg-card">{children}</View>

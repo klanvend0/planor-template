@@ -85,7 +85,8 @@ export function SessionRunner({
   }, [location.course.id, location.lesson.id, session.elapsedMs, session.outcome, session.phase]);
 
   useEffect(() => {
-    if (session.phase === 'out_of_hearts') track('hearts_depleted', { lesson_id: location.lesson.id });
+    if (session.phase === 'out_of_hearts')
+      track('hearts_depleted', { lesson_id: location.lesson.id });
   }, [location.lesson.id, session.phase]);
 
   useEffect(() => {
@@ -187,7 +188,7 @@ export function SessionRunner({
             onPress={onExit}>
             <Icon as={X} size={26} className="text-muted-foreground" />
           </Pressable>
-          <Text className="flex-1 font-semibold text-sm text-muted-foreground" numberOfLines={1}>
+          <Text className="flex-1 font-strong text-sm text-muted-foreground" numberOfLines={1}>
             {localized(location.unit.title, locale)}
           </Text>
         </View>
@@ -234,7 +235,7 @@ export function SessionRunner({
         contentContainerClassName="px-6 pb-8 pt-2"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive">
-        <Text className="mb-4 font-bold text-xs uppercase tracking-widest text-muted-foreground">
+        <Text className="mb-4 font-strong text-xs uppercase tracking-widest text-muted-foreground">
           {t('lesson.question_of', { current: session.position, total: session.total })}
         </Text>
 

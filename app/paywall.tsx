@@ -158,7 +158,7 @@ export default function PaywallScreen() {
           hitSlop={10}
           onPress={() => void restorePurchases()}
           disabled={isRestoring}>
-          <Text className="font-semibold text-sm text-muted-foreground underline">
+          <Text className="font-strong text-sm text-muted-foreground underline">
             {t('paywall.restore')}
           </Text>
         </Pressable>
@@ -228,19 +228,19 @@ export default function PaywallScreen() {
                   </View>
 
                   <View className="flex-1 gap-0.5">
-                    <Text className="font-bold text-[17px] text-foreground">
+                    <Text className="font-strong text-[17px] text-foreground">
                       {t(planLabelKey(pkg))}
                     </Text>
                     {/* The billed amount is never smaller or quieter than the
                         trial badge — Apple rejects paywalls where it is. */}
-                    <Text className="font-semibold text-[15px] text-foreground">
+                    <Text className="font-strong text-[15px] text-foreground">
                       {t(priceKey(pkg), { price: pkg.product.priceString })}
                     </Text>
                   </View>
 
                   {isAnnual ? (
                     <View className="rounded-full bg-success/20 px-2.5 py-1">
-                      <Text className="font-bold text-[11px] uppercase tracking-wide text-success">
+                      <Text className="font-strong text-[11px] uppercase tracking-wide text-success">
                         {t('paywall.best_value')}
                       </Text>
                     </View>
@@ -282,12 +282,12 @@ export default function PaywallScreen() {
 
         <View className="flex-row items-center justify-center gap-6">
           <Text
-            className="font-semibold text-xs text-muted-foreground underline"
+            className="font-strong text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.terms)}>
             {t('paywall.terms')}
           </Text>
           <Text
-            className="font-semibold text-xs text-muted-foreground underline"
+            className="font-strong text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.privacy)}>
             {t('paywall.privacy')}
           </Text>

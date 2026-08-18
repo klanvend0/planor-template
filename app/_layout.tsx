@@ -10,14 +10,12 @@
 
 import '@/global.css';
 
+import { Inter_500Medium, Inter_700Bold, Inter_800ExtraBold } from '@expo-google-fonts/inter';
 import {
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-} from '@expo-google-fonts/inter';
-import { JetBrainsMono_400Regular, JetBrainsMono_700Bold } from '@expo-google-fonts/jetbrains-mono';
+  JetBrainsMono_500Medium,
+  JetBrainsMono_700Bold,
+  JetBrainsMono_800ExtraBold,
+} from '@expo-google-fonts/jetbrains-mono';
 import { PortalHost } from '@rn-primitives/portal';
 import { useFonts } from 'expo-font';
 import { Stack, ThemeProvider } from 'expo-router';
@@ -54,14 +52,15 @@ export default function RootLayout() {
   const scheme = useAppearance();
   const { isReady } = useAppBootstrap();
 
+  // Six families, because React Native does not synthesize weights: every
+  // weight the design uses has to be its own loaded face.
   const [fontsLoaded, fontError] = useFonts({
-    Inter_400Regular,
     Inter_500Medium,
-    Inter_600SemiBold,
     Inter_700Bold,
     Inter_800ExtraBold,
-    JetBrainsMono_400Regular,
+    JetBrainsMono_500Medium,
     JetBrainsMono_700Bold,
+    JetBrainsMono_800ExtraBold,
   });
 
   // A missing font must not strand the learner on the splash screen.

@@ -150,7 +150,18 @@ export function useLessonSession(
       outcome,
       elapsedMs: Date.now() - sessionStartedAt.current,
     }),
-    [phase, question, total, lastResult, review, isGrading, isFinishing, error, outcome, skippedCount]
+    [
+      phase,
+      question,
+      total,
+      lastResult,
+      review,
+      isGrading,
+      isFinishing,
+      error,
+      outcome,
+      skippedCount,
+    ]
   );
 
   const begin = useCallback(() => {

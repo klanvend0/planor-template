@@ -30,7 +30,7 @@ export function ConceptCard({
   return (
     <Animated.View entering={FadeInDown.duration(260)} className="gap-6">
       <View className="gap-2">
-        <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+        <Text className="font-strong text-xs uppercase tracking-widest text-primary">
           {localized(lesson.title, locale)}
         </Text>
         <Text className="font-display text-[26px] leading-8 text-foreground">

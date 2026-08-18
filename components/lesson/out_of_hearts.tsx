@@ -65,7 +65,7 @@ export function OutOfHearts({
 
       <HeartsRow hearts={0} />
 
-      <Text className="font-semibold text-sm text-muted-foreground">
+      <Text className="font-strong text-sm text-muted-foreground">
         {t('hearts.next_in', { time: formatCountdown(remaining) })}
       </Text>
 

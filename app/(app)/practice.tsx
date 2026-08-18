@@ -63,9 +63,7 @@ function DeckCard({
         </View>
         <View className="flex-1 gap-0.5">
           <Text className="font-display text-[20px] text-foreground">{title}</Text>
-          {meta ? (
-            <Text className="font-semibold text-sm text-muted-foreground">{meta}</Text>
-          ) : null}
+          {meta ? <Text className="font-strong text-sm text-muted-foreground">{meta}</Text> : null}
         </View>
       </View>
 

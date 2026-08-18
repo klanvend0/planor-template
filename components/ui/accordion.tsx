@@ -78,10 +78,7 @@ function AccordionTrigger({
 
   return (
     <TextClassContext.Provider
-      value={cn(
-        'text-left text-sm font-medium',
-        Platform.select({ web: 'group-hover:underline' })
-      )}>
+      value={cn('text-left text-sm font-sans', Platform.select({ web: 'group-hover:underline' }))}>
       <AccordionPrimitive.Header>
         <AccordionPrimitive.Trigger {...props} asChild>
           <Trigger

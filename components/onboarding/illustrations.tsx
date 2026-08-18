@@ -22,7 +22,7 @@ import Svg, {
   type SvgProps,
 } from 'react-native-svg';
 
-import { SYNTAX, themeTokens } from '@/lib/theme';
+import { syntaxPalette, themeTokens } from '@/lib/theme';
 
 const WIDTH = 320;
 const HEIGHT = 240;
@@ -78,6 +78,7 @@ export function WelcomeIllustration({
   ...props
 }: IllustrationProps) {
   const tokens = themeTokens(scheme);
+  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (
@@ -93,12 +94,12 @@ export function WelcomeIllustration({
       <EditorPanel fill={tokens.codeBg} stroke={tokens.codeBorder} />
 
       {/* Code lines, with the accent line reading as the "spoken" one. */}
-      <Rect x={64} y={78} width={92} height={9} rx={4.5} fill={SYNTAX.keyword} />
-      <Rect x={162} y={78} width={54} height={9} rx={4.5} fill={SYNTAX.string} />
-      <Rect x={64} y={100} width={132} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.55} />
-      <Rect x={78} y={122} width={70} height={9} rx={4.5} fill={SYNTAX.function} />
-      <Rect x={154} y={122} width={46} height={9} rx={4.5} fill={SYNTAX.number} />
-      <Rect x={64} y={144} width={108} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.35} />
+      <Rect x={64} y={78} width={92} height={9} rx={4.5} fill={syntax.keyword} />
+      <Rect x={162} y={78} width={54} height={9} rx={4.5} fill={syntax.string} />
+      <Rect x={64} y={100} width={132} height={9} rx={4.5} fill={syntax.plain} opacity={0.55} />
+      <Rect x={78} y={122} width={70} height={9} rx={4.5} fill={syntax.function} />
+      <Rect x={154} y={122} width={46} height={9} rx={4.5} fill={syntax.number} />
+      <Rect x={64} y={144} width={108} height={9} rx={4.5} fill={syntax.plain} opacity={0.35} />
 
       {/* Speech bubble: the code says something back. */}
       <G>
@@ -137,6 +138,7 @@ export function PuzzlesIllustration({
   ...props
 }: IllustrationProps) {
   const tokens = themeTokens(scheme);
+  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (
@@ -145,7 +147,7 @@ export function PuzzlesIllustration({
       <EditorPanel y={28} height={128} fill={tokens.codeBg} stroke={tokens.codeBorder} />
 
       {/* A line with a blank waiting to be filled */}
-      <Rect x={64} y={70} width={48} height={9} rx={4.5} fill={SYNTAX.builtin} />
+      <Rect x={64} y={70} width={48} height={9} rx={4.5} fill={syntax.builtin} />
       <Rect
         x={118}
         y={64}
@@ -157,10 +159,10 @@ export function PuzzlesIllustration({
         strokeWidth={2}
         strokeDasharray="6 5"
       />
-      <Rect x={186} y={70} width={34} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.5} />
+      <Rect x={186} y={70} width={34} height={9} rx={4.5} fill={syntax.plain} opacity={0.5} />
 
-      <Rect x={64} y={98} width={120} height={9} rx={4.5} fill={SYNTAX.string} opacity={0.85} />
-      <Rect x={64} y={122} width={86} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.35} />
+      <Rect x={64} y={98} width={120} height={9} rx={4.5} fill={syntax.string} opacity={0.85} />
+      <Rect x={64} y={122} width={86} height={9} rx={4.5} fill={syntax.plain} opacity={0.35} />
 
       {/* Token chips below, one lifting towards the blank */}
       <G>
@@ -204,6 +206,7 @@ export function MistakesIllustration({
   ...props
 }: IllustrationProps) {
   const tokens = themeTokens(scheme);
+  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (
@@ -211,15 +214,15 @@ export function MistakesIllustration({
       <Circle cx={160} cy={118} r={100} fill={tokens.destructive} opacity={0.1} />
       <EditorPanel y={36} height={150} fill={tokens.codeBg} stroke={tokens.codeBorder} />
 
-      <Rect x={64} y={76} width={110} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.4} />
+      <Rect x={64} y={76} width={110} height={9} rx={4.5} fill={syntax.plain} opacity={0.4} />
 
       {/* The offending line, highlighted */}
       <Rect x={56} y={96} width={208} height={26} rx={9} fill={tokens.destructive} opacity={0.22} />
-      <Rect x={64} y={105} width={64} height={9} rx={4.5} fill={SYNTAX.builtin} />
+      <Rect x={64} y={105} width={64} height={9} rx={4.5} fill={syntax.builtin} />
       <Rect x={134} y={105} width={58} height={9} rx={4.5} fill={tokens.destructive} />
 
-      <Rect x={64} y={136} width={92} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.4} />
-      <Rect x={64} y={158} width={130} height={9} rx={4.5} fill={SYNTAX.plain} opacity={0.25} />
+      <Rect x={64} y={136} width={92} height={9} rx={4.5} fill={syntax.plain} opacity={0.4} />
+      <Rect x={64} y={158} width={130} height={9} rx={4.5} fill={syntax.plain} opacity={0.25} />
 
       {/* Bug: body, head, legs, antennae */}
       <G>
@@ -261,6 +264,7 @@ export function MistakesIllustration({
 /** An AI that reads your answer. */
 export function AiIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
   const tokens = themeTokens(scheme);
+  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (
@@ -285,10 +289,10 @@ export function AiIllustration({ width = 280, scheme = 'light', ...props }: Illu
         stroke={tokens.codeBorder}
         strokeWidth={2}
       />
-      <Rect x={50} y={66} width={70} height={8} rx={4} fill={SYNTAX.comment} />
-      <Rect x={50} y={86} width={104} height={8} rx={4} fill={SYNTAX.keyword} />
-      <Rect x={62} y={106} width={82} height={8} rx={4} fill={SYNTAX.function} />
-      <Rect x={50} y={126} width={58} height={8} rx={4} fill={SYNTAX.number} />
+      <Rect x={50} y={66} width={70} height={8} rx={4} fill={syntax.comment} />
+      <Rect x={50} y={86} width={104} height={8} rx={4} fill={syntax.keyword} />
+      <Rect x={62} y={106} width={82} height={8} rx={4} fill={syntax.function} />
+      <Rect x={50} y={126} width={58} height={8} rx={4} fill={syntax.number} />
 
       {/* The learner's written answer */}
       <Rect
@@ -336,6 +340,7 @@ export function AiIllustration({ width = 280, scheme = 'light', ...props }: Illu
 /** Come back tomorrow: the streak. */
 export function StreakIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
   const tokens = themeTokens(scheme);
+  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (

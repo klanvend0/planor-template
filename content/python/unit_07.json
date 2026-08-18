@@ -158,11 +158,11 @@
       "concept": {
         "headline": {
           "en": "Use append, insert, remove, and pop to modify a list",
-          "tr": "Listeyi değiştirmek için append, insert, remove ve pop kullan"
+          "tr": "append, insert, remove ve pop'u kullanarak listeyi değiştir"
         },
         "body": {
           "en": "Lists are mutable, meaning you can change them. append() adds a new item to the end. insert() adds an item at a specific position. remove() deletes the first item with a given value. pop() removes and returns an item at a specific index; pop() with no argument removes the last item. These methods change the list in place.",
-          "tr": "Listeler değiştirilebilirdir; yapılarını değiştirebilirsin. append() listenin sonuna yeni bir eleman ekler. insert() belirli bir konuma eleman ekler. remove() verilen değerin ilk geçişini siler. pop(), belirli bir dizindeki elemanı siler ve döndürür; argümansız pop() son elemanı siler. Bu yöntemler listeyi yerinde değiştirir."
+          "tr": "Listeler değiştirilebilirdir; yani onları oluşturduktan sonra da değiştirebilirsin. append() listenin sonuna yeni bir eleman ekler. insert() belirli bir konuma eleman ekler. remove() verilen değere sahip ilk öğeyi siler. pop(), belirli bir dizindeki elemanı siler ve döndürür; argümansız pop() son elemanı siler. Bu yöntemler listeyi yerinde değiştirir."
         },
         "example": {
           "code": "cart = [\"apple\", \"banana\"]\ncart.append(\"orange\")\ncart.insert(1, \"grape\")\nprint(cart)",
@@ -229,8 +229,8 @@
           "blanks": [
             {
               "id": "1",
-              "answer": ".insert(1, \"dog\")",
-              "distractors": [".append(\"dog\")", ".insert(1)", ".insert(\"dog\", 1)"]
+              "answer": ".insert(1,\"dog\")",
+              "distractors": [".append(\"dog\")", ".insert(1)", ".insert(\"dog\",1)"]
             }
           ],
           "verify": { "stdout": "" },
@@ -249,11 +249,10 @@
           },
           "code": "fruits = [\"apple\", \"banana\", \"apple\"]",
           "expected": "fruits.remove(\"apple\")",
-          "acceptable": ["fruits . remove ( \"apple\" )"],
           "verify": { "stdout": "" },
           "explanation": {
-            "en": "remove() deletes the first item with that value, not an item at an index.",
-            "tr": "remove() bu değerin ilk geçişini siler; bir dizindeki öğeyi değil."
+            "en": "remove() searches the list for the first match of that value and deletes it, leaving any later duplicates untouched.",
+            "tr": "remove() listede o değere sahip ilk öğeyi arar ve siler; sonraki aynı değerdeki öğelere dokunmaz."
           }
         },
         {
@@ -267,7 +266,7 @@
           "verify": { "raises": "ValueError" },
           "explanation": {
             "en": "remove() looks for a value in the list. Since 4 is not in the list, it raises ValueError.",
-            "tr": "remove() listedeki bir değeri arar. 4 listede olmadığından ValueError verir."
+            "tr": "remove() listede eşleşen bir değer arar; 4 bu listede olmadığı için Python bunu bulamaz ve ValueError fırlatır."
           }
         },
         {
@@ -302,7 +301,7 @@
           },
           "explanation": {
             "en": "pop() with no index removes the last item. The list ends up containing only the items that were not removed.",
-            "tr": "Dizinsiz pop() son öğeyi siler. Liste sonunda sadece silinmeyen öğeleri içerir."
+            "tr": "Dizinsiz çağrılan pop() listenin son öğesini siler; sonuçta listede yalnızca silinmeyen öğeler kalır, sırasıyla eklendikleri gibi."
           }
         }
       ]
@@ -312,12 +311,12 @@
       "index": 3,
       "title": {
         "en": "Slicing Lists and Helpers",
-        "tr": "Listeleri Dilimleme ve Yardımcı Fonksiyonlar"
+        "tr": "Liste Dilimleme ve Yardımcılar"
       },
       "concept": {
         "headline": {
           "en": "Slice lists and use len, sum, max, min, sorted",
-          "tr": "Listeleri dilimle ve len, sum, max, min, sorted kullan"
+          "tr": "Listeleri dilimle ve len, sum, max, min, sorted'ı kullan"
         },
         "body": {
           "en": "Slicing works on lists just like strings: list[start:end] gives a new list from start up to (but not including) end. len() returns the number of items. sum() adds all numbers in a list. max() and min() find the largest and smallest values. sorted() returns a new sorted list without changing the original.",
@@ -337,17 +336,17 @@
           "type": "multiple_choice",
           "difficulty": "easy",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "numbers = [10, 20, 30, 40]\nprint(numbers[1:3])",
+          "code": "numbers = [30, 10, 20]\nprint(sorted(numbers))",
           "options": [
-            { "id": "a", "text": { "en": "[20, 30]", "tr": "[20, 30]" } },
-            { "id": "b", "text": { "en": "[10, 20]", "tr": "[10, 20]" } },
-            { "id": "c", "text": { "en": "[30, 40]", "tr": "[30, 40]" } },
-            { "id": "d", "text": { "en": "[20, 30, 40]", "tr": "[20, 30, 40]" } }
+            { "id": "a", "text": { "en": "[10, 20, 30]", "tr": "[10, 20, 30]" } },
+            { "id": "b", "text": { "en": "[30, 10, 20]", "tr": "[30, 10, 20]" } },
+            { "id": "c", "text": { "en": "[30, 20, 10]", "tr": "[30, 20, 10]" } },
+            { "id": "d", "text": { "en": "None", "tr": "None" } }
           ],
           "answerId": "a",
           "explanation": {
-            "en": "Slicing includes the start index (1) but excludes the end index (3), giving items at positions 1 and 2.",
-            "tr": "Dilimleme, başlangıç dizinini (1) dahil eder ama bitiş dizinini (3) hariç tutar; 1 ve 2 konumlarındaki öğeleri verir."
+            "en": "sorted() returns a brand-new list arranged from smallest to largest; it does not change the original list's order at all.",
+            "tr": "sorted(), en küçükten en büyüğe sıralanmış yepyeni bir liste döndürür; orijinal listenin sırasını hiç değiştirmez."
           }
         },
         {
@@ -366,8 +365,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "len() counts the number of items. This list has 3 items.",
-            "tr": "len() öğe sayısını sayar. Bu listenin 3 öğesi vardır."
+            "en": "len() counts how many items are inside a list or other sequence, and this list holds exactly three values.",
+            "tr": "len(), bir listede veya başka bir dizide kaç eleman olduğunu sayar; bu listede tam olarak üç değer vardır."
           }
         },
         {
@@ -379,7 +378,7 @@
             "tr": "Satırı, listenin ilk iki elemanını almak için tamamla."
           },
           "codeTemplate": "colors = [\"red\", \"blue\", \"green\"]\nprint(colors___)",
-          "blanks": [{ "id": "1", "answer": "[0:2]", "distractors": ["[:2]", "[0:1]", "[1:2]"] }],
+          "blanks": [{ "id": "1", "answer": "[0:2]", "distractors": ["[0:3]", "[0:1]", "[1:2]"] }],
           "verify": { "stdout": "['red', 'blue']\n" },
           "explanation": {
             "en": "[0:2] starts at 0 (first item) and goes up to (but not including) 2, giving you items 0 and 1.",
@@ -396,11 +395,10 @@
           },
           "code": "numbers = [5, 12, 8, 20, 3]",
           "expected": "print(max(numbers))",
-          "acceptable": ["print( max( numbers ) )"],
           "verify": { "stdout": "20\n" },
           "explanation": {
-            "en": "max() returns the largest value in the list. Here it finds 20.",
-            "tr": "max() listedeki en büyük değeri döndürür. Burada 20'yi bulur."
+            "en": "max() scans every item in the list and returns whichever one is largest, which here is 20 out of the five numbers.",
+            "tr": "max() listedeki tüm öğeleri tarar ve en büyük olanı döndürür; beş sayı arasında bu değer 20'dir."
           }
         },
         {
@@ -414,8 +412,8 @@
           "lines": ["numbers = [15, 30, 10, 25]", "total = sum(numbers)", "print(total)"],
           "verify": { "stdout": "80\n" },
           "explanation": {
-            "en": "sum() adds all numbers in a list. You must create the list before summing it.",
-            "tr": "sum() listedeki tüm sayıları toplar. Toplamadan önce listeyi oluşturmalısın."
+            "en": "sum() adds every number in a list together, but the list has to exist first, so creating it always comes before summing it.",
+            "tr": "sum() listedeki tüm sayıları toplar; ama önce listenin var olması gerekir, bu yüzden oluşturma satırı toplamadan önce gelir."
           }
         },
         {
@@ -461,12 +459,12 @@
       "title": { "en": "Dictionaries", "tr": "Sözlükler" },
       "concept": {
         "headline": {
-          "en": "Store key-value pairs in dictionaries and look them up by key",
+          "en": "Store key-value pairs in dictionaries and find them by key",
           "tr": "Anahtar-değer çiftlerini sözlüklerde sakla ve anahtarla eriş"
         },
         "body": {
           "en": "A dictionary stores data as key-value pairs, written with curly braces. Use dict[key] to look up a value. Add or change a value with dict[key] = value. You can loop over a dictionary with for key in dict (loops over keys) or for key, value in dict.items() (loops over both). Use dict.keys() to get all keys or dict.values() to get all values.",
-          "tr": "Sözlük, anahtar-değer çiftlerini kıvrımlı parantezler ile saklar. dict[anahtar] ile bir değeri eriş. dict[anahtar] = değer ile bir değeri ekle veya değiştir. for anahtar in dict (anahtarlar üzerinde döner) veya for anahtar, değer in dict.items() (hem anahtarı hem değeri döner) ile döngü yapabilirsin. dict.keys() tüm anahtarları veya dict.values() tüm değerleri almak için kullan."
+          "tr": "Sözlük, anahtar-değer çiftlerini kıvrımlı parantezlerle saklar. dict[anahtar] ile bir değere eriş. dict[anahtar] = değer ile yeni bir değer ekle veya var olanı değiştir. for anahtar in dict ile anahtarlar üzerinde, for anahtar, değer in dict.items() ile hem anahtar hem değer üzerinde döngü kurabilirsin. Tüm anahtarları almak için dict.keys()'i, tüm değerleri almak için dict.values()'i kullan."
         },
         "example": {
           "code": "person = {\"name\": \"Ada\", \"age\": 30}\nprint(person[\"name\"])\nperson[\"city\"] = \"Berlin\"\nfor key in person:\n    print(key)",
@@ -491,8 +489,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "dict[key] looks up the value associated with that key. \"title\" maps to \"1984\".",
-            "tr": "dict[anahtar] o anahtarla ilişkili değeri eriş. \"title\" anahtarı \"1984\" değerine karşılık gelir."
+            "en": "dict[key] looks up the value stored under that exact key, and here the key \"title\" maps to the value \"1984\".",
+            "tr": "dict[anahtar] o anahtarla ilişkili değere erişir. \"title\" anahtarı \"1984\" değerine karşılık gelir."
           }
         },
         {
@@ -535,21 +533,21 @@
           "type": "fill_blank",
           "difficulty": "medium",
           "prompt": {
-            "en": "Complete the line to get the value for the key 'color'.",
-            "tr": "'color' anahtarı için değeri almak için satırı tamamla."
+            "en": "Complete the line to loop over both the keys and values of the dictionary.",
+            "tr": "Sözlüğün hem anahtarları hem değerleri üzerinde döngü kuran satırı tamamla."
           },
-          "codeTemplate": "car = {\"model\": \"Toyota\", \"color\": \"blue\"}\nprint(car___)",
+          "codeTemplate": "car = {\"model\": \"Toyota\", \"color\": \"blue\"}\nfor key, value in car___:\n    print(key, value)",
           "blanks": [
             {
               "id": "1",
-              "answer": "[\"color\"]",
-              "distractors": ["[\"blue\"]", "[\"model\"]", "[0]"]
+              "answer": ".items()",
+              "distractors": [".keys()", ".values()", "items()"]
             }
           ],
-          "verify": { "stdout": "blue\n" },
+          "verify": { "stdout": "model Toyota\ncolor blue\n" },
           "explanation": {
-            "en": "Use the key name in square brackets to look up its value. The key must be a string, so it needs quotes.",
-            "tr": "Değeri aramak için anahtar adını köşeli parantezlerde kullan. Anahtar bir dizi olmalı; tırnak ister."
+            "en": "dict.items() gives you both the key and the value together on each loop pass, which is why the loop can unpack them into two variables.",
+            "tr": "dict.items(), her döngü adımında hem anahtarı hem değeri birlikte verir; bu yüzden döngü onları iki değişkene ayırabilir."
           }
         },
         {
@@ -561,7 +559,6 @@
             "tr": "name'in \"Bob\" ve age'in 25 olduğu iki öğeli bir sözlük oluşturan satırı yaz."
           },
           "expected": "person = {\"name\": \"Bob\", \"age\": 25}",
-          "acceptable": ["person = { \"name\" : \"Bob\" , \"age\" : 25 }"],
           "verify": { "stdout": "" },
           "explanation": {
             "en": "Dictionaries use curly braces, with key: value pairs separated by commas. String keys need quotes.",
