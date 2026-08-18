@@ -51,7 +51,9 @@ describe('checkAnswer', () => {
 
     expect(checkAnswer(question, { type: 'multiple_choice', optionId: 'a' }).isCorrect).toBe(true);
     expect(checkAnswer(question, { type: 'multiple_choice', optionId: 'b' }).isCorrect).toBe(false);
-    expect(checkAnswer(question, { type: 'multiple_choice', optionId: null }).isCorrect).toBe(false);
+    expect(checkAnswer(question, { type: 'multiple_choice', optionId: null }).isCorrect).toBe(
+      false
+    );
   });
 
   it('grades a filled blank token by token', () => {
@@ -65,9 +67,15 @@ describe('checkAnswer', () => {
       blanks: [{ id: '1', answer: '"Merhaba"', distractors: ['Merhaba'] }],
     };
 
-    expect(checkAnswer(question, { type: 'fill_blank', tokens: ['"Merhaba"'] }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'fill_blank', tokens: ["'Merhaba'"] }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'fill_blank', tokens: ['Merhaba'] }).isCorrect).toBe(false);
+    expect(checkAnswer(question, { type: 'fill_blank', tokens: ['"Merhaba"'] }).isCorrect).toBe(
+      true
+    );
+    expect(checkAnswer(question, { type: 'fill_blank', tokens: ["'Merhaba'"] }).isCorrect).toBe(
+      true
+    );
+    expect(checkAnswer(question, { type: 'fill_blank', tokens: ['Merhaba'] }).isCorrect).toBe(
+      false
+    );
     expect(checkAnswer(question, { type: 'fill_blank', tokens: [null] }).isCorrect).toBe(false);
   });
 
@@ -84,8 +92,12 @@ describe('checkAnswer', () => {
     };
 
     expect(checkAnswer(question, { type: 'type_code', text: 'print(name)' }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'type_code', text: '  print(name)  ' }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'type_code', text: 'print("name")' }).isCorrect).toBe(false);
+    expect(checkAnswer(question, { type: 'type_code', text: '  print(name)  ' }).isCorrect).toBe(
+      true
+    );
+    expect(checkAnswer(question, { type: 'type_code', text: 'print("name")' }).isCorrect).toBe(
+      false
+    );
   });
 
   it('grades a spotted bug by line', () => {
@@ -141,9 +153,15 @@ describe('checkAnswer', () => {
       sampleAnswer: localized('It prints the number one to the screen and then finishes running.'),
     };
 
-    expect(checkAnswer(question, { type: 'explain_code', verdict: 'correct' }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'explain_code', verdict: 'partial' }).isCorrect).toBe(true);
-    expect(checkAnswer(question, { type: 'explain_code', verdict: 'incorrect' }).isCorrect).toBe(false);
+    expect(checkAnswer(question, { type: 'explain_code', verdict: 'correct' }).isCorrect).toBe(
+      true
+    );
+    expect(checkAnswer(question, { type: 'explain_code', verdict: 'partial' }).isCorrect).toBe(
+      true
+    );
+    expect(checkAnswer(question, { type: 'explain_code', verdict: 'incorrect' }).isCorrect).toBe(
+      false
+    );
   });
 
   it('refuses to grade an answer of the wrong type', () => {

@@ -38,7 +38,13 @@
           "code": "function say() {\n  console.log(\"Hi\");\n}\n\nsay();",
           "options": [
             { "id": "a", "text": { "en": "Prints Hi", "tr": "Hi yazdırır" } },
-            { "id": "b", "text": { "en": "Defines a function but does not run it", "tr": "Bir fonksiyon tanımlar ama çalıştırmaz" } },
+            {
+              "id": "b",
+              "text": {
+                "en": "Defines a function but does not run it",
+                "tr": "Bir fonksiyon tanımlar ama çalıştırmaz"
+              }
+            },
             { "id": "c", "text": { "en": "Prints say", "tr": "say yazdırır" } },
             { "id": "d", "text": { "en": "Gives an error", "tr": "Hata verir" } }
           ],
@@ -77,9 +83,7 @@
             "tr": "Çağrıldığında Go yazdıracak şekilde fonksiyon tanımını tamamla."
           },
           "codeTemplate": "function start() {\n  console.log(___);\n}\n\nstart();",
-          "blanks": [
-            { "id": "1", "answer": "\"Go\"", "distractors": ["Go", "\"go\"", "print"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "\"Go\"", "distractors": ["Go", "\"go\"", "print"] }],
           "verify": { "stdout": "Go\n" },
           "explanation": {
             "en": "Text passed to console.log must be inside double quotes. Without quotes, JavaScript looks for a variable called Go.",
@@ -109,12 +113,7 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "function test() {",
-            "  console.log(\"yes\");",
-            "tst();",
-            "}"
-          ],
+          "codeLines": ["function test() {", "  console.log(\"yes\");", "tst();", "}"],
           "buggyLineIndex": 2,
           "fix": "test();",
           "explanation": {
@@ -311,7 +310,10 @@
       "index": 3,
       "title": { "en": "Arrow Functions", "tr": "Arrow Fonksiyonları" },
       "concept": {
-        "headline": { "en": "A shorter way to write functions", "tr": "Fonksiyon yazmanın daha kısa yolu" },
+        "headline": {
+          "en": "A shorter way to write functions",
+          "tr": "Fonksiyon yazmanın daha kısa yolu"
+        },
         "body": {
           "en": "Arrow functions are a modern, shorter syntax for writing functions. They use the => symbol (read as 'arrow') instead of the function keyword. An arrow function looks like this: const name = (parameters) => { code }. If there is only one parameter, you can omit the parentheses. If the code is a single return statement, you can put it on one line and skip the braces.",
           "tr": "Arrow fonksiyonları, fonksiyon yazmanın modern, daha kısa bir söz dizimidir. function anahtar sözcüğü yerine => sembolünü (ok okunur) kullanırlar. Bir arrow fonksiyon şöyle görünür: const name = (parameters) => { code }. Eğer tek bir parametre varsa parantezleri atabilirsin. Kod tek bir return cümlesi ise, bunu tek satıra koyabilir ve küme parantezlerini atlayabilirsin."
@@ -355,9 +357,18 @@
             "tr": "Hangi satır square adında bir arrow fonksiyonu doğru tanımlar?"
           },
           "options": [
-            { "id": "a", "text": { "en": "const square = x => x * x;", "tr": "const square = x => x * x;" } },
-            { "id": "b", "text": { "en": "function square(x) => x * x;", "tr": "function square(x) => x * x;" } },
-            { "id": "c", "text": { "en": "const square x => x * x;", "tr": "const square x => x * x;" } },
+            {
+              "id": "a",
+              "text": { "en": "const square = x => x * x;", "tr": "const square = x => x * x;" }
+            },
+            {
+              "id": "b",
+              "text": { "en": "function square(x) => x * x;", "tr": "function square(x) => x * x;" }
+            },
+            {
+              "id": "c",
+              "text": { "en": "const square x => x * x;", "tr": "const square x => x * x;" }
+            },
             { "id": "d", "text": { "en": "square = (x) => x * x", "tr": "square = (x) => x * x" } }
           ],
           "answerId": "a",
@@ -375,9 +386,7 @@
             "tr": "Girdiyi ikiye katı yapacak şekilde arrow fonksiyonu tamamla."
           },
           "codeTemplate": "const double = (n) ___ {\n  return n * 2;\n};\n\nconsole.log(double(7));",
-          "blanks": [
-            { "id": "1", "answer": "=>", "distractors": ["=", "->", "function"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "=>", "distractors": ["=", "->", "function"] }],
           "verify": { "stdout": "14\n" },
           "explanation": {
             "en": "The arrow symbol => separates the parameter from the function body. It reads as 'arrow' and is the key part of arrow function syntax.",
@@ -460,7 +469,10 @@
       "index": 4,
       "title": { "en": "Default Parameters and Scope", "tr": "Varsayılan Parametreler ve Kapsam" },
       "concept": {
-        "headline": { "en": "Defaults and where variables live", "tr": "Varsayılanlar ve değişkenlerin nerede yaşadığı" },
+        "headline": {
+          "en": "Defaults and where variables live",
+          "tr": "Varsayılanlar ve değişkenlerin nerede yaşadığı"
+        },
         "body": {
           "en": "A default parameter is a value that a parameter takes if no argument is passed when the function is called. You write it with = inside the parentheses, like function greet(name = \"Friend\"). Scope is the region of code where a variable exists. Variables declared inside a function with let or const only exist inside that function. Variables declared outside a function at the top level exist everywhere (global scope). This prevents name collisions and makes code cleaner.",
           "tr": "Bir varsayılan parametre, fonksiyon çağrılırken argüman geçilmezse parametrenin aldığı değerdir. Parantezleri içinde = ile yazarsın, mesela function greet(name = \"Friend\"). Kapsam (scope), bir değişkenin var olduğu kod bölgesidir. let veya const ile bir fonksiyon içinde tanımlanan değişkenler sadece o fonksiyon içinde vardır. Üst seviyede bir fonksiyonun dışında tanımlanan değişkenler her yerde (genel kapsam) vardır. Bu, isim çatışmalarını önler ve kodu temiz kılar."
@@ -525,9 +537,7 @@
             "tr": "count için 5 varsayılan değerini kullanacak şekilde fonksiyonu tamamla."
           },
           "codeTemplate": "function repeat(msg, count ___ 5) {\n  for (let i = 0; i < count; i++) {\n    console.log(msg);\n  }\n}\n\nrepeat(\"hi\");",
-          "blanks": [
-            { "id": "1", "answer": "=", "distractors": ["==", "===", "=>"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "=", "distractors": ["==", "===", "=>"] }],
           "verify": { "stdout": "hi\nhi\nhi\nhi\nhi\n" },
           "explanation": {
             "en": "The = sign inside parentheses sets a default value. When repeat is called without a count argument, it defaults to 5.",

@@ -65,7 +65,8 @@ export function OrderLinesView({
       <View
         className={cn(
           'min-h-[120px] justify-center rounded-xl border-2 border-dashed border-code-border bg-code px-4 py-3',
-          result && (result.isCorrect ? 'border-solid border-success' : 'border-solid border-destructive')
+          result &&
+            (result.isCorrect ? 'border-solid border-success' : 'border-solid border-destructive')
         )}>
         {placed.length === 0 ? (
           <Text className="text-center text-sm" style={{ color: SYNTAX.comment }}>
@@ -105,7 +106,7 @@ export function OrderLinesView({
 
       {result && !result.isCorrect ? (
         <View className="gap-1">
-          <Text className="text-sm font-semibold text-muted-foreground">
+          <Text className="font-semibold text-sm text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <View className="rounded-xl border border-code-border bg-code px-4 py-3">

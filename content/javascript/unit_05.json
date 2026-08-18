@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "Creating and Indexing Arrays", "tr": "Diziler Oluşturma ve İndeksleme" },
       "concept": {
-        "headline": { "en": "Arrays hold multiple values, accessed by position", "tr": "Diziler birden fazla değer tutar, konuma göre erişilir" },
+        "headline": {
+          "en": "Arrays hold multiple values, accessed by position",
+          "tr": "Diziler birden fazla değer tutar, konuma göre erişilir"
+        },
         "body": {
           "en": "An array is a list of values written inside square brackets, separated by commas. Each value sits at a position called an index, starting from 0. To get the value at a position, write the array name followed by the index in square brackets. Arrays are useful for keeping related data together.",
           "tr": "Dizi, köşeli parantez içine yazılmış, virgülle ayrılmış bir değer listesidir. Her değer, 0'dan başlayan index denilen bir konumda oturur. Bir konumdaki değeri almak için dizi adından sonra köşeli parantez içinde indeksi yaz. Diziler ilişkili verileri bir arada tutmak için kullanışlıdır."
@@ -49,12 +52,18 @@
           "id": "js-u05-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which creates an array correctly?", "tr": "Hangisi diziyi doğru oluşturur?" },
+          "prompt": {
+            "en": "Which creates an array correctly?",
+            "tr": "Hangisi diziyi doğru oluşturur?"
+          },
           "options": [
             { "id": "a", "text": { "en": "let arr = [1, 2, 3];", "tr": "let arr = [1, 2, 3];" } },
             { "id": "b", "text": { "en": "let arr = (1, 2, 3);", "tr": "let arr = (1, 2, 3);" } },
             { "id": "c", "text": { "en": "let arr = {1, 2, 3};", "tr": "let arr = {1, 2, 3};" } },
-            { "id": "d", "text": { "en": "let arr = \"1, 2, 3\";", "tr": "let arr = \"1, 2, 3\";" } }
+            {
+              "id": "d",
+              "text": { "en": "let arr = \"1, 2, 3\";", "tr": "let arr = \"1, 2, 3\";" }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -71,9 +80,7 @@
             "tr": "Kodu ikinci meyveyi yazdıracak şekilde tamamla."
           },
           "codeTemplate": "let fruits = [\"apple\", \"banana\", \"cherry\"];\nconsole.log(fruits[___]);",
-          "blanks": [
-            { "id": "1", "answer": "1", "distractors": ["0", "2", "banana"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "1", "distractors": ["0", "2", "banana"] }],
           "verify": { "stdout": "banana\n" },
           "explanation": {
             "en": "Indexing starts at 0, so index 1 is the second element. Do not use the value itself, only the number position.",
@@ -102,10 +109,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "let data = [5, 10, 15];",
-            "console.log(data[5]);"
-          ],
+          "codeLines": ["let data = [5, 10, 15];", "console.log(data[5]);"],
           "buggyLineIndex": 1,
           "fix": "console.log(data[2]);",
           "verify": { "stdout": "undefined\n" },
@@ -154,7 +158,10 @@
       "index": 2,
       "title": { "en": "push, pop and length", "tr": "push, pop ve length" },
       "concept": {
-        "headline": { "en": "Arrays grow and shrink with push() and pop()", "tr": "Diziler push() ve pop() ile büyür ve küçülür" },
+        "headline": {
+          "en": "Arrays grow and shrink with push() and pop()",
+          "tr": "Diziler push() ve pop() ile büyür ve küçülür"
+        },
         "body": {
           "en": "push() adds a new element to the end of an array. pop() removes and returns the last element. The .length property tells you how many elements are in the array. These three tools let you build and modify arrays as your program runs.",
           "tr": "push() bir dizinin sonuna yeni bir öğe ekler. pop() son öğeyi kaldırır ve döndürür. .length özelliği dizide kaç öğe olduğunu söyler. Bu üç araç programın çalışırken dizileri oluşturmanı ve değiştirmeni sağlar."
@@ -174,10 +181,16 @@
           "difficulty": "easy",
           "prompt": { "en": "What does push() do?", "tr": "push() ne yapar?" },
           "options": [
-            { "id": "a", "text": { "en": "Adds an element to the end", "tr": "Sona bir öğe ekler" } },
+            {
+              "id": "a",
+              "text": { "en": "Adds an element to the end", "tr": "Sona bir öğe ekler" }
+            },
             { "id": "b", "text": { "en": "Removes the first element", "tr": "İlk öğeyi çıkarır" } },
             { "id": "c", "text": { "en": "Returns the length", "tr": "Uzunluğu döndürür" } },
-            { "id": "d", "text": { "en": "Counts elements in the array", "tr": "Dizideki öğeleri sayar" } }
+            {
+              "id": "d",
+              "text": { "en": "Counts elements in the array", "tr": "Dizideki öğeleri sayar" }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -212,9 +225,7 @@
             "tr": "Kodu listede kaç öğe olduğunu yazdıracak şekilde tamamla."
           },
           "codeTemplate": "let list = [\"a\", \"b\", \"c\"];\nconsole.log(list.___);\n",
-          "blanks": [
-            { "id": "1", "answer": "length", "distractors": ["size", "count", "push"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "length", "distractors": ["size", "count", "push"] }],
           "verify": { "stdout": "3\n" },
           "explanation": {
             "en": "The .length property gives the count. Do not use push() or pop() which modify the array; length just reads it.",
@@ -242,10 +253,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "let arr = [1, 2, 3];",
-            "arr.push();"
-          ],
+          "codeLines": ["let arr = [1, 2, 3];", "arr.push();"],
           "buggyLineIndex": 1,
           "fix": "arr.push(4);",
           "explanation": {
@@ -271,11 +279,7 @@
               "adds two items with push()",
               "prints the count of items"
             ],
-            "tr": [
-              "boş dizi oluşturur",
-              "push() ile iki öğe ekler",
-              "öğelerin sayısını yazdırır"
-            ]
+            "tr": ["boş dizi oluşturur", "push() ile iki öğe ekler", "öğelerin sayısını yazdırır"]
           },
           "sampleAnswer": {
             "en": "It creates an empty array, adds milk and bread to it using push(), then prints how many items are in the array (2).",
@@ -293,7 +297,10 @@
       "index": 3,
       "title": { "en": "for and for...of Loops", "tr": "for ve for...of Döngüleri" },
       "concept": {
-        "headline": { "en": "Loops repeat a block for each element or number", "tr": "Döngüler her öğe veya sayı için bir bloğu tekrarlar" },
+        "headline": {
+          "en": "Loops repeat a block for each element or number",
+          "tr": "Döngüler her öğe veya sayı için bir bloğu tekrarlar"
+        },
         "body": {
           "en": "A for loop repeats code a set number of times. A for...of loop repeats code once for each element in an array. Both are useful: for loops let you count and access by index, for...of loops let you work directly with values. Use for when you need the position number, and for...of when you just want each value.",
           "tr": "for döngüsü kodu belirli sayıda tekrarlar. for...of döngüsü bir dizideki her öğe için kodu bir kez tekrarlar. İkisi de kullanışlıdır: for döngüleri saymanı ve indekse göre erişmeni sağlar, for...of döngüleri doğrudan değerlerle çalışmana izin verir. Konum numarasına ihtiyacın olduğunda for kullan, sadece her değeri istediğinde for...of kullan."
@@ -329,12 +336,39 @@
           "id": "js-u05-l3-q2",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "What is the difference between for and for...of?", "tr": "for ile for...of arasındaki fark nedir?" },
+          "prompt": {
+            "en": "What is the difference between for and for...of?",
+            "tr": "for ile for...of arasındaki fark nedir?"
+          },
           "options": [
-            { "id": "a", "text": { "en": "for uses an index, for...of uses values directly", "tr": "for indeks kullanır, for...of doğrudan değerleri kullanır" } },
-            { "id": "b", "text": { "en": "for...of is faster than for", "tr": "for...of for'dan daha hızlıdır" } },
-            { "id": "c", "text": { "en": "for is only for numbers, for...of is only for text", "tr": "for sadece sayılar içindir, for...of sadece metin içindir" } },
-            { "id": "d", "text": { "en": "for...of can not loop over arrays", "tr": "for...of dizileri döngü ile geçemez" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "for uses an index, for...of uses values directly",
+                "tr": "for indeks kullanır, for...of doğrudan değerleri kullanır"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "for...of is faster than for",
+                "tr": "for...of for'dan daha hızlıdır"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "for is only for numbers, for...of is only for text",
+                "tr": "for sadece sayılar içindir, for...of sadece metin içindir"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "for...of can not loop over arrays",
+                "tr": "for...of dizileri döngü ile geçemez"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -438,7 +472,10 @@
       "index": 4,
       "title": { "en": "map() and filter() Basics", "tr": "map() ve filter() Temelleri" },
       "concept": {
-        "headline": { "en": "map() and filter() transform arrays cleanly", "tr": "map() ve filter() dizileri temiz şekilde dönüştürür" },
+        "headline": {
+          "en": "map() and filter() transform arrays cleanly",
+          "tr": "map() ve filter() dizileri temiz şekilde dönüştürür"
+        },
         "body": {
           "en": "map() creates a new array by applying an action to every element. filter() creates a new array with only the elements that pass a test. Both take a callback function that runs on each element. In JavaScript, a callback is often written as an arrow function: (element) => expression. These methods are cleaner than writing loops when you just want to transform or select elements.",
           "tr": "map() her öğeye bir işlem uygulayarak yeni bir dizi oluşturur. filter() sadece testi geçen öğelerle yeni bir dizi oluşturur. İkisi de her öğede çalışan bir callback fonksiyonu alır. JavaScript'te callback sıklıkla bir arrow function olarak yazılır: (element) => expression. Bu yöntemler, sadece öğeleri dönüştürmek veya seçmek istediğinde döngü yazmaktan daha temizdir."
@@ -458,10 +495,34 @@
           "difficulty": "medium",
           "prompt": { "en": "What does map() do?", "tr": "map() ne yapar?" },
           "options": [
-            { "id": "a", "text": { "en": "Creates a new array by applying an action to every element", "tr": "Her öğeye bir işlem uygulayarak yeni dizi oluşturur" } },
-            { "id": "b", "text": { "en": "Removes elements that do not match a condition", "tr": "Koşulla eşleşmeyen öğeleri çıkarır" } },
-            { "id": "c", "text": { "en": "Finds the first element that matches", "tr": "Eşleşen ilk öğeyi bulur" } },
-            { "id": "d", "text": { "en": "Counts how many elements are in the array", "tr": "Dizide kaç öğe olduğunu sayar" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "Creates a new array by applying an action to every element",
+                "tr": "Her öğeye bir işlem uygulayarak yeni dizi oluşturur"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Removes elements that do not match a condition",
+                "tr": "Koşulla eşleşmeyen öğeleri çıkarır"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Finds the first element that matches",
+                "tr": "Eşleşen ilk öğeyi bulur"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Counts how many elements are in the array",
+                "tr": "Dizide kaç öğe olduğunu sayar"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -475,10 +536,34 @@
           "difficulty": "medium",
           "prompt": { "en": "What does filter() do?", "tr": "filter() ne yapar?" },
           "options": [
-            { "id": "a", "text": { "en": "Keeps only elements that pass a test", "tr": "Sadece testi geçen öğeleri tutar" } },
-            { "id": "b", "text": { "en": "Changes every element to a new value", "tr": "Her öğeyi yeni bir değere değiştirir" } },
-            { "id": "c", "text": { "en": "Removes all elements from the array", "tr": "Diziden tüm öğeleri çıkarır" } },
-            { "id": "d", "text": { "en": "Adds elements to the end of the array", "tr": "Dizinin sonuna öğe ekler" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "Keeps only elements that pass a test",
+                "tr": "Sadece testi geçen öğeleri tutar"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Changes every element to a new value",
+                "tr": "Her öğeyi yeni bir değere değiştirir"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Removes all elements from the array",
+                "tr": "Diziden tüm öğeleri çıkarır"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Adds elements to the end of the array",
+                "tr": "Dizinin sonuna öğe ekler"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -495,9 +580,7 @@
             "tr": "Her sayıyı kare almak için map() çağrısını tamamla."
           },
           "codeTemplate": "let nums = [2, 3, 4];\nlet squared = nums.map(___ => n * n);\nconsole.log(squared);",
-          "blanks": [
-            { "id": "1", "answer": "n", "distractors": ["x", "i", "num"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "n", "distractors": ["x", "i", "num"] }],
           "verify": { "stdout": "[ 4, 9, 16 ]\n" },
           "explanation": {
             "en": "The arrow function (n => n * n) takes each number n and returns n squared. map() collects all the results into a new array.",

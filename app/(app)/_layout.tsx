@@ -20,9 +20,7 @@ export default function AppLayout() {
   if (!isAuthenticated) return <Redirect href="/(auth)/login" />;
 
   return (
-    <Tabs
-      screenOptions={{ headerShown: false }}
-      tabBar={(props) => <GameTabBar {...props} />}>
+    <Tabs screenOptions={{ headerShown: false }} tabBar={(props) => <GameTabBar {...props} />}>
       <Tabs.Screen name="index" options={{ title: t('learn.title') }} />
       <Tabs.Screen name="practice" options={{ title: t('practice.title') }} />
       <Tabs.Screen name="profile" options={{ title: t('profile.title') }} />

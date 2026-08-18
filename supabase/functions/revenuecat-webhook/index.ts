@@ -46,13 +46,7 @@ type RevenueCatEvent = {
 };
 
 type SubscriptionStatus =
-  | 'trialing'
-  | 'active'
-  | 'grace'
-  | 'expired'
-  | 'cancelled'
-  | 'billing_issue'
-  | 'paused';
+  'trialing' | 'active' | 'grace' | 'expired' | 'cancelled' | 'billing_issue' | 'paused';
 
 const WEBHOOK_SECRET = Deno.env.get('REVENUECAT_WEBHOOK_SECRET') ?? '';
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
@@ -217,7 +211,8 @@ Deno.serve(async (request: Request) => {
   const event = payload.event;
   if (!event?.type) return json({ error: 'missing_event' }, 400);
 
-  const entitlements = event.entitlement_ids ?? (event.entitlement_id ? [event.entitlement_id] : []);
+  const entitlements =
+    event.entitlement_ids ?? (event.entitlement_id ? [event.entitlement_id] : []);
   // Events for other entitlements (or none, e.g. TEST) are acknowledged and
   // ignored: a non-2xx would make RevenueCat retry them forever.
   if (entitlements.length > 0 && !entitlements.includes(ENTITLEMENT)) {

@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "if and else", "tr": "if ve else" },
       "concept": {
-        "headline": { "en": "Run different code based on a condition", "tr": "Koşula göre farklı kodu çalıştır" },
+        "headline": {
+          "en": "Run different code based on a condition",
+          "tr": "Koşula göre farklı kodu çalıştır"
+        },
         "body": {
           "en": "if starts a block that runs only when a condition is true. Use else to run other code when the condition is false. Every if and else block is indented, and the condition sits inside parentheses. If the condition is false and there is no else, the indented lines are skipped.",
           "tr": "if, bir koşul doğru olduğunda çalışan bir blok başlatır. Koşul yanlış olduğunda başka bir kod çalıştırmak için else kullan. Her if ve else bloğu girintili olur ve koşul parantez içine yazılır. Koşul yanlışsa ve else yoksa, girintili satırlar atlanır."
@@ -72,9 +75,7 @@
             "tr": "Koşulu age'in en az 18 olup olmadığını kontrol edecek şekilde tamamla."
           },
           "codeTemplate": "age = 18;\nif (age ___ 18) {\n  console.log(\"Adult\");\n}",
-          "blanks": [
-            { "id": "1", "answer": ">=", "distractors": ["=>", ">", "=="] }
-          ],
+          "blanks": [{ "id": "1", "answer": ">=", "distractors": ["=>", ">", "=="] }],
           "verify": { "stdout": "Adult\n" },
           "explanation": {
             "en": "The >= operator means greater than or equal to. Use it to include the boundary value (18 in this case).",
@@ -91,7 +92,10 @@
           },
           "code": "weather = \"rain\";",
           "expected": "if (weather === \"rain\") {\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}",
-          "acceptable": ["if (weather === \"rain\")\n{\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}", "if (weather === \"rain\") {\n  console.log(\"Raining\");\n}\nelse {\n  console.log(\"Sunny\");\n}"],
+          "acceptable": [
+            "if (weather === \"rain\")\n{\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}",
+            "if (weather === \"rain\") {\n  console.log(\"Raining\");\n}\nelse {\n  console.log(\"Sunny\");\n}"
+          ],
           "verify": { "stdout": "Raining\n" },
           "explanation": {
             "en": "The condition checks if weather equals the text rain, and runs different console.log() calls for true and false.",
@@ -103,10 +107,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "number = 10;",
-            "console.log(numer);"
-          ],
+          "codeLines": ["number = 10;", "console.log(numer);"],
           "buggyLineIndex": 1,
           "fix": "console.log(number);",
           "verify": { "raises": "ReferenceError" },
@@ -155,7 +156,10 @@
       "index": 2,
       "title": { "en": "Comparisons and ===", "tr": "Karşılaştırmalar ve ===" },
       "concept": {
-        "headline": { "en": "Always use === to compare values exactly", "tr": "Değerleri karşılaştırırken her zaman === kullan" },
+        "headline": {
+          "en": "Always use === to compare values exactly",
+          "tr": "Değerleri karşılaştırırken her zaman === kullan"
+        },
         "body": {
           "en": "Comparisons use ===, !==, <, >, <=, >= to make yes-or-no decisions. The operator === checks if two values are exactly equal (same type and same value). The older == operator can hide bugs because it tries to convert types, so 5 == \"5\" is true but 5 === \"5\" is false. Always use === to avoid confusion.",
           "tr": "Karşılaştırmalar ===, !==, <, >, <=, >= kullanarak evet-hayır kararları verirler. === operatörü iki değerin tam olarak eşit olup olmadığını kontrol eder (aynı tür ve aynı değer). Eski == operatörü türleri dönüştürmeyi denediği için hatalara neden olabilir; 5 == \"5\" doğru ama 5 === \"5\" yanlış olur. Karışıklığı önlemek için her zaman === kullan."
@@ -194,7 +198,10 @@
           "prompt": { "en": "Which statement is false?", "tr": "Hangi ifade yanlıştır?" },
           "options": [
             { "id": "a", "text": { "en": "3 !== 5", "tr": "3 !== 5" } },
-            { "id": "b", "text": { "en": "\"hello\" === \"hello\"", "tr": "\"hello\" === \"hello\"" } },
+            {
+              "id": "b",
+              "text": { "en": "\"hello\" === \"hello\"", "tr": "\"hello\" === \"hello\"" }
+            },
             { "id": "c", "text": { "en": "7 > 10", "tr": "7 > 10" } },
             { "id": "d", "text": { "en": "4 <= 4", "tr": "4 <= 4" } }
           ],
@@ -213,9 +220,7 @@
             "tr": "code ve input'un her ikisinin de metin apple olup olmadığını kontrol eden koşulu tamamla."
           },
           "codeTemplate": "if (code ___ input) {\n  console.log(\"Correct\");\n}",
-          "blanks": [
-            { "id": "1", "answer": "===", "distractors": ["==", "=", "!=="] }
-          ],
+          "blanks": [{ "id": "1", "answer": "===", "distractors": ["==", "=", "!=="] }],
           "explanation": {
             "en": "Use === to check if two values are exactly equal. The = operator assigns a value, not compares.",
             "tr": "İki değerin tam olarak eşit olup olmadığını kontrol etmek için === kullan. = operatörü karşılaştırmaz, değer atar."
@@ -295,7 +300,10 @@
       "index": 3,
       "title": { "en": "Combining Tests", "tr": "Testleri Birleştirmek" },
       "concept": {
-        "headline": { "en": "Use &&, ||, and ! to build complex conditions", "tr": "Karmaşık koşullar kurmak için &&, ||, ! kullan" },
+        "headline": {
+          "en": "Use &&, ||, and ! to build complex conditions",
+          "tr": "Karmaşık koşullar kurmak için &&, ||, ! kullan"
+        },
         "body": {
           "en": "The && operator means AND: both conditions must be true. The || operator means OR: at least one must be true. The ! operator means NOT: it reverses a condition. These let you build if statements that check multiple things at once. For example, (age > 13 && role === \"admin\") runs only if age is over 13 AND role is exactly admin.",
           "tr": "&&, AND anlamında olur: her iki koşul da doğru olmalı. || operatörü OR anlamında olur: en az biri doğru olmalı. ! operatörü NOT anlamında olur: bir koşulu tersine çevirir. Bunlar bir kerede birden fazla şeyi kontrol eden if ifadeleri kurmana izin verir. Örneğin, (age > 13 && role === \"admin\") sadece age 13'ten büyükse VE role tam olarak admin'se çalışır."
@@ -354,9 +362,7 @@
             "tr": "level'in 1 OLMAMASI durumunda kodu çalıştıracak koşulu ! kullanarak tamamla."
           },
           "codeTemplate": "if (___ level === 1) {\n  console.log(\"Not the first level\");\n}",
-          "blanks": [
-            { "id": "1", "answer": "!", "distractors": ["!!", "not", "~"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "!", "distractors": ["!!", "not", "~"] }],
           "explanation": {
             "en": "The ! operator reverses a condition. ! (level === 1) means NOT (level equals 1), which is true when level is anything but 1.",
             "tr": "! operatörü bir koşulu tersine çevirir. !(level === 1) demek NOT (level eşittir 1) anlamına gelir ve level 1 dışında bir şey olduğunda doğu olur."
@@ -372,7 +378,10 @@
           },
           "code": "score = 85;\nname = \"Alice\";",
           "expected": "if (score >= 80 && name !== \"\") {\n  console.log(\"Approved\");\n}",
-          "acceptable": ["if (score >= 80 && name != \"\") {\n  console.log(\"Approved\");\n}", "if (score >= 80 && !(name === \"\")) {\n  console.log(\"Approved\");\n}"],
+          "acceptable": [
+            "if (score >= 80 && name != \"\") {\n  console.log(\"Approved\");\n}",
+            "if (score >= 80 && !(name === \"\")) {\n  console.log(\"Approved\");\n}"
+          ],
           "verify": { "stdout": "Approved\n" },
           "explanation": {
             "en": "Use && to require both conditions. >= means greater than or equal, and !== means not equal. This checks two things before approving.",
@@ -383,7 +392,10 @@
           "id": "js-u04-l3-q5",
           "type": "order_lines",
           "difficulty": "hard",
-          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sıraya koy." },
+          "prompt": {
+            "en": "Put the lines in the right order.",
+            "tr": "Satırları doğru sıraya koy."
+          },
           "lines": [
             "x = 7;",
             "if (x > 5 && x < 10) {",
@@ -439,7 +451,10 @@
       "index": 4,
       "title": { "en": "Ternary and Truthiness", "tr": "Ternary ve Truthiness" },
       "concept": {
-        "headline": { "en": "Write short conditions with ternary and understand truthiness", "tr": "Ternary ile kısa koşullar yaz ve truthiness'i anla" },
+        "headline": {
+          "en": "Write short conditions with ternary and understand truthiness",
+          "tr": "Ternary ile kısa koşullar yaz ve truthiness'i anla"
+        },
         "body": {
           "en": "The ternary operator is a shorthand for if/else: value = condition ? ifTrue : ifFalse. It runs one of two expressions depending on whether the condition is true or false. Truthiness means every value in JavaScript can be treated as true or false: empty strings, 0, null, and undefined are falsy (act like false), while non-empty strings and non-zero numbers are truthy (act like true). You can use any value directly in an if condition without comparing it.",
           "tr": "Ternary operatörü if/else'in kısa versiyonudur: value = condition ? ifTrue : ifFalse. Koşulun doğru veya yanlış olmasına bağlı olarak iki ifadeden birini çalıştırır. Truthiness, JavaScript'te her değerin doğru veya yanlış olarak kabul edilebileceği anlamına gelir: boş metinler, 0, null ve undefined falsy'dir (yanlış gibi davranırlar), boş olmayan metinler ve sıfır dışı sayılar truthy'dir (doğru gibi davranırlar). Bir if koşulunda herhangi bir değeri onu karşılaştırmadan doğrudan kullanabilirsin."
@@ -497,9 +512,7 @@
             "tr": "score 80'den fazlaysa result'a High, aksi takdirde Low atayacak ternary ifadesini tamamla."
           },
           "codeTemplate": "result = score > 80 ___ \"High\" : \"Low\";",
-          "blanks": [
-            { "id": "1", "answer": "?", "distractors": [":", "?:", "??"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "?", "distractors": [":", "?:", "??"] }],
           "explanation": {
             "en": "The ? comes first in a ternary, separating the condition from the true value. The : separates the true value from the false value.",
             "tr": "Ternary'de ? ilk gelir ve koşulu doğru değerden ayırır. : doğru değeri yanlış değerden ayırır."
@@ -527,11 +540,7 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "password = \"secret\";",
-            "if (password) {",
-            "  console.log(\"Set\");"
-          ],
+          "codeLines": ["password = \"secret\";", "if (password) {", "  console.log(\"Set\");"],
           "buggyLineIndex": 2,
           "fix": "  console.log(\"Set\");\n}",
           "explanation": {

@@ -10,7 +10,12 @@
 
 import { Check, Crown, Lock, Play, Star } from 'lucide-react-native';
 import { Pressable, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
@@ -117,7 +122,7 @@ export function LessonNode({
       <Text
         numberOfLines={2}
         className={cn(
-          'mt-1 w-[104px] text-center text-xs font-semibold',
+          'mt-1 w-[104px] text-center font-semibold text-xs',
           locked ? 'text-muted-foreground' : 'text-foreground'
         )}>
         {title}

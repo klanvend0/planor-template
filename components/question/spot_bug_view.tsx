@@ -54,7 +54,7 @@ export function SpotBugView({
 
       {result ? (
         <View className="gap-1">
-          <Text className="text-sm font-semibold text-muted-foreground">
+          <Text className="font-semibold text-sm text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <CodeBlock code={question.fix} language={language} compact />

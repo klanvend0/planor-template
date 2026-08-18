@@ -45,7 +45,7 @@ export function FeedbackPanel({
       entering={FadeInDown.springify().damping(18).stiffness(180)}
       className={cn(
         'gap-3 rounded-t-3xl border-t-2 px-5 pb-2 pt-4',
-        isCorrect ? 'border-success bg-success/12' : 'border-destructive bg-destructive/12'
+        isCorrect ? 'bg-success/12 border-success' : 'bg-destructive/12 border-destructive'
       )}>
       <View className="flex-row items-center gap-2">
         <Icon
@@ -54,17 +54,14 @@ export function FeedbackPanel({
           className={isCorrect ? 'text-success' : 'text-destructive'}
         />
         <Text
-          className={cn(
-            'font-display text-xl',
-            isCorrect ? 'text-success' : 'text-destructive'
-          )}>
+          className={cn('font-display text-xl', isCorrect ? 'text-success' : 'text-destructive')}>
           {isCorrect ? t('lesson.correct') : t('lesson.incorrect')}
         </Text>
       </View>
 
       {!isCorrect && correctAnswer ? (
         <View className="gap-0.5">
-          <Text className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <Text className="font-mono text-[15px] text-foreground">{correctAnswer}</Text>

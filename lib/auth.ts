@@ -176,7 +176,9 @@ export async function signInWithGoogle(): Promise<AuthResult> {
       }
     }
 
-    const description = new URLSearchParams(result.url.split('?')[1] ?? '').get('error_description');
+    const description = new URLSearchParams(result.url.split('?')[1] ?? '').get(
+      'error_description'
+    );
     return {
       success: false,
       reason: 'failed',

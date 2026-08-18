@@ -30,7 +30,7 @@ import { useGameStore } from '@/stores/game_store';
 function StatCell({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-1 gap-1 rounded-2xl border border-border bg-card px-3 py-3">
-      <Text className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+      <Text className="font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
         {label}
       </Text>
       <Text className="font-display text-[20px] text-foreground">{value}</Text>
@@ -88,7 +88,7 @@ export default function ProfileScreen() {
             <Text className="font-display text-[20px] text-foreground" numberOfLines={1}>
               {user?.user_metadata?.full_name ?? user?.email ?? t('app.name')}
             </Text>
-            <Text className="text-sm font-semibold text-muted-foreground">
+            <Text className="font-semibold text-sm text-muted-foreground">
               {t('profile.level', { level: level.level })}
             </Text>
             <Text className="text-xs text-muted-foreground">
@@ -127,7 +127,7 @@ export default function ProfileScreen() {
 
         {/* Stats */}
         <View className="gap-3">
-          <Text className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
             {t('profile.stats')}
           </Text>
           <View className="flex-row gap-3">
@@ -136,7 +136,10 @@ export default function ProfileScreen() {
             <StatCell label={t('profile.longest_streak')} value={String(stats.longestStreak)} />
           </View>
           <View className="flex-row gap-3">
-            <StatCell label={t('profile.lessons_completed')} value={String(stats.lessonsCompleted)} />
+            <StatCell
+              label={t('profile.lessons_completed')}
+              value={String(stats.lessonsCompleted)}
+            />
             <StatCell label={t('profile.perfect_lessons')} value={String(stats.perfectLessons)} />
             <StatCell label={t('common.xp')} value={String(gameState?.weeklyXp ?? 0)} />
           </View>
@@ -145,10 +148,10 @@ export default function ProfileScreen() {
         {/* League */}
         <View className="gap-3 rounded-3xl border border-border bg-card px-5 py-5">
           <View className="flex-row items-center justify-between">
-            <Text className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
               {t('profile.league')}
             </Text>
-            <Text className="text-xs font-semibold text-muted-foreground">
+            <Text className="font-semibold text-xs text-muted-foreground">
               {t('profile.league_progress', { xp: gameState?.weeklyXp ?? 0 })}
             </Text>
           </View>
@@ -168,12 +171,13 @@ export default function ProfileScreen() {
         {/* Achievements */}
         <View className="gap-3">
           <View className="flex-row items-center justify-between">
-            <Text className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <Text className="font-bold text-xs uppercase tracking-widest text-muted-foreground">
               {t('profile.achievements')}
             </Text>
-            <Text className="text-xs font-semibold text-muted-foreground">
+            <Text className="font-semibold text-xs text-muted-foreground">
               {t('profile.achievements_progress', {
-                unlocked: ACHIEVEMENTS.filter((achievement) => isUnlocked(achievement, stats)).length,
+                unlocked: ACHIEVEMENTS.filter((achievement) => isUnlocked(achievement, stats))
+                  .length,
                 total: ACHIEVEMENTS.length,
               })}
             </Text>
@@ -208,7 +212,7 @@ export default function ProfileScreen() {
                   <Text
                     numberOfLines={2}
                     className={cn(
-                      'text-center text-[11px] font-bold leading-4',
+                      'text-center font-bold text-[11px] leading-4',
                       unlocked ? 'text-foreground' : 'text-muted-foreground'
                     )}>
                     {t(achievement.titleKey)}

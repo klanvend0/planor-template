@@ -13,16 +13,19 @@
       "index": 1,
       "title": { "en": "if and else", "tr": "if ve else" },
       "concept": {
-        "headline": { "en": "if runs code when a test is true", "tr": "if, test doğru olduğunda kodu çalıştırır" },
+        "headline": {
+          "en": "if runs code when a test is true",
+          "tr": "if, test doğru olduğunda kodu çalıştırır"
+        },
         "body": {
           "en": "An if statement lets your code make decisions. You write a test (like age > 18), and Python runs the code inside only if the test is true. The else block runs when the test is false. Both branches use a colon and indent their code. Remember: the test must be an expression that is either true or false, like a comparison using ==, >, <, or !=.",
-          "tr": "if ifadesi kodunuzun karar vermesini sağlar. Bir test yazarsın (örneğin age > 18), Python da test doğruysa sadece içerideki kodu çalıştırır. else bloğu test yanlış olduğunda çalışır. Her iki dal da iki nokta ile biter ve kodlarını içerden yazarlar. Unutma: test doğru ya da yanlış olabilecek bir ifade olmalı, örneğin == , >, <, veya != kullanarak yapılan karşılaştırma gibi."
+          "tr": "if ifadesi kodunun karar vermesini sağlar. Bir test yazarsın (örneğin age > 18) ve Python, test doğruysa sadece içerideki kodu çalıştırır. else bloğu test yanlış olduğunda çalışır. Her iki dal da iki nokta ile biter ve kodları girintili yazılır. Unutma: test doğru ya da yanlış olabilecek bir ifade olmalı, örneğin ==, >, <, veya != kullanarak yapılan karşılaştırma gibi."
         },
         "example": {
           "code": "age = 25\nif age > 18:\n    print(\"You can vote\")\nelse:\n    print(\"Too young to vote\")",
           "caption": {
             "en": "If the test passes, the indented block runs.",
-            "tr": "Test geçerse, içerden yazılı blok çalışır."
+            "tr": "Test geçerse, girintili blok çalışır."
           }
         }
       },
@@ -37,7 +40,10 @@
             { "id": "a", "text": { "en": "Pass", "tr": "Pass" } },
             { "id": "b", "text": { "en": "Fail", "tr": "Fail" } },
             { "id": "c", "text": { "en": "Both Pass and Fail", "tr": "Hem Pass hem Fail" } },
-            { "id": "d", "text": { "en": "Nothing, there is an error", "tr": "Hiçbir şey, hata verir" } }
+            {
+              "id": "d",
+              "text": { "en": "Nothing, there is an error", "tr": "Hiçbir şey, hata verir" }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -49,7 +55,10 @@
           "id": "py-u05-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line is the condition that gets tested?", "tr": "Hangi satır test edilen koşuldur?" },
+          "prompt": {
+            "en": "Which line is the condition that gets tested?",
+            "tr": "Hangi satır test edilen koşuldur?"
+          },
           "code": "name = \"Alex\"\nif name == \"Alex\":\n    print(\"Welcome\")",
           "options": [
             { "id": "a", "text": { "en": "name = \"Alex\"", "tr": "name = \"Alex\"" } },
@@ -91,7 +100,6 @@
           },
           "code": "number = 4",
           "expected": "if number % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")",
-          "acceptable": ["if number % 2==0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")"],
           "verify": { "stdout": "Even\n" },
           "explanation": {
             "en": "The remainder of number divided by 2 is 0 only for even numbers. We check this with % 2 == 0. This is a common pattern in programming.",
@@ -152,10 +160,13 @@
       "index": 2,
       "title": { "en": "elif chains", "tr": "elif zincirleri" },
       "concept": {
-        "headline": { "en": "elif tests additional conditions", "tr": "elif ek koşulları test eder" },
+        "headline": {
+          "en": "elif tests additional conditions",
+          "tr": "elif ek koşulları test eder"
+        },
         "body": {
           "en": "When you have more than two choices, elif (else if) lets you add more branches. You can chain multiple elif blocks, and Python will test them in order until it finds one that is true. Once a condition is true, Python runs that block and skips the rest. If none of the conditions match, the final else block runs (if there is one). Indentation matters: elif and else must align with the if.",
-          "tr": "İkiden fazla seçeneğiniz olduğunda, elif (else if) daha fazla dal eklemenizi sağlar. Birden fazla elif bloğu zincirleme yapabilir ve Python doğru olanı bulana kadar sırasıyla test eder. Bir koşul doğru olunca Python o bloğu çalıştırır ve gerisini atlar. Hiçbir koşul eşleşmezse, son else bloğu çalışır (varsa). Girinti önemlidir: elif ve else, if ile hizalı olmalıdır."
+          "tr": "İkiden fazla seçeneğin olduğunda, elif (else if) daha fazla dal eklemeni sağlar. Birden fazla elif bloğu zincirleme yapabilir ve Python doğru olanı bulana kadar sırasıyla test eder. Bir koşul doğru olunca Python o bloğu çalıştırır ve gerisini atlar. Hiçbir koşul eşleşmezse, son else bloğu çalışır (varsa). Girinti önemlidir: elif ve else, if ile hizalı olmalıdır."
         },
         "example": {
           "code": "grade = 75\nif grade >= 90:\n    print(\"A\")\nelif grade >= 80:\n    print(\"B\")\nelif grade >= 70:\n    print(\"C\")\nelse:\n    print(\"F\")",
@@ -188,12 +199,18 @@
           "id": "py-u05-l2-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "How many elif blocks can you have?", "tr": "Kaç tane elif bloğu olabilir?" },
+          "prompt": {
+            "en": "How many elif blocks can you have?",
+            "tr": "Kaç tane elif bloğu olabilir?"
+          },
           "options": [
             { "id": "a", "text": { "en": "Only one", "tr": "Sadece bir tane" } },
             { "id": "b", "text": { "en": "At most two", "tr": "En fazla iki" } },
             { "id": "c", "text": { "en": "As many as you want", "tr": "İstediğin kadar" } },
-            { "id": "d", "text": { "en": "Depends on the Python version", "tr": "Python versiyonuna bağlıdır" } }
+            {
+              "id": "d",
+              "text": { "en": "Depends on the Python version", "tr": "Python versiyonuna bağlıdır" }
+            }
           ],
           "answerId": "c",
           "explanation": {
@@ -210,13 +227,11 @@
             "tr": "Üç boyutu işlemek için kodu tamamla."
           },
           "codeTemplate": "size = \"large\"\nif size == \"small\":\n    print(\"10 dollars\")\n___ size == \"large\":\n    print(\"20 dollars\")\nelse:\n    print(\"15 dollars\")",
-          "blanks": [
-            { "id": "1", "answer": "elif", "distractors": ["if", "else if", "elif:"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "elif", "distractors": ["if", "else if", "elif:"] }],
           "verify": { "stdout": "20 dollars\n" },
           "explanation": {
             "en": "elif means else if. It adds another condition to test when the previous one was false. You do not type the colon in the blank.",
-            "tr": "elif, else if demektir. Önceki koşul yanlış olunca test etmek üzere başka bir koşul ekler. Blanko'ya iki nokta yazmazsın."
+            "tr": "elif, else if demektir. Önceki koşul yanlış olduğunda test edilecek yeni bir koşul ekler. İki noktayı boşluğa yazmana gerek yok, kalıpta zaten var."
           }
         },
         {
@@ -229,11 +244,10 @@
           },
           "code": "day = 2",
           "expected": "if day == 1:\n    print(\"Monday\")\nelif day == 2:\n    print(\"Tuesday\")\nelif day == 3:\n    print(\"Wednesday\")\nelse:\n    print(\"Unknown\")",
-          "acceptable": ["if day == 1:\n    print(\"Monday\")\nelif day == 2:\n    print(\"Tuesday\")\nelif day == 3:\n    print(\"Wednesday\")\nelse:\n    print(\"Unknown\")"],
           "verify": { "stdout": "Tuesday\n" },
           "explanation": {
             "en": "When you have many specific cases, elif chains are clearer than nested ifs. Each condition is tested in order until one matches.",
-            "tr": "Birçok spesifik durumunuz olduğunda, elif zincirleri iç içe if'lerden daha açık olur. Her koşul sırasıyla test edilir ta ki biri eşleşene kadar."
+            "tr": "Birçok özel durumun olduğunda, elif zincirleri iç içe if'lerden daha açıktır. Her koşul, biri eşleşene kadar sırasıyla test edilir."
           }
         },
         {
@@ -241,12 +255,19 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["score = 85", "if score >= 90:\n    print(\"A\")", "elif score >= 80:\n    print(\"B\")", "print(\"Good job\")"],
-          "buggyLineIndex": 3,
+          "codeLines": [
+            "score = 50",
+            "if score >= 90:",
+            "    print(\"A\")",
+            "elif score >= 80:",
+            "    print(\"B\")",
+            "print(\"Good job\")"
+          ],
+          "buggyLineIndex": 5,
           "fix": "    print(\"Good job\")",
           "explanation": {
-            "en": "The last print should be inside the elif to be part of the if/elif chain. Without indentation, it runs no matter what score is.",
-            "tr": "Son print, if/elif zincirinin parçası olmak için elif içinde olmalıdır. Girinti olmadan, score'un değeri ne olursa olsun çalışır."
+            "en": "The last print should be indented inside the elif to be part of the chain. Without indentation, it runs even though score matched no branch.",
+            "tr": "Son print, zincirin parçası olmak için elif içine girintili yazılmalıdır. Girinti olmadan, score hiçbir dala uymasa bile çalışır."
           }
         },
         {
@@ -287,9 +308,12 @@
     {
       "id": "py-u05-l3",
       "index": 3,
-      "title": { "en": "combining tests with and, or, not", "tr": "and, or, not ile testleri birleştir" },
+      "title": { "en": "and, or, not", "tr": "and, or ve not" },
       "concept": {
-        "headline": { "en": "and, or, and not combine boolean expressions", "tr": "and, or ve not boolean ifadeleri birleştirir" },
+        "headline": {
+          "en": "and, or, and not combine boolean expressions",
+          "tr": "and, or ve not boolean ifadeleri birleştirir"
+        },
         "body": {
           "en": "Sometimes a single comparison is not enough. Use and to require both conditions to be true, or to accept either one being true, and not to flip true to false or vice versa. and has higher precedence than or, meaning and is tested first. Remember: and requires all conditions; or needs only one; not reverses the result. These work with any expressions that evaluate to true or false.",
           "tr": "Bazen tek bir karşılaştırma yeterli değildir. Her iki koşulun da doğru olması gerekiyorsa and kullan, biri doğru olsa yeterli ise or kullan, sonucu tersine çevirmek için not kullan. and, or'dan daha yüksek öncelikledir; and önce test edilir. Unutma: and bütün koşulları ister; or sadece birini; not sonucu tersine çevirir. Bunlar doğru ya da yanlış olarak değerlendirilen herhangi bir ifadeyle çalışır."
@@ -331,7 +355,7 @@
             { "id": "a", "text": { "en": "Not alice", "tr": "Not alice" } },
             { "id": "b", "text": { "en": "Nothing", "tr": "Hiçbir şey" } },
             { "id": "c", "text": { "en": "Error", "tr": "Hata" } },
-            { "id": "d", "text": { "en": "alice", "tr": "alice" } }
+            { "id": "d", "text": { "en": "True", "tr": "True" } }
           ],
           "answerId": "a",
           "explanation": {
@@ -345,12 +369,10 @@
           "difficulty": "medium",
           "prompt": {
             "en": "Complete the condition to print if either x is 5 or y is 10.",
-            "tr": "x 5'se veya y 10'sa yazdıracak koşulu tamamla."
+            "tr": "x 5'e eşitse veya y 10'a eşitse yazdıracak koşulu tamamla."
           },
           "codeTemplate": "x = 3\ny = 10\nif x == 5 ___ y == 10:\n    print(\"Match\")",
-          "blanks": [
-            { "id": "1", "answer": "or", "distractors": ["and", "||", "or:"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "or", "distractors": ["and", "||", "or:"] }],
           "verify": { "stdout": "Match\n" },
           "explanation": {
             "en": "or means the condition is true if at least one part is true. Here y is 10, so the or expression is true even though x is not 5.",
@@ -367,7 +389,6 @@
           },
           "code": "score = 75",
           "expected": "if score >= 50 and score <= 100:\n    print(\"Valid\")",
-          "acceptable": ["if score >= 50 and score <= 100:\n    print(\"Valid\")"],
           "verify": { "stdout": "Valid\n" },
           "explanation": {
             "en": "and ensures both bounds are checked. score must be >= 50 AND <= 100. This is how ranges are tested in programming.",
@@ -378,7 +399,10 @@
           "id": "py-u05-l3-q5",
           "type": "order_lines",
           "difficulty": "medium",
-          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sıraya koy." },
+          "prompt": {
+            "en": "Put the lines in the right order.",
+            "tr": "Satırları doğru sıraya koy."
+          },
           "lines": [
             "day = \"Monday\"",
             "if day == \"Monday\" or day == \"Friday\":",
@@ -420,7 +444,7 @@
           },
           "explanation": {
             "en": "and requires all conditions to be true together, making it useful for security: you need both permission and login. or would give access to either one alone.",
-            "tr": "and, güvenlik için yararlı hâle getiren tüm koşulların birlikte doğru olmasını ister: hem izin hem giriş lazımdır. or, tek başına herhangi birinin erişmesine izin verirdi."
+            "tr": "and, tüm koşulların birlikte doğru olmasını ister; bu da güvenlik için işe yarar çünkü hem izin hem giriş gerekir. or ise tek başına herhangi birine izin verirdi."
           }
         }
       ]
@@ -430,10 +454,13 @@
       "index": 4,
       "title": { "en": "nested ifs and truthiness", "tr": "iç içe if'ler ve truthiness" },
       "concept": {
-        "headline": { "en": "Nest ifs for multi-level decisions; understand what counts as true", "tr": "Çok seviyeli kararlar için if'leri iç içe koy; neyin doğru saydığını anla" },
+        "headline": {
+          "en": "Nest ifs for multi-level checks; know what counts as true",
+          "tr": "İf'leri iç içe koy; bazı değerler karşılaştırmasız doğrudur"
+        },
         "body": {
-          "en": "You can put an if inside another if to make decisions at multiple levels. Each level uses its own indentation. Indentation shows which if each block belongs to. Python also treats some values as true or false without needing a comparison: non-empty strings and non-zero numbers are true, empty strings and 0 are false, and None is always false. This is called truthiness. Using truthiness makes code cleaner: if name: works instead of if name != \"\".",
-          "tr": "Çok seviyeli karar vermek için bir if'i başka bir if'in içine koyabilirsin. Her seviye kendi girintisini kullanır. Girinti, her bloğun hangi if'e ait olduğunu gösterir. Python, karşılaştırma olmadan bazı değerleri doğru veya yanlış olarak da algılar: boş olmayan metinler ve sıfır olmayan sayılar doğrudur, boş metinler ve 0 yanlıştır ve None her zaman yanlıştır. Buna truthiness denir. Truthiness kullanmak kodu temiz yapar: if name: , if name != \"\" yerine çalışır."
+          "en": "You can put an if inside another if to make decisions at multiple levels; indentation shows which if each block belongs to. Python also treats some values as true or false without a comparison: non-empty strings and non-zero numbers are true, while empty strings, 0, and None are false. This is called truthiness, and it lets you write if name: instead of if name != \"\".",
+          "tr": "Çok seviyeli karar vermek için bir if'i başka bir if'in içine koyabilirsin; girinti, her bloğun hangi if'e ait olduğunu gösterir. Python, karşılaştırma olmadan bazı değerleri de doğru ya da yanlış sayar: boş olmayan metinler ve sıfır olmayan sayılar doğru, boş metinler, 0 ve None ise yanlıştır. Buna truthiness denir ve if name != \"\" yerine sadece if name: yazmanı sağlar."
         },
         "example": {
           "code": "age = 25\nhas_license = True\nif age >= 18:\n    if has_license:\n        print(\"Can drive alone\")\n    else:\n        print(\"Need a license\")",
@@ -448,7 +475,10 @@
           "id": "py-u05-l4-q1",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "What does this nested if code print?", "tr": "Bu iç içe if kodu ne yazdırır?" },
+          "prompt": {
+            "en": "What does this nested if code print?",
+            "tr": "Bu iç içe if kodu ne yazdırır?"
+          },
           "code": "x = 10\nif x > 5:\n    if x < 20:\n        print(\"In range\")",
           "options": [
             { "id": "a", "text": { "en": "In range", "tr": "In range" } },
@@ -466,7 +496,10 @@
           "id": "py-u05-l4-q2",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "Which value is truthy (acts as true)?", "tr": "Hangi değer truthy'dir (doğru olarak davranır)?" },
+          "prompt": {
+            "en": "Which value is truthy (acts as true)?",
+            "tr": "Hangi değer truthy'dir (doğru olarak davranır)?"
+          },
           "options": [
             { "id": "a", "text": { "en": "0", "tr": "0" } },
             { "id": "b", "text": { "en": "\"hello\"", "tr": "\"hello\"" } },
@@ -476,7 +509,7 @@
           "answerId": "b",
           "explanation": {
             "en": "Non-empty strings are truthy. Empty strings, 0, and None are falsy. You can use if string: to check if it has content without comparing it explicitly.",
-            "tr": "Boş olmayan metinler doğruluk değeriyle doğru'dur. Boş metinler, 0 ve None yanlıştır. if string: kullanarak onu açıkça karşılaştırmadan içeriği olup olmadığını kontrol edebilirsin."
+            "tr": "Boş olmayan metinler doğruluk değeriyle doğrudur. Boş metinler, 0 ve None yanlıştır. if string: kullanarak onu açıkça karşılaştırmadan içeriği olup olmadığını kontrol edebilirsin."
           }
         },
         {
@@ -489,12 +522,16 @@
           },
           "codeTemplate": "name = \"Alice\"\nif ___:\n    print(\"Hello \" + name)",
           "blanks": [
-            { "id": "1", "answer": "name", "distractors": ["name != \"\"", "name == \"Alice\"", "if name"] }
+            {
+              "id": "1",
+              "answer": "name",
+              "distractors": ["name != \"\"", "name == \"Alice\"", "if name"]
+            }
           ],
           "verify": { "stdout": "Hello Alice\n" },
           "explanation": {
             "en": "Non-empty strings are truthy, so if name: works. It is cleaner than if name != \"\". Python automatically treats non-empty strings as true.",
-            "tr": "Boş olmayan metinler doğruluk değeriyle doğru'dur; if name: çalışır. if name != \"\" 'den daha temiz. Python boş olmayan metinleri otomatik olarak doğru olarak algılar."
+            "tr": "Boş olmayan metinler doğruluk değeriyle doğrudur; if name: çalışır. if name != \"\" 'den daha temiz. Python boş olmayan metinleri otomatik olarak doğru olarak algılar."
           }
         },
         {
@@ -507,11 +544,10 @@
           },
           "code": "x = 15",
           "expected": "if x > 5:\n    if x < 20:\n        print(\"Valid\")\n    else:\n        print(\"Too high\")\nelse:\n    print(\"Too low\")",
-          "acceptable": ["if x > 5:\n    if x < 20:\n        print(\"Valid\")\n    else:\n        print(\"Too high\")\nelse:\n    print(\"Too low\")"],
           "verify": { "stdout": "Valid\n" },
           "explanation": {
             "en": "Nested ifs allow you to test conditions at different levels. The else at each level refers to the if directly above it based on indentation.",
-            "tr": "İç içe if'ler farklı seviyelerde koşulları test etmenizi sağlar. Her seviyedeki else, girintiye bağlı olarak doğrudan üstündeki if'e atıfta bulunur."
+            "tr": "İç içe if'ler farklı seviyelerde koşulları test etmeni sağlar. Her seviyedeki else, girintiye bağlı olarak doğrudan üstündeki if'e atıfta bulunur."
           }
         },
         {
@@ -519,12 +555,18 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["password = \"secret\"", "if password:", "    if len(password) > 3:", "        print(\"Strong\")"],
-          "buggyLineIndex": 0,
-          "fix": "password = \"secret\"",
+          "codeLines": [
+            "password = \"secret123\"",
+            "if password:",
+            "    if len(passwrod) > 3:",
+            "        print(\"Strong\")"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "    if len(password) > 3:",
+          "verify": { "raises": "NameError" },
           "explanation": {
-            "en": "This code is actually correct. The outer if tests if password is truthy (non-empty), and the inner if checks if it is long enough. Both work together to validate the password.",
-            "tr": "Bu kod aslında doğrudur. Dış if, password'ün doğruluk değeriyle doğru olup olmadığını (boş olmadığını) test eder; iç if yeterince uzun olup olmadığını kontrol eder. Her ikisi birlikte şifreyi doğrulamak için çalışır."
+            "en": "passwrod is misspelled. Python has no variable by that name, so the inner if raises a NameError instead of checking the length.",
+            "tr": "passwrod yanlış yazılmış. Python bu isimde bir değişken tanımıyor; bu yüzden iç if, uzunluğu kontrol etmek yerine NameError fırlatır."
           }
         },
         {

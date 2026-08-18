@@ -75,9 +75,7 @@ export const multipleChoiceQuestionSchema = z
     ...questionBase,
     type: z.literal('multiple_choice'),
     code: z.string().nullish(),
-    options: z
-      .array(z.object({ id: z.string().min(1), text: localizedSchema }))
-      .length(4),
+    options: z.array(z.object({ id: z.string().min(1), text: localizedSchema })).length(4),
     answerId: z.string().min(1),
   })
   .refine((q) => q.options.some((o) => o.id === q.answerId), {

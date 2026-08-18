@@ -140,6 +140,8 @@ describe('achievements', () => {
   it('has a unique id and copy for every badge', () => {
     const ids = ACHIEVEMENTS.map((achievement) => achievement.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ACHIEVEMENTS.every((achievement) => achievement.titleKey && achievement.bodyKey)).toBe(true);
+    expect(ACHIEVEMENTS.every((achievement) => achievement.titleKey && achievement.bodyKey)).toBe(
+      true
+    );
   });
 });

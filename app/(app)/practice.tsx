@@ -45,7 +45,9 @@ function DeckCard({
     <View
       className={cn(
         'gap-4 rounded-3xl border-2 px-5 py-5',
-        tone === 'destructive' ? 'border-destructive/30 bg-destructive/10' : 'border-primary/30 bg-primary/10'
+        tone === 'destructive'
+          ? 'border-destructive/30 bg-destructive/10'
+          : 'border-primary/30 bg-primary/10'
       )}>
       <View className="flex-row items-center gap-3">
         <View
@@ -61,7 +63,9 @@ function DeckCard({
         </View>
         <View className="flex-1 gap-0.5">
           <Text className="font-display text-[20px] text-foreground">{title}</Text>
-          {meta ? <Text className="text-sm font-semibold text-muted-foreground">{meta}</Text> : null}
+          {meta ? (
+            <Text className="font-semibold text-sm text-muted-foreground">{meta}</Text>
+          ) : null}
         </View>
       </View>
 
@@ -115,7 +119,9 @@ export default function PracticeScreen() {
             meta={t('practice.mistakes_count', { count: mistakes.questions.length })}
             body={t('practice.mistakes_body')}
             actionLabel={t('practice.start')}
-            onPress={() => router.push({ pathname: '/practice/[deck]', params: { deck: 'mistakes' } })}
+            onPress={() =>
+              router.push({ pathname: '/practice/[deck]', params: { deck: 'mistakes' } })
+            }
           />
         ) : (
           <View className="gap-2 rounded-3xl border-2 border-border bg-card px-5 py-6">
@@ -133,7 +139,9 @@ export default function PracticeScreen() {
           tone="primary"
           title={t('practice.speed_title')}
           body={hasReview ? t('practice.speed_body') : t('practice.no_lessons_yet')}
-          meta={hasReview ? t('practice.mistakes_count', { count: review.questions.length }) : undefined}
+          meta={
+            hasReview ? t('practice.mistakes_count', { count: review.questions.length }) : undefined
+          }
           actionLabel={t('practice.start')}
           disabled={!hasReview}
           onPress={() => router.push({ pathname: '/practice/[deck]', params: { deck: 'review' } })}

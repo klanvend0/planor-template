@@ -122,12 +122,12 @@ export default function LoginScreen() {
 
         <View className="flex-row items-center justify-center gap-6 pt-1">
           <Text
-            className="text-xs font-semibold text-muted-foreground underline"
+            className="font-semibold text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.terms)}>
             {t('paywall.terms')}
           </Text>
           <Text
-            className="text-xs font-semibold text-muted-foreground underline"
+            className="font-semibold text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.privacy)}>
             {t('paywall.privacy')}
           </Text>

@@ -83,7 +83,8 @@ type Level4<T> = {
     : never;
 }[Keys<T>];
 
-export type TranslationKeys = Level1<typeof en> | Level2<typeof en> | Level3<typeof en> | Level4<typeof en>;
+export type TranslationKeys =
+  Level1<typeof en> | Level2<typeof en> | Level3<typeof en> | Level4<typeof en>;
 
 /**
  * Translate a key.
@@ -91,7 +92,10 @@ export type TranslationKeys = Level1<typeof en> | Level2<typeof en> | Level3<typ
  * @param key - Dotted key from `i18n/en.json`.
  * @param options - i18n-js options: interpolation values, `count` for plurals.
  */
-export function t<Key extends TranslationKeys>(key: Key, options?: Parameters<I18n['t']>[1]): string {
+export function t<Key extends TranslationKeys>(
+  key: Key,
+  options?: Parameters<I18n['t']>[1]
+): string {
   return i18n.t(key as string, options);
 }
 

@@ -103,7 +103,9 @@ export function SessionRunner({
           <Text className="text-center font-display text-2xl text-foreground">
             {t('results.title_ok')}
           </Text>
-          <Text className="text-center text-[15px] text-muted-foreground">{t('errors.network')}</Text>
+          <Text className="text-center text-[15px] text-muted-foreground">
+            {t('errors.network')}
+          </Text>
           <GameButton label={t('common.continue')} onPress={onFinish} />
         </View>
       );
@@ -171,7 +173,7 @@ export function SessionRunner({
             onPress={onExit}>
             <Icon as={X} size={26} className="text-muted-foreground" />
           </Pressable>
-          <Text className="flex-1 text-sm font-semibold text-muted-foreground" numberOfLines={1}>
+          <Text className="flex-1 font-semibold text-sm text-muted-foreground" numberOfLines={1}>
             {localized(location.unit.title, locale)}
           </Text>
         </View>
@@ -218,7 +220,7 @@ export function SessionRunner({
         contentContainerClassName="px-6 pb-8 pt-2"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive">
-        <Text className="mb-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+        <Text className="mb-4 font-bold text-xs uppercase tracking-widest text-muted-foreground">
           {t('lesson.question_of', { current: session.position, total: session.total })}
         </Text>
 

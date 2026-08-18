@@ -1,100 +1,129 @@
-# **APP_NAME** Template
+# Codeling
 
-A production-ready React Native / Expo template built for speed and scalability.
+A mobile game for learning to code. Short puzzles instead of long tutorials:
+fill in the blank, type the missing line, spot the bug, pick the output — and, for
+subscribers, explain what a snippet does in your own words and have an AI tell you
+exactly what you understood and what you missed.
 
-## Features
+iOS first, Turkish and English throughout, 336 questions across a Python and a
+JavaScript course.
 
-- **Framework**: [Expo SDK 54](https://expo.dev/) (React Native 0.81)
-- **Navigation**: [Expo Router](https://expo.dev/router)
-- **Styling**: [NativeWind](https://www.nativewind.dev/) (Tailwind CSS) + [React Native Reusables](https://reactnativereusables.com)
-- **Backend**: [Supabase](https://supabase.com/) (Auth, Database, Edge Functions)
-- **Internationalization**: [i18n-js](https://github.com/fnando/i18n-js) + [expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)
-- **Analytics**: [PostHog](https://posthog.com/)
-- **Paywalls**: [Superwall](https://superwall.com/) _(planned - requires development build)_
-- **Testing**: [Jest](https://jestjs.io/) + [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
+## What is in here
 
-## Getting Started
+| Area                                               | Where                |
+| -------------------------------------------------- | -------------------- |
+| Screens                                            | `app/` (Expo Router) |
+| Question views, HUD, illustrations                 | `components/`        |
+| Content schema, grading rules, gamification, theme | `lib/`               |
+| Supabase, RevenueCat, AI grading, notifications    | `services/`          |
+| Client state                                       | `stores/`            |
+| The question bank                                  | `content/`           |
+| Database + edge functions                          | `supabase/`          |
 
-### 1. Create a New App
+## Stack
 
-Use this template on GitHub or clone it:
+- **Expo SDK 57** (React Native 0.86, React 19.2, New Architecture)
+- **Expo Router 57** — file-based routes; note that since SDK 56 it no longer
+  depends on React Navigation, so themes and tab types come from `expo-router`
+- **NativeWind 4** (Tailwind v3) with CSS-variable design tokens
+- **React Native Reusables** (`@rn-primitives/*`) for the shadcn-style primitives
+- **Supabase** — auth, Postgres, edge functions
+- **RevenueCat** — subscriptions with a 3-day free trial
+- **Zustand** for state, **Zod** for validating anything that crosses a boundary
 
-```bash
-# Using GitHub template (recommended)
-# Click "Use this template" button on GitHub
-
-# Or clone directly
-git clone https://github.com/YOUR_ORG/__APP_SLUG__.git my-app
-cd my-app
-rm -rf .git && git init
-```
-
-### 2. Environment Setup
-
-Fill in your API keys in `.env`:
-
-```env
-EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-EXPO_PUBLIC_SUPABASE_KEY=your-anon-key
-EXPO_PUBLIC_POSTHOG_API_KEY=your-posthog-key
-EXPO_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
-# EXPO_PUBLIC_SUPERWALL_API_KEY=your-superwall-key  # Optional - for production builds
-```
-
-### 3. Supabase Setup
-
-Link to your remote Supabase project:
-
-```bash
-npm run supabase:login     # Login to Supabase CLI
-npm run supabase:link      # Link to your project
-npm run supabase:pull      # Pull existing schema (optional)
-npm run supabase:gen-types # Generate TypeScript types
-```
-
-### 4. Run the App
+## Getting started
 
 ```bash
 npm install
-npm run dev
-# or
-npm run ios
-# or
-npm run android
+cp .env.example .env        # fill in Supabase + RevenueCat keys
+npm run dev                 # development build (not Expo Go — see below)
 ```
 
-## Supabase Development Workflow
-
-This template uses Supabase CLI for migrations:
+RevenueCat is a native module and throws inside Expo Go, so day-to-day work needs
+a development build:
 
 ```bash
-# Create a new migration
-npm run supabase:migration:new my_migration_name
-
-# Edit the migration file in supabase/migrations/
-
-# Push migrations to remote Supabase
-npm run supabase:push
-
-# Regenerate TypeScript types
-npm run supabase:gen-types
+npx eas build --profile development --platform ios
 ```
 
-Migration files are stored in `supabase/migrations/` and TypeScript types are generated to `lib/database.types.ts`.
+The app still runs without any RevenueCat key at all: everyone is simply treated
+as a free user, which is enough for building lessons and screens.
 
-## Project Structure
+Backend setup — migrations, edge functions, the AI provider, the webhook and
+Apple's revoke flow — is in [docs/BACKEND_SETUP.md](docs/BACKEND_SETUP.md).
 
-- `app/`: Expo Router pages and layouts
-- `components/`: Reusable UI components
-- `lib/`: Service configurations (Supabase, i18n, PostHog, etc.)
-- `i18n/`: Translation files
-- `supabase/`: Supabase config and migrations
-- `scripts/`: Setup and utility scripts
+## Everyday commands
 
-## Testing
+```bash
+npm run dev             # start the dev server
+npm run ios             # run on a simulator/device
+npm test                # unit tests
+npm run typecheck       # tsc --noEmit
+npm run format          # prettier
+npm run content:check   # validate the question bank AND run every snippet
+npm run content:seed    # regenerate the AI grading rubric migration
+npm run icon:build      # re-render every app icon variant from vector source
+npm run expo:doctor     # dependency sanity check
+```
 
-Run the test suite with:
+## How the game works
+
+**Lessons.** Each lesson opens with a teaching card — one idea, one worked
+example — then asks six questions about exactly that idea. Wrong answers go back
+into the queue and come round again, so a lesson ends when everything has been
+answered right at least once. Score is first-attempt accuracy.
+
+**Hearts.** A wrong answer costs a heart; hearts regenerate one per 30 minutes,
+and subscribers have unlimited. Running out is not a dead end — the learner can
+wait, take their one free daily refill, practise old mistakes for free, or
+subscribe.
+
+**XP, levels, streaks, leagues.** XP is paid per question difficulty, with a bonus
+for a flawless lesson and one every seventh streak day. Weekly XP puts the learner
+in a league (bronze → diamond) that is computed from their own numbers — there is
+no social leaderboard and no other learner's data anywhere in the app.
+
+**The premium question.** Every lesson's last question shows a snippet whose
+comments are written in the learner's language and asks for a 100-200 character
+explanation. A cheap model grades it against a rubric that lives in Postgres,
+returning a verdict, a score, what to fix and what was missed. Free users see the
+question, an honest description of what it does, and a way past it.
+
+All of this is decided by the database, not the client: `record_answer`,
+`complete_lesson` and `record_practice` are `SECURITY DEFINER` functions, and no
+client role holds `insert` or `update` on the tables behind them.
+
+## Content
+
+The question bank lives in `content/<course>/unit_NN.json` and ships inside the
+app, so a lesson starts instantly and works offline. `content/AUTHORING.md` is the
+contract; `npm run content:check` enforces it and **actually executes** every
+snippet with `python3` / `node`, so a question whose "correct" answer does not run
+cannot ship.
+
+Progress, attempts and XP are the only things stored server-side.
+
+## Offline
+
+Lessons are playable without a connection. Answers and lesson results are queued
+in `stores/sync_queue.ts` and replayed when the app next reaches the network; the
+local game state is updated optimistically with the same rules Postgres applies,
+so the two agree once the queue drains.
+
+## Tests
 
 ```bash
 npm test
 ```
+
+Coverage is deliberately concentrated where being wrong costs the learner
+something: answer grading (`lib/answer_check.ts`) and the reward curve
+(`lib/gamification.ts`).
+
+## Shipping
+
+`eas.json` carries development, preview and production profiles. Before the first
+submission, replace the placeholders in `app.json` (`appleTeamId`, bundle
+identifier) and `eas.json` (`appleId`, `ascAppId`), and point the Terms and
+Privacy Policy links in `.env` at real pages — App Store review checks that they
+resolve, both in the app and in App Store Connect metadata.

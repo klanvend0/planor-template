@@ -4,11 +4,11 @@
   "index": 6,
   "title": {
     "en": "Repeating Work",
-    "tr": "Tekrarlayan Işler"
+    "tr": "Tekrarlayan İşler"
   },
   "description": {
     "en": "Learn to repeat code with loops: for loops over ranges and lists, while loops, and the accumulator pattern.",
-    "tr": "Döngüler ile kodu nasıl tekrarlayacağınızı öğrenin: for döngüleri, while döngüleri ve biriktirim kalıbı."
+    "tr": "Döngülerle kodu tekrarlamayı öğren: aralıklar ve listeler üzerinde for, while döngüleri ve biriktirim kalıbı."
   },
   "lessons": [
     {
@@ -25,7 +25,7 @@
         },
         "body": {
           "en": "A for loop runs the same block of code multiple times. The range() function creates a sequence of numbers. range(5) counts from 0 to 4 — five numbers total. Each time through the loop, the loop variable holds the next number. After the colon, the indented lines are the code that repeats.",
-          "tr": "for döngüsü aynı kod bloğunu birden çok kez çalıştırır. range() işlevi bir sayı dizisi oluşturur. range(5) sıfırdan dörde kadar sayar — toplamda beş sayı. Her döngü turunda döngü değişkeni bir sonraki sayıyı alır. İki noktanın sonrası girintili satırlar tekrarlanan koddur."
+          "tr": "for döngüsü aynı kod bloğunu birden çok kez çalıştırır. range() işlevi bir sayı dizisi oluşturur. range(5) sıfırdan dörde kadar sayar — toplamda beş sayı. Her döngü turunda döngü değişkeni bir sonraki sayıyı alır. İki noktadan sonraki girintili satırlar, tekrarlanan koddur."
         },
         "example": {
           "code": "for i in range(3):\n    print(i)",
@@ -70,15 +70,15 @@
             {
               "id": "d",
               "text": {
-                "en": "hi\n3",
-                "tr": "hi\n3"
+                "en": "hi\nhi",
+                "tr": "hi\nhi"
               }
             }
           ],
           "answerId": "a",
           "explanation": {
             "en": "The loop runs 3 times because range(3) is 0, 1, 2. Each print() call makes a new line.",
-            "tr": "Döngü 3 kez çalışır çünkü range(3) sıfır, bir, iki'dir. Her print() çağrısı yeni bir satır açar."
+            "tr": "Döngü 3 kez çalışır çünkü range(3) sıfır, bir, ikidir. Her print() çağrısı yeni bir satır açar."
           }
         },
         {
@@ -138,11 +138,7 @@
             {
               "id": "1",
               "answer": "range(3)",
-              "distractors": [
-                "range(2)",
-                "3",
-                "[0, 1, 2]"
-              ]
+              "distractors": ["range(2)", "3", "range(4)"]
             }
           ],
           "verify": {
@@ -162,15 +158,12 @@
             "tr": "1'den 5'e kadar sayıları yazdıran bir döngü yaz."
           },
           "expected": "for i in range(1, 6):\n    print(i)",
-          "acceptable": [
-            "for i in range(1,6):\n    print(i)"
-          ],
           "verify": {
             "stdout": "1\n2\n3\n4\n5\n"
           },
           "explanation": {
-            "en": "range(1, 6) starts at 1 and stops before 6, so it counts 1, 2, 3, 4, 5. The second argument to range() sets the starting point.",
-            "tr": "range(1, 6) birden başlar ve altıdan önce durur; bir, iki, üç, dört, beş sayar. range()'nin ikinci argümanı başlangıç noktasını ayarlar."
+            "en": "range(1, 6) starts at 1 and stops before 6, so it counts 1, 2, 3, 4, 5. The first argument sets where range() starts; the second sets where it stops.",
+            "tr": "range(1, 6) birden başlar ve altıdan önce durur; bir, iki, üç, dört, beş sayar. range()'nin birinci argümanı başlangıcı, ikincisi durma noktasını belirler."
           }
         },
         {
@@ -181,15 +174,15 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "for i in range(4):",
-            "print(i)"
-          ],
+          "codeLines": ["for i in range(4):", "print(i)"],
           "buggyLineIndex": 1,
           "fix": "    print(i)",
+          "verify": {
+            "raises": "IndentationError"
+          },
           "explanation": {
-            "en": "The print line must be indented to show it is inside the loop. Without indentation, it only runs once, not four times.",
-            "tr": "print satırı döngüün içinde olduğunu göstermek için girintili olmalı. Girintisiz hâlde sadece bir kez, dört kez değil çalışır."
+            "en": "The print line must be indented to show it belongs inside the loop. Without indentation, Python raises an IndentationError and the code does not run at all.",
+            "tr": "print satırı döngünün içinde olduğunu göstermek için girintili olmalı. Girintisiz hâlde Python IndentationError verir ve kod hiç çalışmaz."
           }
         },
         {
@@ -241,7 +234,7 @@
         },
         "body": {
           "en": "You can loop over the characters in a string without knowing how many there are. You can also loop over the elements of a list. A list is a sequence of values inside square brackets, separated by commas. Each time through the loop, the loop variable holds the next character or element. This is safer and clearer than counting yourself.",
-          "tr": "Bir metindeki her karakteri kaç tane olduğunu bilmeden döngüye çevirebilirsin. Bir listenin elemanlarını da döngüye çevirebilirsin. Liste, kare parantez içine virgülle ayrılmış değerler dizisidir. Her döngü turunda döngü değişkeni bir sonraki karakter veya elemanı alır. Bu kendinin saymanından daha güvenli ve açıktır."
+          "tr": "Bir metindeki karakterler üzerinde, kaç tane olduklarını bilmeden döngü kurabilirsin. Aynı şekilde bir listenin elemanları üzerinde de döngü kurabilirsin. Liste, köşeli parantez içine virgülle ayrılmış değerlerden oluşan bir dizidir. Her döngü turunda döngü değişkeni bir sonraki karakteri veya elemanı alır. Bu, kendin saymaktan daha güvenli ve nettir."
         },
         "example": {
           "code": "word = \"cat\"\nfor letter in word:\n    print(letter)\n\nfor item in [1, 2, 3]:\n    print(item)",
@@ -355,11 +348,7 @@
             {
               "id": "1",
               "answer": "item",
-              "distractors": [
-                "i",
-                "number",
-                "5"
-              ]
+              "distractors": ["i", "number", "5"]
             }
           ],
           "verify": {
@@ -379,15 +368,12 @@
             "tr": "dog kelimesindeki her harfi ayrı satırda yazdıran bir döngü yaz."
           },
           "expected": "for letter in \"dog\":\n    print(letter)",
-          "acceptable": [
-            "for letter in 'dog':\n    print(letter)"
-          ],
           "verify": {
             "stdout": "d\no\ng\n"
           },
           "explanation": {
             "en": "Looping over a string gives you each character one at a time. The loop variable letter will be 'd', then 'o', then 'g'.",
-            "tr": "Bir metin üzerinde döngü karşılıklı olarak her karakteri verir. letter döngü değişkeni sırasıyla 'd', 'o', 'g' olur."
+            "tr": "Bir metin üzerinde döngü her karakteri birer birer verir. letter döngü değişkeni sırasıyla 'd', 'o', 'g' olur."
           }
         },
         {
@@ -443,7 +429,7 @@
           },
           "explanation": {
             "en": "Looping over a list lets you process each element. Inside the loop, n holds one element at a time, and you can do math or anything else with it.",
-            "tr": "Bir liste üzerinde döngü her elemanı işlemenizi sağlar. Döngü içinde n bir seferde bir elemanı alır ve onunla matematik vb. yapabilirsin."
+            "tr": "Bir liste üzerinde döngü her elemanı işlemeni sağlar. Döngü içinde n bir seferde bir elemanı tutar ve onunla matematik gibi işlemler yapabilirsin."
           }
         }
       ]
@@ -576,11 +562,7 @@
             {
               "id": "1",
               "answer": "> 0",
-              "distractors": [
-                "< 4",
-                "!= 0",
-                ">= 1"
-              ]
+              "distractors": ["< 4", "!= 0", ">= 1"]
             }
           ],
           "verify": {
@@ -600,9 +582,7 @@
             "tr": "1'den 3'e kadar sayan bir while döngüsü yaz."
           },
           "expected": "i = 1\nwhile i <= 3:\n    print(i)\n    i = i + 1",
-          "acceptable": [
-            "i = 1\nwhile i < 4:\n    print(i)\n    i = i + 1"
-          ],
+          "acceptable": ["i = 1\nwhile i < 4:\n    print(i)\n    i = i + 1"],
           "verify": {
             "stdout": "1\n2\n3\n"
           },
@@ -619,11 +599,7 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "x = 0",
-            "while x < 3:",
-            "    print(x)"
-          ],
+          "codeLines": ["x = 0", "while x < 3:", "    print(x)"],
           "buggyLineIndex": 2,
           "fix": "    print(x)\n    x = x + 1",
           "explanation": {
@@ -796,11 +772,7 @@
             {
               "id": "1",
               "answer": "result",
-              "distractors": [
-                "num",
-                "0",
-                "total"
-              ]
+              "distractors": ["num", "0", "total"]
             }
           ],
           "verify": {
@@ -820,9 +792,7 @@
             "tr": "1, 2, 3 yazdırıp 4'e ulaşınca duran bir döngü yaz."
           },
           "expected": "for i in range(1, 10):\n    if i == 4:\n        break\n    print(i)",
-          "acceptable": [
-            "for i in range(1, 4):\n    print(i)"
-          ],
+          "acceptable": ["for i in range(1, 4):\n    print(i)"],
           "verify": {
             "stdout": "1\n2\n3\n"
           },
@@ -839,12 +809,7 @@
             "en": "Which line stops the accumulator from working?",
             "tr": "Hangi satır biriktirim'in çalışmasını durdurur?"
           },
-          "codeLines": [
-            "total = 0",
-            "for num in [10, 20, 30]:",
-            "    total + num",
-            "print(total)"
-          ],
+          "codeLines": ["total = 0", "for num in [10, 20, 30]:", "    total + num", "print(total)"],
           "buggyLineIndex": 2,
           "fix": "    total = total + num",
           "explanation": {

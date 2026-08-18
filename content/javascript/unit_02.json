@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "let and const", "tr": "let ve const" },
       "concept": {
-        "headline": { "en": "let creates a variable you can change, const creates one you cannot", "tr": "let değiştirilebilen bir değişken oluşturur, const ise oluşturmayanı" },
+        "headline": {
+          "en": "let creates a variable you can change, const creates one you cannot",
+          "tr": "let değiştirilebilen bir değişken oluşturur, const ise oluşturmayanı"
+        },
         "body": {
           "en": "In JavaScript, let and const both declare variables, but they behave differently. A let variable can be reassigned to a new value at any time. A const variable must be given a value when it is declared, and that value cannot change afterward. You choose const when you want to protect a value from accidental changes, and let when you know it will need to change.",
           "tr": "JavaScript'te let ve const her ikisi de değişken bildirir ama farklı davranırlar. let değişkeni istediğin zaman yeni bir değerle yeniden atanabilir. const değişkeni bildirilirken bir değer almalı ve o değer sonradan değişemez. Bir değeri yanlışlıktan değişikliğe karşı korumak istediğinde const, değişeceğini bildiğinde ise let seçersin."
@@ -49,7 +52,10 @@
           "id": "js-u02-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line correctly declares a const variable?", "tr": "Hangi satır const değişkeni doğru bir şekilde bildirir?" },
+          "prompt": {
+            "en": "Which line correctly declares a const variable?",
+            "tr": "Hangi satır const değişkeni doğru bir şekilde bildirir?"
+          },
           "options": [
             { "id": "a", "text": { "en": "const name;", "tr": "const name;" } },
             { "id": "b", "text": { "en": "const name = \"Bob\";", "tr": "const name = \"Bob\";" } },
@@ -71,9 +77,7 @@
             "tr": "Değiştirilebilen bir değişken bildirmek için satırı tamamla, başlangıç değeri 100."
           },
           "codeTemplate": "___ score = 100;",
-          "blanks": [
-            { "id": "1", "answer": "let", "distractors": ["const", "var", "let score"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "let", "distractors": ["const", "var", "let score"] }],
           "verify": { "stdout": "" },
           "explanation": {
             "en": "let declares a variable that you can reassign later. const would prevent that, and var is older style.",
@@ -150,7 +154,10 @@
       "index": 2,
       "title": { "en": "Numbers and Strings", "tr": "Sayılar ve Metinler" },
       "concept": {
-        "headline": { "en": "Numbers and strings are different types; operations behave differently on them", "tr": "Sayılar ve metinler farklı türlerdir; işlemler onlarla farklı davranırlar" },
+        "headline": {
+          "en": "Numbers and strings are different types; operations behave differently on them",
+          "tr": "Sayılar ve metinler farklı türlerdir; işlemler onlarla farklı davranırlar"
+        },
         "body": {
           "en": "In JavaScript, a number is just digits, like 42 or 3.14. A string is text, and must be in quotes, like \"hello\". When you use + with two numbers, JavaScript adds them mathematically. But when you use + with strings, JavaScript glues them together. If you mix a number and a string with +, JavaScript treats the number as text and concatenates them.",
           "tr": "JavaScript'te sayı sadece rakamlardır, 42 ya da 3.14 gibi. String metin ve tırnak içinde olmalı, \"hello\" gibi. İki sayı ile + kullandığında JavaScript onları matematiksel olarak toplar. Fakat stringler ile + kullandığında JavaScript onları birleştirir. Bir sayı ile stringi + kullanırsan JavaScript sayıyı metin olarak davranır ve birleştirir."
@@ -209,9 +216,7 @@
             "tr": "Hello metnini 42 değeriyle birlikte yazdırmak için satırı tamamla."
           },
           "codeTemplate": "console.log(\"Hello\" ___ 42);",
-          "blanks": [
-            { "id": "1", "answer": "+", "distractors": ["-", "*", "="] }
-          ],
+          "blanks": [{ "id": "1", "answer": "+", "distractors": ["-", "*", "="] }],
           "verify": { "stdout": "Hello42\n" },
           "explanation": {
             "en": "The + operator joins a string and a number, converting the number to a string. The result is Hello42.",
@@ -238,7 +243,10 @@
           "id": "js-u02-l2-q5",
           "type": "order_lines",
           "difficulty": "medium",
-          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sıraya koy." },
+          "prompt": {
+            "en": "Put the lines in the right order.",
+            "tr": "Satırları doğru sıraya koy."
+          },
           "lines": ["let price = 15;", "let total = price + 10;", "console.log(total);"],
           "verify": { "stdout": "25\n" },
           "explanation": {
@@ -286,7 +294,10 @@
       "index": 3,
       "title": { "en": "typeof and Type Conversion", "tr": "typeof ve Tür Dönüştürme" },
       "concept": {
-        "headline": { "en": "Use typeof to check a value's type, and Number() and String() to convert between types", "tr": "Bir değerin türünü kontrol etmek için typeof kullan, türler arasında dönüştürmek için Number() ve String() kullan" },
+        "headline": {
+          "en": "Use typeof to check a value's type, and Number() and String() to convert between types",
+          "tr": "Bir değerin türünü kontrol etmek için typeof kullan, türler arasında dönüştürmek için Number() ve String() kullan"
+        },
         "body": {
           "en": "Every value in JavaScript has a type. The typeof operator tells you what it is: \"number\", \"string\", \"boolean\", etc. Sometimes you need to convert one type to another. Number() turns text into a number if it can, and String() turns any value into text. These conversions are useful when you need numbers to do math, or when you need strings to display text.",
           "tr": "JavaScript'teki her değerin bir türü vardır. typeof operatörü sana ne olduğunu söyler: \"number\", \"string\", \"boolean\" vs. Bazen bir türü başka türe dönüştürmen gerekir. Number() metni sayıya çevirir eğer yapabilirse, String() herhangi bir değeri metne çevirir. Bu dönüştürmeler sayılara ihtiyaç duyduğunda matematiksel işlem yapmak için ya da metne ihtiyaç duyduğunda metin görüntülemek için faydalıdır."
@@ -304,7 +315,10 @@
           "id": "js-u02-l3-q1",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does console.log(typeof 25) print?", "tr": "console.log(typeof 25) ne yazdırır?" },
+          "prompt": {
+            "en": "What does console.log(typeof 25) print?",
+            "tr": "console.log(typeof 25) ne yazdırır?"
+          },
           "options": [
             { "id": "a", "text": { "en": "number", "tr": "number" } },
             { "id": "b", "text": { "en": "25", "tr": "25" } },
@@ -321,7 +335,10 @@
           "id": "js-u02-l3-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does console.log(typeof \"42\") print?", "tr": "console.log(typeof \"42\") ne yazdırır?" },
+          "prompt": {
+            "en": "What does console.log(typeof \"42\") print?",
+            "tr": "console.log(typeof \"42\") ne yazdırır?"
+          },
           "options": [
             { "id": "a", "text": { "en": "string", "tr": "string" } },
             { "id": "b", "text": { "en": "number", "tr": "number" } },
@@ -373,7 +390,11 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["const text = \"50\";", "const result = text + 10;", "console.log(result);"],
+          "codeLines": [
+            "const text = \"50\";",
+            "const result = text + 10;",
+            "console.log(result);"
+          ],
           "buggyLineIndex": 1,
           "fix": "const result = Number(text) + 10;",
           "verify": { "stdout": "60\n" },
@@ -422,7 +443,10 @@
       "index": 4,
       "title": { "en": "Booleans, null, and undefined", "tr": "Boolean, null ve undefined" },
       "concept": {
-        "headline": { "en": "Booleans are true or false; null and undefined represent empty or missing values", "tr": "Boolean true ya da false; null ve undefined boş ya da eksik değerleri temsil eder" },
+        "headline": {
+          "en": "Booleans are true or false; null and undefined represent empty or missing values",
+          "tr": "Boolean true ya da false; null ve undefined boş ya da eksik değerleri temsil eder"
+        },
         "body": {
           "en": "A boolean is a value that is either true or false. You use booleans in comparisons and decisions. null is a value you can explicitly assign to mean \"no value here\", intentionally empty. undefined is what JavaScript uses when a variable is declared but never given a value, or a function returns nothing. Both null and undefined represent the absence of a value, but null is intentional while undefined usually means something was not set.",
           "tr": "Boolean true ya da false olarak bir değerdir. Boolean değerleri karşılaştırmalarda ve kararlar alırken kullanırsın. null, \"burada değer yok\" anlamına gelecek şekilde açıkça atayabileceğin bir değerdir, kasten boş. undefined, bir değişken bildirildiği zaman ama hiç değer verilmediğinde ya da bir fonksiyon hiçbir şey döndürmediğinde JavaScript'in kullandığı şeydir. Hem null hem undefined bir değerin olmayışını temsil eder ama null kasten, undefined genellikle bir şey atanmadı anlamını verir."
@@ -440,7 +464,10 @@
           "id": "js-u02-l4-q1",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does console.log(true) print?", "tr": "console.log(true) ne yazdırır?" },
+          "prompt": {
+            "en": "What does console.log(true) print?",
+            "tr": "console.log(true) ne yazdırır?"
+          },
           "options": [
             { "id": "a", "text": { "en": "true", "tr": "true" } },
             { "id": "b", "text": { "en": "1", "tr": "1" } },
@@ -457,9 +484,15 @@
           "id": "js-u02-l4-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line declares a boolean variable?", "tr": "Hangi satır bir boolean değişken bildirir?" },
+          "prompt": {
+            "en": "Which line declares a boolean variable?",
+            "tr": "Hangi satır bir boolean değişken bildirir?"
+          },
           "options": [
-            { "id": "a", "text": { "en": "const flag = \"true\";", "tr": "const flag = \"true\";" } },
+            {
+              "id": "a",
+              "text": { "en": "const flag = \"true\";", "tr": "const flag = \"true\";" }
+            },
             { "id": "b", "text": { "en": "const flag = true;", "tr": "const flag = true;" } },
             { "id": "c", "text": { "en": "const flag = True;", "tr": "const flag = True;" } },
             { "id": "d", "text": { "en": "const flag = 1;", "tr": "const flag = 1;" } }
@@ -479,9 +512,7 @@
             "tr": "false boolean değerini isPaused değişkeninde saklamak için satırı tamamla."
           },
           "codeTemplate": "const isPaused = ___;",
-          "blanks": [
-            { "id": "1", "answer": "false", "distractors": ["False", "0", "\"false\""] }
-          ],
+          "blanks": [{ "id": "1", "answer": "false", "distractors": ["False", "0", "\"false\""] }],
           "verify": { "stdout": "" },
           "explanation": {
             "en": "false is a boolean keyword, lowercase, and without quotes. False would be a name, 0 is a number, and \"false\" is text.",

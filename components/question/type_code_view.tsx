@@ -59,7 +59,7 @@ export function TypeCodeView({
 
       {result && !result.isCorrect ? (
         <View className="gap-1">
-          <Text className="text-sm font-semibold text-muted-foreground">
+          <Text className="font-semibold text-sm text-muted-foreground">
             {t('lesson.correct_answer')}
           </Text>
           <CodeBlock code={question.expected} language={language} compact />

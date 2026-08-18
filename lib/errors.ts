@@ -11,12 +11,7 @@
 import type { TranslationKeys } from '@/lib/i18n';
 
 export type AppErrorCode =
-  | 'network'
-  | 'auth'
-  | 'rate_limited'
-  | 'subscription_required'
-  | 'store_unavailable'
-  | 'unknown';
+  'network' | 'auth' | 'rate_limited' | 'subscription_required' | 'store_unavailable' | 'unknown';
 
 /** A failure that already knows how it should be shown to the learner. */
 export class AppError extends Error {
@@ -31,7 +26,13 @@ export class AppError extends Error {
   }
 }
 
-const NETWORK_HINTS = ['network request failed', 'failed to fetch', 'timeout', 'econnrefused', 'offline'];
+const NETWORK_HINTS = [
+  'network request failed',
+  'failed to fetch',
+  'timeout',
+  'econnrefused',
+  'offline',
+];
 
 /**
  * Turn anything thrown by Supabase, fetch or RevenueCat into an {@link AppError}.
@@ -49,7 +50,8 @@ export function toAppError(error: unknown, fallback: AppErrorCode = 'unknown'): 
     return new AppError('network', message, error);
   }
 
-  const status = (error as { status?: number; statusCode?: number } | null)?.status ??
+  const status =
+    (error as { status?: number; statusCode?: number } | null)?.status ??
     (error as { statusCode?: number } | null)?.statusCode;
   if (status === 401 || status === 403) return new AppError('auth', message, error);
   if (status === 429) return new AppError('rate_limited', message, error);

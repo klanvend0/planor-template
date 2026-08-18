@@ -54,7 +54,16 @@ function EditorPanel({
 }) {
   return (
     <G>
-      <Rect x={x} y={y} width={width} height={height} rx={20} fill={fill} stroke={stroke} strokeWidth={2} />
+      <Rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        rx={20}
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={2}
+      />
       <Circle cx={x + 20} cy={y + 20} r={4} fill="#FF6B6B" />
       <Circle cx={x + 34} cy={y + 20} r={4} fill="#FFC46B" />
       <Circle cx={x + 48} cy={y + 20} r={4} fill="#6BE39B" />
@@ -63,7 +72,11 @@ function EditorPanel({
 }
 
 /** Welcome: code is a language, learn it like one. */
-export function WelcomeIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
+export function WelcomeIllustration({
+  width = 280,
+  scheme = 'light',
+  ...props
+}: IllustrationProps) {
   const tokens = themeTokens(scheme);
   const frame = useFrame(width);
 
@@ -91,8 +104,24 @@ export function WelcomeIllustration({ width = 280, scheme = 'light', ...props }:
       <G>
         <Rect x={196} y={150} width={92} height={54} rx={16} fill={tokens.primary} />
         <Path d="M214 204 L206 222 L232 204 Z" fill={tokens.primary} />
-        <Rect x={210} y={168} width={40} height={7} rx={3.5} fill={tokens.primaryForeground} opacity={0.9} />
-        <Rect x={210} y={182} width={62} height={7} rx={3.5} fill={tokens.primaryForeground} opacity={0.6} />
+        <Rect
+          x={210}
+          y={168}
+          width={40}
+          height={7}
+          rx={3.5}
+          fill={tokens.primaryForeground}
+          opacity={0.9}
+        />
+        <Rect
+          x={210}
+          y={182}
+          width={62}
+          height={7}
+          rx={3.5}
+          fill={tokens.primaryForeground}
+          opacity={0.6}
+        />
       </G>
 
       <Circle cx={62} cy={54} r={7} fill={tokens.accent} />
@@ -102,7 +131,11 @@ export function WelcomeIllustration({ width = 280, scheme = 'light', ...props }:
 }
 
 /** Five ways to practise: chips, blanks and choices. */
-export function PuzzlesIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
+export function PuzzlesIllustration({
+  width = 280,
+  scheme = 'light',
+  ...props
+}: IllustrationProps) {
   const tokens = themeTokens(scheme);
   const frame = useFrame(width);
 
@@ -131,7 +164,16 @@ export function PuzzlesIllustration({ width = 280, scheme = 'light', ...props }:
 
       {/* Token chips below, one lifting towards the blank */}
       <G>
-        <Rect x={52} y={172} width={68} height={34} rx={12} fill={tokens.card} stroke={tokens.border} strokeWidth={2} />
+        <Rect
+          x={52}
+          y={172}
+          width={68}
+          height={34}
+          rx={12}
+          fill={tokens.card}
+          stroke={tokens.border}
+          strokeWidth={2}
+        />
         <Rect x={66} y={185} width={40} height={8} rx={4} fill={tokens.mutedForeground} />
       </G>
       <G>
@@ -139,7 +181,16 @@ export function PuzzlesIllustration({ width = 280, scheme = 'light', ...props }:
         <Rect x={142} y={177} width={40} height={8} rx={4} fill={tokens.primaryForeground} />
       </G>
       <G>
-        <Rect x={204} y={172} width={64} height={34} rx={12} fill={tokens.card} stroke={tokens.border} strokeWidth={2} />
+        <Rect
+          x={204}
+          y={172}
+          width={64}
+          height={34}
+          rx={12}
+          fill={tokens.card}
+          stroke={tokens.border}
+          strokeWidth={2}
+        />
         <Rect x={218} y={185} width={36} height={8} rx={4} fill={tokens.mutedForeground} />
       </G>
     </Svg>
@@ -147,7 +198,11 @@ export function PuzzlesIllustration({ width = 280, scheme = 'light', ...props }:
 }
 
 /** Bugs teach you the most. */
-export function MistakesIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
+export function MistakesIllustration({
+  width = 280,
+  scheme = 'light',
+  ...props
+}: IllustrationProps) {
   const tokens = themeTokens(scheme);
   const frame = useFrame(width);
 
@@ -220,16 +275,42 @@ export function AiIllustration({ width = 280, scheme = 'light', ...props }: Illu
       <Circle cx={160} cy={116} r={102} fill="url(#aiGlow)" />
 
       {/* The snippet being explained */}
-      <Rect x={34} y={44} width={150} height={106} rx={18} fill={tokens.codeBg} stroke={tokens.codeBorder} strokeWidth={2} />
+      <Rect
+        x={34}
+        y={44}
+        width={150}
+        height={106}
+        rx={18}
+        fill={tokens.codeBg}
+        stroke={tokens.codeBorder}
+        strokeWidth={2}
+      />
       <Rect x={50} y={66} width={70} height={8} rx={4} fill={SYNTAX.comment} />
       <Rect x={50} y={86} width={104} height={8} rx={4} fill={SYNTAX.keyword} />
       <Rect x={62} y={106} width={82} height={8} rx={4} fill={SYNTAX.function} />
       <Rect x={50} y={126} width={58} height={8} rx={4} fill={SYNTAX.number} />
 
       {/* The learner's written answer */}
-      <Rect x={96} y={164} width={188} height={56} rx={16} fill={tokens.card} stroke={tokens.border} strokeWidth={2} />
+      <Rect
+        x={96}
+        y={164}
+        width={188}
+        height={56}
+        rx={16}
+        fill={tokens.card}
+        stroke={tokens.border}
+        strokeWidth={2}
+      />
       <Rect x={112} y={182} width={124} height={7} rx={3.5} fill={tokens.mutedForeground} />
-      <Rect x={112} y={198} width={92} height={7} rx={3.5} fill={tokens.mutedForeground} opacity={0.6} />
+      <Rect
+        x={112}
+        y={198}
+        width={92}
+        height={7}
+        rx={3.5}
+        fill={tokens.mutedForeground}
+        opacity={0.6}
+      />
 
       {/* The grader, checking it */}
       <G>

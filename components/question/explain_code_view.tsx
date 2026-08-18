@@ -47,7 +47,11 @@ export type ExplainCodeViewProps = {
 function VerdictBanner({ review }: { review: ExplanationReview }) {
   const { t } = useTranslation();
   const tone =
-    review.verdict === 'correct' ? 'success' : review.verdict === 'partial' ? 'warning' : 'destructive';
+    review.verdict === 'correct'
+      ? 'success'
+      : review.verdict === 'partial'
+        ? 'warning'
+        : 'destructive';
 
   return (
     <View
@@ -71,7 +75,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
               ? t('explain.verdict_partial')
               : t('explain.verdict_incorrect')}
         </Text>
-        <Text className="text-sm font-semibold text-muted-foreground">
+        <Text className="font-semibold text-sm text-muted-foreground">
           {t('explain.score', { score: review.score })}
         </Text>
       </View>
@@ -80,7 +84,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.corrections.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
             {t('explain.corrections')}
           </Text>
           {review.corrections.map((correction, index) => (
@@ -94,7 +98,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.missedPoints.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
             {t('explain.missed')}
           </Text>
           {review.missedPoints.map((point, index) => (
@@ -125,7 +129,8 @@ export function ExplainCodeView({
   const { t } = useTranslation();
   const code = pick(question.code, locale);
   const length = text.trim().length;
-  const canSubmit = length >= EXPLANATION_MIN_CHARS && length <= EXPLANATION_MAX_CHARS && !isGrading;
+  const canSubmit =
+    length >= EXPLANATION_MIN_CHARS && length <= EXPLANATION_MAX_CHARS && !isGrading;
 
   if (!isPro) {
     return (
@@ -141,7 +146,11 @@ export function ExplainCodeView({
           <Text className="text-[15px] leading-6 text-muted-foreground">
             {t('explain.locked_body')}
           </Text>
-          <GameButton label={t('explain.locked_cta', { days: TRIAL_DAYS })} onPress={onUpgrade} className="mt-1" />
+          <GameButton
+            label={t('explain.locked_cta', { days: TRIAL_DAYS })}
+            onPress={onUpgrade}
+            className="mt-1"
+          />
           <GameButton label={t('explain.locked_skip')} variant="ghost" onPress={onSkip} flat />
         </View>
       </View>
@@ -152,7 +161,7 @@ export function ExplainCodeView({
     <View className="gap-5">
       <View className="flex-row items-center gap-2">
         <Icon as={Sparkles} size={18} className="text-primary" />
-        <Text className="text-sm font-bold uppercase tracking-wide text-primary">
+        <Text className="font-bold text-sm uppercase tracking-wide text-primary">
           {t('explain.title')}
         </Text>
       </View>
@@ -167,7 +176,7 @@ export function ExplainCodeView({
           </View>
           <VerdictBanner review={review} />
           <View className="gap-1">
-            <Text className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+            <Text className="font-bold text-xs uppercase tracking-wide text-muted-foreground">
               {t('explain.sample_title')}
             </Text>
             <Text className="text-[15px] leading-6 text-muted-foreground">
@@ -195,7 +204,7 @@ export function ExplainCodeView({
               <Text className="text-xs text-muted-foreground">{t('explain.instruction')}</Text>
               <Text
                 className={cn(
-                  'text-xs font-semibold',
+                  'font-semibold text-xs',
                   length > EXPLANATION_MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'
                 )}>
                 {t('explain.counter', { count: length })}

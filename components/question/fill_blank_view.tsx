@@ -22,7 +22,9 @@ import { cn } from '@/lib/utils';
 import { pick, QuestionShell, type QuestionViewProps } from './question_shell';
 
 /** Split the template into text segments and blanks, preserving order. */
-function segments(template: string): { kind: 'text' | 'blank'; value: string; blankIndex: number }[] {
+function segments(
+  template: string
+): { kind: 'text' | 'blank'; value: string; blankIndex: number }[] {
   const parts = template.split('___');
   const result: { kind: 'text' | 'blank'; value: string; blankIndex: number }[] = [];
 
@@ -47,9 +49,7 @@ export function FillBlankView({
   const bank = useMemo(() => tokenBank(question), [question]);
 
   const filled: (string | null)[] =
-    draft?.type === 'fill_blank'
-      ? draft.tokens
-      : question.blanks.map(() => null);
+    draft?.type === 'fill_blank' ? draft.tokens : question.blanks.map(() => null);
 
   const emit = (next: (string | null)[]) => {
     const complete = next.every((token) => token !== null);
@@ -89,7 +89,10 @@ export function FillBlankView({
       hint={disabled ? undefined : t('lesson.tap_to_fill')}>
       {/* The snippet, with tappable chips where the blanks are. */}
       <View className="overflow-hidden rounded-xl border border-code-border bg-code py-3">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="px-4">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerClassName="px-4">
           <View>
             {lines.map((line, lineIndex) => {
               // Blanks are numbered across the whole template, not per line.
@@ -127,8 +130,13 @@ export function FillBlankView({
                         accessibilityLabel={value ?? t('lesson.tap_to_fill')}
                         className={cn(
                           'mx-1 min-w-[64px] items-center justify-center rounded-lg border-2 px-2 py-1',
-                          value ? 'border-primary bg-primary/20' : 'border-dashed border-code-border',
-                          result && (isRight ? 'border-success bg-success/20' : 'border-destructive bg-destructive/20')
+                          value
+                            ? 'border-primary bg-primary/20'
+                            : 'border-dashed border-code-border',
+                          result &&
+                            (isRight
+                              ? 'border-success bg-success/20'
+                              : 'border-destructive bg-destructive/20')
                         )}>
                         <Text className="font-mono text-[15px]" style={{ color: SYNTAX.plain }}>
                           {value ?? ' '}

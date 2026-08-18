@@ -143,7 +143,9 @@ export async function getSubscriptionSnapshot(): Promise<SubscriptionSnapshot | 
 }
 
 /** Subscribe to entitlement changes (renewals, expirations, cross-device buys). */
-export function onSubscriptionChange(listener: (snapshot: SubscriptionSnapshot) => void): () => void {
+export function onSubscriptionChange(
+  listener: (snapshot: SubscriptionSnapshot) => void
+): () => void {
   if (!configured) return () => {};
 
   const handler = (info: CustomerInfo) => listener(toSnapshot(info));
@@ -166,8 +168,7 @@ export async function getCurrentOffering(): Promise<PurchasesOffering | null> {
 }
 
 export type PurchaseOutcome =
-  | { status: 'purchased'; snapshot: SubscriptionSnapshot }
-  | { status: 'cancelled' };
+  { status: 'purchased'; snapshot: SubscriptionSnapshot } | { status: 'cancelled' };
 
 /**
  * Buy a package.
@@ -220,7 +221,9 @@ export async function restore(): Promise<SubscriptionSnapshot | null> {
  * @param productIds - Store product identifiers from the current offering.
  * @returns Map of product id to eligibility.
  */
-export async function checkTrialEligibility(productIds: string[]): Promise<Record<string, boolean>> {
+export async function checkTrialEligibility(
+  productIds: string[]
+): Promise<Record<string, boolean>> {
   const unknown = Object.fromEntries(productIds.map((id) => [id, false]));
   if (!configured || productIds.length === 0) return unknown;
 

@@ -14,7 +14,11 @@ import { FREE_UNIT_LIMIT } from '@/lib/constants';
 import { toAppError, type AppError } from '@/lib/errors';
 import type { CourseId } from '@/lib/content_schema';
 import { getCourseLessons, getUnits } from '@/services/content_service';
-import { fetchLessonProgress, type LessonProgress, type LessonResult } from '@/services/progress_service';
+import {
+  fetchLessonProgress,
+  type LessonProgress,
+  type LessonResult,
+} from '@/services/progress_service';
 
 export type LessonStatus = 'locked' | 'available' | 'completed' | 'premium_locked';
 
@@ -84,7 +88,10 @@ export const useProgressStore = create<ProgressStoreState & ProgressStoreActions
 }));
 
 /** True when the lesson has been finished at least once with a passing score. */
-export function isLessonCompleted(byLesson: Record<string, LessonProgress>, lessonId: string): boolean {
+export function isLessonCompleted(
+  byLesson: Record<string, LessonProgress>,
+  lessonId: string
+): boolean {
   return byLesson[lessonId]?.status === 'completed';
 }
 

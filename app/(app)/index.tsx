@@ -33,7 +33,8 @@ import {
 } from '@/stores/progress_store';
 import { useSettingsStore } from '@/stores/settings_store';
 
-function greetingKey(): 'learn.greeting_morning' | 'learn.greeting_afternoon' | 'learn.greeting_evening' {
+function greetingKey():
+  'learn.greeting_morning' | 'learn.greeting_afternoon' | 'learn.greeting_evening' {
   const hour = new Date().getHours();
   if (hour < 12) return 'learn.greeting_morning';
   if (hour < 18) return 'learn.greeting_afternoon';
@@ -100,7 +101,7 @@ export default function LearnScreen() {
             <Text className="font-mono-bold text-sm text-foreground">
               {activeCourse === 'python' ? 'Py' : 'JS'}
             </Text>
-            <Text className="text-sm font-semibold text-foreground">
+            <Text className="font-semibold text-sm text-foreground">
               {localized(course.title, locale)}
             </Text>
             <Icon as={ChevronDown} size={14} className="text-muted-foreground" />
@@ -120,11 +121,8 @@ export default function LearnScreen() {
         </View>
 
         <View className="flex-row items-center gap-3">
-          <ProgressBar
-            progress={dailyXp / dailyGoal}
-            tone={goalReached ? 'success' : 'xp'}
-          />
-          <Text className="text-xs font-semibold text-muted-foreground">
+          <ProgressBar progress={dailyXp / dailyGoal} tone={goalReached ? 'success' : 'xp'} />
+          <Text className="font-semibold text-xs text-muted-foreground">
             {goalReached
               ? t('learn.daily_goal_done')
               : t('learn.daily_goal_progress', { current: dailyXp, target: dailyGoal })}
@@ -136,11 +134,13 @@ export default function LearnScreen() {
         className="flex-1"
         contentContainerClassName="px-5 pt-5 gap-6"
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />}>
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />
+        }>
         {/* Continue card */}
         {nextLesson ? (
           <View className="gap-3 rounded-3xl border-2 border-primary/30 bg-primary/10 px-5 py-5">
-            <Text className="text-xs font-bold uppercase tracking-widest text-primary">
+            <Text className="font-bold text-xs uppercase tracking-widest text-primary">
               {t(greetingKey())}
             </Text>
             <Text className="font-display text-[22px] leading-7 text-foreground">
@@ -148,7 +148,9 @@ export default function LearnScreen() {
             </Text>
             <GameButton
               label={t('learn.jump_back_in')}
-              onPress={() => router.push({ pathname: '/lesson/[lessonId]', params: { lessonId: nextLesson.id } })}
+              onPress={() =>
+                router.push({ pathname: '/lesson/[lessonId]', params: { lessonId: nextLesson.id } })
+              }
             />
           </View>
         ) : null}
@@ -170,7 +172,10 @@ export default function LearnScreen() {
                 lockedLabel={t('paywall.title')}
                 courseId={activeCourse}
                 unitLabel={t('learn.unit', { index: unit.index })}
-                progressLabel={t('learn.unit_progress', { done: progress.done, total: progress.total })}
+                progressLabel={t('learn.unit_progress', {
+                  done: progress.done,
+                  total: progress.total,
+                })}
               />
 
               <View className="items-center gap-3">

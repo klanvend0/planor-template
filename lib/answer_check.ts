@@ -192,7 +192,7 @@ export function checkAnswer(question: Question, input: AnswerInput): CheckResult
       return {
         isCorrect: answer.lineIndex === question.buggyLineIndex,
         expected: question.fix,
-        submitted: answer.lineIndex === null ? '' : question.codeLines[answer.lineIndex] ?? '',
+        submitted: answer.lineIndex === null ? '' : (question.codeLines[answer.lineIndex] ?? ''),
       };
     }
 

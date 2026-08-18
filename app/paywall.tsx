@@ -35,7 +35,9 @@ import { useSubscriptionStore } from '@/stores/subscription_store';
 const FEATURES = ['ai', 'hearts', 'courses', 'practice', 'support'] as const;
 
 /** Human label for a package, from the store's own period type. */
-function planLabelKey(pkg: PurchasesPackage): 'paywall.plan_weekly' | 'paywall.plan_monthly' | 'paywall.plan_annual' {
+function planLabelKey(
+  pkg: PurchasesPackage
+): 'paywall.plan_weekly' | 'paywall.plan_monthly' | 'paywall.plan_annual' {
   switch (pkg.packageType) {
     case 'WEEKLY':
       return 'paywall.plan_weekly';
@@ -47,7 +49,9 @@ function planLabelKey(pkg: PurchasesPackage): 'paywall.plan_weekly' | 'paywall.p
 }
 
 /** Price line for a package, in the period the store sells it in. */
-function priceKey(pkg: PurchasesPackage): 'paywall.per_week' | 'paywall.per_month' | 'paywall.per_year' {
+function priceKey(
+  pkg: PurchasesPackage
+): 'paywall.per_week' | 'paywall.per_month' | 'paywall.per_year' {
   switch (pkg.packageType) {
     case 'WEEKLY':
       return 'paywall.per_week';
@@ -94,7 +98,8 @@ export default function PaywallScreen() {
 
   const selected = packages.find((pkg) => pkg.identifier === selectedId) ?? packages[0] ?? null;
   const eligibleForTrial = selected
-    ? (trialEligibility[selected.product.identifier] ?? false) || packageTrialDays(selected) !== null
+    ? (trialEligibility[selected.product.identifier] ?? false) ||
+      packageTrialDays(selected) !== null
     : false;
   const trialDays = selected ? (packageTrialDays(selected) ?? TRIAL_DAYS) : TRIAL_DAYS;
 
@@ -143,7 +148,7 @@ export default function PaywallScreen() {
           hitSlop={10}
           onPress={() => void restorePurchases()}
           disabled={isRestoring}>
-          <Text className="text-sm font-semibold text-muted-foreground underline">
+          <Text className="font-semibold text-sm text-muted-foreground underline">
             {t('paywall.restore')}
           </Text>
         </Pressable>
@@ -207,7 +212,9 @@ export default function PaywallScreen() {
                       'h-6 w-6 items-center justify-center rounded-full border-2 border-border',
                       isSelected && 'border-primary bg-primary'
                     )}>
-                    {isSelected ? <Icon as={Check} size={13} className="text-primary-foreground" /> : null}
+                    {isSelected ? (
+                      <Icon as={Check} size={13} className="text-primary-foreground" />
+                    ) : null}
                   </View>
 
                   <View className="flex-1 gap-0.5">
@@ -216,14 +223,14 @@ export default function PaywallScreen() {
                     </Text>
                     {/* The billed amount is never smaller or quieter than the
                         trial badge — Apple rejects paywalls where it is. */}
-                    <Text className="text-[15px] font-semibold text-foreground">
+                    <Text className="font-semibold text-[15px] text-foreground">
                       {t(priceKey(pkg), { price: pkg.product.priceString })}
                     </Text>
                   </View>
 
                   {isAnnual ? (
                     <View className="rounded-full bg-success/20 px-2.5 py-1">
-                      <Text className="text-[11px] font-bold uppercase tracking-wide text-success">
+                      <Text className="font-bold text-[11px] uppercase tracking-wide text-success">
                         {t('paywall.best_value')}
                       </Text>
                     </View>
@@ -250,7 +257,9 @@ export default function PaywallScreen() {
         ) : null}
 
         <GameButton
-          label={eligibleForTrial ? t('paywall.cta_trial', { days: trialDays }) : t('paywall.cta_buy')}
+          label={
+            eligibleForTrial ? t('paywall.cta_trial', { days: trialDays }) : t('paywall.cta_buy')
+          }
           size="lg"
           busy={isPurchasing}
           disabled={!selected || snapshot?.isSubscribed}
@@ -263,12 +272,12 @@ export default function PaywallScreen() {
 
         <View className="flex-row items-center justify-center gap-6">
           <Text
-            className="text-xs font-semibold text-muted-foreground underline"
+            className="font-semibold text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.terms)}>
             {t('paywall.terms')}
           </Text>
           <Text
-            className="text-xs font-semibold text-muted-foreground underline"
+            className="font-semibold text-xs text-muted-foreground underline"
             onPress={() => void openExternal(LINKS.privacy)}>
             {t('paywall.privacy')}
           </Text>

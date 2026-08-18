@@ -16,7 +16,11 @@ import { isPremiumQuestion, questionXp, type Lesson, type Question } from '@/lib
 import { starsForScore } from '@/lib/gamification';
 import { correctFeedback, incorrectFeedback } from '@/lib/haptics';
 import { toAppError, type AppError } from '@/lib/errors';
-import { getLessonBaseXp, getQuestionLocation, type LessonLocation } from '@/services/content_service';
+import {
+  getLessonBaseXp,
+  getQuestionLocation,
+  type LessonLocation,
+} from '@/services/content_service';
 import { gradeExplanation, type ExplanationReview } from '@/services/grading_service';
 import { recordPractice, type LessonResult } from '@/services/progress_service';
 import { useGameStore } from '@/stores/game_store';
@@ -91,7 +95,10 @@ export type SessionOptions = {
  * course and unit ids the answer log needs.
  * @param options - See {@link SessionOptions}.
  */
-export function useLessonSession(location: LessonLocation, options?: SessionOptions): LessonSession {
+export function useLessonSession(
+  location: LessonLocation,
+  options?: SessionOptions
+): LessonSession {
   const lesson: Lesson = location.lesson;
   const mode = options?.mode ?? 'lesson';
   const sourceQuestions = useMemo(
@@ -177,7 +184,11 @@ export function useLessonSession(location: LessonLocation, options?: SessionOpti
           durationMs: Date.now() - questionStartedAt.current,
         });
 
-        if (!result.isCorrect && !outcomeOfAnswer.unlimitedHearts && outcomeOfAnswer.heartsLeft <= 0) {
+        if (
+          !result.isCorrect &&
+          !outcomeOfAnswer.unlimitedHearts &&
+          outcomeOfAnswer.heartsLeft <= 0
+        ) {
           setPhase('out_of_hearts');
         }
       } catch (caught) {
@@ -215,7 +226,10 @@ export function useLessonSession(location: LessonLocation, options?: SessionOpti
           locale,
         });
         setReview(graded);
-        await settle(question, checkAnswer(question, { type: 'explain_code', verdict: graded.verdict }));
+        await settle(
+          question,
+          checkAnswer(question, { type: 'explain_code', verdict: graded.verdict })
+        );
         return graded;
       } catch (caught) {
         setError(toAppError(caught));

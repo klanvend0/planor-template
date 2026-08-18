@@ -65,7 +65,7 @@ export function OutOfHearts({
 
       <HeartsRow hearts={0} />
 
-      <Text className="text-sm font-semibold text-muted-foreground">
+      <Text className="font-semibold text-sm text-muted-foreground">
         {t('hearts.next_in', { time: formatCountdown(remaining) })}
       </Text>
 
@@ -78,7 +78,12 @@ export function OutOfHearts({
           disabled={!refillAvailable}
           busy={refillBusy}
         />
-        <GameButton label={t('hearts.practice_instead')} variant="ghost" onPress={onPractice} flat />
+        <GameButton
+          label={t('hearts.practice_instead')}
+          variant="ghost"
+          onPress={onPractice}
+          flat
+        />
         <GameButton label={t('common.close')} variant="ghost" onPress={onClose} flat />
       </View>
     </View>

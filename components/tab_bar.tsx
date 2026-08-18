@@ -66,7 +66,7 @@ export function GameTabBar({ state, descriptors, navigation }: BottomTabBarProps
             />
             <Text
               className={cn(
-                'text-[11px] font-bold',
+                'font-bold text-[11px]',
                 isFocused ? 'text-primary' : 'text-muted-foreground'
               )}>
               {label}

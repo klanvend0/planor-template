@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "Joining Strings", "tr": "Metinleri Birleştirme" },
       "concept": {
-        "headline": { "en": "Combine strings with + or template literals", "tr": "+ veya template literals ile metinleri birleştir" },
+        "headline": {
+          "en": "Combine strings with + or template literals",
+          "tr": "+ veya template literals ile metinleri birleştir"
+        },
         "body": {
           "en": "You can join two strings together using the + operator, which is called concatenation. You can also use template literals, which are strings written with backticks instead of quotes. Inside template literals, you can use the syntax dollar-brace-variable-brace to insert the value of a variable. Template literals are cleaner when joining many pieces of text.",
           "tr": "+ operatörünü kullanarak iki metni birleştirebilirsin; buna concatenation denir. Template literals'i de kullanabilirsin; bunlar backtick ile yazılan metinlerdir. Template literals içinde değişkenin değerini eklemek için dollar-brace-variable-brace söz dizimi kullanabilirsin. Birçok metin parçası birleştirirken template literals daha temizdir."
@@ -49,13 +52,40 @@
           "id": "js-u03-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which correctly uses a template literal?", "tr": "Hangi template literal'i doğru kullanır?" },
+          "prompt": {
+            "en": "Which correctly uses a template literal?",
+            "tr": "Hangi template literal'i doğru kullanır?"
+          },
           "code": "let color = \"blue\";",
           "options": [
-            { "id": "a", "text": { "en": "console.log(\"The color is \" + color);", "tr": "console.log(\"The color is \" + color);" } },
-            { "id": "b", "text": { "en": "console.log(`The color is ${color}`);", "tr": "console.log(`The color is ${color}`);" } },
-            { "id": "c", "text": { "en": "console.log(\"The color is ${color}\");", "tr": "console.log(\"The color is ${color}\");" } },
-            { "id": "d", "text": { "en": "console.log(`The color is $color`);", "tr": "console.log(`The color is $color`);" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "console.log(\"The color is \" + color);",
+                "tr": "console.log(\"The color is \" + color);"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "console.log(`The color is ${color}`);",
+                "tr": "console.log(`The color is ${color}`);"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "console.log(\"The color is ${color}\");",
+                "tr": "console.log(\"The color is ${color}\");"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "console.log(`The color is $color`);",
+                "tr": "console.log(`The color is $color`);"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -73,7 +103,15 @@
           },
           "codeTemplate": "let name = \"Ada\";\nconsole.log(___);",
           "blanks": [
-            { "id": "1", "answer": "`Welcome, ${name}!`", "distractors": ["\"Welcome, ${name}!\"", "`Welcome, $name!`", "\"Welcome, \" + name + \"!\""] }
+            {
+              "id": "1",
+              "answer": "`Welcome, ${name}!`",
+              "distractors": [
+                "\"Welcome, ${name}!\"",
+                "`Welcome, $name!`",
+                "\"Welcome, \" + name + \"!\""
+              ]
+            }
           ],
           "verify": { "stdout": "Welcome, Ada!\n" },
           "explanation": {
@@ -103,7 +141,11 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["let animal = \"cat\";", "console.log(`The animal is ${animal}`);", "console.log(`The animal is ${pet}`);"],
+          "codeLines": [
+            "let animal = \"cat\";",
+            "console.log(`The animal is ${animal}`);",
+            "console.log(`The animal is ${pet}`);"
+          ],
           "buggyLineIndex": 2,
           "fix": "console.log(`The animal is ${animal}`);",
           "verify": { "raises": "ReferenceError" },
@@ -125,8 +167,16 @@
             "tr": "// Metinleri iki şekilde birleştir\nlet first = \"John\";\nlet last = \"Smith\";\nconsole.log(first + \" \" + last);\nconsole.log(`${first} ${last}`);"
           },
           "keyPoints": {
-            "en": ["stores two strings in variables", "uses + to join them on one line", "uses template literals to join them on another line"],
-            "tr": ["iki metni değişkenlerde saklar", "bir satırda + ile birleştirir", "başka bir satırda template literals ile birleştirir"]
+            "en": [
+              "stores two strings in variables",
+              "uses + to join them on one line",
+              "uses template literals to join them on another line"
+            ],
+            "tr": [
+              "iki metni değişkenlerde saklar",
+              "bir satırda + ile birleştirir",
+              "başka bir satırda template literals ile birleştirir"
+            ]
           },
           "sampleAnswer": {
             "en": "The code stores a first name and last name, then prints them joined together two different ways: once with + concatenation and once with template literals.",
@@ -144,7 +194,10 @@
       "index": 2,
       "title": { "en": "String Length and Indexing", "tr": "Metin Uzunluğu ve İndeksleme" },
       "concept": {
-        "headline": { "en": "Access string length and individual characters", "tr": "Metin uzunluğuna ve bireysel karakterlere erişim" },
+        "headline": {
+          "en": "Access string length and individual characters",
+          "tr": "Metin uzunluğuna ve bireysel karakterlere erişim"
+        },
         "body": {
           "en": "Every string has a .length property that tells you how many characters it contains. You can access individual characters using square brackets with an index number: the first character is at index 0, the second is at 1, and so on. This is called indexing. You can also use string methods like .toUpperCase() to convert the string, .toLowerCase() to make it lowercase, or .slice(start, end) to extract a piece of the string.",
           "tr": "Her metnin kaç karakter içerdiğini söyleyen bir .length özelliği vardır. Kare parantez içinde bir indeks numarası kullanarak bireysel karakterlere erişebilirsin: ilk karakter 0 indeksinde, ikinci 1 indeksinde vb. Buna indeksleme denir. .toUpperCase() gibi metin metodlarını da kullanabilirsin, .toLowerCase() ile küçük yapabilir veya .slice(start, end) ile metin parçasını çıkarabilirsin."
@@ -180,7 +233,10 @@
           "id": "js-u03-l2-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What is the first character of the string \"hello\"?", "tr": "\"hello\" metninin ilk karakteri nedir?" },
+          "prompt": {
+            "en": "What is the first character of the string \"hello\"?",
+            "tr": "\"hello\" metninin ilk karakteri nedir?"
+          },
           "options": [
             { "id": "a", "text": { "en": "\"hello\"[0]", "tr": "\"hello\"[0]" } },
             { "id": "b", "text": { "en": "h", "tr": "h" } },
@@ -202,9 +258,7 @@
             "tr": "2 indeksindeki karaktere erişmek için kodu tamamla."
           },
           "codeTemplate": "let word = \"JavaScript\";\nconsole.log(word[___]);",
-          "blanks": [
-            { "id": "1", "answer": "2", "distractors": ["1", "3", "\"2\""] }
-          ],
+          "blanks": [{ "id": "1", "answer": "2", "distractors": ["1", "3", "\"2\""] }],
           "verify": { "stdout": "v\n" },
           "explanation": {
             "en": "Index 2 means the third character (counting from 0). In \"JavaScript\", that is v.",
@@ -254,8 +308,16 @@
             "tr": "// Uzunluğu ve ilk karakteri al\nlet name = \"Emma\";\nconsole.log(name.length);\nconsole.log(name[0]);\nconsole.log(name.toLowerCase());"
           },
           "keyPoints": {
-            "en": ["uses .length to get the number of characters", "uses [0] to get the first character", "uses .toLowerCase() to convert to lowercase"],
-            "tr": [".length kullanarak karakter sayısını alır", "[0] kullanarak ilk karakteri alır", ".toLowerCase() kullanarak küçük harfe çevirir"]
+            "en": [
+              "uses .length to get the number of characters",
+              "uses [0] to get the first character",
+              "uses .toLowerCase() to convert to lowercase"
+            ],
+            "tr": [
+              ".length kullanarak karakter sayısını alır",
+              "[0] kullanarak ilk karakteri alır",
+              ".toLowerCase() kullanarak küçük harfe çevirir"
+            ]
           },
           "sampleAnswer": {
             "en": "The code stores a name and then accesses its length property, the first character using index 0, and converts it to lowercase.",
@@ -273,7 +335,10 @@
       "index": 3,
       "title": { "en": "Math Operators and Order", "tr": "Matematik İşlemleri ve İşlem Sırası" },
       "concept": {
-        "headline": { "en": "Multiply and divide; control order with parentheses", "tr": "Çarpma ve bölme; işlem sırasını parantezle kontrol et" },
+        "headline": {
+          "en": "Multiply and divide; control order with parentheses",
+          "tr": "Çarpma ve bölme; işlem sırasını parantezle kontrol et"
+        },
         "body": {
           "en": "JavaScript can do arithmetic: +, -, *, and / are the main operators. When you combine multiple operators, JavaScript follows the order of operations: multiplication and division are done before addition and subtraction. You can use parentheses to change the order. For example, 2 + 3 * 4 equals 14 (3 * 4 = 12, then 12 + 2 = 14), but (2 + 3) * 4 equals 20 (2 + 3 = 5, then 5 * 4 = 20).",
           "tr": "JavaScript aritmetik yapabilir: +, -, *, ve / ana işlemlerdir. Birden fazla işlemi kombine ettiğinde, JavaScript işlem sırasını takip eder: çarpma ve bölme toplama ve çıkarmadan önce yapılır. İşlem sırasını değiştirmek için parantez kullanabilirsin. Örneğin, 2 + 3 * 4 = 14 (3 * 4 = 12, sonra 12 + 2 = 14), ama (2 + 3) * 4 = 20 (2 + 3 = 5, sonra 5 * 4 = 20)."
@@ -332,9 +397,7 @@
             "tr": "30 yazdıracak şekilde ifadeyi tamamla."
           },
           "codeTemplate": "console.log((___ + 2) * 5);",
-          "blanks": [
-            { "id": "1", "answer": "4", "distractors": ["6", "2", "10"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "4", "distractors": ["6", "2", "10"] }],
           "verify": { "stdout": "30\n" },
           "explanation": {
             "en": "Working backward: 30 / 5 = 6, so the parentheses must equal 6. 6 - 2 = 4, so the blank is 4.",
@@ -361,7 +424,10 @@
           "id": "js-u03-l3-q5",
           "type": "spot_bug",
           "difficulty": "hard",
-          "prompt": { "en": "Which line has the wrong result?", "tr": "Hangi satırın sonucu yanlış?" },
+          "prompt": {
+            "en": "Which line has the wrong result?",
+            "tr": "Hangi satırın sonucu yanlış?"
+          },
           "codeLines": ["console.log(10 + 5 * 2);", "console.log((10 + 5) * 2);"],
           "buggyLineIndex": 0,
           "fix": "console.log(20);",
@@ -383,8 +449,16 @@
             "tr": "// İlk hesaplama\nconsole.log(2 + 3 * 4);\n// İkinci hesaplama\nconsole.log((2 + 3) * 4);"
           },
           "keyPoints": {
-            "en": ["first line: multiplication happens before addition", "second line: parentheses force addition first", "parentheses change the order of operations"],
-            "tr": ["ilk satır: çarpma toplamadan önce olur", "ikinci satır: parantezler toplamayı önce yapmaya zorlar", "parantezler işlem sırasını değiştirir"]
+            "en": [
+              "first line: multiplication happens before addition",
+              "second line: parentheses force addition first",
+              "parentheses change the order of operations"
+            ],
+            "tr": [
+              "ilk satır: çarpma toplamadan önce olur",
+              "ikinci satır: parantezler toplamayı önce yapmaya zorlar",
+              "parantezler işlem sırasını değiştirir"
+            ]
           },
           "sampleAnswer": {
             "en": "The first calculates 3 * 4 = 12 then 2 + 12 = 14. The second calculates 2 + 3 = 5 first (because of parentheses), then 5 * 4 = 20. Parentheses change the order.",
@@ -402,7 +476,10 @@
       "index": 4,
       "title": { "en": "Remainder and Rounding", "tr": "Kalan ve Yuvarlama" },
       "concept": {
-        "headline": { "en": "Find remainders with %; round numbers with Math functions", "tr": "% ile kalanı bulun; Math fonksiyonları ile yuvarlayın" },
+        "headline": {
+          "en": "Find remainders with %; round numbers with Math functions",
+          "tr": "% ile kalanı bulun; Math fonksiyonları ile yuvarlayın"
+        },
         "body": {
           "en": "The % operator, called modulo, gives you the remainder when one number is divided by another. For example, 10 % 3 = 1 because 10 divided by 3 is 3 with remainder 1. The Math object has functions to round numbers: Math.round() rounds to the nearest integer, Math.floor() always rounds down, and Math.ceil() always rounds up. You can also use toFixed(n) on a number to show n decimal places.",
           "tr": "Modulo denen % operatörü, bir sayı diğerine bölündüğünde kalanı verir. Örneğin, 10 % 3 = 1 çünkü 10'u 3'e böldüğünde 3 çıkıyor 1 kalan. Math nesnesinin sayıları yuvarlamak için fonksiyonları vardır: Math.round() en yakın tamsayıya yuvarlar, Math.floor() her zaman aşağı yuvarlar, Math.ceil() her zaman yukarı yuvarlar. Bir sayıda toFixed(n) kullanarak n ondalık basamak gösterebilirsin."
@@ -438,12 +515,33 @@
           "id": "js-u03-l4-q2",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "What is the difference between Math.round and Math.floor?", "tr": "Math.round ile Math.floor arasındaki fark nedir?" },
+          "prompt": {
+            "en": "What is the difference between Math.round and Math.floor?",
+            "tr": "Math.round ile Math.floor arasındaki fark nedir?"
+          },
           "options": [
-            { "id": "a", "text": { "en": "Math.round rounds up; Math.floor rounds down", "tr": "Math.round yukarı yuvarlar; Math.floor aşağı yuvarlar" } },
-            { "id": "b", "text": { "en": "Math.round rounds to nearest; Math.floor always rounds down", "tr": "Math.round en yakın sayıya yuvarlar; Math.floor her zaman aşağı yuvarlar" } },
+            {
+              "id": "a",
+              "text": {
+                "en": "Math.round rounds up; Math.floor rounds down",
+                "tr": "Math.round yukarı yuvarlar; Math.floor aşağı yuvarlar"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Math.round rounds to nearest; Math.floor always rounds down",
+                "tr": "Math.round en yakın sayıya yuvarlar; Math.floor her zaman aşağı yuvarlar"
+              }
+            },
             { "id": "c", "text": { "en": "They do the same thing", "tr": "Aynı şeyi yaparlar" } },
-            { "id": "d", "text": { "en": "Math.floor is for integers only", "tr": "Math.floor sadece tamsayılar için" } }
+            {
+              "id": "d",
+              "text": {
+                "en": "Math.floor is for integers only",
+                "tr": "Math.floor sadece tamsayılar için"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -461,7 +559,11 @@
           },
           "codeTemplate": "console.log(___(4.8));",
           "blanks": [
-            { "id": "1", "answer": "Math.round", "distractors": ["Math.floor", "Math.ceil", "toFixed"] }
+            {
+              "id": "1",
+              "answer": "Math.round",
+              "distractors": ["Math.floor", "Math.ceil", "toFixed"]
+            }
           ],
           "verify": { "stdout": "5\n" },
           "explanation": {
@@ -490,8 +592,15 @@
           "id": "js-u03-l4-q5",
           "type": "spot_bug",
           "difficulty": "hard",
-          "prompt": { "en": "Which line has the wrong output?", "tr": "Hangi satırın çıktısı yanlış?" },
-          "codeLines": ["console.log(Math.round(2.5));", "console.log(Math.floor(2.5));", "console.log((2.5).toFixed(0));"],
+          "prompt": {
+            "en": "Which line has the wrong output?",
+            "tr": "Hangi satırın çıktısı yanlış?"
+          },
+          "codeLines": [
+            "console.log(Math.round(2.5));",
+            "console.log(Math.floor(2.5));",
+            "console.log((2.5).toFixed(0));"
+          ],
           "buggyLineIndex": 2,
           "fix": "console.log((2.5).toFixed(1));",
           "explanation": {
@@ -512,8 +621,16 @@
             "tr": "// Bölünebilirliği kontrol et ve bir hesaplamayı yuvarla\nlet price = 9.99;\nconsole.log(price * 100);\nconsole.log(Math.round(price * 100));\nconsole.log((price * 100).toFixed(0));"
           },
           "keyPoints": {
-            "en": ["multiplies 9.99 by 100 to get cents", "uses Math.round to round the result", "uses toFixed to show only whole numbers"],
-            "tr": ["9.99'u 100 ile çarparak sent cinsine çevirir", "sonucu yuvarlamak için Math.round kullanır", "sadece tam sayıları göstermek için toFixed kullanır"]
+            "en": [
+              "multiplies 9.99 by 100 to get cents",
+              "uses Math.round to round the result",
+              "uses toFixed to show only whole numbers"
+            ],
+            "tr": [
+              "9.99'u 100 ile çarparak sent cinsine çevirir",
+              "sonucu yuvarlamak için Math.round kullanır",
+              "sadece tam sayıları göstermek için toFixed kullanır"
+            ]
           },
           "sampleAnswer": {
             "en": "The code converts a price to cents (9.99 * 100 = 999), then shows how to round that result using both Math.round and toFixed to get 999 or 1000.",

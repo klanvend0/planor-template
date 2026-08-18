@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "Arithmetic Operators", "tr": "Aritmetik İşleçler" },
       "concept": {
-        "headline": { "en": "Math in Python with +, -, *, /", "tr": "Python'da +, -, *, / ile matematik" },
+        "headline": {
+          "en": "Math in Python with +, -, *, /",
+          "tr": "Python'da +, -, *, / ile matematik"
+        },
         "body": {
           "en": "Python handles basic math just like you learned in school. Use + to add, - to subtract, * to multiply, and / to divide. Python evaluates expressions left to right (with some exceptions we'll see later). Division always gives a decimal result, even if the answer is a whole number.",
           "tr": "Python, okulda öğrendiğin gibi temel matematiği yapar. Toplamak için +, çıkarmak için -, çarpmak için *, bölmek için / kullan. Python ifadeleri soldan sağa değerlendirir (biraz sonra istisnaları göreceğiz). Bölme her zaman ondalık sonuç verir; cevap tam sayı olsa bile."
@@ -49,7 +52,10 @@
           "id": "py-u04-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line correctly multiplies 4 and 5?", "tr": "Hangi satır 4 ile 5'i doğru çarpar?" },
+          "prompt": {
+            "en": "Which line correctly multiplies 4 and 5?",
+            "tr": "Hangi satır 4 ile 5'i doğru çarpar?"
+          },
           "options": [
             { "id": "a", "text": { "en": "print(4 * 5)", "tr": "print(4 * 5)" } },
             { "id": "b", "text": { "en": "print(4 + 5)", "tr": "print(4 + 5)" } },
@@ -71,9 +77,7 @@
             "tr": "Kodu 20 yazdıracak şekilde tamamla."
           },
           "codeTemplate": "print(25 ___ 5)",
-          "blanks": [
-            { "id": "1", "answer": "-", "distractors": ["+", "*", "/"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "-", "distractors": ["+", "*", "/"] }],
           "verify": { "stdout": "20\n" },
           "explanation": {
             "en": "25 minus 5 equals 20. The - operator subtracts the second number from the first.",
@@ -152,7 +156,10 @@
       "index": 2,
       "title": { "en": "Integer Division and Remainder", "tr": "Tam Bölme ve Kalan" },
       "concept": {
-        "headline": { "en": "// gives whole-number division, % finds the remainder", "tr": "// tam bölme verir, % kalanı bulur" },
+        "headline": {
+          "en": "// gives whole-number division, % finds the remainder",
+          "tr": "// tam bölme verir, % kalanı bulur"
+        },
         "body": {
           "en": "When you want to divide but keep only the whole-number part, use //. It drops any decimal. The % operator (modulo) gives you the remainder left over after division. These operators are very useful for finding patterns in numbers — for instance, % can tell you if a number is even or odd.",
           "tr": "Bölme yapıp sadece tam sayı kısmını almak istediğinde // kullan; ondalık kısmı atar. % işleci (modulo) ise bölmeden kalan miktarı verir. Bu işleçler sayılardaki desenleri bulmak için çok yararlıdır; örneğin % bir sayının tek mi çift mi olduğunu söyleyebilir."
@@ -211,9 +218,7 @@
             "tr": "Kodu 7 yazdıracak şekilde tamamla."
           },
           "codeTemplate": "print(50 ___ 7)",
-          "blanks": [
-            { "id": "1", "answer": "//", "distractors": ["%", "/", "-"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "//", "distractors": ["%", "/", "-"] }],
           "verify": { "stdout": "7\n" },
           "explanation": {
             "en": "50 divided by 7 is about 7.14 (50 / 7). The // operator drops the decimal part and keeps only the whole number, 7.",
@@ -290,7 +295,10 @@
       "index": 3,
       "title": { "en": "Powers and Precedence", "tr": "Üs ve İşlem Sırası" },
       "concept": {
-        "headline": { "en": "Order of operations: power first, then * / %, then + -", "tr": "İşlem sırası: önce üs, sonra * / %, sonra + -" },
+        "headline": {
+          "en": "Order of operations: power first, then * / %, then + -",
+          "tr": "İşlem sırası: önce üs, sonra * / %, sonra + -"
+        },
         "body": {
           "en": "The power operator (written as two asterisks) raises the left number to the power of the right one (2 to the power 3 means 2 times 2 times 2, which is 8). Python has a standard order of operations: power is evaluated first, then multiply/divide/modulo (left to right), then add and subtract (left to right). You can always use parentheses to force a different order.",
           "tr": "Üs işleci (iki yıldız yazılır) solundaki sayıyı sağındaki sayının gücüne yükseltir (2 üzeri 3 demek 2 × 2 × 2, yani 8). Python standart işlem sırasını takip eder: üs önce, sonra çarpma/bölme/modulo, sonra toplama ve çıkarma. Her zaman parantezler kullanarak farklı bir sıra zorlayabilirsin."
@@ -349,9 +357,7 @@
             "tr": "Kodu 64 yazdıracak şekilde tamamla."
           },
           "codeTemplate": "print(4 ___ 3)",
-          "blanks": [
-            { "id": "1", "answer": "**", "distractors": ["+", "*", "^"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "**", "distractors": ["+", "*", "^"] }],
           "verify": { "stdout": "64\n" },
           "explanation": {
             "en": "4 to the power of 3 is 4 × 4 × 4 = 64. Use the power operator (two asterisks, not caret) to raise to a power.",
@@ -430,7 +436,10 @@
       "index": 4,
       "title": { "en": "Functions and Comparisons", "tr": "Fonksiyonlar ve Karşılaştırmalar" },
       "concept": {
-        "headline": { "en": "round(), abs() convert numbers; <, >, ==, != compare", "tr": "round(), abs() dönüştürür; <, >, ==, != karşılaştırır" },
+        "headline": {
+          "en": "round(), abs() convert numbers; <, >, ==, != compare",
+          "tr": "round(), abs() dönüştürür; <, >, ==, != karşılaştırır"
+        },
         "body": {
           "en": "Python has built-in functions to transform numbers: round() rounds a decimal to the nearest whole number, and abs() gives the absolute value (distance from zero, always positive). Comparison operators test relationships: <, >, <=, >=, ==, !=. These always return True or False, which is a boolean value.",
           "tr": "Python sayıları dönüştüren yerleşik fonksiyonlara sahiptir: round() bir ondalık sayıyı en yakın tam sayıya yuvarlar, abs() mutlak değeri (sıfıra olan uzaklığı, her zaman pozitif) verir. Karşılaştırma işleçleri ilişkileri test eder: <, >, <=, >=, ==, !=. Bunlar her zaman True ya da False döndürür."
@@ -489,9 +498,7 @@
             "tr": "Kodu 8 yazdıracak şekilde tamamla."
           },
           "codeTemplate": "print(abs(___))",
-          "blanks": [
-            { "id": "1", "answer": "-8", "distractors": ["8", "-8.0", "-9"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "-8", "distractors": ["8", "-8.0", "-9"] }],
           "verify": { "stdout": "8\n" },
           "explanation": {
             "en": "abs() converts a negative number to its positive equivalent. Starting from -8 shows that clearly: abs(-8) equals 8.",

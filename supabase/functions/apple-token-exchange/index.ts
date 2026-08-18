@@ -85,7 +85,11 @@ Deno.serve(async (request: Request) => {
 
   if (!response.ok) {
     const detail = await response.text();
-    console.error('[apple-token-exchange] apple rejected the code', response.status, detail.slice(0, 200));
+    console.error(
+      '[apple-token-exchange] apple rejected the code',
+      response.status,
+      detail.slice(0, 200)
+    );
     return json({ error: 'exchange_failed' }, 502);
   }
 

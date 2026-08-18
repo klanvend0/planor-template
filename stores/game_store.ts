@@ -68,11 +68,14 @@ const emptyState: GameStoreState = {
 };
 
 /** Local mirror of the server's scoring, used when a write has to be queued. */
-function localLessonResult(state: GameState | null, params: {
-  correct: number;
-  total: number;
-  baseXp: number;
-}): LessonResult {
+function localLessonResult(
+  state: GameState | null,
+  params: {
+    correct: number;
+    total: number;
+    baseXp: number;
+  }
+): LessonResult {
   const score = Math.round((params.correct / Math.max(1, params.total)) * 100);
   const awarded = Math.round(params.baseXp * (score / 100)) + (score === 100 ? 10 : 0);
   const today = new Date().toISOString().slice(0, 10);
@@ -119,9 +122,7 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
     try {
       const outcome = await recordAnswerRpc(params);
       set((current) => ({
-        state: current.state
-          ? { ...current.state, hearts: outcome.heartsLeft }
-          : current.state,
+        state: current.state ? { ...current.state, hearts: outcome.heartsLeft } : current.state,
         pendingSync: false,
       }));
       return outcome;
@@ -169,7 +170,8 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
               longestStreak: Math.max(current.state.longestStreak, result.streakDays),
               dailyXp: result.dailyXp,
               lessonsCompleted:
-                current.state.lessonsCompleted + (result.isFirstCompletion && result.score >= 50 ? 1 : 0),
+                current.state.lessonsCompleted +
+                (result.isFirstCompletion && result.score >= 50 ? 1 : 0),
               lastActiveDate: new Date().toISOString().slice(0, 10),
             }
           : current.state,

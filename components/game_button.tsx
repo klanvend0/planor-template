@@ -115,7 +115,9 @@ export function GameButton({
           {busy ? (
             <ActivityIndicator
               size="small"
-              className={variant === 'secondary' || variant === 'ghost' ? 'text-foreground' : 'text-white'}
+              className={
+                variant === 'secondary' || variant === 'ghost' ? 'text-foreground' : 'text-white'
+              }
             />
           ) : (
             <>

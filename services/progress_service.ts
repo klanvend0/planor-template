@@ -194,7 +194,9 @@ export async function refillHearts(): Promise<number> {
 export async function fetchLessonProgress(courseId: CourseId): Promise<LessonProgress[]> {
   const { data, error } = await supabase
     .from('lesson_progress')
-    .select('lesson_id, unit_id, course_id, status, best_score, stars, attempts, xp_earned, first_completed_at')
+    .select(
+      'lesson_id, unit_id, course_id, status, best_score, stars, attempts, xp_earned, first_completed_at'
+    )
     .eq('course_id', courseId);
   if (error) throw toAppError(error);
 
@@ -245,7 +247,11 @@ export async function fetchMistakeQuestionIds(courseId: CourseId, limit = 20): P
 
 /** The caller's profile row, created by the `handle_new_user` trigger. */
 export async function fetchProfile(userId: string): Promise<Profile | null> {
-  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .maybeSingle();
   if (error) throw toAppError(error);
   if (!data) return null;
 

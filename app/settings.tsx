@@ -25,7 +25,11 @@ import { errorMessageKey, toAppError } from '@/lib/errors';
 import { openExternal } from '@/lib/links';
 import { cn } from '@/lib/utils';
 import { deleteAccount } from '@/services/account_service';
-import { cancelDailyReminder, requestNotificationPermission, scheduleDailyReminder } from '@/services/notifications_service';
+import {
+  cancelDailyReminder,
+  requestNotificationPermission,
+  scheduleDailyReminder,
+} from '@/services/notifications_service';
 import { updateProfile } from '@/services/progress_service';
 import { useAuthStore } from '@/stores/auth_store';
 import { useGameStore } from '@/stores/game_store';
@@ -35,7 +39,7 @@ import { useSubscriptionStore } from '@/stores/subscription_store';
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View className="gap-2">
-      <Text className="px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+      <Text className="px-1 font-bold text-xs uppercase tracking-widest text-muted-foreground">
         {title}
       </Text>
       <View className="overflow-hidden rounded-2xl border border-border bg-card">{children}</View>
@@ -64,11 +68,13 @@ function Row({
         'min-h-[52px] flex-row items-center justify-between gap-3 px-4 py-3',
         !last && 'border-b border-border'
       )}>
-      <Text className={cn('flex-1 text-[16px]', destructive ? 'text-destructive' : 'text-foreground')}>
+      <Text
+        className={cn('flex-1 text-[16px]', destructive ? 'text-destructive' : 'text-foreground')}>
         {label}
       </Text>
       {value ? <Text className="text-[15px] text-muted-foreground">{value}</Text> : null}
-      {right ?? (onPress ? <Icon as={ChevronRight} size={18} className="text-muted-foreground" /> : null)}
+      {right ??
+        (onPress ? <Icon as={ChevronRight} size={18} className="text-muted-foreground" /> : null)}
     </View>
   );
 
@@ -176,7 +182,10 @@ export default function SettingsScreen() {
   const restorePurchases = async () => {
     try {
       const restored = await restore();
-      Alert.alert(t('settings.restore'), restored ? t('paywall.restore_done') : t('paywall.restore_none'));
+      Alert.alert(
+        t('settings.restore'),
+        restored ? t('paywall.restore_done') : t('paywall.restore_none')
+      );
     } catch {
       Alert.alert(t('settings.restore'), t('paywall.unavailable'));
     }
@@ -250,7 +259,9 @@ export default function SettingsScreen() {
             label={t('settings.theme')}
             value={themeLabel[settings.colorScheme]}
             onPress={() =>
-              settings.setColorScheme(next(['system', 'light', 'dark'] as const, settings.colorScheme))
+              settings.setColorScheme(
+                next(['system', 'light', 'dark'] as const, settings.colorScheme)
+              )
             }
           />
           <Row
@@ -285,7 +296,9 @@ export default function SettingsScreen() {
           <Row
             label={t('settings.subscription')}
             value={isPro ? t('profile.pro_member') : t('profile.free_member')}
-            onPress={() => (isPro ? void openExternal(LINKS.manageSubscription) : router.push('/paywall'))}
+            onPress={() =>
+              isPro ? void openExternal(LINKS.manageSubscription) : router.push('/paywall')
+            }
           />
           <Row label={t('settings.restore')} onPress={() => void restorePurchases()} />
           <Row label={t('settings.sign_out')} onPress={confirmSignOut} />

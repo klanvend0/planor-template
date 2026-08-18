@@ -97,7 +97,7 @@ export function GoogleSignInButton({ onSuccess, onError }: GoogleSignInButtonPro
           <SvgXml xml={GoogleLogo} width={24} height={24} />
         </View>
       )}
-      <Text className={`text-base font-medium ${isDark ? 'text-foreground' : 'text-gray-700'}`}>
+      <Text className={`font-medium text-base ${isDark ? 'text-foreground' : 'text-gray-700'}`}>
         {t('auth.sign_in_with_google')}
       </Text>
     </TouchableOpacity>

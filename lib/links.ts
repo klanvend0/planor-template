@@ -21,7 +21,9 @@ import * as WebBrowser from 'expo-web-browser';
 export async function openExternal(url: string): Promise<void> {
   try {
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      await WebBrowser.openBrowserAsync(url, { presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET });
+      await WebBrowser.openBrowserAsync(url, {
+        presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
+      });
       return;
     }
     await Linking.openURL(url);

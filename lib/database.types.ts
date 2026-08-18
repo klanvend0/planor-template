@@ -13,20 +13,9 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type CourseIdColumn = 'python' | 'javascript';
 export type LocaleColumn = 'en' | 'tr';
 export type SubscriptionStatus =
-  | 'trialing'
-  | 'active'
-  | 'grace'
-  | 'expired'
-  | 'cancelled'
-  | 'billing_issue'
-  | 'paused';
+  'trialing' | 'active' | 'grace' | 'expired' | 'cancelled' | 'billing_issue' | 'paused';
 export type XpSource =
-  | 'lesson'
-  | 'perfect_bonus'
-  | 'streak_bonus'
-  | 'daily_goal'
-  | 'practice'
-  | 'ai_review';
+  'lesson' | 'perfect_bonus' | 'streak_bonus' | 'daily_goal' | 'practice' | 'ai_review';
 export type AiVerdict = 'correct' | 'partial' | 'incorrect';
 
 export interface Database {

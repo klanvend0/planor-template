@@ -51,7 +51,7 @@ export function UnitHeader({
       <View className="flex-row items-center justify-between">
         <Text
           className={cn(
-            'text-xs font-bold uppercase tracking-widest',
+            'font-bold text-xs uppercase tracking-widest',
             courseId === 'python' ? 'text-course-python' : 'text-course-javascript'
           )}>
           {unitLabel}
@@ -60,12 +60,12 @@ export function UnitHeader({
         {locked ? (
           <View className="flex-row items-center gap-1.5 rounded-full bg-warning/20 px-2.5 py-1">
             <Icon as={Crown} size={13} className="text-warning" />
-            <Text className="text-[11px] font-bold uppercase tracking-wide text-warning">
+            <Text className="font-bold text-[11px] uppercase tracking-wide text-warning">
               {lockedLabel}
             </Text>
           </View>
         ) : (
-          <Text className="text-xs font-semibold text-muted-foreground">{progressLabel}</Text>
+          <Text className="font-semibold text-xs text-muted-foreground">{progressLabel}</Text>
         )}
       </View>
 

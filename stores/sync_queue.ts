@@ -62,7 +62,9 @@ type SyncQueueState = {
 };
 
 type SyncQueueActions = {
-  enqueue: (entry: Omit<QueuedAnswer, 'id' | 'queuedAt'> | Omit<QueuedLesson, 'id' | 'queuedAt'>) => void;
+  enqueue: (
+    entry: Omit<QueuedAnswer, 'id' | 'queuedAt'> | Omit<QueuedLesson, 'id' | 'queuedAt'>
+  ) => void;
   /** Replay pending writes oldest-first. Stops at the first network failure. */
   flush: () => Promise<number>;
   clear: () => void;
@@ -82,7 +84,10 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
 
       enqueue: (entry) =>
         set((state) => {
-          const next = [...state.entries, { ...entry, id: nextId(), queuedAt: Date.now() } as QueuedWrite];
+          const next = [
+            ...state.entries,
+            { ...entry, id: nextId(), queuedAt: Date.now() } as QueuedWrite,
+          ];
           return { entries: next.slice(-MAX_ENTRIES) };
         }),
 

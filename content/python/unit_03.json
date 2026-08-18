@@ -177,10 +177,7 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "greeting = \"Hi\"",
-            "print(greeting + * 2)"
-          ],
+          "codeLines": ["greeting = \"Hi\"", "print(greeting + * 2)"],
           "buggyLineIndex": 1,
           "fix": "print(greeting * 2)",
           "verify": {
@@ -394,10 +391,7 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "text = \"code\"",
-            "print(text[4])"
-          ],
+          "codeLines": ["text = \"code\"", "print(text[4])"],
           "buggyLineIndex": 1,
           "fix": "print(text[3])",
           "verify": {

@@ -34,7 +34,11 @@ const EMPTY: AchievementStats = {
 
 export function useProfileStats(): ProfileStats {
   const gameState = useGameStore((state) => state.state);
-  const [derived, setDerived] = useState({ aiReviewsPassed: 0, coursesStarted: 0, unitsCompleted: 0 });
+  const [derived, setDerived] = useState({
+    aiReviewsPassed: 0,
+    coursesStarted: 0,
+    unitsCompleted: 0,
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const reload = useCallback(async () => {

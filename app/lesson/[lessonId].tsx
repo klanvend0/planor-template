@@ -41,7 +41,14 @@ export default function LessonScreen() {
     );
   }
 
-  return <LessonPlayer lessonId={lessonId!} location={location} applyResult={applyResult} recorded={recorded} />;
+  return (
+    <LessonPlayer
+      lessonId={lessonId!}
+      location={location}
+      applyResult={applyResult}
+      recorded={recorded}
+    />
+  );
 }
 
 /**

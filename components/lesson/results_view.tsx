@@ -42,9 +42,13 @@ function StatTile({
         <Icon
           as={icon}
           size={15}
-          className={cn(tone === 'xp' && 'text-xp', tone === 'success' && 'text-success', tone === 'streak' && 'text-streak')}
+          className={cn(
+            tone === 'xp' && 'text-xp',
+            tone === 'success' && 'text-success',
+            tone === 'streak' && 'text-streak'
+          )}
         />
-        <Text className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+        <Text className="font-bold text-[11px] uppercase tracking-wide text-muted-foreground">
           {label}
         </Text>
       </View>

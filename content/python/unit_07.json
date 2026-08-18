@@ -13,7 +13,10 @@
       "index": 1,
       "title": { "en": "Creating and Indexing Lists", "tr": "Liste Oluşturma ve Dizin Erişimi" },
       "concept": {
-        "headline": { "en": "Create a list with [] and access items by position", "tr": "[] ile liste oluştur ve konuma göre elemanları eriş" },
+        "headline": {
+          "en": "Create a list with [] and access items by position",
+          "tr": "[] ile liste oluştur ve konuma göre elemanları eriş"
+        },
         "body": {
           "en": "A list is a container that holds multiple values in a sequence, written with square brackets and items separated by commas. Each item has a position, or index, starting from 0 for the first item. Like strings, you can use negative indexes to count from the end: -1 is the last item, -2 is second-to-last.",
           "tr": "Liste, birden fazla değeri sırayla tutan bir kabı temsil eder; köşeli parantezler ve virgülle ayrılmış elemanlar ile yazılır. Her elemanın bir konumu, yani dizini vardır; ilk eleman 0'dan başlar. Dizeler gibi, sondan saymak için negatif dizinler kullanabilirsin: -1 son eleman, -2 sondan ikinci eleman."
@@ -49,7 +52,10 @@
           "id": "py-u07-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line creates a list?", "tr": "Hangi satır bir liste oluşturur?" },
+          "prompt": {
+            "en": "Which line creates a list?",
+            "tr": "Hangi satır bir liste oluşturur?"
+          },
           "options": [
             { "id": "a", "text": { "en": "items = (1, 2, 3)", "tr": "items = (1, 2, 3)" } },
             { "id": "b", "text": { "en": "items = [1, 2, 3]", "tr": "items = [1, 2, 3]" } },
@@ -71,9 +77,7 @@
             "tr": "Satırı, listenin son elemanını yazdıracak şekilde tamamla."
           },
           "codeTemplate": "animals = [\"cat\", \"dog\", \"bird\"]\nprint(animals___)",
-          "blanks": [
-            { "id": "1", "answer": "[-1]", "distractors": ["[3]", "[2]", "[0]"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "[-1]", "distractors": ["[3]", "[2]", "[0]"] }],
           "verify": { "stdout": "bird\n" },
           "explanation": {
             "en": "The negative index -1 always points to the last item, just like in strings.",
@@ -102,10 +106,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "names = [\"Alice\", \"Bob\", \"Carol\"]",
-            "print(names[4])"
-          ],
+          "codeLines": ["names = [\"Alice\", \"Bob\", \"Carol\"]", "print(names[4])"],
           "buggyLineIndex": 1,
           "fix": "print(names[2])",
           "verify": { "raises": "IndexError" },
@@ -156,7 +157,10 @@
       "index": 2,
       "title": { "en": "Changing Lists", "tr": "Listeleri Değiştirme" },
       "concept": {
-        "headline": { "en": "Use append, insert, remove, and pop to modify a list", "tr": "Listeyi değiştirmek için append, insert, remove ve pop kullan" },
+        "headline": {
+          "en": "Use append, insert, remove, and pop to modify a list",
+          "tr": "Listeyi değiştirmek için append, insert, remove ve pop kullan"
+        },
         "body": {
           "en": "Lists are mutable, meaning you can change them. append() adds a new item to the end. insert() adds an item at a specific position. remove() deletes the first item with a given value. pop() removes and returns an item at a specific index; pop() with no argument removes the last item. These methods change the list in place.",
           "tr": "Listeler değiştirilebilirdir; yapılarını değiştirebilirsin. append() listenin sonuna yeni bir eleman ekler. insert() belirli bir konuma eleman ekler. remove() verilen değerin ilk geçişini siler. pop(), belirli bir dizindeki elemanı siler ve döndürür; argümansız pop() son elemanı siler. Bu yöntemler listeyi yerinde değiştirir."
@@ -176,9 +180,18 @@
           "difficulty": "easy",
           "prompt": { "en": "What does list.append(5) do?", "tr": "list.append(5) ne yapar?" },
           "options": [
-            { "id": "a", "text": { "en": "Adds 5 to the end of the list", "tr": "Listeye 5'i sona ekler" } },
-            { "id": "b", "text": { "en": "Adds 5 at the beginning", "tr": "Listeye 5'i başa ekler" } },
-            { "id": "c", "text": { "en": "Replaces all items with 5", "tr": "Tüm öğeleri 5 ile değiştirir" } },
+            {
+              "id": "a",
+              "text": { "en": "Adds 5 to the end of the list", "tr": "Listeye 5'i sona ekler" }
+            },
+            {
+              "id": "b",
+              "text": { "en": "Adds 5 at the beginning", "tr": "Listeye 5'i başa ekler" }
+            },
+            {
+              "id": "c",
+              "text": { "en": "Replaces all items with 5", "tr": "Tüm öğeleri 5 ile değiştirir" }
+            },
             { "id": "d", "text": { "en": "Returns the list plus 5", "tr": "Listeyi 5 ile toplar" } }
           ],
           "answerId": "a",
@@ -215,7 +228,11 @@
           },
           "codeTemplate": "animals = [\"cat\", \"bird\"]\nanimals___",
           "blanks": [
-            { "id": "1", "answer": ".insert(1, \"dog\")", "distractors": [".append(\"dog\")", ".insert(1)", ".insert(\"dog\", 1)"] }
+            {
+              "id": "1",
+              "answer": ".insert(1, \"dog\")",
+              "distractors": [".append(\"dog\")", ".insert(1)", ".insert(\"dog\", 1)"]
+            }
           ],
           "verify": { "stdout": "" },
           "explanation": {
@@ -245,10 +262,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "numbers = [1, 2, 3]",
-            "numbers.remove(4)"
-          ],
+          "codeLines": ["numbers = [1, 2, 3]", "numbers.remove(4)"],
           "buggyLineIndex": 1,
           "fix": "numbers.remove(1)",
           "verify": { "raises": "ValueError" },
@@ -297,9 +311,15 @@
     {
       "id": "py-u07-l3",
       "index": 3,
-      "title": { "en": "Slicing Lists and Helpers", "tr": "Listeleri Dilimleme ve Yardımcı Fonksiyonlar" },
+      "title": {
+        "en": "Slicing Lists and Helpers",
+        "tr": "Listeleri Dilimleme ve Yardımcı Fonksiyonlar"
+      },
       "concept": {
-        "headline": { "en": "Slice lists and use len, sum, max, min, sorted", "tr": "Listeleri dilimle ve len, sum, max, min, sorted kullan" },
+        "headline": {
+          "en": "Slice lists and use len, sum, max, min, sorted",
+          "tr": "Listeleri dilimle ve len, sum, max, min, sorted kullan"
+        },
         "body": {
           "en": "Slicing works on lists just like strings: list[start:end] gives a new list from start up to (but not including) end. len() returns the number of items. sum() adds all numbers in a list. max() and min() find the largest and smallest values. sorted() returns a new sorted list without changing the original.",
           "tr": "Dilimleme, dizeler gibi listeler üzerinde de çalışır: list[başlangıç:son] başlangıçtan sona kadarki yeni bir listeyi döndürür (son dahil değil). len() eleman sayısını döndürür. sum() listedeki tüm sayıları toplar. max() ve min() en büyük ve en küçük değerleri bulur. sorted() orijinal listeyi değiştirmeden yeni sıralı bir liste döndürür."
@@ -335,7 +355,10 @@
           "id": "py-u07-l3-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does len([1, 2, 3]) return?", "tr": "len([1, 2, 3]) ne döndürür?" },
+          "prompt": {
+            "en": "What does len([1, 2, 3]) return?",
+            "tr": "len([1, 2, 3]) ne döndürür?"
+          },
           "options": [
             { "id": "a", "text": { "en": "3", "tr": "3" } },
             { "id": "b", "text": { "en": "2", "tr": "2" } },
@@ -357,9 +380,7 @@
             "tr": "Satırı, listenin ilk iki elemanını almak için tamamla."
           },
           "codeTemplate": "colors = [\"red\", \"blue\", \"green\"]\nprint(colors___)",
-          "blanks": [
-            { "id": "1", "answer": "[0:2]", "distractors": ["[:2]", "[0:1]", "[1:2]"] }
-          ],
+          "blanks": [{ "id": "1", "answer": "[0:2]", "distractors": ["[:2]", "[0:1]", "[1:2]"] }],
           "verify": { "stdout": "['red', 'blue']\n" },
           "explanation": {
             "en": "[0:2] starts at 0 (first item) and goes up to (but not including) 2, giving you items 0 and 1.",
@@ -387,12 +408,11 @@
           "id": "py-u07-l3-q5",
           "type": "order_lines",
           "difficulty": "hard",
-          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sırayla dizle." },
-          "lines": [
-            "numbers = [15, 30, 10, 25]",
-            "total = sum(numbers)",
-            "print(total)"
-          ],
+          "prompt": {
+            "en": "Put the lines in the right order.",
+            "tr": "Satırları doğru sırayla dizle."
+          },
+          "lines": ["numbers = [15, 30, 10, 25]", "total = sum(numbers)", "print(total)"],
           "verify": { "stdout": "80\n" },
           "explanation": {
             "en": "sum() adds all numbers in a list. You must create the list before summing it.",
@@ -441,7 +461,10 @@
       "index": 4,
       "title": { "en": "Dictionaries", "tr": "Sözlükler" },
       "concept": {
-        "headline": { "en": "Store key-value pairs in dictionaries and look them up by key", "tr": "Anahtar-değer çiftlerini sözlüklerde sakla ve anahtarla eriş" },
+        "headline": {
+          "en": "Store key-value pairs in dictionaries and look them up by key",
+          "tr": "Anahtar-değer çiftlerini sözlüklerde sakla ve anahtarla eriş"
+        },
         "body": {
           "en": "A dictionary stores data as key-value pairs, written with curly braces. Use dict[key] to look up a value. Add or change a value with dict[key] = value. You can loop over a dictionary with for key in dict (loops over keys) or for key, value in dict.items() (loops over both). Use dict.keys() to get all keys or dict.values() to get all values.",
           "tr": "Sözlük, anahtar-değer çiftlerini kıvrımlı parantezler ile saklar. dict[anahtar] ile bir değeri eriş. dict[anahtar] = değer ile bir değeri ekle veya değiştir. for anahtar in dict (anahtarlar üzerinde döner) veya for anahtar, değer in dict.items() (hem anahtarı hem değeri döner) ile döngü yapabilirsin. dict.keys() tüm anahtarları veya dict.values() tüm değerleri almak için kullan."
@@ -477,12 +500,30 @@
           "id": "py-u07-l4-q2",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "How do you add a new key-value pair to a dictionary?", "tr": "Sözlüğe yeni bir anahtar-değer çifti nasıl eklersin?" },
+          "prompt": {
+            "en": "How do you add a new key-value pair to a dictionary?",
+            "tr": "Sözlüğe yeni bir anahtar-değer çifti nasıl eklersin?"
+          },
           "options": [
-            { "id": "a", "text": { "en": "dict[\"key\"] = \"value\"", "tr": "dict[\"key\"] = \"value\"" } },
-            { "id": "b", "text": { "en": "dict.add(\"key\", \"value\")", "tr": "dict.add(\"key\", \"value\")" } },
-            { "id": "c", "text": { "en": "dict.insert(\"key\", \"value\")", "tr": "dict.insert(\"key\", \"value\")" } },
-            { "id": "d", "text": { "en": "dict(\"key\": \"value\")", "tr": "dict(\"key\": \"value\")" } }
+            {
+              "id": "a",
+              "text": { "en": "dict[\"key\"] = \"value\"", "tr": "dict[\"key\"] = \"value\"" }
+            },
+            {
+              "id": "b",
+              "text": { "en": "dict.add(\"key\", \"value\")", "tr": "dict.add(\"key\", \"value\")" }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "dict.insert(\"key\", \"value\")",
+                "tr": "dict.insert(\"key\", \"value\")"
+              }
+            },
+            {
+              "id": "d",
+              "text": { "en": "dict(\"key\": \"value\")", "tr": "dict(\"key\": \"value\")" }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -500,7 +541,11 @@
           },
           "codeTemplate": "car = {\"model\": \"Toyota\", \"color\": \"blue\"}\nprint(car___)",
           "blanks": [
-            { "id": "1", "answer": "[\"color\"]", "distractors": ["[\"blue\"]", "[\"model\"]", "[0]"] }
+            {
+              "id": "1",
+              "answer": "[\"color\"]",
+              "distractors": ["[\"blue\"]", "[\"model\"]", "[0]"]
+            }
           ],
           "verify": { "stdout": "blue\n" },
           "explanation": {
@@ -529,10 +574,7 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": [
-            "student = {\"id\": 101, \"name\": \"Zara\"}",
-            "print(student[\"grade\"])"
-          ],
+          "codeLines": ["student = {\"id\": 101, \"name\": \"Zara\"}", "print(student[\"grade\"])"],
           "buggyLineIndex": 1,
           "fix": "print(student[\"name\"])",
           "verify": { "raises": "KeyError" },

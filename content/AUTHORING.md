@@ -22,12 +22,12 @@ English inside Turkish sentences, because that is how Turkish developers speak.
 
 ```jsonc
 {
-  "id": "py-u01",              // "<course-prefix>-u<NN>", prefix: py | js
-  "courseId": "python",        // "python" | "javascript"
-  "index": 1,                  // 1-based, matches the filename
+  "id": "py-u01", // "<course-prefix>-u<NN>", prefix: py | js
+  "courseId": "python", // "python" | "javascript"
+  "index": 1, // 1-based, matches the filename
   "title": { "en": "...", "tr": "..." },
-  "description": { "en": "...", "tr": "..." },   // 60-120 chars per locale
-  "lessons": [ /* exactly 4 lessons */ ]
+  "description": { "en": "...", "tr": "..." }, // 60-120 chars per locale
+  "lessons": [/* exactly 4 lessons */],
 }
 ```
 
@@ -35,32 +35,34 @@ English inside Turkish sentences, because that is how Turkish developers speak.
 
 ```jsonc
 {
-  "id": "py-u01-l1",           // "<unit-id>-l<n>"
-  "index": 1,                  // 1-based within the unit
-  "title": { "en": "...", "tr": "..." },       // <= 32 chars per locale
+  "id": "py-u01-l1", // "<unit-id>-l<n>"
+  "index": 1, // 1-based within the unit
+  "title": { "en": "...", "tr": "..." }, // <= 32 chars per locale
   "concept": {
-    "headline": { "en": "...", "tr": "..." },  // <= 60 chars, the one idea being taught
-    "body": { "en": "...", "tr": "..." },      // 180-420 chars, plain language, no markdown
+    "headline": { "en": "...", "tr": "..." }, // <= 60 chars, the one idea being taught
+    "body": { "en": "...", "tr": "..." }, // 180-420 chars, plain language, no markdown
     "example": {
-      "code": "print(\"hi\")",                 // 1-6 lines, runnable on its own
-      "caption": { "en": "...", "tr": "..." }  // <= 90 chars
-    }
+      "code": "print(\"hi\")", // 1-6 lines, runnable on its own
+      "caption": { "en": "...", "tr": "..." }, // <= 90 chars
+    },
   },
-  "questions": [ /* exactly 6 questions, in this order:
+  "questions": [
+    /* exactly 6 questions, in this order:
                     multiple_choice, multiple_choice, fill_blank,
-                    type_code, spot_bug | order_lines, explain_code */ ]
+                    type_code, spot_bug | order_lines, explain_code */
+  ],
 }
 ```
 
 ## Common question fields
 
-| field | type | notes |
-| --- | --- | --- |
-| `id` | string | `"<lesson-id>-q<n>"` |
-| `type` | enum | see below |
-| `difficulty` | `"easy" \| "medium" \| "hard"` | drives XP (10 / 15 / 25) |
-| `prompt` | Localized | the instruction shown above the question |
-| `explanation` | Localized | 80-220 chars, shown after answering, teaches *why* |
+| field         | type                           | notes                                              |
+| ------------- | ------------------------------ | -------------------------------------------------- |
+| `id`          | string                         | `"<lesson-id>-q<n>"`                               |
+| `type`        | enum                           | see below                                          |
+| `difficulty`  | `"easy" \| "medium" \| "hard"` | drives XP (10 / 15 / 25)                           |
+| `prompt`      | Localized                      | the instruction shown above the question           |
+| `explanation` | Localized                      | 80-220 chars, shown after answering, teaches _why_ |
 
 Difficulty must rise across the unit: lesson 1 is mostly `easy`, lesson 4 contains at
 least two `hard` questions.
@@ -73,20 +75,21 @@ least two `hard` questions.
   "type": "multiple_choice",
   "difficulty": "easy",
   "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-  "code": "print(2 + 3)",            // optional, omit or null when there is no snippet
-  "options": [                        // exactly 4, ids "a".."d", exactly one correct
+  "code": "print(2 + 3)", // optional, omit or null when there is no snippet
+  "options": [
+    // exactly 4, ids "a".."d", exactly one correct
     { "id": "a", "text": { "en": "5", "tr": "5" } },
     { "id": "b", "text": { "en": "23", "tr": "23" } },
     { "id": "c", "text": { "en": "2 + 3", "tr": "2 + 3" } },
-    { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+    { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } },
   ],
   "answerId": "a",
-  "explanation": { "en": "...", "tr": "..." }
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
 Options that are pure code or pure values use the same string for `en` and `tr`.
-Distractors must be *plausible* — the mistakes a beginner actually makes — never filler.
+Distractors must be _plausible_ — the mistakes a beginner actually makes — never filler.
 
 ## `fill_blank`
 
@@ -95,12 +98,10 @@ Distractors must be *plausible* — the mistakes a beginner actually makes — n
   "type": "fill_blank",
   "difficulty": "easy",
   "prompt": { "en": "Complete the code so it prints Hello.", "tr": "..." },
-  "codeTemplate": "print(___)",       // 1-2 "___" placeholders, in order
-  "blanks": [
-    { "id": "1", "answer": "\"Hello\"", "distractors": ["Hello", "'Hello", "print"] }
-  ],
-  "verify": { "stdout": "Hello\n" },  // optional; see "Verification" below
-  "explanation": { "en": "...", "tr": "..." }
+  "codeTemplate": "print(___)", // 1-2 "___" placeholders, in order
+  "blanks": [{ "id": "1", "answer": "\"Hello\"", "distractors": ["Hello", "'Hello", "print"] }],
+  "verify": { "stdout": "Hello\n" }, // optional; see "Verification" below
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
@@ -114,11 +115,11 @@ distractors must be short tokens (<= 16 chars) that look like they could belong.
   "type": "type_code",
   "difficulty": "medium",
   "prompt": { "en": "Write a line that prints the value of name.", "tr": "..." },
-  "code": "name = \"Ada\"",           // optional context shown above the input
-  "expected": "print(name)",           // the canonical answer
-  "acceptable": ["print( name )"],     // optional extra accepted spellings
-  "verify": { "stdout": "Ada\n" },     // optional; runs code + "\n" + expected
-  "explanation": { "en": "...", "tr": "..." }
+  "code": "name = \"Ada\"", // optional context shown above the input
+  "expected": "print(name)", // the canonical answer
+  "acceptable": ["print( name )"], // optional extra accepted spellings
+  "verify": { "stdout": "Ada\n" }, // optional; runs code + "\n" + expected
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
@@ -132,11 +133,11 @@ variants that differ only by spacing or by `'` vs `"`.
   "type": "spot_bug",
   "difficulty": "medium",
   "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-  "codeLines": ["age = 20", "print(agee)"],   // 2-6 lines, one is wrong
-  "buggyLineIndex": 1,                          // 0-based
-  "fix": "print(age)",                          // the corrected line
-  "verify": { "raises": "NameError" },          // optional; see below
-  "explanation": { "en": "...", "tr": "..." }
+  "codeLines": ["age = 20", "print(agee)"], // 2-6 lines, one is wrong
+  "buggyLineIndex": 1, // 0-based
+  "fix": "print(age)", // the corrected line
+  "verify": { "raises": "NameError" }, // optional; see below
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
@@ -152,7 +153,7 @@ name, a typo'd variable, a wrong operator, a missing colon, a value used before 
   "prompt": { "en": "Put the lines in the right order.", "tr": "..." },
   "lines": ["total = 0", "for n in [1, 2, 3]:", "    total += n", "print(total)"],
   "verify": { "stdout": "6\n" },
-  "explanation": { "en": "...", "tr": "..." }
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
@@ -168,14 +169,14 @@ Indentation is significant and is part of the line text.
   "prompt": { "en": "In 100-200 characters, explain what this code does.", "tr": "..." },
   "code": {
     "en": "# Adds up every price in the cart\ntotal = 0\nfor price in cart:\n    total += price",
-    "tr": "# Sepetteki her fiyatı toplar\ntotal = 0\nfor price in cart:\n    total += price"
+    "tr": "# Sepetteki her fiyatı toplar\ntotal = 0\nfor price in cart:\n    total += price",
   },
   "keyPoints": {
     "en": ["starts the total at zero", "loops over every price", "accumulates into total"],
-    "tr": ["toplamı sıfırdan başlatır", "her fiyatı gezer", "total üzerinde biriktirir"]
+    "tr": ["toplamı sıfırdan başlatır", "her fiyatı gezer", "total üzerinde biriktirir"],
   },
-  "sampleAnswer": { "en": "...", "tr": "..." },   // 100-200 chars, the model answer
-  "explanation": { "en": "...", "tr": "..." }
+  "sampleAnswer": { "en": "...", "tr": "..." }, // 100-200 chars, the model answer
+  "explanation": { "en": "...", "tr": "..." },
 }
 ```
 
@@ -203,7 +204,7 @@ input, uses randomness, or refers to a variable that is not defined in the snipp
 2. A `verify.stdout` that does not match what the code really prints.
 3. A `multiple_choice` with more or fewer than 4 options, or with a duplicated option.
 4. Missing `tr` or `en` on any localized field.
-5. Identical `en` and `tr` on a *sentence* field (code and bare values may match).
+5. Identical `en` and `tr` on a _sentence_ field (code and bare values may match).
 6. Teaching anything the course has not introduced yet — a unit may only rely on itself
    and the units before it.
 7. Emoji, markdown, or HTML inside any content string.

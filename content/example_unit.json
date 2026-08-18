@@ -37,7 +37,10 @@
             { "id": "a", "text": { "en": "5", "tr": "5" } },
             { "id": "b", "text": { "en": "23", "tr": "23" } },
             { "id": "c", "text": { "en": "2 + 3", "tr": "2 + 3" } },
-            { "id": "d", "text": { "en": "Nothing, it is an error", "tr": "Hiçbir şey, hata verir" } }
+            {
+              "id": "d",
+              "text": { "en": "Nothing, it is an error", "tr": "Hiçbir şey, hata verir" }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -49,7 +52,10 @@
           "id": "py-u01-l1-q2",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "Which line prints text correctly?", "tr": "Hangi satır metni doğru yazdırır?" },
+          "prompt": {
+            "en": "Which line prints text correctly?",
+            "tr": "Hangi satır metni doğru yazdırır?"
+          },
           "options": [
             { "id": "a", "text": { "en": "print(Merhaba)", "tr": "print(Merhaba)" } },
             { "id": "b", "text": { "en": "print(\"Merhaba\")", "tr": "print(\"Merhaba\")" } },

@@ -28,7 +28,10 @@ import { useColorScheme } from 'nativewind';
 
 import { GameButton } from '@/components/game_button';
 import { ChoiceCard } from '@/components/onboarding/choice_card';
-import { ONBOARDING_ILLUSTRATIONS, type OnboardingSlideKey } from '@/components/onboarding/illustrations';
+import {
+  ONBOARDING_ILLUSTRATIONS,
+  type OnboardingSlideKey,
+} from '@/components/onboarding/illustrations';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
@@ -37,8 +40,16 @@ import type { CourseId } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
 import type { SupportedLocale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
-import { requestNotificationPermission, scheduleDailyReminder } from '@/services/notifications_service';
-import { DAILY_GOALS, useSettingsStore, type DailyGoal, type ExperienceLevel } from '@/stores/settings_store';
+import {
+  requestNotificationPermission,
+  scheduleDailyReminder,
+} from '@/services/notifications_service';
+import {
+  DAILY_GOALS,
+  useSettingsStore,
+  type DailyGoal,
+  type ExperienceLevel,
+} from '@/stores/settings_store';
 
 const SLIDES: OnboardingSlideKey[] = ['welcome', 'puzzles', 'mistakes', 'ai', 'streak'];
 
@@ -187,7 +198,7 @@ export default function OnboardingScreen() {
           />
         </View>
 
-        <Text className="w-16 text-right text-xs font-semibold text-muted-foreground">
+        <Text className="w-16 text-right font-semibold text-xs text-muted-foreground">
           {t('onboarding.progress', { current: stepIndex + 1, total: STEPS.length })}
         </Text>
       </View>
@@ -196,7 +207,10 @@ export default function OnboardingScreen() {
         className="flex-1"
         contentContainerClassName="px-6 pb-6 gap-6"
         keyboardShouldPersistTaps="handled">
-        <Animated.View key={step} entering={FadeInRight.duration(220)} exiting={FadeOut.duration(120)}>
+        <Animated.View
+          key={step}
+          entering={FadeInRight.duration(220)}
+          exiting={FadeOut.duration(120)}>
           {step === 'language' ? (
             <View className="gap-6">
               <View className="gap-2">
@@ -211,7 +225,11 @@ export default function OnboardingScreen() {
                 {(['en', 'tr'] as SupportedLocale[]).map((code) => (
                   <ChoiceCard
                     key={code}
-                    title={code === 'en' ? t('onboarding.language.english') : t('onboarding.language.turkish')}
+                    title={
+                      code === 'en'
+                        ? t('onboarding.language.english')
+                        : t('onboarding.language.turkish')
+                    }
                     selected={locale === code}
                     onPress={() => {
                       void setLocale(code);
@@ -239,7 +257,9 @@ export default function OnboardingScreen() {
                   <ChoiceCard
                     key={course}
                     title={t(`onboarding.course.${course}` as 'onboarding.course.python')}
-                    subtitle={t(`onboarding.course.${course}_hint` as 'onboarding.course.python_hint')}
+                    subtitle={t(
+                      `onboarding.course.${course}_hint` as 'onboarding.course.python_hint'
+                    )}
                     selected={settings.activeCourse === course}
                     onPress={() => settings.setActiveCourse(course)}
                     leading={
@@ -273,7 +293,9 @@ export default function OnboardingScreen() {
                   <ChoiceCard
                     key={level}
                     title={t(`onboarding.experience.${level}` as 'onboarding.experience.new')}
-                    subtitle={t(`onboarding.experience.${level}_hint` as 'onboarding.experience.new_hint')}
+                    subtitle={t(
+                      `onboarding.experience.${level}_hint` as 'onboarding.experience.new_hint'
+                    )}
                     selected={settings.experienceLevel === level}
                     onPress={() => settings.setExperienceLevel(level)}
                   />
@@ -342,7 +364,11 @@ export default function OnboardingScreen() {
       <View className="gap-3 px-6" style={{ paddingBottom: insets.bottom + 16 }}>
         {step === 'notifications' ? (
           <>
-            <GameButton label={t('onboarding.notifications.allow')} onPress={() => void enableReminders()} size="lg" />
+            <GameButton
+              label={t('onboarding.notifications.allow')}
+              onPress={() => void enableReminders()}
+              size="lg"
+            />
             <GameButton
               label={t('onboarding.notifications.deny')}
               variant="ghost"
