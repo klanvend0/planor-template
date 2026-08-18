@@ -22,6 +22,7 @@ import { Flame, Heart, Infinity as InfinityIcon, Zap } from 'lucide-react-native
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { MAX_HEARTS } from '@/lib/gamification';
+import { DURATION, METER, POP_SPRING } from '@/lib/motion';
 import { themeTokens } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
@@ -44,9 +45,11 @@ export function ProgressBar({
   const width = useSharedValue(0);
 
   useEffect(() => {
-    width.value = withSpring(Math.max(0, Math.min(1, progress)), {
-      damping: 18,
-      stiffness: 160,
+    // Width is the one property the design system allows animating, because
+    // here it carries information rather than decoration.
+    width.value = withTiming(Math.max(0, Math.min(1, progress)), {
+      duration: 700,
+      easing: METER,
     });
   }, [progress, width]);
 
@@ -84,8 +87,8 @@ export function HeartsIndicator({
 
   useEffect(() => {
     // A lost heart should be felt: pop, then settle.
-    scale.value = withSpring(1.18, { damping: 6, stiffness: 260 }, () => {
-      scale.value = withTiming(1, { duration: 160 });
+    scale.value = withSpring(1.18, POP_SPRING, () => {
+      scale.value = withTiming(1, { duration: DURATION.stateChange });
     });
   }, [hearts, scale]);
 

@@ -4,8 +4,8 @@
   "index": 2,
   "title": { "en": "Variables and Types", "tr": "Değişkenler ve Türler" },
   "description": {
-    "en": "Declare variables with let and const, work with numbers and strings, check types with typeof, and use booleans, null, and undefined.",
-    "tr": "let ve const ile değişken tanımlamayı, sayı ve stringlerle çalışmayı, typeof ile tür kontrolünü, boolean, null ve undefined kullanmayı öğren."
+    "en": "Declare variables with let and const, work with numbers and strings, check types, and use booleans, null, and undefined.",
+    "tr": "let ve const ile değişken tanımlamayı, sayı ve stringleri, tür kontrolünü, boolean, null ve undefined kullanmayı öğren."
   },
   "lessons": [
     {
@@ -294,7 +294,7 @@
       "title": { "en": "typeof and Type Conversion", "tr": "typeof ve Tür Dönüştürme" },
       "concept": {
         "headline": {
-          "en": "typeof checks a value's type; Number() and String() convert it",
+          "en": "typeof checks the type; Number() and String() convert it",
           "tr": "typeof türü kontrol eder; Number() ve String() dönüştürür"
         },
         "body": {
@@ -444,7 +444,7 @@
       "concept": {
         "headline": {
           "en": "Booleans are true/false; null and undefined mean no value",
-          "tr": "Boolean true/false'tur; null ve undefined değer yokluğunu belirtir"
+          "tr": "Boolean true/false'tur; null, undefined boşluğu gösterir"
         },
         "body": {
           "en": "A boolean is a value that is either true or false, used in comparisons and decisions. null is a value you assign on purpose to mean \"no value here\". undefined is what a variable holds when it is declared but never given a value. Both represent absence, but null is intentional while undefined usually means something was never set.",
@@ -476,7 +476,7 @@
           "answerId": "a",
           "explanation": {
             "en": "true is a boolean value and prints as true (lowercase). JavaScript is case sensitive.",
-            "tr": "true bir boolean değerdir ve true (küçük harf) olarak yazdırır. JavaScript büyük harfe duyarlıdır."
+            "tr": "true bir boolean değerdir ve true (küçük harf) olarak yazdırılır. JavaScript büyük/küçük harfe duyarlıdır."
           }
         },
         {
@@ -530,22 +530,25 @@
           "acceptable": ["let hasWon = true;"],
           "verify": { "stdout": "" },
           "explanation": {
-            "en": "true is a boolean keyword, not a string. No quotes needed.",
-            "tr": "true bir boolean anahtar kelimesi, string değil. Tırnak gerekli değil."
+            "en": "true is a boolean keyword written in lowercase, not a string, so it needs no quotes around it.",
+            "tr": "true küçük harfle yazılan bir boolean anahtar kelimesidir, string değildir, bu yüzden tırnak gerekmez."
           }
         },
         {
           "id": "js-u02-l4-q5",
           "type": "spot_bug",
           "difficulty": "hard",
-          "prompt": { "en": "Which line is wrong and why?", "tr": "Hangi satır hatalı ve neden?" },
-          "codeLines": ["let status;", "console.log(status);", "status = false;"],
-          "buggyLineIndex": 1,
-          "fix": "console.log(typeof status);",
-          "verify": { "stdout": "undefined\n" },
+          "prompt": {
+            "en": "This code throws an error. Which line is actually the mistake?",
+            "tr": "Bu kod hata veriyor. Hangi satır aslında hatalı?"
+          },
+          "codeLines": ["const status = null;", "status = \"active\";", "console.log(status);"],
+          "buggyLineIndex": 0,
+          "fix": "let status = null;",
+          "verify": { "raises": "TypeError" },
           "explanation": {
-            "en": "status is declared but not given a value, so it is undefined. This is valid but prints undefined. If you want a false value, assign it.",
-            "tr": "status bildirildi ama değer verilmedi, yani undefined'dır. Bu geçerlidir fakat undefined yazdırır. false değer istersen ata."
+            "en": "const locks status to null forever, so reassigning it on line 2 throws a TypeError. Using let on line 1 would allow the change.",
+            "tr": "const, status'u sonsuza dek null'a kilitler, bu yüzden 2. satırdaki yeniden atama TypeError verir. 1. satırda let kullanılsaydı değişikliğe izin verirdi."
           }
         },
         {
@@ -557,28 +560,28 @@
             "tr": "100-200 karakterle burada gösterilen null ve undefined arasındaki farkı anlat."
           },
           "code": {
-            "en": "// Intentional empty value\nconst a = null;\n// Unset variable\nlet b;\nconsole.log(typeof a);\nconsole.log(typeof b);",
-            "tr": "// Kasten boş değer\nconst a = null;\n// Atanmamış değişken\nlet b;\nconsole.log(typeof a);\nconsole.log(typeof b);"
+            "en": "// Intentional empty value\nconst a = null;\n// Unset variable\nlet b;\nconsole.log(a);\nconsole.log(b);",
+            "tr": "// Kasten boş değer\nconst a = null;\n// Atanmamış değişken\nlet b;\nconsole.log(a);\nconsole.log(b);"
           },
           "keyPoints": {
             "en": [
-              "null is explicitly assigned to mean no value",
-              "undefined happens when a variable is not initialized",
-              "both represent absence but for different reasons"
+              "null is assigned on purpose to mean no value",
+              "undefined appears when a variable is declared but never assigned",
+              "printing them shows null and undefined, two different empty states"
             ],
             "tr": [
-              "null değer yok anlamında açıkça atanır",
-              "undefined değişken başlatılmadığında olur",
-              "her ikisi de yokluğu temsil eder ama farklı nedenlerle"
+              "null, değer yok anlamında bilerek atanır",
+              "undefined, bir değişken tanımlanıp değer verilmediğinde ortaya çıkar",
+              "yazdırıldıklarında null ve undefined, iki farklı boş durumu gösterir"
             ]
           },
           "sampleAnswer": {
-            "en": "null is a value you intentionally assign to mean no value. undefined occurs when a variable is declared but not initialized. Both represent absence, but null is deliberate while undefined is accidental.",
-            "tr": "null değer yok anlamında kasten atadığın değerdir. undefined bir değişken bildirildiği zaman ama başlatılmadığında ortaya çıkar. Her ikisi de yokluğu temsil eder ama null kasten undefined ise tesadüfi."
+            "en": "const a is deliberately set to null to mean empty. let b is never assigned, so JavaScript gives it undefined by default. Printing them shows null then undefined.",
+            "tr": "const a, boş olduğunu belirtmek için bilerek null yapılır. let b hiç atanmadığı için JavaScript ona varsayılan olarak undefined verir. Yazdırınca önce null, sonra undefined görünür."
           },
           "explanation": {
-            "en": "Understanding this distinction helps you debug: if you see undefined, something was not initialized; if you see null, someone intentionally set it.",
-            "tr": "Bu farkı anlamak debug etmene yardımcı olur: undefined görürsen bir şey başlatılmadı; null görürsen biri kasten ayarladı."
+            "en": "null shows the value was deliberately left empty, while undefined shows JavaScript filled in a default because nothing was assigned.",
+            "tr": "null, değerin bilerek boş bırakıldığını gösterir; undefined ise hiçbir şey atanmadığı için JavaScript'in varsayılan olarak koyduğu değerdir."
           }
         }
       ]
