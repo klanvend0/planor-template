@@ -27,6 +27,7 @@ import { useTranslation } from '@/hooks/use_translation';
 import type { LessonSession } from '@/hooks/use_lesson_session';
 import type { AnswerInput } from '@/lib/answer_check';
 import { expectedAnswerText } from '@/lib/answer_check';
+import { track } from '@/lib/analytics';
 import { localized } from '@/lib/content_schema';
 import { errorMessageKey } from '@/lib/errors';
 import { celebrateFeedback } from '@/lib/haptics';
@@ -71,8 +72,21 @@ export function SessionRunner({
   }, [session.question?.id]);
 
   useEffect(() => {
-    if (session.phase === 'finished' && session.outcome) void celebrateFeedback();
-  }, [session.phase, session.outcome]);
+    if (session.phase !== 'finished' || !session.outcome) return;
+    void celebrateFeedback();
+    track('lesson_completed', {
+      lesson_id: location.lesson.id,
+      course: location.course.id,
+      score: session.outcome.score,
+      stars: session.outcome.stars,
+      xp: session.outcome.xpAwarded,
+      duration_ms: session.elapsedMs,
+    });
+  }, [location.course.id, location.lesson.id, session.elapsedMs, session.outcome, session.phase]);
+
+  useEffect(() => {
+    if (session.phase === 'out_of_hearts') track('hearts_depleted', { lesson_id: location.lesson.id });
+  }, [location.lesson.id, session.phase]);
 
   useEffect(() => {
     if (!session.error) return;

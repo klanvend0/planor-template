@@ -444,17 +444,17 @@
       "concept": {
         "headline": {
           "en": "while loops repeat code as long as a condition is true",
-          "tr": "while döngüleri bir koşul doğru kaldığı sürece kodu tekrarlar"
+          "tr": "while döngüleri koşul doğruyken kodu tekrarlar"
         },
         "body": {
           "en": "A while loop keeps running as long as its condition is true. It checks the condition before each run. Unlike a for loop, you must change something inside the loop so the condition eventually becomes false, or the loop will never stop. A while loop is useful when you do not know ahead of time how many times you need to repeat.",
-          "tr": "while döngüsü koşulu doğru kaldığı sürece çalışır. Her çalışmadan önce koşulu kontrol eder. for döngüsünden farklı olarak döngü içinde bir şeyi değiştirmelisin ki koşul sonunda yanlış olsun, yoksa döngü hiç durmaz. while döngüsü kaç kez tekrarlamanız gerektiğini önceden bilmediğinizde kullanışlıdır."
+          "tr": "while döngüsü koşulu doğru kaldığı sürece çalışır. Her çalışmadan önce koşulu kontrol eder. for döngüsünden farklı olarak döngü içinde bir şeyi değiştirmelisin ki koşul sonunda yanlış olsun, yoksa döngü hiç durmaz. while döngüsü kaç kez tekrarlaman gerektiğini önceden bilmediğinde kullanışlıdır."
         },
         "example": {
           "code": "count = 0\nwhile count < 3:\n    print(count)\n    count = count + 1",
           "caption": {
             "en": "Prints 0, 1, 2. count increases each time until it reaches 3.",
-            "tr": "0, 1, 2 yazdırır. count her seferde artır yani üçe ulaşana kadar."
+            "tr": "0, 1, 2 yazdırır. count, üçe ulaşana kadar her seferde bir artar."
           }
         }
       },
@@ -604,7 +604,7 @@
           "fix": "    print(x)\n    x = x + 1",
           "explanation": {
             "en": "The loop never changes x, so x stays 0 forever and the condition x < 3 is always true. You must update the variable inside the loop.",
-            "tr": "Döngü x'i hiç değiştirmez, bu yüzden x selamlamaz sıfır kalır ve x < 3 koşulu her zaman doğrudur. Döngü içinde değişkeni güncellemelisin."
+            "tr": "Döngü x'i hiç değiştirmez, bu yüzden x hep sıfır kalır ve x < 3 koşulu her zaman doğrudur. Döngü içinde değişkeni güncellemelisin."
           }
         },
         {
@@ -653,12 +653,12 @@
       },
       "concept": {
         "headline": {
-          "en": "break and continue give you fine control; accumulator builds up a result",
-          "tr": "break ve continue size ince kontrol verir; biriktirim sonuç oluşturur"
+          "en": "break, continue, and the accumulator pattern control loops",
+          "tr": "break, continue ve biriktirim kalıbıyla döngüleri yönet"
         },
         "body": {
           "en": "break stops a loop immediately and jumps out of it. continue skips the rest of the current iteration and goes to the next one. The accumulator pattern starts with a variable at zero (or an empty string), then inside the loop you add to it each time. This lets you build up a total, a product, or a combined string. These patterns help you solve real problems.",
-          "tr": "break döngüyü hemen durdurur ve çıkar. continue mevcut tekrarın geri kalanını atlar ve bir sonrakine gider. Biriktirim kalıbı bir değişkeni sıfırdan (veya boş metinle) başlatır, sonra döngü içinde her seferde ona eklersin. Bu sayede toplam, çarpım veya birleştirilmiş metin oluşturabilirsin. Bu kalıplar gerçek sorunları çözmenizi sağlar."
+          "tr": "break döngüyü hemen durdurur ve çıkar. continue mevcut tekrarın geri kalanını atlar ve bir sonrakine gider. Biriktirim kalıbı bir değişkeni sıfırdan (veya boş metinle) başlatır, sonra döngü içinde her seferde ona eklersin. Bu sayede toplam, çarpım veya birleştirilmiş metin oluşturabilirsin. Bu kalıplar gerçek sorunları çözmeni sağlar."
         },
         "example": {
           "code": "# Accumulator: add up numbers\ntotal = 0\nfor num in [1, 2, 3]:\n    total = total + num\nprint(total)\n\n# break and continue\nfor i in range(5):\n    if i == 2:\n        continue\n    if i == 4:\n        break\n    print(i)",
@@ -788,17 +788,16 @@
           "type": "type_code",
           "difficulty": "hard",
           "prompt": {
-            "en": "Write a loop that prints 1, 2, 3, then stops when it reaches 4.",
-            "tr": "1, 2, 3 yazdırıp 4'e ulaşınca duran bir döngü yaz."
+            "en": "Write a for loop that uses break to print 1, 2, 3 and stop before printing 4.",
+            "tr": "break kullanarak 1, 2, 3 yazdırıp 4 yazdırmadan duran bir for döngüsü yaz."
           },
           "expected": "for i in range(1, 10):\n    if i == 4:\n        break\n    print(i)",
-          "acceptable": ["for i in range(1, 4):\n    print(i)"],
           "verify": {
             "stdout": "1\n2\n3\n"
           },
           "explanation": {
-            "en": "break lets you exit the loop early when a condition is met. You can also use range(1, 4) which stops before 4 without needing break.",
-            "tr": "break koşul sağlanunca döngüden erken çıkmanıza izin verir. Ya da break kullanmadan dördün önce duran range(1, 4) kullanabilirsin."
+            "en": "break exits the loop immediately once the condition is met, even though range(1, 10) would otherwise keep counting further.",
+            "tr": "break, koşul sağlanınca döngüden hemen çıkmanı sağlar; range(1, 10) tek başına kullanılsa döngü daha uzun sürerdi."
           }
         },
         {
@@ -807,11 +806,14 @@
           "difficulty": "hard",
           "prompt": {
             "en": "Which line stops the accumulator from working?",
-            "tr": "Hangi satır biriktirim'in çalışmasını durdurur?"
+            "tr": "Hangi satır biriktirimin çalışmasını durdurur?"
           },
           "codeLines": ["total = 0", "for num in [10, 20, 30]:", "    total + num", "print(total)"],
           "buggyLineIndex": 2,
           "fix": "    total = total + num",
+          "verify": {
+            "stdout": "0\n"
+          },
           "explanation": {
             "en": "total + num just calculates but does not store the result. You must use = to assign: total = total + num. Without assignment, total stays at 0.",
             "tr": "total + num sadece hesaplar ama sonucu saklamaz. Atamak için = kullanmalısın: total = total + num. Atama olmadan total sıfırda kalır."

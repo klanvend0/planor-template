@@ -10,7 +10,7 @@
 
 import { router, useFocusEffect } from 'expo-router';
 import { ChevronDown, Settings } from 'lucide-react-native';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,6 +21,7 @@ import { pathOffset, UnitHeader } from '@/components/learn/unit_header';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { track } from '@/lib/analytics';
 import { localized } from '@/lib/content_schema';
 import { FREE_UNIT_LIMIT, TRIAL_DAYS } from '@/lib/constants';
 import { getCourse, getLesson } from '@/services/content_service';
@@ -49,6 +50,7 @@ export default function LearnScreen() {
   const activeCourse = useSettingsStore((state) => state.activeCourse);
   const setActiveCourse = useSettingsStore((state) => state.setActiveCourse);
   const dailyGoal = useSettingsStore((state) => state.dailyGoalXp);
+  const lastPaywallAt = useSettingsStore((state) => state.lastPaywallAt);
 
   const gameState = useGameStore((state) => state.state);
   const refreshGame = useGameStore((state) => state.refresh);
@@ -64,6 +66,13 @@ export default function LearnScreen() {
     }, [activeCourse, loadProgress])
   );
 
+  // The trial offer is made once, the first time the learner reaches the map.
+  useEffect(() => {
+    if (!gameState || hasSubscription || lastPaywallAt !== null) return;
+    const timer = setTimeout(() => router.push('/paywall'), 600);
+    return () => clearTimeout(timer);
+  }, [gameState, hasSubscription, lastPaywallAt]);
+
   const nextId = useMemo(
     () => nextLessonId(byLesson, activeCourse, hasSubscription),
     [byLesson, activeCourse, hasSubscription]
@@ -76,12 +85,13 @@ export default function LearnScreen() {
     setRefreshing(false);
   };
 
-  const openLesson = (lessonId: string, status: ReturnType<typeof lessonStatus>) => {
+  const openLesson = (lessonId: string, status: ReturnType<typeof lessonStatus>, unitId: string) => {
     if (status === 'premium_locked') {
       router.push('/paywall');
       return;
     }
     if (status === 'locked') return;
+    track('lesson_started', { lesson_id: lessonId, course: activeCourse, unit: unitId });
     router.push({ pathname: '/lesson/[lessonId]', params: { lessonId } });
   };
 
@@ -195,7 +205,7 @@ export default function LearnScreen() {
                       stars={byLesson[lesson.id]?.stars ?? 0}
                       isCurrent={lesson.id === nextId}
                       offset={pathOffset(index)}
-                      onPress={() => openLesson(lesson.id, status)}
+                      onPress={() => openLesson(lesson.id, status, unit.id)}
                     />
                   );
                 })}

@@ -35,6 +35,7 @@ import {
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { track } from '@/lib/analytics';
 import { TRIAL_DAYS } from '@/lib/constants';
 import type { CourseId } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
@@ -110,6 +111,11 @@ export default function OnboardingScreen() {
   const advanceStep = () => setStepIndex((index) => Math.min(STEPS.length - 1, index + 1));
 
   const finish = () => {
+    track('onboarding_completed', {
+      locale: settings.locale,
+      course: settings.activeCourse,
+      daily_goal: settings.dailyGoalXp,
+    });
     settings.completeOnboarding();
     router.replace('/(auth)/login');
   };

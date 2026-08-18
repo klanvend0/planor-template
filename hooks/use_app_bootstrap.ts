@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 
+import { identify as identifyAnalytics, resetAnalytics } from '@/lib/analytics';
 import { initI18n } from '@/lib/i18n';
 import { useAuthStore } from '@/stores/auth_store';
 import { useGameStore } from '@/stores/game_store';
@@ -65,6 +66,7 @@ export function useAppBootstrap(): BootstrapState {
   useEffect(() => {
     if (!userId) {
       identifiedUser.current = null;
+      resetAnalytics();
       clearGame();
       clearProgress();
       return;
@@ -72,6 +74,7 @@ export function useAppBootstrap(): BootstrapState {
     if (identifiedUser.current === userId) return;
 
     identifiedUser.current = userId;
+    identifyAnalytics(userId);
     void identify(userId);
     void refreshGame();
   }, [clearGame, clearProgress, identify, refreshGame, userId]);

@@ -24,6 +24,7 @@ import { GameButton } from '@/components/game_button';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { track } from '@/lib/analytics';
 import { LINKS, TRIAL_DAYS } from '@/lib/constants';
 import { errorMessageKey } from '@/lib/errors';
 import { openExternal } from '@/lib/links';
@@ -85,6 +86,7 @@ export default function PaywallScreen() {
 
   useEffect(() => {
     markPaywallSeen();
+    track('paywall_viewed', { source: 'modal' });
     if (!offering) void loadOffering();
   }, [loadOffering, markPaywallSeen, offering]);
 
@@ -108,8 +110,16 @@ export default function PaywallScreen() {
   const purchase = async () => {
     if (!selected) return;
     try {
+      track('purchase_started', {
+        product_id: selected.product.identifier,
+        trial: eligibleForTrial,
+      });
       const outcome = await buy(selected);
       if (outcome === 'purchased') {
+        track('purchase_completed', {
+          product_id: selected.product.identifier,
+          trial: eligibleForTrial,
+        });
         Alert.alert(t('paywall.title'), t('paywall.restore_done'));
         close();
       }
