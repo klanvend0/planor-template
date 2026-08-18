@@ -288,6 +288,10 @@ export interface Database {
         Args: { p_user_id: string; p_hourly?: number; p_daily?: number };
         Returns: boolean;
       };
+      release_ai_review: {
+        Args: { p_user_id: string };
+        Returns: undefined;
+      };
     };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;

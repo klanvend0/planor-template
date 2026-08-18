@@ -370,7 +370,12 @@ begin
 end;
 $$;
 
-/** True when the caller currently owns an active entitlement. */
+/**
+ * True when the learner currently owns an active entitlement.
+ *
+ * The paid-through date is checked as well as the status: if an EXPIRATION
+ * webhook is ever lost, the mirror would otherwise keep saying "active" forever.
+ */
 create or replace function public.has_active_subscription(p_user_id uuid)
 returns boolean
 language sql
@@ -378,7 +383,15 @@ stable
 security definer
 set search_path = public
 as $$
-  select coalesce((select is_active from public.subscriptions where user_id = p_user_id), false);
+  select coalesce(
+    (
+      select s.is_active
+        and (s.current_period_end is null or s.current_period_end > now())
+      from public.subscriptions s
+      where s.user_id = p_user_id
+    ),
+    false
+  );
 $$;
 
 -- ---------------------------------------------------------------------------
@@ -947,3 +960,24 @@ alter table public.apple_credentials enable row level security;
 
 comment on table public.apple_credentials is
   'Service-role only. Apple refresh tokens used solely to revoke the sign-in grant on account deletion.';
+
+/**
+ * Hands back a quota slot claimed by {@link claim_ai_review}.
+ *
+ * Called when the provider fails before any tokens are spent, so a bad minute
+ * upstream does not eat into the learner's allowance.
+ */
+create or replace function public.release_ai_review(p_user_id uuid)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  update public.ai_review_quota
+    set used = greatest(0, used - 1)
+    where user_id = p_user_id
+      and ((window_kind = 'hour' and window_start = date_trunc('hour', now()))
+        or (window_kind = 'day' and window_start = date_trunc('day', now())));
+$$;
+
+revoke execute on function public.release_ai_review(uuid) from public, anon, authenticated;

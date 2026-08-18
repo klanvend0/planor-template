@@ -100,12 +100,16 @@ function json(body: unknown, status = 200): Response {
  * The answer is additionally wrapped in markers the system prompt declares inert.
  */
 function sanitizeAnswer(raw: string): string {
-  return raw
-    .replace(/[\u0000-\u001F\u007F]/g, ' ')
-    .replace(/```/g, "'''")
-    .replace(/<\/?(system|assistant|user|instructions?)>/gi, '')
-    .trim()
-    .slice(0, MAX_ANSWER);
+  return (
+    raw
+      .replace(/[\u0000-\u001F\u007F]/g, ' ')
+      .replace(/```/g, "'''")
+      // The learner must not be able to close the block their answer sits in.
+      .replace(/<{2,}|>{2,}/g, '·')
+      .replace(/<\/?(system|assistant|user|instructions?)>/gi, '')
+      .trim()
+      .slice(0, MAX_ANSWER)
+  );
 }
 
 function systemPrompt(locale: Locale): string {
@@ -285,14 +289,22 @@ Deno.serve(async (request: Request) => {
   if (!questionId) return json({ error: 'question_required' }, 400);
   if (answer.length < MIN_ANSWER) return json({ error: 'answer_too_short' }, 400);
 
-  // Entitlement: the mirror written by the RevenueCat webhook decides.
+  // Entitlement: the mirror written by the RevenueCat webhook decides. The
+  // period end is checked too, so a webhook that never arrived (or was lost)
+  // cannot leave someone permanently entitled.
   const { data: subscription } = await serviceClient
     .from('subscriptions')
-    .select('is_active')
+    .select('is_active, current_period_end')
     .eq('user_id', user.id)
     .maybeSingle();
 
-  if (!subscription?.is_active) return json({ error: 'subscription_required' }, 402);
+  const stillInPeriod =
+    !subscription?.current_period_end ||
+    new Date(subscription.current_period_end).getTime() > Date.now();
+
+  if (!subscription?.is_active || !stillInPeriod) {
+    return json({ error: 'subscription_required' }, 402);
+  }
 
   const { data: rubric } = await serviceClient
     .from('question_rubrics')
@@ -329,6 +341,8 @@ Deno.serve(async (request: Request) => {
     });
   } catch (error) {
     console.error('[grade-explanation] provider failed', error);
+    // No tokens were spent, so the learner keeps the slot.
+    await serviceClient.rpc('release_ai_review', { p_user_id: user.id });
     return json({ error: 'grader_unavailable' }, 502);
   }
 

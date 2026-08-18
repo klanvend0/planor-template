@@ -18,8 +18,8 @@
           "tr": "+ veya template literals ile metinleri birleştir"
         },
         "body": {
-          "en": "You can join two strings together using the + operator, which is called concatenation. You can also use template literals, which are strings written with backticks instead of quotes. Inside template literals, you can use the syntax dollar-brace-variable-brace to insert the value of a variable. Template literals are cleaner when joining many pieces of text.",
-          "tr": "+ operatörünü kullanarak iki metni birleştirebilirsin; buna concatenation denir. Template literals'i de kullanabilirsin; bunlar backtick ile yazılan metinlerdir. Template literals içinde değişkenin değerini eklemek için dollar-brace-variable-brace söz dizimi kullanabilirsin. Birçok metin parçası birleştirirken template literals daha temizdir."
+          "en": "You can join two strings together using the + operator, called concatenation. You can also use template literals: strings written with backticks instead of quotes. Inside a template literal, ${name} inserts the value of a variable directly into the text. Template literals are cleaner when joining many pieces of text.",
+          "tr": "+ operatörüyle iki metni birleştirebilirsin; buna concatenation denir. Template literal de kullanabilirsin: bunlar backtick ile yazılan metinlerdir. Bir template literal içinde ${name} yazarak değişkenin değerini doğrudan metnin içine ekleyebilirsin. Birçok metin parçasını birleştirirken template literals daha temizdir."
         },
         "example": {
           "code": "let greeting = \"Hello\";\nlet name = \"Ada\";\nconsole.log(greeting + \" \" + name);\nconsole.log(`${greeting}, ${name}!`);",
@@ -45,7 +45,7 @@
           "answerId": "a",
           "explanation": {
             "en": "The + operator joins the three strings together. The space in the middle string keeps them apart in the output.",
-            "tr": "+ operatörü üç metni birleştirir. Ortadaki metindeki boşluk çıktıda aralarında mesafe tutar."
+            "tr": "+ operatörü üç metni birleştirir. Ortadaki boşluk karakteri sayesinde kelimeler arasında boşluk kalır."
           }
         },
         {
@@ -54,7 +54,7 @@
           "difficulty": "easy",
           "prompt": {
             "en": "Which correctly uses a template literal?",
-            "tr": "Hangi template literal'i doğru kullanır?"
+            "tr": "Aşağıdakilerden hangisi template literal kullanımını doğru gösterir?"
           },
           "code": "let color = \"blue\";",
           "options": [
@@ -89,8 +89,8 @@
           ],
           "answerId": "b",
           "explanation": {
-            "en": "Template literals use backticks and need the dollar-brace-variable-brace syntax with curly braces around the variable. Regular quotes do not work with this syntax.",
-            "tr": "Template literals backtick kullanır ve değişkenin etrafında kıvrık parantez gerekir. Normal tırnaklar bu söz dizimiyle çalışmaz."
+            "en": "Template literals use backticks and need ${name} syntax with curly braces around the variable. Regular quotes do not work with this syntax.",
+            "tr": "Template literals backtick kullanır ve değişkenin etrafında ${name} gibi kıvrık parantez gerekir. Normal tırnaklar bu söz dizimiyle çalışmaz."
           }
         },
         {
@@ -115,8 +115,8 @@
           ],
           "verify": { "stdout": "Welcome, Ada!\n" },
           "explanation": {
-            "en": "Template literals use backticks and require the dollar-brace-variable-brace syntax. Regular double quotes do not allow this syntax for variable insertion.",
-            "tr": "Template literals backtick kullanır ve dollar-brace-variable-brace söz dizimi gerekir. Normal çift tırnaklar değişken ekleme için bu söz dizimini desteklemez."
+            "en": "Template literals use backticks and the ${name} syntax. Regular double quotes do not allow this syntax for variable insertion.",
+            "tr": "Template literals backtick kullanır ve ${name} söz dizimi gerekir. Normal çift tırnaklar değişken ekleme için bu söz dizimini desteklemez."
           }
         },
         {
@@ -143,11 +143,11 @@
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
           "codeLines": [
             "let animal = \"cat\";",
-            "console.log(`The animal is ${animal}`);",
-            "console.log(`The animal is ${pet}`);"
+            "console.log(`I have a pet ${animal}`);",
+            "console.log(`I really love my ${pet}`);"
           ],
           "buggyLineIndex": 2,
-          "fix": "console.log(`The animal is ${animal}`);",
+          "fix": "console.log(`I really love my ${animal}`);",
           "verify": { "raises": "ReferenceError" },
           "explanation": {
             "en": "The variable pet was never defined. Inside a template literal, when you use a variable that does not exist, JavaScript raises a ReferenceError.",
@@ -200,13 +200,13 @@
         },
         "body": {
           "en": "Every string has a .length property that tells you how many characters it contains. You can access individual characters using square brackets with an index number: the first character is at index 0, the second is at 1, and so on. This is called indexing. You can also use string methods like .toUpperCase() to convert the string, .toLowerCase() to make it lowercase, or .slice(start, end) to extract a piece of the string.",
-          "tr": "Her metnin kaç karakter içerdiğini söyleyen bir .length özelliği vardır. Kare parantez içinde bir indeks numarası kullanarak bireysel karakterlere erişebilirsin: ilk karakter 0 indeksinde, ikinci 1 indeksinde vb. Buna indeksleme denir. .toUpperCase() gibi metin metodlarını da kullanabilirsin, .toLowerCase() ile küçük yapabilir veya .slice(start, end) ile metin parçasını çıkarabilirsin."
+          "tr": "Her metnin kaç karakter içerdiğini söyleyen bir .length özelliği vardır. Kare parantez içinde bir indeks numarası kullanarak bireysel karakterlere erişebilirsin: ilk karakter 0 indeksinde, ikinci 1 indeksinde vb. Buna indeksleme denir. .toUpperCase() gibi metin metotlarını da kullanabilirsin: .toLowerCase() ile küçük harfe çevirebilir veya .slice(start, end) ile metnin bir parçasını çıkarabilirsin."
         },
         "example": {
           "code": "let word = \"Hello\";\nconsole.log(word.length);\nconsole.log(word[0]);\nconsole.log(word.toUpperCase());\nconsole.log(word.slice(1, 4));",
           "caption": {
             "en": "Access length, index, method calls, and slicing of strings.",
-            "tr": "Metinlerin uzunluğuna, indeksine, metod çağrısına ve dilimlenmesine erişim."
+            "tr": "Metinlerin uzunluğuna, indeksine, metot çağrısına ve dilimlenmesine erişim."
           }
         }
       },
@@ -238,15 +238,15 @@
             "tr": "\"hello\" metninin ilk karakteri nedir?"
           },
           "options": [
-            { "id": "a", "text": { "en": "\"hello\"[0]", "tr": "\"hello\"[0]" } },
+            { "id": "a", "text": { "en": "hello", "tr": "hello" } },
             { "id": "b", "text": { "en": "h", "tr": "h" } },
             { "id": "c", "text": { "en": "e", "tr": "e" } },
-            { "id": "d", "text": { "en": "\"hello\"[1]", "tr": "\"hello\"[1]" } }
+            { "id": "d", "text": { "en": "undefined", "tr": "undefined" } }
           ],
           "answerId": "b",
           "explanation": {
-            "en": "The first character is at index 0, which is h. Indexing in most programming languages starts at 0, not 1.",
-            "tr": "İlk karakter 0 indeksinde olduğu için h'dir. Çoğu programlama dilinde indeksleme 0'dan başlar, 1'den değil."
+            "en": "Indexing returns a single character, not the whole string. The first character sits at index 0, which is h, since indexing starts at 0, not 1.",
+            "tr": "İndeksleme tüm metni değil, tek bir karakteri döndürür. İlk karakter 0 indeksinde olduğu için h'dir, çünkü indeksleme 0'dan başlar, 1'den değil."
           }
         },
         {
@@ -321,11 +321,11 @@
           },
           "sampleAnswer": {
             "en": "The code stores a name and then accesses its length property, the first character using index 0, and converts it to lowercase.",
-            "tr": "Kod bir isim saklar ve sonra onun length özelliğine, 0 indeksini kullanarak ilk karaktere ve küçük harfe çevirilmiş hâline erişir."
+            "tr": "Kod bir isim saklar ve sonra onun length özelliğine, 0 indeksini kullanarak ilk karaktere ve küçük harfe çevrilmiş hâline erişir."
           },
           "explanation": {
             "en": ".length and indexing allow you to examine parts of a string. String methods like .toLowerCase() transform the string without changing the original.",
-            "tr": ".length ve indeksleme metinin parçalarını incelemenize izin verir. .toLowerCase() gibi metot metni orijinal değiştirmeden dönüştürür."
+            "tr": ".length ve indeksleme, bir metnin parçalarını incelemenizi sağlar. .toLowerCase() gibi metotlar ise metni, orijinalini değiştirmeden yeni bir metne dönüştürür."
           }
         }
       ]
@@ -341,7 +341,7 @@
         },
         "body": {
           "en": "JavaScript can do arithmetic: +, -, *, and / are the main operators. When you combine multiple operators, JavaScript follows the order of operations: multiplication and division are done before addition and subtraction. You can use parentheses to change the order. For example, 2 + 3 * 4 equals 14 (3 * 4 = 12, then 12 + 2 = 14), but (2 + 3) * 4 equals 20 (2 + 3 = 5, then 5 * 4 = 20).",
-          "tr": "JavaScript aritmetik yapabilir: +, -, *, ve / ana işlemlerdir. Birden fazla işlemi kombine ettiğinde, JavaScript işlem sırasını takip eder: çarpma ve bölme toplama ve çıkarmadan önce yapılır. İşlem sırasını değiştirmek için parantez kullanabilirsin. Örneğin, 2 + 3 * 4 = 14 (3 * 4 = 12, sonra 12 + 2 = 14), ama (2 + 3) * 4 = 20 (2 + 3 = 5, sonra 5 * 4 = 20)."
+          "tr": "JavaScript aritmetik yapabilir: +, -, * ve / ana işlemlerdir. Birden fazla işlemi bir arada kullandığında, JavaScript işlem sırasını izler: çarpma ve bölme, toplama ve çıkarmadan önce yapılır. İşlem sırasını değiştirmek için parantez kullanabilirsin. Örneğin, 2 + 3 * 4 = 14 (3 * 4 = 12, sonra 12 + 2 = 14), ama (2 + 3) * 4 = 20 (2 + 3 = 5, sonra 5 * 4 = 20)."
         },
         "example": {
           "code": "console.log(2 + 3 * 4);\nconsole.log((2 + 3) * 4);\nconsole.log(10 / 2 + 5);\nconsole.log(10 / (2 + 5));",
@@ -425,15 +425,20 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": {
-            "en": "Which line has the wrong result?",
-            "tr": "Hangi satırın sonucu yanlış?"
+            "en": "This code should apply a 10% discount to the total of price and shipping (22.5), but it prints 24.5. Which line is wrong?",
+            "tr": "Bu kod price ve shipping toplamına %10 indirim uygulayıp 22.5 yazdırmalı, ama 24.5 yazdırıyor. Hangi satır hatalı?"
           },
-          "codeLines": ["console.log(10 + 5 * 2);", "console.log((10 + 5) * 2);"],
-          "buggyLineIndex": 0,
-          "fix": "console.log(20);",
+          "codeLines": [
+            "let price = 20;",
+            "let shipping = 5;",
+            "let total = price + shipping * 0.9;",
+            "console.log(total);"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "let total = (price + shipping) * 0.9;",
           "explanation": {
-            "en": "Without parentheses, 5 * 2 = 10 happens first, then 10 + 10 = 20. But a beginner might think 10 + 5 = 15, then 15 * 2 = 30, which is wrong.",
-            "tr": "Parantez olmadan 5 * 2 = 10 önce yapılır, sonra 10 + 10 = 20. Ama bir başlangıç 10 + 5 = 15 yapıp 15 * 2 = 30 düşünebilir, bu yanlış."
+            "en": "Without parentheses, shipping * 0.9 = 4.5 runs first, so total is 20 + 4.5 = 24.5. Parentheses around (price + shipping) force the addition first: (20 + 5) * 0.9 = 22.5.",
+            "tr": "Parantez olmadan shipping * 0.9 = 4.5 önce hesaplanır, bu yüzden total 20 + 4.5 = 24.5 olur. (price + shipping) parantezi toplamayı önce yaptırır: (20 + 5) * 0.9 = 22.5."
           }
         },
         {
@@ -445,28 +450,28 @@
             "tr": "100-200 karakterle bu iki satır arasındaki farkı anlat."
           },
           "code": {
-            "en": "// First calculation\nconsole.log(2 + 3 * 4);\n// Second calculation\nconsole.log((2 + 3) * 4);",
-            "tr": "// İlk hesaplama\nconsole.log(2 + 3 * 4);\n// İkinci hesaplama\nconsole.log((2 + 3) * 4);"
+            "en": "// First calculation\nconsole.log(20 - 8 / 4);\n// Second calculation\nconsole.log((20 - 8) / 4);",
+            "tr": "// İlk hesaplama\nconsole.log(20 - 8 / 4);\n// İkinci hesaplama\nconsole.log((20 - 8) / 4);"
           },
           "keyPoints": {
             "en": [
-              "first line: multiplication happens before addition",
-              "second line: parentheses force addition first",
+              "first line: division happens before subtraction",
+              "second line: parentheses force subtraction first",
               "parentheses change the order of operations"
             ],
             "tr": [
-              "ilk satır: çarpma toplamadan önce olur",
-              "ikinci satır: parantezler toplamayı önce yapmaya zorlar",
+              "ilk satır: bölme çıkarmadan önce olur",
+              "ikinci satır: parantezler çıkarmayı önce yapmaya zorlar",
               "parantezler işlem sırasını değiştirir"
             ]
           },
           "sampleAnswer": {
-            "en": "The first calculates 3 * 4 = 12 then 2 + 12 = 14. The second calculates 2 + 3 = 5 first (because of parentheses), then 5 * 4 = 20. Parentheses change the order.",
-            "tr": "İlk satır 3 * 4 = 12 sonra 2 + 12 = 14 hesaplar. İkinci 2 + 3 = 5 (parantez yüzünden) sonra 5 * 4 = 20 hesaplar. Parantezler sırayı değiştirir."
+            "en": "The first calculates 8 / 4 = 2 then 20 - 2 = 18. The second calculates 20 - 8 = 12 first (because of parentheses), then 12 / 4 = 3. Parentheses change the order.",
+            "tr": "İlk satır 8 / 4 = 2 sonra 20 - 2 = 18 hesaplar. İkinci satır önce (parantez yüzünden) 20 - 8 = 12, sonra 12 / 4 = 3 hesaplar. Parantezler sırayı değiştirir."
           },
           "explanation": {
-            "en": "Without parentheses, *, / are done before +, -. With parentheses, you override this and make the parenthesized operation happen first.",
-            "tr": "Parantez olmadan *, / +, - den önce yapılır. Parantez ile bunu geçersiz kılıp parantez içindeki işlem önce yapılır."
+            "en": "Without parentheses, * and / run before + and -. With parentheses, you override this so the parenthesized operation happens first.",
+            "tr": "Parantez olmadan *, / işlemleri +, - işlemlerinden önce yapılır. Parantez kullanarak bunu geçersiz kılar, önce parantez içindeki işlem yapılır."
           }
         }
       ]
@@ -482,7 +487,7 @@
         },
         "body": {
           "en": "The % operator, called modulo, gives you the remainder when one number is divided by another. For example, 10 % 3 = 1 because 10 divided by 3 is 3 with remainder 1. The Math object has functions to round numbers: Math.round() rounds to the nearest integer, Math.floor() always rounds down, and Math.ceil() always rounds up. You can also use toFixed(n) on a number to show n decimal places.",
-          "tr": "Modulo denen % operatörü, bir sayı diğerine bölündüğünde kalanı verir. Örneğin, 10 % 3 = 1 çünkü 10'u 3'e böldüğünde 3 çıkıyor 1 kalan. Math nesnesinin sayıları yuvarlamak için fonksiyonları vardır: Math.round() en yakın tamsayıya yuvarlar, Math.floor() her zaman aşağı yuvarlar, Math.ceil() her zaman yukarı yuvarlar. Bir sayıda toFixed(n) kullanarak n ondalık basamak gösterebilirsin."
+          "tr": "Modulo denen % operatörü, bir sayı diğerine bölündüğünde kalanı verir. Örneğin, 10 % 3 = 1'dir çünkü 10, 3'e bölündüğünde bölüm 3, kalan ise 1'dir. Math nesnesi sayıları yuvarlamak için çeşitli fonksiyonlar sunar: Math.round() en yakın tamsayıya yuvarlar, Math.floor() her zaman aşağı yuvarlar, Math.ceil() her zaman yukarı yuvarlar. Bir sayı üzerinde toFixed(n) kullanarak n ondalık basamak gösterebilirsin."
         },
         "example": {
           "code": "console.log(10 % 3);\nconsole.log(Math.round(3.7));\nconsole.log(Math.floor(3.9));\nconsole.log((3.14159).toFixed(2));",
@@ -576,16 +581,18 @@
           "type": "type_code",
           "difficulty": "hard",
           "prompt": {
-            "en": "Write a line that checks if a number is even (divisible by 2) using %.",
-            "tr": "% kullanarak bir sayının çift olup olmadığını kontrol eden satırı yaz."
+            "en": "Write a line that prints the price 19.99 with 8% tax added (multiply by 1.08), rounded to 2 decimal places.",
+            "tr": "19.99 fiyatına 1.08 ile çarparak %8 vergi eklenmiş halini, 2 ondalık basamağa yuvarlayıp yazdıran satırı yaz."
           },
-          "code": "let num = 8;",
-          "expected": "console.log(num % 2 === 0);",
-          "acceptable": ["console.log( num % 2 === 0 );"],
-          "verify": { "stdout": "true\n" },
+          "expected": "console.log((19.99 * 1.08).toFixed(2));",
+          "acceptable": [
+            "console.log( (19.99 * 1.08).toFixed(2) );",
+            "console.log((19.99*1.08).toFixed(2));"
+          ],
+          "verify": { "stdout": "21.59\n" },
           "explanation": {
-            "en": "A number is even if num % 2 equals 0 (no remainder). This prints true for even numbers and false for odd numbers.",
-            "tr": "Bir sayı çiftse num % 2 sıfır olur (kalan yok). Bu çift sayılar için true, tek sayılar için false yazdırır."
+            "en": "Parentheses force the multiplication to finish first, giving 21.589199999999998. toFixed(2) then rounds that to two decimal places: 21.59.",
+            "tr": "Parantezler önce çarpmanın bitmesini sağlar, sonuç 21.589199999999998 olur. toFixed(2) bunu iki ondalık basamağa yuvarlayıp 21.59 yapar."
           }
         },
         {

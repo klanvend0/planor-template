@@ -36,6 +36,26 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
+/**
+ * Read the claims out of an id_token without verifying it.
+ *
+ * Verification is unnecessary here: the token came straight from Apple over TLS
+ * in the response to our own exchange request, so it cannot have been swapped.
+ * The claims are only used to check that the code belonged to the caller.
+ */
+function readClaims(idToken: string): { sub?: string } | null {
+  try {
+    const payload = idToken.split('.')[1];
+    const padded = payload.replace(/-/g, '+').replace(/_/g, '/').padEnd(
+      payload.length + ((4 - (payload.length % 4)) % 4),
+      '='
+    );
+    return JSON.parse(atob(padded));
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (request: Request) => {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -96,6 +116,17 @@ Deno.serve(async (request: Request) => {
   const tokens = await response.json();
   const refreshToken = typeof tokens?.refresh_token === 'string' ? tokens.refresh_token : '';
   if (!refreshToken) return json({ error: 'no_refresh_token' }, 502);
+
+  // The code has to belong to the caller. Without this check anyone could post
+  // someone else's authorization code and file that person's refresh token
+  // under their own account — and later revoke their Apple sign-in with it.
+  const claims = typeof tokens?.id_token === 'string' ? readClaims(tokens.id_token) : null;
+  const appleIdentity = user.identities?.find((identity) => identity.provider === 'apple');
+
+  if (!claims?.sub || !appleIdentity || appleIdentity.id !== claims.sub) {
+    console.error('[apple-token-exchange] code does not belong to the caller');
+    return json({ error: 'identity_mismatch' }, 403);
+  }
 
   const { error } = await admin.from('apple_credentials').upsert(
     {

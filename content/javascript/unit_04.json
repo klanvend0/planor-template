@@ -4,8 +4,8 @@
   "index": 4,
   "title": { "en": "Making Decisions", "tr": "Kararlar Almak" },
   "description": {
-    "en": "Control program flow with if and else, compare values with ===, combine tests with logical operators, and use ternary shortcuts.",
-    "tr": "if ve else ile program akışını kontrol et, === ile değerleri karşılaştır, mantıksal operatörlerle testleri birleştir ve ternary kısayollarını kullan."
+    "en": "Control program flow with if/else, compare values with ===, combine conditions with && and ||, and use ternary shortcuts.",
+    "tr": "if/else ile akışı kontrol et, === ile karşılaştır, && ve || ile koşulları birleştir, ternary kısayolları kullan."
   },
   "lessons": [
     {
@@ -22,7 +22,7 @@
           "tr": "if, bir koşul doğru olduğunda çalışan bir blok başlatır. Koşul yanlış olduğunda başka bir kod çalıştırmak için else kullan. Her if ve else bloğu girintili olur ve koşul parantez içine yazılır. Koşul yanlışsa ve else yoksa, girintili satırlar atlanır."
         },
         "example": {
-          "code": "age = 20;\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Not yet\");\n}",
+          "code": "let age = 20;\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Not yet\");\n}",
           "caption": {
             "en": "Checks age and prints different messages.",
             "tr": "Yaşı kontrol eder ve farklı mesajları yazdırır."
@@ -35,7 +35,7 @@
           "type": "multiple_choice",
           "difficulty": "easy",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "score = 85;\nif (score > 80) {\n  console.log(\"Good\");\n}",
+          "code": "let score = 85;\nif (score > 80) {\n  console.log(\"Good\");\n}",
           "options": [
             { "id": "a", "text": { "en": "Good", "tr": "Good" } },
             { "id": "b", "text": { "en": "80", "tr": "80" } },
@@ -45,7 +45,7 @@
           "answerId": "a",
           "explanation": {
             "en": "Score 85 is greater than 80, so the condition is true and the console.log() runs.",
-            "tr": "Skor 85, 80'den büyüktür, yani koşul doğru ve console.log() çalışır."
+            "tr": "Skor 85, 80'den büyük olduğu için koşul true olur ve if bloğu içindeki console.log() çalışarak Good yazdırır."
           }
         },
         {
@@ -53,7 +53,7 @@
           "type": "multiple_choice",
           "difficulty": "easy",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "score = 70;\nif (score > 80) {\n  console.log(\"Good\");\n} else {\n  console.log(\"Try again\");\n}",
+          "code": "let score = 70;\nif (score > 80) {\n  console.log(\"Good\");\n} else {\n  console.log(\"Try again\");\n}",
           "options": [
             { "id": "a", "text": { "en": "Good", "tr": "Good" } },
             { "id": "b", "text": { "en": "Try again", "tr": "Try again" } },
@@ -63,7 +63,7 @@
           "answerId": "b",
           "explanation": {
             "en": "Score 70 is not greater than 80, so the condition is false and the else block runs.",
-            "tr": "Skor 70, 80'den büyük değildir, yani koşul yanlış ve else bloğu çalışır."
+            "tr": "Skor 70, 80'den büyük olmadığı için koşul false olur, if bloğu atlanır ve bunun yerine else çalışarak Try again yazdırır."
           }
         },
         {
@@ -74,7 +74,7 @@
             "en": "Complete the condition so it checks if age is at least 18.",
             "tr": "Koşulu age'in en az 18 olup olmadığını kontrol edecek şekilde tamamla."
           },
-          "codeTemplate": "age = 18;\nif (age ___ 18) {\n  console.log(\"Adult\");\n}",
+          "codeTemplate": "let age = 18;\nif (age ___ 18) {\n  console.log(\"Adult\");\n}",
           "blanks": [{ "id": "1", "answer": ">=", "distractors": ["=>", ">", "=="] }],
           "verify": { "stdout": "Adult\n" },
           "explanation": {
@@ -90,7 +90,7 @@
             "en": "Write an if statement that prints Raining when weather is rain, and Sunny otherwise.",
             "tr": "weather rain olduğunda Raining yazdıran, aksi takdirde Sunny yazdıran bir if ifadesi yaz."
           },
-          "code": "weather = \"rain\";",
+          "code": "let weather = \"rain\";",
           "expected": "if (weather === \"rain\") {\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}",
           "acceptable": [
             "if (weather === \"rain\")\n{\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}",
@@ -107,7 +107,7 @@
           "type": "spot_bug",
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
-          "codeLines": ["number = 10;", "console.log(numer);"],
+          "codeLines": ["let number = 10;", "console.log(numer);"],
           "buggyLineIndex": 1,
           "fix": "console.log(number);",
           "verify": { "raises": "ReferenceError" },
@@ -125,8 +125,8 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "// Checks if the user is old enough\nage = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}",
-            "tr": "// Kullanıcının yeterince yaşlı olup olmadığını kontrol eder\nage = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}"
+            "en": "// Checks if the user is old enough\nlet age = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}",
+            "tr": "// Kullanıcının yeterince yaşlı olup olmadığını kontrol eder\nlet age = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}"
           },
           "keyPoints": {
             "en": [
@@ -145,8 +145,8 @@
             "tr": "age'in en az 13 olup olmadığını kontrol eder. Evetse Welcome yazdırır. Hayırsa Too young yazdırır. Bu genç kullanıcıları engeller."
           },
           "explanation": {
-            "en": "The >= operator means greater than or equal to, so age 13 through 200 would print Welcome.",
-            "tr": ">= operatörü \"büyük veya eşit\" anlamında olur, yani yaş 13'ten 200'e kadar Welcome yazdırır."
+            "en": "Using >= includes the boundary value itself, so an age of exactly 13 also counts as old enough, not just ages above it.",
+            "tr": ">= kullanmak sınır değerini de dahil eder, yani tam 13 yaşında olmak da yeterince yaşlı sayılır, sadece üstündeki yaşlar değil."
           }
         }
       ]
@@ -165,7 +165,7 @@
           "tr": "Karşılaştırmalar ===, !==, <, >, <=, >= kullanarak evet-hayır kararları verirler. === operatörü iki değerin tam olarak eşit olup olmadığını kontrol eder (aynı tür ve aynı değer). Eski == operatörü türleri dönüştürmeyi denediği için hatalara neden olabilir; 5 == \"5\" doğru ama 5 === \"5\" yanlış olur. Karışıklığı önlemek için her zaman === kullan."
         },
         "example": {
-          "code": "x = 5;\nconsole.log(x === 5);      // true\nconsole.log(x === \"5\");    // false\nconsole.log(x == \"5\");     // true (confusing!)",
+          "code": "let x = 5;\nconsole.log(x === 5);      // true\nconsole.log(x === \"5\");    // false\nconsole.log(x == \"5\");     // true (confusing!)",
           "caption": {
             "en": "=== is exact; == converts types.",
             "tr": "=== tam eşlik; == türleri dönüştürür."
@@ -178,7 +178,7 @@
           "type": "multiple_choice",
           "difficulty": "easy",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "x = 10;\nif (x === 10) {\n  console.log(\"Match\");\n}",
+          "code": "let x = 10;\nif (x === 10) {\n  console.log(\"Match\");\n}",
           "options": [
             { "id": "a", "text": { "en": "Match", "tr": "Match" } },
             { "id": "b", "text": { "en": "10", "tr": "10" } },
@@ -187,8 +187,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "x is 10 and 10 === 10 is true, so the if block runs and prints Match.",
-            "tr": "x değeri 10 ve 10 === 10 doğru olur, yani if bloğu çalışır ve Match yazdırır."
+            "en": "x is 10 and 10 === 10 evaluates to true because the value and type both match, so the if block runs and prints Match.",
+            "tr": "x değeri 10 ve 10 === 10 hem değer hem tür eşleştiği için true olur, bu yüzden if bloğu çalışır ve Match yazdırır."
           }
         },
         {
@@ -207,8 +207,8 @@
           ],
           "answerId": "c",
           "explanation": {
-            "en": "7 is not greater than 10, so 7 > 10 is false. The other three are all true.",
-            "tr": "7, 10'dan büyük değildir, yani 7 > 10 yanlış olur. Diğer üçü de doğrudur."
+            "en": "7 is not greater than 10, so 7 > 10 evaluates to false. The other three comparisons are all true, making this the false one.",
+            "tr": "7, 10'dan büyük olmadığı için 7 > 10 false olur. Diğer üç karşılaştırma da true'dur, yani yanlış olan budur."
           }
         },
         {
@@ -217,7 +217,7 @@
           "difficulty": "medium",
           "prompt": {
             "en": "Complete the condition to check if code and input are both the text apple.",
-            "tr": "code ve input'un her ikisinin de metin apple olup olmadığını kontrol eden koşulu tamamla."
+            "tr": "code ve input'un ikisinin de apple metnine eşit olup olmadığını kontrol eden koşulu tamamla."
           },
           "codeTemplate": "if (code ___ input) {\n  console.log(\"Correct\");\n}",
           "blanks": [{ "id": "1", "answer": "===", "distractors": ["==", "=", "!=="] }],
@@ -234,13 +234,13 @@
             "en": "Write an if statement that prints Too low if count is less than 5.",
             "tr": "count 5'ten küçükse Too low yazdıran bir if ifadesi yaz."
           },
-          "code": "count = 3;",
+          "code": "let count = 3;",
           "expected": "if (count < 5) {\n  console.log(\"Too low\");\n}",
           "acceptable": ["if (count < 5) {\nconsole.log(\"Too low\");\n}"],
           "verify": { "stdout": "Too low\n" },
           "explanation": {
             "en": "The < operator means less than. Count 3 is less than 5, so the condition is true and the message prints.",
-            "tr": "< operatörü \"küçüktür\" anlamında olur. Count 3, 5'ten küçüktür, yani koşul doğu ve mesaj yazdırılır."
+            "tr": "< operatörü \"küçüktür\" anlamına gelir. Count 3, 5'ten küçük olduğu için koşul true olur ve mesaj yazdırılır."
           }
         },
         {

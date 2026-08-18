@@ -51,6 +51,11 @@ type SubscriptionStatus =
 const WEBHOOK_SECRET = Deno.env.get('REVENUECAT_WEBHOOK_SECRET') ?? '';
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
 const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
+/**
+ * Sandbox purchases are free and anyone with a sandbox Apple ID can make them,
+ * so they are ignored unless a build explicitly opts in for testing.
+ */
+const ALLOW_SANDBOX = (Deno.env.get('REVENUECAT_ALLOW_SANDBOX') ?? '') === 'true';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -61,15 +66,23 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-/** Constant-time comparison so the secret cannot be probed byte by byte. */
-function secretMatches(header: string | null): boolean {
+/**
+ * Constant-time comparison of two SHA-256 digests.
+ *
+ * Hashing first means the comparison is always over 32 bytes, so neither the
+ * secret's length nor an early mismatch is observable in the response time.
+ */
+async function secretMatches(header: string | null): Promise<boolean> {
   if (!WEBHOOK_SECRET) return false;
   const provided = (header ?? '').replace(/^Bearer\s+/i, '');
-  if (provided.length !== WEBHOOK_SECRET.length) return false;
+
+  const digest = async (value: string) =>
+    new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)));
+
+  const [a, b] = await Promise.all([digest(provided), digest(WEBHOOK_SECRET)]);
+
   let diff = 0;
-  for (let i = 0; i < provided.length; i += 1) {
-    diff |= provided.charCodeAt(i) ^ WEBHOOK_SECRET.charCodeAt(i);
-  }
+  for (let i = 0; i < a.length; i += 1) diff |= a[i] ^ b[i];
   return diff === 0;
 }
 
@@ -103,7 +116,8 @@ function statusForEvent(event: RevenueCatEvent): SubscriptionStatus | null {
     case 'BILLING_ISSUE':
       return expired ? 'expired' : 'grace';
     case 'SUBSCRIPTION_PAUSED':
-      return 'paused';
+      // A pause takes effect at the end of the paid period, not immediately.
+      return expired ? 'paused' : isTrial ? 'trialing' : 'active';
     case 'EXPIRATION':
       return 'expired';
     default:
@@ -197,7 +211,7 @@ Deno.serve(async (request: Request) => {
     console.error('[revenuecat-webhook] REVENUECAT_WEBHOOK_SECRET is not set');
     return json({ error: 'not_configured' }, 503);
   }
-  if (!secretMatches(request.headers.get('Authorization'))) {
+  if (!(await secretMatches(request.headers.get('Authorization')))) {
     return json({ error: 'unauthorized' }, 401);
   }
 
@@ -225,6 +239,12 @@ Deno.serve(async (request: Request) => {
     { auth: { persistSession: false } }
   );
 
+  // Sandbox events would otherwise hand out real entitlements for free.
+  const environment = (event.environment ?? '').toUpperCase();
+  if (environment && environment !== 'PRODUCTION' && !ALLOW_SANDBOX) {
+    return json({ ok: true, ignored: 'sandbox_event' });
+  }
+
   const eventAt = event.event_timestamp_ms
     ? new Date(event.event_timestamp_ms).toISOString()
     : new Date().toISOString();
@@ -232,9 +252,16 @@ Deno.serve(async (request: Request) => {
 
   // A transfer moves the entitlement between accounts and carries no state, so
   // the losing ids are revoked and the winning id is re-read from the API.
-  if (eventType === 'TRANSFER' || eventType === 'SUBSCRIBER_ALIAS') {
+  if (eventType === 'TRANSFER') {
     const from = (event.transferred_from ?? []).filter((id) => UUID_PATTERN.test(id));
     const to = (event.transferred_to ?? []).filter((id) => UUID_PATTERN.test(id));
+
+    // The same duplicate/stale guard the ordinary path uses; a retried transfer
+    // must not revoke an account that has since been granted again.
+    if (to.length > 0) {
+      const decision = await shouldApply(client, to[0], event);
+      if (!decision.apply) return json({ ok: true, ignored: decision.reason });
+    }
 
     if (from.length > 0) {
       await client
@@ -316,6 +343,11 @@ Deno.serve(async (request: Request) => {
   );
 
   if (error) {
+    // A foreign-key violation means the learner deleted their account: there is
+    // nothing to mirror, and retrying forever would only fill the logs.
+    if (error.code === '23503') {
+      return json({ ok: true, ignored: 'user_deleted' });
+    }
     console.error('[revenuecat-webhook] upsert failed', error);
     // 500 makes RevenueCat retry, which is what a transient failure needs.
     return json({ error: 'persist_failed' }, 500);
