@@ -496,14 +496,14 @@
           "options": [
             {
               "id": "a",
+              "text": { "en": "Prints Hello, then prints undefined", "tr": "Hello yazdırır, sonra undefined yazdırır" }
+            },
+            {
+              "id": "b",
               "text": {
                 "en": "Prints Hello, then raises a ReferenceError",
                 "tr": "Hello yazdırır, sonra ReferenceError verir"
               }
-            },
-            {
-              "id": "b",
-              "text": { "en": "Prints Hello, then prints undefined", "tr": "Hello yazdırır, sonra undefined yazdırır" }
             },
             {
               "id": "c",
@@ -517,7 +517,7 @@
               }
             }
           ],
-          "answerId": "a",
+          "answerId": "b",
           "explanation": {
             "en": "Each line runs before the next one starts. The first console.log finishes printing, then the second line crashes because mesage was never defined.",
             "tr": "Her satır bir sonrakinden önce çalışır. İlk console.log yazdırmayı bitirir, sonra ikinci satır çöker çünkü mesage hiç tanımlanmadı."
