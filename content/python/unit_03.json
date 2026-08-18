@@ -8,7 +8,7 @@
   },
   "description": {
     "en": "Learn to join strings, measure their length, access individual characters, slice them, and use built-in string methods.",
-    "tr": "Metinleri birleştirmeyi, uzunluklarını ölçmeyi, karakterlerine erişmeyi, kesitler almayı ve yerleşik metin yöntemlerini kullanmayı öğren."
+    "tr": "Metinleri birleştirmeyi, uzunluğunu ölçmeyi, karakterlere erişmeyi, dilimlemeyi ve yerleşik metin yöntemlerini öğren."
   },
   "lessons": [
     {
@@ -16,7 +16,7 @@
       "index": 1,
       "title": {
         "en": "Joining and Repeating Strings",
-        "tr": "Metinleri Birleştirme ve Tekrarlama"
+        "tr": "Metin Birleştirme ve Tekrarlama"
       },
       "concept": {
         "headline": {
@@ -25,7 +25,7 @@
         },
         "body": {
           "en": "Two strings can be glued together with the + operator, which concatenates them end to end. The * operator repeats a string a certain number of times. Both operations create new strings without changing the originals.",
-          "tr": "+ operatörü iki metni uç uca yapıştırarak birleştirir. * operatörü bir metni belirli bir sayı kadar tekrarlar. Her iki işlem de yeni metinler oluşturur; orijinalleri değiştirmez."
+          "tr": "+ operatörü iki metni uç uca yapıştırarak birleştirir. * operatörü bir metni belirli bir sayı kadar tekrarlar. Her iki işlem de yeni bir metin oluşturur; orijinal değişkenler aynı kalır, değiştirilmez."
         },
         "example": {
           "code": "first = \"Hello\"\nlast = \"World\"\nprint(first + \" \" + last)\nprint(\"na\" * 3)",
@@ -166,7 +166,7 @@
           },
           "explanation": {
             "en": "The three parts must be joined in order: first, then the hyphen string, then last.",
-            "tr": "Üç parça sırasıyla birleştirilir: first, sonra tire, sonra last."
+            "tr": "Üç parça sırasıyla + ile birleştirilir: first, ardından tire metni, ardından last. Sıra önemlidir çünkü + soldan sağa çalışır."
           }
         },
         {
@@ -237,12 +237,12 @@
       },
       "concept": {
         "headline": {
-          "en": "Use len() to count characters, and [] to access individual ones",
+          "en": "Use len() to count characters and [] to access one",
           "tr": "Karakterleri saymak için len() ve erişmek için [] kullan"
         },
         "body": {
           "en": "Every string has a length that you can measure with len(). Each character in a string has a position, starting from 0 at the front. You can fetch a character by putting its position inside square brackets. Negative indexes count from the end: -1 is the last character, -2 is the second-to-last, and so on.",
-          "tr": "Her metnin len() ile ölçülen bir uzunluğu vardır. Bir metindeki her karakterin, öne doğru 0 ile başlayan bir konumu vardır. Köşeli parantez içinde konumunu yazarak bir karakteri alabilirsin. Negatif indeksler sondan sayılır: -1 son karakter, -2 sondan ikinci karakterdir."
+          "tr": "Her metnin len() ile ölçülen bir uzunluğu vardır. Metindeki her karakterin, baştan itibaren 0'dan başlayan bir konumu (indeksi) vardır. Köşeli parantez içine bu konumu yazarak bir karaktere erişebilirsin. Negatif indeksler sondan sayılır: -1 son karakter, -2 ise sondan ikinci karakterdir."
         },
         "example": {
           "code": "word = \"Python\"\nprint(len(word))\nprint(word[0])\nprint(word[-1])",
@@ -294,8 +294,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "The word Python has 6 letters: P, y, t, h, o, n. len() counts all of them.",
-            "tr": "Python kelimesinin 6 harfi vardır: P, y, t, h, o, n. len() hepsini sayar."
+            "en": "The word Python has 6 letters: P, y, t, h, o, n. len() counts every character, including the uppercase P.",
+            "tr": "Python kelimesinin 6 harfi vardır: P, y, t, h, o, n. len() büyük P dahil her karakteri sayar."
           }
         },
         {
@@ -339,8 +339,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "Indexing starts at 0, so [0] gets the first character, which is H.",
-            "tr": "İndeksleme 0'dan başlar, bu yüzden [0] ilk karakter olan H'yi alır."
+            "en": "Indexing starts at 0, not 1, so [0] gets the very first character of the string, which is H.",
+            "tr": "İndeksleme 0'dan başlar, 1'den değil; bu yüzden [0] metnin ilk karakteri olan H'yi verir."
           }
         },
         {
@@ -356,7 +356,7 @@
             {
               "id": "1",
               "answer": "-1",
-              "distractors": ["3", "4", "word"]
+              "distractors": ["-2", "4", "word"]
             }
           ],
           "verify": {
@@ -605,7 +605,7 @@
           },
           "explanation": {
             "en": "To include character 5, the end index must be 6 (since end is exclusive). Characters 2, 3, 4, 5 are m, p, u, t.",
-            "tr": "Karakter 5'i dahil etmek için son indeks 6 olmalıdır (son dahil değildir). Karakterler 2, 3, 4, 5 m, p, u, t'dir."
+            "tr": "Karakter 5'i dahil etmek için son indeks 6 olmalıdır (son dahil değildir). Karakterler 2, 3, 4, 5 sırasıyla m, p, u, t'dir."
           }
         },
         {
@@ -617,14 +617,15 @@
             "tr": "Hangi satır hatalı?"
           },
           "codeLines": [
-            "text = \"slice\"",
-            "print(text[1:10])"
+            "word = \"wonderful\"",
+            "# Print the first four letters",
+            "print(word[0:5])"
           ],
-          "buggyLineIndex": 1,
-          "fix": "print(text[1:5])",
+          "buggyLineIndex": 2,
+          "fix": "print(word[0:4])",
           "explanation": {
-            "en": "Even though 10 is beyond the end, Python does not raise an error; it just slices as far as it can. If you want only part of the string, use the actual end index.",
-            "tr": "10 sondan ötede olsa da, Python hata vermez; sadece yapabileceği kadar dilimler. Eğer metinin sadece bir parçasını istiyorsan gerçek son indeksi kullan."
+            "en": "The comment says four letters, but [0:5] includes five characters (indices 0-4) since the end index is exclusive. [0:4] gives exactly wond.",
+            "tr": "Yorum dört harf diyor, ama [0:5] son indeks hariç tutulduğu için beş karakter içerir (indeksler 0-4). [0:4] tam olarak wond'u verir."
           }
         },
         {
@@ -636,30 +637,30 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "# Extracts the domain from an email\nemail = \"alice@example.com\"\nstart = email.index(\"@\") + 1\nend = email.index(\".\")\nprint(email[start:end])",
-            "tr": "# Bir e-postadan alan adını çıkarır\nemail = \"alice@example.com\"\nstart = email.index(\"@\") + 1\nend = email.index(\".\")\nprint(email[start:end])"
+            "en": "# Splits a date into year, month, and day\ndate = \"2024-08-18\"\nyear = date[0:4]\nmonth = date[5:7]\nday = date[8:10]\nprint(year, month, day)",
+            "tr": "# Bir tarihi yıl, ay ve güne ayırır\ndate = \"2024-08-18\"\nyear = date[0:4]\nmonth = date[5:7]\nday = date[8:10]\nprint(year, month, day)"
           },
           "keyPoints": {
             "en": [
-              "uses index() to find the @ symbol position",
-              "uses index() to find the . symbol position",
-              "slices between those positions to extract the domain",
-              "prints the extracted domain"
+              "slices the year from date[0:4]",
+              "slices the month from date[5:7]",
+              "slices the day from date[8:10]",
+              "prints all three values together"
             ],
             "tr": [
-              "@ sembolünün konumunu bulmak için index() kullanır",
-              "nokta sembolünün konumunu bulmak için index() kullanır",
-              "o konumlar arasında dilimler alan adını çıkarır",
-              "çıkarılan alan adını yazdırır"
+              "date[0:4] ile yılı dilimler",
+              "date[5:7] ile ayı dilimler",
+              "date[8:10] ile günü dilimler",
+              "üç değeri birlikte yazdırır"
             ]
           },
           "sampleAnswer": {
-            "en": "It finds the position of @ and the period, then slices the email string between those positions to extract just the domain name, which is example.",
-            "tr": "@ ve noktanın konumlarını bulur, sonra e-posta metnini bu konumlar arasında dilimleyerek sadece alan adını çıkarır; bu da example'dır."
+            "en": "It slices the date string at fixed positions to pull out the year (first 4 characters), the month (next 2), and the day (last 2), then prints them.",
+            "tr": "Tarih metnini sabit konumlardan dilimleyerek yılı (ilk 4 karakter), ayı (sonraki 2) ve günü (son 2) çıkarır, sonra üçünü birlikte yazdırır."
           },
           "explanation": {
-            "en": "The index() method is already familiar from previous units. Slicing uses those positions to pull out a meaningful part of the string.",
-            "tr": "index() metodu önceki ünitelerden tanıdıktır. Dilimleme bu konumları metinin anlamlı bir parçasını çıkarmak için kullanır."
+            "en": "Fixed-width slicing works when data always has the same shape, like a YYYY-MM-DD date, so you can count positions instead of searching for them.",
+            "tr": "Sabit genişlikli dilimleme, YYYY-MM-DD gibi veriler hep aynı biçimdeyken işe yarar; karakterleri aramak yerine konumlarını sayabilirsin."
           }
         }
       ]
@@ -674,7 +675,7 @@
       "concept": {
         "headline": {
           "en": "Call methods on strings and use f-strings to embed variables",
-          "tr": "Metinler üzerinde yöntemler çağır ve değişkenleri gömmek için f-string'ler kullan"
+          "tr": "Metinlerde yöntem çağır, f-string ile değişken göm"
         },
         "body": {
           "en": "Strings come with built-in methods: .upper() converts to uppercase, .lower() converts to lowercase, .strip() removes leading and trailing spaces, and .replace(old, new) swaps one substring for another. F-strings (formatted strings) let you insert variables directly into text by wrapping them in curly braces, prefixed with f before the quotes.",
@@ -792,7 +793,7 @@
             {
               "id": "1",
               "answer": "f\"Hello, {name}!\"",
-              "distractors": ["\"Hello, {name}!\"", "f\"Hello, name!\"", "f'Hello, {name}!'"]
+              "distractors": ["\"Hello, {name}!\"", "f\"Hello, name!\"", "f\"Hello {name}!\""]
             }
           ],
           "verify": {
@@ -825,7 +826,7 @@
         {
           "id": "py-u03-l4-q5",
           "type": "spot_bug",
-          "difficulty": "medium",
+          "difficulty": "hard",
           "prompt": {
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
@@ -837,7 +838,6 @@
           ],
           "buggyLineIndex": 2,
           "fix": "print(result.upper())",
-          "explain": "Methods need parentheses, even if there are no arguments. .upper is just the method itself, not calling it.",
           "explanation": {
             "en": "Methods need parentheses to be called. .upper without () is the method object, not the result.",
             "tr": "Yöntemler çağrılmak için parantez ister. () olmadan .upper sadece yöntem nesnesidir, sonuç değil."

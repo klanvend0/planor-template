@@ -112,7 +112,7 @@
     },
     "ready": {
       "title": "Your first lesson is ready",
-      "subtitle": "Three days of Pro are on us. Cancel any time.",
+      "subtitle": "%{days} days of Pro are on us. Cancel any time.",
       "cta": "Start learning"
     },
     "progress": "Step %{current} of %{total}"
@@ -195,7 +195,7 @@
     "show_sample": "Show a model answer",
     "locked_title": "AI feedback is a Pro feature",
     "locked_body": "Write an explanation in your own words and an AI tells you exactly what you understood and what you missed.",
-    "locked_cta": "Try Pro free for 3 days",
+    "locked_cta": "Try Pro free for %{days} days",
     "locked_skip": "Skip this question",
     "offline": "AI feedback needs a connection."
   },
@@ -259,22 +259,52 @@
     "manage_plan": "Manage plan"
   },
   "achievements": {
-    "first_lesson": { "title": "First steps", "body": "Finish your first lesson" },
-    "streak_3": { "title": "Three in a row", "body": "Keep a 3 day streak" },
-    "streak_7": { "title": "A full week", "body": "Keep a 7 day streak" },
-    "streak_30": { "title": "Unbreakable", "body": "Keep a 30 day streak" },
-    "xp_100": { "title": "Warmed up", "body": "Earn 100 XP" },
-    "xp_1000": { "title": "Thousand club", "body": "Earn 1000 XP" },
-    "perfect_5": { "title": "No mistakes", "body": "Finish 5 lessons flawlessly" },
-    "unit_complete": { "title": "Unit cleared", "body": "Complete every lesson in a unit" },
-    "explainer": { "title": "In your own words", "body": "Pass an AI-graded explanation" },
-    "polyglot": { "title": "Two languages", "body": "Start both courses" },
+    "first_lesson": {
+      "title": "First steps",
+      "body": "Finish your first lesson"
+    },
+    "streak_3": {
+      "title": "Three in a row",
+      "body": "Keep a 3 day streak"
+    },
+    "streak_7": {
+      "title": "A full week",
+      "body": "Keep a 7 day streak"
+    },
+    "streak_30": {
+      "title": "Unbreakable",
+      "body": "Keep a 30 day streak"
+    },
+    "xp_100": {
+      "title": "Warmed up",
+      "body": "Earn 100 XP"
+    },
+    "xp_1000": {
+      "title": "Thousand club",
+      "body": "Earn 1000 XP"
+    },
+    "perfect_5": {
+      "title": "No mistakes",
+      "body": "Finish 5 lessons flawlessly"
+    },
+    "unit_complete": {
+      "title": "Unit cleared",
+      "body": "Complete every lesson in a unit"
+    },
+    "explainer": {
+      "title": "In your own words",
+      "body": "Pass an AI-graded explanation"
+    },
+    "polyglot": {
+      "title": "Two languages",
+      "body": "Start both courses"
+    },
     "locked": "Locked"
   },
   "paywall": {
     "title": "Codeling Pro",
     "subtitle": "Everything unlocked, three days free.",
-    "trial_badge": "3 days free",
+    "trial_badge": "%{days} days free",
     "features": {
       "ai": "AI feedback on every explanation you write",
       "hearts": "Unlimited hearts, so a wrong answer never stops you",
@@ -290,9 +320,9 @@
     "per_year": "%{price} / year",
     "best_value": "Best value",
     "save_percent": "Save %{percent}%",
-    "trial_line": "3 days free, then %{price}. Cancel any time.",
+    "trial_line": "%{days} days free, then %{price}. Cancel any time.",
     "no_trial_line": "%{price}. Cancel any time.",
-    "cta_trial": "Start my 3 free days",
+    "cta_trial": "Start my %{days} free days",
     "cta_buy": "Subscribe",
     "restore": "Restore purchases",
     "restore_none": "No previous purchase found on this Apple ID.",

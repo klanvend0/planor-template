@@ -77,7 +77,7 @@
           "verify": { "stdout": "20\n" },
           "explanation": {
             "en": "25 minus 5 equals 20. The - operator subtracts the second number from the first.",
-            "tr": "25 eksi 5 eşittir 20. - işleci ikinci sayıyı birinciden çıkarır."
+            "tr": "25 eksi 5 eşittir 20. - işleci ikinci sayıyı birincisinden çıkarır ve aradaki farkı bulur."
           }
         },
         {
@@ -290,7 +290,7 @@
       "index": 3,
       "title": { "en": "Powers and Precedence", "tr": "Üs ve İşlem Sırası" },
       "concept": {
-        "headline": { "en": "Power operator raises to a power; multiply/divide/modulo before add/subtract", "tr": "Üs işleci üsse yükseltir; çarpma/bölme/modulo toplama/çıkarmadan önce yapılır" },
+        "headline": { "en": "Order of operations: power first, then * / %, then + -", "tr": "İşlem sırası: önce üs, sonra * / %, sonra + -" },
         "body": {
           "en": "The power operator (written as two asterisks) raises the left number to the power of the right one (2 to the power 3 means 2 times 2 times 2, which is 8). Python has a standard order of operations: power is evaluated first, then multiply/divide/modulo (left to right), then add and subtract (left to right). You can always use parentheses to force a different order.",
           "tr": "Üs işleci (iki yıldız yazılır) solundaki sayıyı sağındaki sayının gücüne yükseltir (2 üzeri 3 demek 2 × 2 × 2, yani 8). Python standart işlem sırasını takip eder: üs önce, sonra çarpma/bölme/modulo, sonra toplama ve çıkarma. Her zaman parantezler kullanarak farklı bir sıra zorlayabilirsin."
@@ -319,7 +319,7 @@
           "answerId": "c",
           "explanation": {
             "en": "3 to the power of 4 means 3 × 3 × 3 × 3 = 81. The power operator (two asterisks) raises to a power.",
-            "tr": "3 üzeri 4 demek 3 × 3 × 3 × 3 = 81. Üs işleci (iki yıldız) üsse yükseltir."
+            "tr": "3 üzeri 4 demek, 3 sayısının kendisiyle 4 kez çarpılmasıdır: 3 × 3 × 3 × 3 = 81."
           }
         },
         {
@@ -384,8 +384,8 @@
           "fix": "print((a + b) ** 2)",
           "verify": {},
           "explanation": {
-            "en": "Exponentiation runs before addition, so a + b ** 2 computes 3 ** 2 = 9 first, then 10 + 9 = 19 — not (a + b) ** 2 = 169. Parentheses force addition first.",
-            "tr": "Üs alma toplamadan önce çalışır; a + b ** 2 önce 3 üzeri 2 = 9'u, sonra 10 + 9 = 19'u hesaplar, (a + b) üzeri 2 = 169 değildir. Önce toplamak için parantez gerekir."
+            "en": "The power operator runs before addition, so a + b to the power of 2 first computes 3 to the power of 2 = 9, then 10 + 9 = 19 — not (a + b) to the power of 2 = 169. Parentheses force addition first.",
+            "tr": "Üs alma toplamadan önce çalışır; a + b üzeri 2 önce 3 üzeri 2 = 9'u, sonra 10 + 9 = 19'u hesaplar; (a + b) üzeri 2 ise 169'dur. Önce toplamak için parantez gerekir."
           }
         },
         {
@@ -430,7 +430,7 @@
       "index": 4,
       "title": { "en": "Functions and Comparisons", "tr": "Fonksiyonlar ve Karşılaştırmalar" },
       "concept": {
-        "headline": { "en": "round(), abs() convert numbers; <, >, ==, != compare", "tr": "round(), abs() sayıları dönüştürür; <, >, ==, != karşılaştırır" },
+        "headline": { "en": "round(), abs() convert numbers; <, >, ==, != compare", "tr": "round(), abs() dönüştürür; <, >, ==, != karşılaştırır" },
         "body": {
           "en": "Python has built-in functions to transform numbers: round() rounds a decimal to the nearest whole number, and abs() gives the absolute value (distance from zero, always positive). Comparison operators test relationships: <, >, <=, >=, ==, !=. These always return True or False, which is a boolean value.",
           "tr": "Python sayıları dönüştüren yerleşik fonksiyonlara sahiptir: round() bir ondalık sayıyı en yakın tam sayıya yuvarlar, abs() mutlak değeri (sıfıra olan uzaklığı, her zaman pozitif) verir. Karşılaştırma işleçleri ilişkileri test eder: <, >, <=, >=, ==, !=. Bunlar her zaman True ya da False döndürür."
@@ -438,8 +438,8 @@
         "example": {
           "code": "print(round(3.7))\nprint(abs(-5))\nprint(10 > 7)\nprint(10 == 7)",
           "caption": {
-            "en": "Rounding 3.7 to 4, absolute value of -5 is 5, and two comparisons that return True and False.",
-            "tr": "3.7 yuvarlanan 4, -5 mutlak değeri 5, ve True/False dönen iki karşılaştırma."
+            "en": "3.7 rounds to 4, abs(-5) is 5, and two comparisons return True and False.",
+            "tr": "3.7, 4'e yuvarlanır; abs(-5), 5'tir; iki karşılaştırma da True ve False döner."
           }
         }
       },

@@ -18,7 +18,7 @@ import { CodeBlock } from '@/components/code_block';
 import { GameButton } from '@/components/game_button';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { EXPLANATION_MAX_CHARS, EXPLANATION_MIN_CHARS } from '@/lib/constants';
+import { EXPLANATION_MAX_CHARS, EXPLANATION_MIN_CHARS, TRIAL_DAYS } from '@/lib/constants';
 import type { ExplainCodeQuestion } from '@/lib/content_schema';
 import { useTranslation } from '@/hooks/use_translation';
 import type { SupportedLocale } from '@/lib/i18n';
@@ -141,7 +141,7 @@ export function ExplainCodeView({
           <Text className="text-[15px] leading-6 text-muted-foreground">
             {t('explain.locked_body')}
           </Text>
-          <GameButton label={t('explain.locked_cta')} onPress={onUpgrade} className="mt-1" />
+          <GameButton label={t('explain.locked_cta', { days: TRIAL_DAYS })} onPress={onUpgrade} className="mt-1" />
           <GameButton label={t('explain.locked_skip')} variant="ghost" onPress={onSkip} flat />
         </View>
       </View>

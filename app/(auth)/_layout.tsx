@@ -1,8 +1,7 @@
 /**
- * Auth Layout
+ * Auth layout.
  *
- * Layout for authentication screens (login, register, etc.)
- * This layout is shown when the user is not authenticated.
+ * One screen, no header: sign-in is the only thing that happens here.
  *
  * @module app/(auth)/_layout
  */
@@ -10,12 +9,5 @@
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: 'transparent' },
-      }}
-    />
-  );
+  return <Stack screenOptions={{ headerShown: false, gestureEnabled: false }} />;
 }

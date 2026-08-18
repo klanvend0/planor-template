@@ -1,32 +1,24 @@
 /**
- * Root Index Screen
+ * Entry route.
  *
- * This screen is a placeholder that redirects based on auth state.
- * The actual routing is handled by useProtectedRoute in _layout.tsx.
+ * Sends the learner to the right place: onboarding until they have chosen a
+ * language and a course, sign-in until they have an account, the learn map after
+ * that. Bootstrapping already finished in the root layout, so this is a pure
+ * redirect with no loading state of its own.
  *
  * @module app/index
  */
 
-import { View, ActivityIndicator } from 'react-native';
 import { Redirect } from 'expo-router';
+
 import { useAuthStore } from '@/stores/auth_store';
+import { useSettingsStore } from '@/stores/settings_store';
 
 export default function IndexScreen() {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const onboardingCompleted = useSettingsStore((state) => state.onboardingCompleted);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  // Show loading while checking auth
-  if (isLoading) {
-    return (
-      <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
-  // Redirect based on auth state
-  if (isAuthenticated) {
-    return <Redirect href="/(protected)" />;
-  }
-
-  return <Redirect href="/(auth)/login" />;
+  if (!onboardingCompleted) return <Redirect href="/(onboarding)" />;
+  if (!isAuthenticated) return <Redirect href="/(auth)/login" />;
+  return <Redirect href="/(app)" />;
 }

@@ -112,7 +112,7 @@
     },
     "ready": {
       "title": "İlk dersin hazır",
-      "subtitle": "Pro'nun ilk üç günü bizden. İstediğin an iptal et.",
+      "subtitle": "Pro'nun ilk %{days} günü bizden. İstediğin an iptal et.",
       "cta": "Öğrenmeye başla"
     },
     "progress": "Adım %{current}/%{total}"
@@ -195,7 +195,7 @@
     "show_sample": "Örnek cevabı göster",
     "locked_title": "Yapay zekâ değerlendirmesi Pro'da",
     "locked_body": "Kodu kendi cümlelerinle anlat; yapay zekâ neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin.",
-    "locked_cta": "Pro'yu 3 gün ücretsiz dene",
+    "locked_cta": "Pro'yu %{days} gün ücretsiz dene",
     "locked_skip": "Bu soruyu geç",
     "offline": "Yapay zekâ değerlendirmesi için bağlantı gerekiyor."
   },
@@ -259,22 +259,52 @@
     "manage_plan": "Planı yönet"
   },
   "achievements": {
-    "first_lesson": { "title": "İlk adım", "body": "İlk dersini bitir" },
-    "streak_3": { "title": "Üst üste üç", "body": "3 günlük seri yap" },
-    "streak_7": { "title": "Tam bir hafta", "body": "7 günlük seri yap" },
-    "streak_30": { "title": "Kırılmaz", "body": "30 günlük seri yap" },
-    "xp_100": { "title": "Isındık", "body": "100 XP kazan" },
-    "xp_1000": { "title": "Bin XP kulübü", "body": "1000 XP kazan" },
-    "perfect_5": { "title": "Hatasız", "body": "5 dersi kusursuz bitir" },
-    "unit_complete": { "title": "Ünite temiz", "body": "Bir ünitedeki tüm dersleri bitir" },
-    "explainer": { "title": "Kendi cümlelerinle", "body": "Yapay zekâ değerlendirmesinden geç" },
-    "polyglot": { "title": "İki dil", "body": "Her iki kursa da başla" },
+    "first_lesson": {
+      "title": "İlk adım",
+      "body": "İlk dersini bitir"
+    },
+    "streak_3": {
+      "title": "Üst üste üç",
+      "body": "3 günlük seri yap"
+    },
+    "streak_7": {
+      "title": "Tam bir hafta",
+      "body": "7 günlük seri yap"
+    },
+    "streak_30": {
+      "title": "Kırılmaz",
+      "body": "30 günlük seri yap"
+    },
+    "xp_100": {
+      "title": "Isındık",
+      "body": "100 XP kazan"
+    },
+    "xp_1000": {
+      "title": "Bin XP kulübü",
+      "body": "1000 XP kazan"
+    },
+    "perfect_5": {
+      "title": "Hatasız",
+      "body": "5 dersi kusursuz bitir"
+    },
+    "unit_complete": {
+      "title": "Ünite temiz",
+      "body": "Bir ünitedeki tüm dersleri bitir"
+    },
+    "explainer": {
+      "title": "Kendi cümlelerinle",
+      "body": "Yapay zekâ değerlendirmesinden geç"
+    },
+    "polyglot": {
+      "title": "İki dil",
+      "body": "Her iki kursa da başla"
+    },
     "locked": "Kilitli"
   },
   "paywall": {
     "title": "Codeling Pro",
     "subtitle": "Her şey açık, ilk üç gün ücretsiz.",
-    "trial_badge": "3 gün ücretsiz",
+    "trial_badge": "%{days} gün ücretsiz",
     "features": {
       "ai": "Yazdığın her açıklamaya yapay zekâ geri bildirimi",
       "hearts": "Sınırsız can; yanlış cevap seni durdurmaz",
@@ -290,9 +320,9 @@
     "per_year": "%{price} / yıl",
     "best_value": "En avantajlı",
     "save_percent": "%%{percent} tasarruf",
-    "trial_line": "3 gün ücretsiz, sonrasında %{price}. İstediğin an iptal et.",
+    "trial_line": "%{days} gün ücretsiz, sonrasında %{price}. İstediğin an iptal et.",
     "no_trial_line": "%{price}. İstediğin an iptal et.",
-    "cta_trial": "3 günüm ücretsiz başlasın",
+    "cta_trial": "%{days} günüm ücretsiz başlasın",
     "cta_buy": "Abone ol",
     "restore": "Satın alımları geri yükle",
     "restore_none": "Bu Apple kimliğinde önceki bir satın alım bulunamadı.",
