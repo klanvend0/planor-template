@@ -1,0 +1,579 @@
+{
+  "id": "js-u05",
+  "courseId": "javascript",
+  "index": 5,
+  "title": { "en": "Arrays and Loops", "tr": "Diziler ve Döngüler" },
+  "description": {
+    "en": "Learn to create and work with arrays, loop over them with for and for...of, and transform data with map() and filter().",
+    "tr": "Diziler oluşturmayı öğren, for ve for...of ile döngü yap, map() ve filter() ile veriyi dönüştür."
+  },
+  "lessons": [
+    {
+      "id": "js-u05-l1",
+      "index": 1,
+      "title": { "en": "Creating and Indexing Arrays", "tr": "Diziler Oluşturma ve İndeksleme" },
+      "concept": {
+        "headline": { "en": "Arrays hold multiple values, accessed by position", "tr": "Diziler birden fazla değer tutar, konuma göre erişilir" },
+        "body": {
+          "en": "An array is a list of values written inside square brackets, separated by commas. Each value sits at a position called an index, starting from 0. To get the value at a position, write the array name followed by the index in square brackets. Arrays are useful for keeping related data together.",
+          "tr": "Dizi, köşeli parantez içine yazılmış, virgülle ayrılmış bir değer listesidir. Her değer, 0'dan başlayan index denilen bir konumda oturur. Bir konumdaki değeri almak için dizi adından sonra köşeli parantez içinde indeksi yaz. Diziler ilişkili verileri bir arada tutmak için kullanışlıdır."
+        },
+        "example": {
+          "code": "let colors = [\"red\", \"green\", \"blue\"];\nconsole.log(colors[0]);\nconsole.log(colors[2]);",
+          "caption": {
+            "en": "An array of colors; indexing starts at 0, so [2] is the third value.",
+            "tr": "Renklerden oluşan dizi; indeksleme 0'dan başlar, yani [2] üçüncü değerdir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u05-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "let nums = [10, 20, 30];\nconsole.log(nums[1]);",
+          "options": [
+            { "id": "a", "text": { "en": "10", "tr": "10" } },
+            { "id": "b", "text": { "en": "20", "tr": "20" } },
+            { "id": "c", "text": { "en": "30", "tr": "30" } },
+            { "id": "d", "text": { "en": "1", "tr": "1" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Index 1 is the second position, which holds 20. Index starts at 0, not 1.",
+            "tr": "İndeks 1 ikinci konumdur, burada 20 vardır. İndeksler 0'dan başlar, 1'den değil."
+          }
+        },
+        {
+          "id": "js-u05-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which creates an array correctly?", "tr": "Hangisi diziyi doğru oluşturur?" },
+          "options": [
+            { "id": "a", "text": { "en": "let arr = [1, 2, 3];", "tr": "let arr = [1, 2, 3];" } },
+            { "id": "b", "text": { "en": "let arr = (1, 2, 3);", "tr": "let arr = (1, 2, 3);" } },
+            { "id": "c", "text": { "en": "let arr = {1, 2, 3};", "tr": "let arr = {1, 2, 3};" } },
+            { "id": "d", "text": { "en": "let arr = \"1, 2, 3\";", "tr": "let arr = \"1, 2, 3\";" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Square brackets [] create an array. Parentheses and braces are different syntax, and quotes make it a string.",
+            "tr": "Köşeli parantezler [] dizi oluşturur. Yuvarlak ve kıvrımlı parantezler farklı söz dizimi ve tırnaklar string yapar."
+          }
+        },
+        {
+          "id": "js-u05-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints the second fruit.",
+            "tr": "Kodu ikinci meyveyi yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "let fruits = [\"apple\", \"banana\", \"cherry\"];\nconsole.log(fruits[___]);",
+          "blanks": [
+            { "id": "1", "answer": "1", "distractors": ["0", "2", "banana"] }
+          ],
+          "verify": { "stdout": "banana\n" },
+          "explanation": {
+            "en": "Indexing starts at 0, so index 1 is the second element. Do not use the value itself, only the number position.",
+            "tr": "İndeksleme 0'dan başlar, yani indeks 1 ikinci öğedir. Değerin kendisini değil, sadece sayı pozisyonunu kullan."
+          }
+        },
+        {
+          "id": "js-u05-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints the last element of the array.",
+            "tr": "Dizinin son elemanını yazdıran satırı yaz."
+          },
+          "code": "let items = [\"a\", \"b\", \"c\", \"d\"];",
+          "expected": "console.log(items[3]);",
+          "acceptable": ["console.log(items[ 3 ])"],
+          "verify": { "stdout": "d\n" },
+          "explanation": {
+            "en": "The array has 4 elements, and the last one is at index 3 (since we start counting from 0).",
+            "tr": "Dizide 4 öğe var ve sonuncusu indeks 3'tedir (0'dan saymaya başladığımız için)."
+          }
+        },
+        {
+          "id": "js-u05-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "let data = [5, 10, 15];",
+            "console.log(data[5]);"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "console.log(data[2]);",
+          "verify": { "stdout": "undefined\n" },
+          "explanation": {
+            "en": "The array only has 3 elements (indices 0, 1, 2), so index 5 does not exist. You get undefined instead of an error, which is a common JavaScript gotcha.",
+            "tr": "Dizide sadece 3 öğe var (indeksler 0, 1, 2), yani indeks 5 yoktur. Hata yerine undefined alırsın; bu JavaScript'in yaygın bir tuzağıdır."
+          }
+        },
+        {
+          "id": "js-u05-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Store three measurements and print the first\nlet temps = [72, 68, 75];\nconsole.log(temps[0]);",
+            "tr": "// Üç ölçümü depolamak ve ilkini yazdırmak\nlet temps = [72, 68, 75];\nconsole.log(temps[0]);"
+          },
+          "keyPoints": {
+            "en": [
+              "creates an array of three temperature values",
+              "accesses the element at index 0",
+              "prints that value"
+            ],
+            "tr": [
+              "üç sıcaklık değerinden oluşan dizi oluşturur",
+              "indeks 0'daki öğeye erişir",
+              "o değeri yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It creates an array with three temperature values and prints the first one using index 0.",
+            "tr": "Üç sıcaklık değeriyle bir dizi oluşturur ve indeks 0 kullanarak ilkini yazdırır."
+          },
+          "explanation": {
+            "en": "Arrays are lists of values; you pick which one you want by its position number starting from 0.",
+            "tr": "Diziler değer listeleridir; hangi birini istediğini 0'dan başlayan konum numarasıyla seçersin."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u05-l2",
+      "index": 2,
+      "title": { "en": "push, pop and length", "tr": "push, pop ve length" },
+      "concept": {
+        "headline": { "en": "Arrays grow and shrink with push() and pop()", "tr": "Diziler push() ve pop() ile büyür ve küçülür" },
+        "body": {
+          "en": "push() adds a new element to the end of an array. pop() removes and returns the last element. The .length property tells you how many elements are in the array. These three tools let you build and modify arrays as your program runs.",
+          "tr": "push() bir dizinin sonuna yeni bir öğe ekler. pop() son öğeyi kaldırır ve döndürür. .length özelliği dizide kaç öğe olduğunu söyler. Bu üç araç programın çalışırken dizileri oluşturmanı ve değiştirmeni sağlar."
+        },
+        "example": {
+          "code": "let box = [1, 2];\nbox.push(3);\nconsole.log(box.length);\nlet last = box.pop();\nconsole.log(last);",
+          "caption": {
+            "en": "Push adds to the end, pop removes from the end, length counts elements.",
+            "tr": "push sona ekler, pop sondan çıkarır, length öğeleri sayar."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u05-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does push() do?", "tr": "push() ne yapar?" },
+          "options": [
+            { "id": "a", "text": { "en": "Adds an element to the end", "tr": "Sona bir öğe ekler" } },
+            { "id": "b", "text": { "en": "Removes the first element", "tr": "İlk öğeyi çıkarır" } },
+            { "id": "c", "text": { "en": "Returns the length", "tr": "Uzunluğu döndürür" } },
+            { "id": "d", "text": { "en": "Counts elements in the array", "tr": "Dizideki öğeleri sayar" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "push() is for adding; pop() is for removing. length is for counting, not for adding.",
+            "tr": "push() ekleme içindir; pop() çıkarma içindir. length sayma içindir, ekleme için değil."
+          }
+        },
+        {
+          "id": "js-u05-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "let stack = [10, 20];\nstack.pop();\nconsole.log(stack.length);",
+          "options": [
+            { "id": "a", "text": { "en": "2", "tr": "2" } },
+            { "id": "b", "text": { "en": "1", "tr": "1" } },
+            { "id": "c", "text": { "en": "20", "tr": "20" } },
+            { "id": "d", "text": { "en": "10", "tr": "10" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "pop() removes the last element, so the array goes from 2 elements to 1. length now returns 1.",
+            "tr": "pop() son öğeyi çıkarır, yani dizi 2 öğeden 1'e düşer. Şimdi length 1 döndürür."
+          }
+        },
+        {
+          "id": "js-u05-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints how many items are in the list.",
+            "tr": "Kodu listede kaç öğe olduğunu yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "let list = [\"a\", \"b\", \"c\"];\nconsole.log(list.___);\n",
+          "blanks": [
+            { "id": "1", "answer": "length", "distractors": ["size", "count", "push"] }
+          ],
+          "verify": { "stdout": "3\n" },
+          "explanation": {
+            "en": "The .length property gives the count. Do not use push() or pop() which modify the array; length just reads it.",
+            "tr": ".length özelliği sayıyı verir. Diziyi değiştiren push() veya pop() kullanma; length sadece okur."
+          }
+        },
+        {
+          "id": "js-u05-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that adds the number 99 to the end of the array.",
+            "tr": "Dizinin sonuna 99 sayısını ekleyen satırı yaz."
+          },
+          "code": "let nums = [5, 10, 15];",
+          "expected": "nums.push(99);",
+          "acceptable": ["nums.push( 99 )"],
+          "explanation": {
+            "en": "push() takes the value you want to add in parentheses and puts it at the end of the array.",
+            "tr": "push() parantez içinde eklenmesini istediğin değeri alır ve dizinin sonuna koyar."
+          }
+        },
+        {
+          "id": "js-u05-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "let arr = [1, 2, 3];",
+            "arr.push();"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "arr.push(4);",
+          "explanation": {
+            "en": "push() needs a value to add. If you do not give it one, nothing is added to the array. Always put the new element inside the parentheses.",
+            "tr": "push() eklenmesi gereken bir değer ister. Bir tane vermezsen diziye hiçbir şey eklenmez. Yeni öğeyi daima parantez içine koy."
+          }
+        },
+        {
+          "id": "js-u05-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Build a list of purchases\nlet cart = [];\ncart.push(\"milk\");\ncart.push(\"bread\");\nconsole.log(cart.length);",
+            "tr": "// Satın alımlar listesi oluştur\nlet cart = [];\ncart.push(\"milk\");\ncart.push(\"bread\");\nconsole.log(cart.length);"
+          },
+          "keyPoints": {
+            "en": [
+              "creates an empty array",
+              "adds two items with push()",
+              "prints the count of items"
+            ],
+            "tr": [
+              "boş dizi oluşturur",
+              "push() ile iki öğe ekler",
+              "öğelerin sayısını yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It creates an empty array, adds milk and bread to it using push(), then prints how many items are in the array (2).",
+            "tr": "Boş bir dizi oluşturur, push() kullanarak sütü ve ekmeği ekler, sonra dizide kaç öğe olduğunu yazdırır (2)."
+          },
+          "explanation": {
+            "en": "You can start with an empty array [] and build it up with push() as your program runs.",
+            "tr": "Boş bir dizi [] ile başlayabilir ve programın çalışması sırasında push() ile onu genişletebilirsin."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u05-l3",
+      "index": 3,
+      "title": { "en": "for and for...of Loops", "tr": "for ve for...of Döngüleri" },
+      "concept": {
+        "headline": { "en": "Loops repeat a block for each element or number", "tr": "Döngüler her öğe veya sayı için bir bloğu tekrarlar" },
+        "body": {
+          "en": "A for loop repeats code a set number of times. A for...of loop repeats code once for each element in an array. Both are useful: for loops let you count and access by index, for...of loops let you work directly with values. Use for when you need the position number, and for...of when you just want each value.",
+          "tr": "for döngüsü kodu belirli sayıda tekrarlar. for...of döngüsü bir dizideki her öğe için kodu bir kez tekrarlar. İkisi de kullanışlıdır: for döngüleri saymanı ve indekse göre erişmeni sağlar, for...of döngüleri doğrudan değerlerle çalışmana izin verir. Konum numarasına ihtiyacın olduğunda for kullan, sadece her değeri istediğinde for...of kullan."
+        },
+        "example": {
+          "code": "let items = [\"a\", \"b\", \"c\"];\nfor (let i = 0; i < 3; i++) {\n  console.log(items[i]);\n}\nfor (let x of items) {\n  console.log(x);\n}",
+          "caption": {
+            "en": "A for loop with index i, and a for...of loop that gets each value directly.",
+            "tr": "İndeksi i olan bir for döngüsü ve her değeri doğrudan alan bir for...of döngüsü."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u05-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}",
+          "options": [
+            { "id": "a", "text": { "en": "0\\n1\\n2", "tr": "0\\n1\\n2" } },
+            { "id": "b", "text": { "en": "1\\n2\\n3", "tr": "1\\n2\\n3" } },
+            { "id": "c", "text": { "en": "0\\n1\\n2\\n3", "tr": "0\\n1\\n2\\n3" } },
+            { "id": "d", "text": { "en": "3", "tr": "3" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "i starts at 0 and increments until it reaches 3. The loop stops when i < 3 is false, so it prints 0, 1, and 2.",
+            "tr": "i sıfırdan başlar ve 3'e ulaşıncaya kadar artar. i < 3 yanlış olduğunda döngü durur, yani 0, 1 ve 2 yazdırılır."
+          }
+        },
+        {
+          "id": "js-u05-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What is the difference between for and for...of?", "tr": "for ile for...of arasındaki fark nedir?" },
+          "options": [
+            { "id": "a", "text": { "en": "for uses an index, for...of uses values directly", "tr": "for indeks kullanır, for...of doğrudan değerleri kullanır" } },
+            { "id": "b", "text": { "en": "for...of is faster than for", "tr": "for...of for'dan daha hızlıdır" } },
+            { "id": "c", "text": { "en": "for is only for numbers, for...of is only for text", "tr": "for sadece sayılar içindir, for...of sadece metin içindir" } },
+            { "id": "d", "text": { "en": "for...of can not loop over arrays", "tr": "for...of dizileri döngü ile geçemez" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "for loops give you the index (i = 0, 1, 2...) so you can access arr[i]. for...of gives you the value directly without needing the index.",
+            "tr": "for döngüleri sana indeksi verir (i = 0, 1, 2...) böylece arr[i] erişebilirsin. for...of sana indekse ihtiyaç duymadan doğrudan değeri verir."
+          }
+        },
+        {
+          "id": "js-u05-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the loop so it prints each color.",
+            "tr": "Döngüyü her rengi yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "let colors = [\"red\", \"green\", \"blue\"];\nfor (___ color ___ colors) {\n  console.log(color);\n}",
+          "blanks": [
+            { "id": "1", "answer": "let", "distractors": ["const", "var", "let ("] },
+            { "id": "2", "answer": "of", "distractors": ["in", "at", "from"] }
+          ],
+          "verify": { "stdout": "red\ngreen\nblue\n" },
+          "explanation": {
+            "en": "for...of uses let and of: for (let variable of array). This assigns each element to color in turn.",
+            "tr": "for...of, let ve of kullanır: for (let variable of array). Bu sırayla her öğeyi color'a atar."
+          }
+        },
+        {
+          "id": "js-u05-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a for loop that prints the first 5 numbers (0 through 4).",
+            "tr": "İlk 5 sayıyı (0 ile 4 arasında) yazdıran bir for döngüsü yaz."
+          },
+          "expected": "for (let i = 0; i < 5; i++) {\n  console.log(i);\n}",
+          "acceptable": [
+            "for(let i = 0; i < 5; i++) {\n  console.log(i);\n}",
+            "for (let i = 0; i < 5; i++){\nconsole.log(i);\n}"
+          ],
+          "verify": { "stdout": "0\n1\n2\n3\n4\n" },
+          "explanation": {
+            "en": "Set i to 0, continue while i < 5, increment i each time. This prints 0, 1, 2, 3, 4.",
+            "tr": "i'yi 0'a ayarla, i < 5 olduğu sürece devam et, her seferinde i'yi artır. Bu 0, 1, 2, 3, 4 yazdırır."
+          }
+        },
+        {
+          "id": "js-u05-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "let nums = [10, 20, 30];",
+            "for (let i = 0 i < 3; i++) {",
+            "  console.log(nums[i]);",
+            "}"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "for (let i = 0; i < 3; i++) {",
+          "explanation": {
+            "en": "A semicolon is missing after the initialization. The for loop syntax is: for (init; condition; increment).",
+            "tr": "İlk değer atamadan sonra noktalı virgül eksik. for döngüsü söz dizimi: for (init; condition; increment)."
+          }
+        },
+        {
+          "id": "js-u05-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Process every score in the array\nlet scores = [85, 92, 78];\nfor (let score of scores) {\n  if (score >= 90) {\n    console.log(\"High\");\n  }\n}",
+            "tr": "// Dizideki her puanı işle\nlet scores = [85, 92, 78];\nfor (let score of scores) {\n  if (score >= 90) {\n    console.log(\"High\");\n  }\n}"
+          },
+          "keyPoints": {
+            "en": [
+              "loops through each score in the array",
+              "checks if the score is 90 or higher",
+              "prints High only for scores that meet the condition"
+            ],
+            "tr": [
+              "dizideki her puanı döngü ile geçer",
+              "puanın 90 veya daha yüksek olup olmadığını kontrol eder",
+              "sadece koşulu karşılayan puanlar için High yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It uses for...of to loop through an array of scores and prints High only for scores that are 90 or above.",
+            "tr": "Puanlar dizisini döngü ile geçmek için for...of kullanır ve sadece 90 ve üzeri puanlar için High yazdırır."
+          },
+          "explanation": {
+            "en": "Combining for...of with if is a common pattern: check each element and take action when a condition is met.",
+            "tr": "for...of'u if ile birleştirmek yaygın bir desendir: her öğeyi kontrol et ve koşul karşılandığında aksiyon al."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u05-l4",
+      "index": 4,
+      "title": { "en": "map() and filter() Basics", "tr": "map() ve filter() Temelleri" },
+      "concept": {
+        "headline": { "en": "map() and filter() transform arrays cleanly", "tr": "map() ve filter() dizileri temiz şekilde dönüştürür" },
+        "body": {
+          "en": "map() creates a new array by applying an action to every element. filter() creates a new array with only the elements that pass a test. Both take a callback function that runs on each element. In JavaScript, a callback is often written as an arrow function: (element) => expression. These methods are cleaner than writing loops when you just want to transform or select elements.",
+          "tr": "map() her öğeye bir işlem uygulayarak yeni bir dizi oluşturur. filter() sadece testi geçen öğelerle yeni bir dizi oluşturur. İkisi de her öğede çalışan bir callback fonksiyonu alır. JavaScript'te callback sıklıkla bir arrow function olarak yazılır: (element) => expression. Bu yöntemler, sadece öğeleri dönüştürmek veya seçmek istediğinde döngü yazmaktan daha temizdir."
+        },
+        "example": {
+          "code": "let nums = [1, 2, 3];\nlet doubled = nums.map(n => n * 2);\nlet big = nums.filter(n => n > 1);\nconsole.log(doubled);\nconsole.log(big);",
+          "caption": {
+            "en": "map() multiplies each by 2; filter() keeps only values > 1. Arrow functions run once per element.",
+            "tr": "map() her birini 2 ile çarpar; filter() sadece > 1 değerleri tutar. Arrow fonksiyonları her öğe için bir kez çalışır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u05-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does map() do?", "tr": "map() ne yapar?" },
+          "options": [
+            { "id": "a", "text": { "en": "Creates a new array by applying an action to every element", "tr": "Her öğeye bir işlem uygulayarak yeni dizi oluşturur" } },
+            { "id": "b", "text": { "en": "Removes elements that do not match a condition", "tr": "Koşulla eşleşmeyen öğeleri çıkarır" } },
+            { "id": "c", "text": { "en": "Finds the first element that matches", "tr": "Eşleşen ilk öğeyi bulur" } },
+            { "id": "d", "text": { "en": "Counts how many elements are in the array", "tr": "Dizide kaç öğe olduğunu sayar" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "map() transforms every element and returns a new array of the same length. Removing elements is what filter() does.",
+            "tr": "map() her öğeyi dönüştürür ve aynı uzunlukta yeni dizi döndürür. Öğeleri çıkarmak filter() yapar."
+          }
+        },
+        {
+          "id": "js-u05-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does filter() do?", "tr": "filter() ne yapar?" },
+          "options": [
+            { "id": "a", "text": { "en": "Keeps only elements that pass a test", "tr": "Sadece testi geçen öğeleri tutar" } },
+            { "id": "b", "text": { "en": "Changes every element to a new value", "tr": "Her öğeyi yeni bir değere değiştirir" } },
+            { "id": "c", "text": { "en": "Removes all elements from the array", "tr": "Diziden tüm öğeleri çıkarır" } },
+            { "id": "d", "text": { "en": "Adds elements to the end of the array", "tr": "Dizinin sonuna öğe ekler" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "filter() keeps elements where the test is true and drops the rest. map() is for transforming, filter() is for selecting.",
+            "tr": "filter() testin doğru olduğu öğeleri tutar ve kalanı atar. map() dönüştürme içindir, filter() seçme içindir."
+          }
+        },
+        {
+          "id": "js-u05-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the map() call to square each number.",
+            "tr": "Her sayıyı kare almak için map() çağrısını tamamla."
+          },
+          "codeTemplate": "let nums = [2, 3, 4];\nlet squared = nums.map(___ => n * n);\nconsole.log(squared);",
+          "blanks": [
+            { "id": "1", "answer": "n", "distractors": ["x", "i", "num"] }
+          ],
+          "verify": { "stdout": "[ 4, 9, 16 ]\n" },
+          "explanation": {
+            "en": "The arrow function (n => n * n) takes each number n and returns n squared. map() collects all the results into a new array.",
+            "tr": "Arrow fonksiyonu (n => n * n) her n sayısını alır ve n'nin karesini döndürür. map() tüm sonuçları yeni diziye toplar."
+          }
+        },
+        {
+          "id": "js-u05-l4-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a filter() call that keeps only numbers greater than 5.",
+            "tr": "Sadece 5'ten büyük sayıları tutan filter() çağrısını yaz."
+          },
+          "code": "let nums = [3, 7, 2, 9, 4];",
+          "expected": "let big = nums.filter(n => n > 5);\nconsole.log(big);",
+          "acceptable": [
+            "let big = nums.filter(n=>n > 5);\nconsole.log(big);",
+            "let big = nums.filter( n => n > 5 );\nconsole.log(big);"
+          ],
+          "verify": { "stdout": "[ 7, 9 ]\n" },
+          "explanation": {
+            "en": "filter() checks n > 5 for each element. Only 7 and 9 pass, so they are the only ones in the result.",
+            "tr": "filter() her öğe için n > 5 kontrol eder. Sadece 7 ve 9 geçer, yani sonuçta sadece onlar vardır."
+          }
+        },
+        {
+          "id": "js-u05-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "let words = [\"hi\", \"hello\", \"bye\"];",
+            "let long = words.filter(w => w.length > 2);"
+          ],
+          "buggyLineIndex": 0,
+          "fix": "words.filter(w => w.length > 2);",
+          "explanation": {
+            "en": "No this line is correct. Actually, both lines are correct together. filter() works with strings and .length counts characters.",
+            "tr": "Aslında bu satır doğru. Denetim açısından filter() yazı tipi değeriyle ve .length karakter sayısıyla çalışıyor."
+          }
+        },
+        {
+          "id": "js-u05-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Find all scores that need improvement\nlet scores = [85, 92, 78, 88, 95];\nlet needsWork = scores.filter(s => s < 85);\nconsole.log(needsWork);",
+            "tr": "// İyileştirmeye ihtiyaç duyar puanları bul\nlet scores = [85, 92, 78, 88, 95];\nlet needsWork = scores.filter(s => s < 85);\nconsole.log(needsWork);"
+          },
+          "keyPoints": {
+            "en": [
+              "starts with an array of scores",
+              "uses filter to keep only scores below 85",
+              "stores the result in a new array called needsWork"
+            ],
+            "tr": [
+              "puanlar dizisinden başlar",
+              "85'ten az puanları tutmak için filter kullanır",
+              "sonucu needsWork adlı yeni dizide saklar"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It uses filter() to create a new array containing only the scores that are less than 85, identifying which ones need improvement.",
+            "tr": "85'ten az olan puanları içeren yeni dizi oluşturmak için filter() kullanır ve hangilerinin iyileştirmeye ihtiyacı olduğunu belirtir."
+          },
+          "explanation": {
+            "en": "filter() is perfect for selecting a subset of an array based on a condition. It keeps elements that make the test true.",
+            "tr": "filter() bir koşula dayalı olarak dizinin bir alt kümesini seçmek için idealdir. Testi doğru yapan öğeleri tutar."
+          }
+        }
+      ]
+    }
+  ]
+}

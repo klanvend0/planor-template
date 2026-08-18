@@ -1,0 +1,525 @@
+{
+  "id": "js-u01",
+  "courseId": "javascript",
+  "index": 1,
+  "title": { "en": "First Steps", "tr": "İlk Adımlar" },
+  "description": {
+    "en": "Learn how to write and run your first JavaScript program using console.log to see output.",
+    "tr": "console.log ile çıktı görerek ilk JavaScript programını yazmayı ve çalıştırmayı öğren."
+  },
+  "lessons": [
+    {
+      "id": "js-u01-l1",
+      "index": 1,
+      "title": { "en": "console.log() and Output", "tr": "console.log() ve Çıktı" },
+      "concept": {
+        "headline": { "en": "console.log() displays a value", "tr": "console.log() bir değeri ekrana yazdırır" },
+        "body": {
+          "en": "console.log() is how a JavaScript program talks to you. Whatever you put between the parentheses appears on the screen, and each call starts a new line. Numbers can be printed directly, but text must sit inside quotes, otherwise JavaScript thinks you are naming a variable that does not exist yet.",
+          "tr": "console.log(), bir JavaScript programının seninle konuşma şeklidir. Parantezin içine ne koyarsan ekrana o çıkar ve her çağrı yeni bir satır açar. Sayılar doğrudan yazılabilir ama metinleri tırnak içine almak gerekir; yoksa JavaScript onu henüz tanımlanmamış bir değişken sanır."
+        },
+        "example": {
+          "code": "console.log(\"Hello, World!\");\nconsole.log(42);",
+          "caption": {
+            "en": "Two lines of output from two console.log calls.",
+            "tr": "İki console.log çağrısından iki satır çıktı."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u01-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "console.log(3 + 4);",
+          "options": [
+            { "id": "a", "text": { "en": "7", "tr": "7" } },
+            { "id": "b", "text": { "en": "34", "tr": "34" } },
+            { "id": "c", "text": { "en": "3 + 4", "tr": "3 + 4" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "JavaScript evaluates 3 + 4 first and prints the result, 7. Quotes would have made it text instead.",
+            "tr": "JavaScript önce 3 + 4 işlemini yapar ve sonucu, yani 7'yi yazdırır. Tırnak kullansaydık metin olarak yazardı."
+          }
+        },
+        {
+          "id": "js-u01-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line prints text correctly?", "tr": "Hangi satır metni doğru yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "console.log(Hello);", "tr": "console.log(Hello);" } },
+            { "id": "b", "text": { "en": "console.log(\"Hello\");", "tr": "console.log(\"Hello\");" } },
+            { "id": "c", "text": { "en": "console.log Hello;", "tr": "console.log Hello;" } },
+            { "id": "d", "text": { "en": "console(\"Hello\");", "tr": "console(\"Hello\");" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Text needs quotes, and the .log() method must be called with parentheses. Without quotes, JavaScript looks for a variable named Hello.",
+            "tr": "Metin tırnak ister ve .log() metodu parantezle çağrılmalı. Tırnaksız hâlde JavaScript Hello adında bir değişken arar."
+          }
+        },
+        {
+          "id": "js-u01-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints JavaScript.",
+            "tr": "Kodu JavaScript yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "console.log(___);",
+          "blanks": [
+            { "id": "1", "answer": "\"JavaScript\"", "distractors": ["JavaScript", "'JavaScript", "console"] }
+          ],
+          "verify": { "stdout": "JavaScript\n" },
+          "explanation": {
+            "en": "The quotes tell JavaScript this is text. Without them it would look for a variable called JavaScript.",
+            "tr": "Tırnaklar JavaScript'e bunun metin olduğunu söyler. Tırnaksız hâlde JavaScript adında bir değişken arar."
+          }
+        },
+        {
+          "id": "js-u01-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints the number 100.",
+            "tr": "100 sayısını yazdıran satırı yaz."
+          },
+          "expected": "console.log(100);",
+          "acceptable": ["console.log( 100 );"],
+          "verify": { "stdout": "100\n" },
+          "explanation": {
+            "en": "Numbers do not need quotes. console.log() prints whatever is between the parentheses.",
+            "tr": "Sayılar tırnak istemez. console.log() parantezin içindeki herhangi bir şeyi yazdırır."
+          }
+        },
+        {
+          "id": "js-u01-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["console.log(5);", "console.log(name);"],
+          "buggyLineIndex": 1,
+          "fix": "console.log(\"name\");",
+          "verify": { "raises": "ReferenceError" },
+          "explanation": {
+            "en": "The variable name was never created, so JavaScript raises ReferenceError. If you meant to print the word name, put it in quotes.",
+            "tr": "name değişkeni hiç oluşturulmadı, bu yüzden JavaScript ReferenceError verir. Eğer name kelimesini yazdırmak istiyorsandı, tırnak içine al."
+          }
+        },
+        {
+          "id": "js-u01-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Display a greeting\nconsole.log(\"Welcome to JavaScript\");",
+            "tr": "// Bir selamlamayı göster\nconsole.log(\"Welcome to JavaScript\");"
+          },
+          "keyPoints": {
+            "en": ["calls console.log", "prints the text in quotes", "outputs to the screen"],
+            "tr": ["console.log'u çağırır", "tırnak içindeki metni yazdırır", "ekrana çıktı verir"]
+          },
+          "sampleAnswer": {
+            "en": "The code calls console.log with a text string, so JavaScript prints Welcome to JavaScript on the screen.",
+            "tr": "Kod console.log'u bir metin dizesiyle çağırır ve JavaScript ekrana Welcome to JavaScript yazdırır."
+          },
+          "explanation": {
+            "en": "console.log is the tool that sends output to the screen; whatever is in quotes appears exactly as written.",
+            "tr": "console.log ekrana çıktı gönderen araçtır; tırnak içindeki metinler tam olduğu gibi görülür."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u01-l2",
+      "index": 2,
+      "title": { "en": "Comments and Statements", "tr": "Yorumlar ve İfadeler" },
+      "concept": {
+        "headline": { "en": "Comments explain your code; statements are commands", "tr": "Yorumlar kodunuzu anlatır; ifadeler komuttur" },
+        "body": {
+          "en": "A comment starts with // and tells the reader what the code does. The computer ignores everything after // on that line. A statement is a command that does something: console.log is a statement. Each statement ends with a semicolon. Comments help you remember why you wrote the code later, and help others understand it.",
+          "tr": "Yorum // ile başlar ve kodun ne yaptığını anlatır. Bilgisayar o satırda // den sonraki herhangi bir şeyi yok sayar. İfade bir komuttur: console.log bir ifadedir. Her ifade noktalı virgülle biter. Yorumlar daha sonra kodunuzu hatırlamanıza ve başkalarının anlamasına yardımcı olur."
+        },
+        "example": {
+          "code": "// Say hello\nconsole.log(\"Hello\");\n// Say goodbye\nconsole.log(\"Goodbye\");",
+          "caption": {
+            "en": "Comments explain each console.log statement.",
+            "tr": "Yorumlar her console.log ifadesini anlatır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u01-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does the computer do with a comment?", "tr": "Bilgisayar bir yorumla ne yapar?" },
+          "options": [
+            { "id": "a", "text": { "en": "Ignores it completely", "tr": "Tamamen yok sayar" } },
+            { "id": "b", "text": { "en": "Prints it to the screen", "tr": "Ekrana yazdırır" } },
+            { "id": "c", "text": { "en": "Causes an error", "tr": "Hata üretir" } },
+            { "id": "d", "text": { "en": "Saves it to a file", "tr": "Bir dosyaya kaydeder" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Comments are only for humans to read. JavaScript skips everything after // on a line and never executes it.",
+            "tr": "Yorumlar sadece insanlar için yazılır. JavaScript satırda // den sonrasını atlar ve asla çalıştırmaz."
+          }
+        },
+        {
+          "id": "js-u01-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line has the correct syntax for a comment?", "tr": "Hangi satıra yorum için doğru yazım şekli var?" },
+          "options": [
+            { "id": "a", "text": { "en": "# This is a comment", "tr": "# Bu bir yorum" } },
+            { "id": "b", "text": { "en": "/ This is a comment", "tr": "/ Bu bir yorum" } },
+            { "id": "c", "text": { "en": "// This is a comment", "tr": "// Bu bir yorum" } },
+            { "id": "d", "text": { "en": "\" This is a comment \"", "tr": "\" Bu bir yorum \"" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "JavaScript comments start with two slashes //. A single slash, hash, or quotes have different meanings.",
+            "tr": "JavaScript yorumları iki bölü işaretiyle başlar //. Tek bölü, diyez veya tırnakların başka anlamları vardır."
+          }
+        },
+        {
+          "id": "js-u01-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code by adding a comment that explains the console.log.",
+            "tr": "console.log'u açıklayan bir yorum ekleyerek kodu tamamla."
+          },
+          "codeTemplate": "___\nconsole.log(25);",
+          "blanks": [
+            { "id": "1", "answer": "// Print the number 25", "distractors": ["Print the number 25", "console.log(25);", "# Print the number 25"] }
+          ],
+          "explanation": {
+            "en": "A comment starts with // and can appear on its own line. It explains what the next line of code does.",
+            "tr": "Yorum // ile başlar ve kendi satırında görünebilir. Sonraki kod satırının ne yaptığını anlatır."
+          }
+        },
+        {
+          "id": "js-u01-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a console.log statement that prints the number 42.",
+            "tr": "42 sayısını yazdıran bir console.log ifadesi yaz."
+          },
+          "expected": "console.log(42);",
+          "acceptable": ["console.log( 42 );"],
+          "verify": { "stdout": "42\n" },
+          "explanation": {
+            "en": "Every statement must end with a semicolon. console.log prints its argument to the screen.",
+            "tr": "Her ifade noktalı virgülle bitmeli. console.log argümanını ekrana yazdırır."
+          }
+        },
+        {
+          "id": "js-u01-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line has a syntax error?", "tr": "Hangi satırda yazım hatası var?" },
+          "codeLines": ["// This prints a number", "console.log(50)"],
+          "buggyLineIndex": 1,
+          "fix": "console.log(50);",
+          "explanation": {
+            "en": "Every statement needs a semicolon at the end. The comment on line 1 is correct, but line 2 is missing its semicolon.",
+            "tr": "Her ifadenin sonunda noktalı virgül gerekir. 1. satırdaki yorum doğru ama 2. satırda noktalı virgül eksik."
+          }
+        },
+        {
+          "id": "js-u01-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Announce the program\nconsole.log(\"Starting...\");\n// Say the number\nconsole.log(10);",
+            "tr": "// Programı duyur\nconsole.log(\"Starting...\");\n// Sayıyı söyle\nconsole.log(10);"
+          },
+          "keyPoints": {
+            "en": ["prints two lines", "first line is text", "second line is a number"],
+            "tr": ["iki satır yazdırır", "birinci satır metindir", "ikinci satır bir sayıdır"]
+          },
+          "sampleAnswer": {
+            "en": "The code prints two things: first the text Starting, then the number 10. Each console.log creates a new line.",
+            "tr": "Kod iki şey yazdırır: önce Starting metni, sonra 10 sayısı. Her console.log yeni bir satır oluşturur."
+          },
+          "explanation": {
+            "en": "Each console.log() call on its own line produces one line of output. Comments above explain what each line does.",
+            "tr": "Kendi satırında olan her console.log() çağrısı bir satır çıktı üretir. Üstündeki yorumlar her satırın ne yaptığını anlatır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u01-l3",
+      "index": 3,
+      "title": { "en": "Strings and Quotes", "tr": "Metinler ve Tırnaklar" },
+      "concept": {
+        "headline": { "en": "Strings are text; use quotes to create them", "tr": "Metinler tırnak içinde yazılır" },
+        "body": {
+          "en": "A string is a piece of text. In JavaScript, you write strings using double quotes or single quotes. Both \" and ' work the same way, but you must match them: if you open with \", close with \", and if you open with ', close with '. You can put numbers, spaces, and special characters inside quotes. If you forget the quotes, JavaScript thinks you are naming a variable.",
+          "tr": "Metin bir veri parçasıdır. JavaScript'te metinleri iki tırnak \" veya tek tırnak ' ile yazarsın. Her ikisi aynı şekilde çalışır ama eşleştirmen gerekir: \" ile açarsan \" ile kapat, ' ile açarsan ' ile kapat. Tırnak içinde sayılar, boşluklar ve özel karakterler yazabilirsin. Tırnakları unutursan JavaScript bir değişken sanır."
+        },
+        "example": {
+          "code": "console.log(\"Hello, World!\");\nconsole.log('Goodbye!');",
+          "caption": {
+            "en": "Strings can use double or single quotes, but they must match.",
+            "tr": "Metinler çift veya tek tırnak kullanabilir ama eşleşmeli."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u01-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "console.log(\"25\");",
+          "options": [
+            { "id": "a", "text": { "en": "25", "tr": "25" } },
+            { "id": "b", "text": { "en": "The text 25", "tr": "25 metni" } },
+            { "id": "c", "text": { "en": "An error", "tr": "Bir hata" } },
+            { "id": "d", "text": { "en": "\"25\"", "tr": "\"25\"" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "When 25 is in quotes, it is text, so JavaScript prints exactly 25. The quotes are not part of the output; they just tell JavaScript to treat 25 as a string.",
+            "tr": "25 tırnak içindeyken o metin olur ve JavaScript tam olarak 25 yazdırır. Tırnaklar çıktının parçası değildir; sadece JavaScript'e 25'i metin olarak davranmasını söylerler."
+          }
+        },
+        {
+          "id": "js-u01-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata yaratır?" },
+          "options": [
+            { "id": "a", "text": { "en": "console.log(\"Hello\");", "tr": "console.log(\"Hello\");" } },
+            { "id": "b", "text": { "en": "console.log('Hi');", "tr": "console.log('Hi');" } },
+            { "id": "c", "text": { "en": "console.log(\"Bye);", "tr": "console.log(\"Bye);" } },
+            { "id": "d", "text": { "en": "console.log('OK');", "tr": "console.log('OK');" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "The quotes do not match: it opens with \" but closes with ). You must close with the same type of quote you opened with.",
+            "tr": "Tırnaklar eşleşmiyor: \" ile açılmış ama ) ile kapanmış. Açtığın tırnak türüyle kapatmalısın."
+          }
+        },
+        {
+          "id": "js-u01-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code so it prints Hello, everyone!",
+            "tr": "Kodu Hello, everyone! yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "console.log(___);\n// Note the comma and exclamation mark in the text",
+          "blanks": [
+            { "id": "1", "answer": "\"Hello, everyone!\"", "distractors": ["Hello, everyone!", "'Hello, everyone!'", "\"Hello everyone\""] }
+          ],
+          "verify": { "stdout": "Hello, everyone!\n" },
+          "explanation": {
+            "en": "Strings can include spaces, commas, and punctuation. They are part of the text when inside quotes.",
+            "tr": "Metinler boşluk, virgül ve noktalama işaretleri içerebilir. Tırnak içindeyken metnin parçasıdır."
+          }
+        },
+        {
+          "id": "js-u01-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints I like coding.",
+            "tr": "I like coding yazdıran satırı yaz."
+          },
+          "expected": "console.log(\"I like coding\");",
+          "acceptable": ["console.log('I like coding');"],
+          "verify": { "stdout": "I like coding\n" },
+          "explanation": {
+            "en": "Text must be enclosed in quotes. Both double and single quotes work, but they must match.",
+            "tr": "Metin tırnak içinde olmalı. Çift ve tek tırnaklar her ikisi de çalışır ama eşleşmeli."
+          }
+        },
+        {
+          "id": "js-u01-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["console.log(\"Open\");", "console.log('Close);"],
+          "buggyLineIndex": 1,
+          "fix": "console.log('Close');",
+          "verify": { "raises": "SyntaxError" },
+          "explanation": {
+            "en": "The second line opens with a single quote but closes with a double quote. Quotes must match: if you open with ', close with '.",
+            "tr": "İkinci satır tek tırnak ile açılmış ama çift tırnak ile kapanmış. Tırnaklar eşleşmeli: ' ile açarsan ' ile kapat."
+          }
+        },
+        {
+          "id": "js-u01-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does and why it works.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını ve neden çalıştığını anlat."
+          },
+          "code": {
+            "en": "// Double quotes contain the text\nconsole.log(\"JavaScript is fun\");\n// Single quotes also work\nconsole.log('It is powerful');",
+            "tr": "// Çift tırnaklar metni içerir\nconsole.log(\"JavaScript is fun\");\n// Tek tırnaklar da çalışır\nconsole.log('It is powerful');"
+          },
+          "keyPoints": {
+            "en": ["double quotes create a string", "single quotes also create a string", "both quote types work the same way"],
+            "tr": ["çift tırnaklar metin oluşturur", "tek tırnaklar da metin oluşturur", "her iki tırnak türü aynı şekilde çalışır"]
+          },
+          "sampleAnswer": {
+            "en": "The code prints two strings, one with double quotes and one with single quotes. Both work because JavaScript treats them the same way for text.",
+            "tr": "Kod iki metin yazdırır, biri çift tırnak biri tek tırnak ile. Her ikisi çalışır çünkü JavaScript onları metinler için aynı şekilde davranır."
+          },
+          "explanation": {
+            "en": "You can choose either quote style; they are equally valid. The choice is yours, as long as you close with the same type you opened with.",
+            "tr": "Her iki tırnak stilini seçebilirsin; eşit derecede geçerlidirler. Seçim senin; açtığınla aynı tırnak türüyle kapattığın sürece."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u01-l4",
+      "index": 4,
+      "title": { "en": "Code Runs Top to Bottom", "tr": "Kod Yukarıdan Aşağıya Çalışır" },
+      "concept": {
+        "headline": { "en": "Code runs in order, line by line", "tr": "Kod sırayla, satır satır çalışır" },
+        "body": {
+          "en": "JavaScript reads your code from the top and runs each line one at a time in order. This means the first line runs before the second line, and the second before the third. If you make a typo in a name or use a variable before you create it, JavaScript stops and raises an error. Common typos are forgetting a semicolon, misspelling a variable name, mismatched quotes, or forgetting parentheses.",
+          "tr": "JavaScript kodunuzu yukarıdan okur ve her satırı sırasıyla birer birer çalıştırır. İlk satır ikincisinden, ikinci de üçüncüden önce çalışır. Bir isimde yazım hatası yaparsan veya bir değişkeni oluşturmadan önce kullanırsan JavaScript durur ve hata verir. Yaygın yazım hataları noktalı virgülü unutmak, değişken adını yanlış yazmak, tırnakları uyuşturamamak veya parantezleri unutmaktır."
+        },
+        "example": {
+          "code": "console.log(\"First\");\nconsole.log(\"Second\");\nconsole.log(\"Third\");",
+          "caption": {
+            "en": "Each line runs in order, from top to bottom.",
+            "tr": "Her satır sırasıyla yukarıdan aşağıya çalışır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u01-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "In what order does JavaScript run these lines?", "tr": "JavaScript bu satırları hangi sırayla çalıştırır?" },
+          "code": "console.log(\"First\");\nconsole.log(\"Second\");\nconsole.log(\"Third\");",
+          "options": [
+            { "id": "a", "text": { "en": "First, Second, Third", "tr": "First, Second, Third" } },
+            { "id": "b", "text": { "en": "Third, Second, First", "tr": "Third, Second, First" } },
+            { "id": "c", "text": { "en": "In random order", "tr": "Rastgele sırayla" } },
+            { "id": "d", "text": { "en": "All at the same time", "tr": "Hepsi aynı anda" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "JavaScript runs code from top to bottom. The first line runs first, then the second, then the third.",
+            "tr": "JavaScript kodu yukarıdan aşağıya çalıştırır. İlk satır ilk çalışır, sonra ikinci, sonra üçüncü."
+          }
+        },
+        {
+          "id": "js-u01-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What is the most common reason JavaScript stops with an error in beginner code?", "tr": "JavaScript'in başlangıç kodunda hata vererek durmasının en yaygın sebebi nedir?" },
+          "options": [
+            { "id": "a", "text": { "en": "Using a variable name that has a typo", "tr": "Yazım hatası yapılmış bir değişken adı kullanmak" } },
+            { "id": "b", "text": { "en": "The code is too long", "tr": "Kod çok uzun" } },
+            { "id": "c", "text": { "en": "Using the wrong programming language", "tr": "Yanlış programlama dilini kullanmak" } },
+            { "id": "d", "text": { "en": "The computer is too slow", "tr": "Bilgisayar çok yavaş" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Typos in variable names are the most common mistake. If you write agee instead of age, JavaScript looks for a variable called agee and finds nothing, so it raises an error.",
+            "tr": "Değişken adlarında yapılan yazım hataları en yaygın hatadır. age yerine agee yazarsan, JavaScript agee adında bir değişken arar ve bulamaz, hata verir."
+          }
+        },
+        {
+          "id": "js-u01-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code so it prints one, two, three in order.",
+            "tr": "Kodu one, two, three yazdıracak şekilde sırasıyla tamamla."
+          },
+          "codeTemplate": "console.log(\"one\");\n___\nconsole.log(\"three\");",
+          "blanks": [
+            { "id": "1", "answer": "console.log(\"two\");", "distractors": ["console.log(two);", "console.log('two')", "print(\"two\");"] }
+          ],
+          "verify": { "stdout": "one\ntwo\nthree\n" },
+          "explanation": {
+            "en": "Each console.log statement must use the same format: the function name, parentheses, and a string in quotes. Missing quotes, semicolon, or parentheses causes an error.",
+            "tr": "Her console.log ifadesi aynı biçimi kullanmalı: fonksiyon adı, parantez ve tırnak içinde metin. Tırnağı, noktalı virgülü veya parantezi unutmak hata yaratır."
+          }
+        },
+        {
+          "id": "js-u01-l4-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write two console.log lines that print 1 and then 2.",
+            "tr": "1'i ve sonra 2'yi yazdıran iki console.log satırı yaz."
+          },
+          "expected": "console.log(1);\nconsole.log(2);",
+          "acceptable": ["console.log( 1 );\nconsole.log( 2 );"],
+          "verify": { "stdout": "1\n2\n" },
+          "explanation": {
+            "en": "Each line executes in order. The first console.log prints 1, then the second prints 2 on a new line.",
+            "tr": "Her satır sırasıyla çalışır. İlk console.log 1'i yazdırır, sonra ikinci yeni satıra 2'yi yazdırır."
+          }
+        },
+        {
+          "id": "js-u01-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line contains a typo that breaks the code?", "tr": "Hangi satırda kodu kıran yazım hatası var?" },
+          "codeLines": ["console.log(\"Start\");", "console.log(count);", "console.log(\"End\");"],
+          "buggyLineIndex": 1,
+          "fix": "console.log(\"count\");",
+          "verify": { "raises": "ReferenceError" },
+          "explanation": {
+            "en": "The variable count was never created. If you meant to print the word count, it needs quotes. Without quotes, JavaScript looks for a variable that does not exist.",
+            "tr": "count değişkeni hiç oluşturulmadı. Eğer count kelimesini yazdırmak istiyorsandı tırnak gerekir. Tırnak olmadan JavaScript olmayan bir değişkeni arar."
+          }
+        },
+        {
+          "id": "js-u01-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what happens when you run this code and why.",
+            "tr": "100-200 karakterle bu kodu çalıştırdığında ne olacağını ve neden olacağını anlat."
+          },
+          "code": {
+            "en": "// First output\nconsole.log(\"A\");\n// Second output\nconsole.log(\"B\");\n// Third output\nconsole.log(\"C\");",
+            "tr": "// İlk çıktı\nconsole.log(\"A\");\n// İkinci çıktı\nconsole.log(\"B\");\n// Üçüncü çıktı\nconsole.log(\"C\");"
+          },
+          "keyPoints": {
+            "en": ["runs from top to bottom", "prints A first, then B, then C", "each console.log creates a new line"],
+            "tr": ["yukarıdan aşağıya çalışır", "önce A'yı, sonra B'yi, sonra C'yi yazdırır", "her console.log yeni bir satır oluşturur"]
+          },
+          "sampleAnswer": {
+            "en": "JavaScript runs the code line by line from top to bottom. It prints A, then B, then C, each on its own line, in that exact order.",
+            "tr": "JavaScript kodu yukarıdan aşağıya satır satır çalıştırır. A'yı, sonra B'yi, sonra C'yi yazdırır, her biri kendi satırında, tam bu sırayla."
+          },
+          "explanation": {
+            "en": "The order of code matters. JavaScript does not skip ahead or change the order; it always runs from top to bottom, one line at a time.",
+            "tr": "Kodun sırası önemli. JavaScript ileri atlamaz veya sırayı değiştirmez; her zaman yukarıdan aşağıya, birer satır birer çalışır."
+          }
+        }
+      ]
+    }
+  ]
+}

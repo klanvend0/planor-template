@@ -1,0 +1,893 @@
+{
+  "id": "py-u06",
+  "courseId": "python",
+  "index": 6,
+  "title": {
+    "en": "Repeating Work",
+    "tr": "Tekrarlayan Işler"
+  },
+  "description": {
+    "en": "Learn to repeat code with loops: for loops over ranges and lists, while loops, and the accumulator pattern.",
+    "tr": "Döngüler ile kodu nasıl tekrarlayacağınızı öğrenin: for döngüleri, while döngüleri ve biriktirim kalıbı."
+  },
+  "lessons": [
+    {
+      "id": "py-u06-l1",
+      "index": 1,
+      "title": {
+        "en": "Counting with for",
+        "tr": "for ile Sayma"
+      },
+      "concept": {
+        "headline": {
+          "en": "for loops repeat code a certain number of times",
+          "tr": "for döngüleri kodu belirli sayıda tekrarlar"
+        },
+        "body": {
+          "en": "A for loop runs the same block of code multiple times. The range() function creates a sequence of numbers. range(5) counts from 0 to 4 — five numbers total. Each time through the loop, the loop variable holds the next number. After the colon, the indented lines are the code that repeats.",
+          "tr": "for döngüsü aynı kod bloğunu birden çok kez çalıştırır. range() işlevi bir sayı dizisi oluşturur. range(5) sıfırdan dörde kadar sayar — toplamda beş sayı. Her döngü turunda döngü değişkeni bir sonraki sayıyı alır. İki noktanın sonrası girintili satırlar tekrarlanan koddur."
+        },
+        "example": {
+          "code": "for i in range(3):\n    print(i)",
+          "caption": {
+            "en": "Prints 0, then 1, then 2.",
+            "tr": "0, sonra 1, sonra 2 yazdırır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u06-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "for x in range(3):\n    print(\"hi\")",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "hi\nhi\nhi",
+                "tr": "hi\nhi\nhi"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "hi 3 times on one line",
+                "tr": "hi 3 defa bir satırda"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "range(3)",
+                "tr": "range(3)"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "hi\n3",
+                "tr": "hi\n3"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The loop runs 3 times because range(3) is 0, 1, 2. Each print() call makes a new line.",
+            "tr": "Döngü 3 kez çalışır çünkü range(3) sıfır, bir, iki'dir. Her print() çağrısı yeni bir satır açar."
+          }
+        },
+        {
+          "id": "py-u06-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does range(4) produce?",
+            "tr": "range(4) neyi üretir?"
+          },
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "0, 1, 2, 3",
+                "tr": "0, 1, 2, 3"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "1, 2, 3, 4",
+                "tr": "1, 2, 3, 4"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "0, 1, 2, 3, 4",
+                "tr": "0, 1, 2, 3, 4"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "4",
+                "tr": "4"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "range() always starts at 0 and stops before the number you give it, so range(4) counts 0 to 3.",
+            "tr": "range() daima sıfırdan başlar ve verdiğin sayıdan önce durur; range(4) sıfırdan üçe kadar sayar."
+          }
+        },
+        {
+          "id": "py-u06-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the loop to print the numbers 0, 1, and 2.",
+            "tr": "Döngüyü 0, 1 ve 2 sayılarını yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "for i in ___:\n    print(i)",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "range(3)",
+              "distractors": [
+                "range(2)",
+                "3",
+                "[0, 1, 2]"
+              ]
+            }
+          ],
+          "verify": {
+            "stdout": "0\n1\n2\n"
+          },
+          "explanation": {
+            "en": "range(3) creates the sequence 0, 1, 2. The loop variable i takes each value in turn.",
+            "tr": "range(3) sıfır, bir, iki dizisini oluşturur. i döngü değişkeni sırasıyla her değeri alır."
+          }
+        },
+        {
+          "id": "py-u06-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a loop that prints the numbers from 1 to 5.",
+            "tr": "1'den 5'e kadar sayıları yazdıran bir döngü yaz."
+          },
+          "expected": "for i in range(1, 6):\n    print(i)",
+          "acceptable": [
+            "for i in range(1,6):\n    print(i)"
+          ],
+          "verify": {
+            "stdout": "1\n2\n3\n4\n5\n"
+          },
+          "explanation": {
+            "en": "range(1, 6) starts at 1 and stops before 6, so it counts 1, 2, 3, 4, 5. The second argument to range() sets the starting point.",
+            "tr": "range(1, 6) birden başlar ve altıdan önce durur; bir, iki, üç, dört, beş sayar. range()'nin ikinci argümanı başlangıç noktasını ayarlar."
+          }
+        },
+        {
+          "id": "py-u06-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "for i in range(4):",
+            "print(i)"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "    print(i)",
+          "explanation": {
+            "en": "The print line must be indented to show it is inside the loop. Without indentation, it only runs once, not four times.",
+            "tr": "print satırı döngüün içinde olduğunu göstermek için girintili olmalı. Girintisiz hâlde sadece bir kez, dört kez değil çalışır."
+          }
+        },
+        {
+          "id": "py-u06-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Count up from zero\nfor num in range(5):\n    print(num)",
+            "tr": "# Sıfırdan saymaya başla\nfor num in range(5):\n    print(num)"
+          },
+          "keyPoints": {
+            "en": [
+              "uses a for loop to repeat five times",
+              "range(5) produces 0, 1, 2, 3, 4",
+              "prints each number on its own line"
+            ],
+            "tr": [
+              "for döngüsü ile beş kez tekrarlar",
+              "range(5) sıfır, bir, iki, üç, dördü üretir",
+              "her sayıyı kendi satırında yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It uses a for loop with range(5) to run five times. Each time, num holds the next number (0 through 4) and is printed.",
+            "tr": "range(5) ile bir for döngüsü kullanarak beş kez çalışır. Her seferde num bir sonraki sayıyı (0'dan 4'e) alır ve yazdırılır."
+          },
+          "explanation": {
+            "en": "The for loop is the simplest way to run code a fixed number of times. range() does the counting for you.",
+            "tr": "for döngüsü kodu belirli sayıda çalıştırmanın en basit yoludur. range() sayma işini senin için yapar."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u06-l2",
+      "index": 2,
+      "title": {
+        "en": "Looping over Data",
+        "tr": "Veriler Üzerinde Döngü"
+      },
+      "concept": {
+        "headline": {
+          "en": "for loops can step through each character or element",
+          "tr": "for döngüleri her karakter veya elemanı gözden geçirebilir"
+        },
+        "body": {
+          "en": "You can loop over the characters in a string without knowing how many there are. You can also loop over the elements of a list. A list is a sequence of values inside square brackets, separated by commas. Each time through the loop, the loop variable holds the next character or element. This is safer and clearer than counting yourself.",
+          "tr": "Bir metindeki her karakteri kaç tane olduğunu bilmeden döngüye çevirebilirsin. Bir listenin elemanlarını da döngüye çevirebilirsin. Liste, kare parantez içine virgülle ayrılmış değerler dizisidir. Her döngü turunda döngü değişkeni bir sonraki karakter veya elemanı alır. Bu kendinin saymanından daha güvenli ve açıktır."
+        },
+        "example": {
+          "code": "word = \"cat\"\nfor letter in word:\n    print(letter)\n\nfor item in [1, 2, 3]:\n    print(item)",
+          "caption": {
+            "en": "Looping over a string gives each letter. Looping over a list gives each element.",
+            "tr": "Bir metin üzerinde döngü her harfi verir. Bir liste üzerinde döngü her elemanı verir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u06-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "for ch in \"abc\":\n    print(ch)",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "a\nb\nc",
+                "tr": "a\nb\nc"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "abc",
+                "tr": "abc"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "ch",
+                "tr": "ch"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "\"abc\"",
+                "tr": "\"abc\""
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The loop steps through each character in the string. ch gets 'a', then 'b', then 'c', and each is printed on a new line.",
+            "tr": "Döngü metindeki her karakteri gözden geçirir. ch sırasıyla 'a', 'b', 'c' alır ve her biri yeni bir satırda yazdırılır."
+          }
+        },
+        {
+          "id": "py-u06-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "for n in [10, 20, 30]:\n    print(n)",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "10\n20\n30",
+                "tr": "10\n20\n30"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "[10, 20, 30]",
+                "tr": "[10, 20, 30]"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "n",
+                "tr": "n"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "10 20 30",
+                "tr": "10 20 30"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The loop steps through each element in the list. n gets 10, then 20, then 30, and each print() puts the value on its own line.",
+            "tr": "Döngü listedeki her elemanı gözden geçirir. n sırasıyla 10, 20, 30 alır ve her print() değeri kendi satırına koyar."
+          }
+        },
+        {
+          "id": "py-u06-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code to print each number in the list.",
+            "tr": "Listedeki her sayıyı yazdırmak için kodu tamamla."
+          },
+          "codeTemplate": "for ___ in [5, 7, 9]:\n    print(item)",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "item",
+              "distractors": [
+                "i",
+                "number",
+                "5"
+              ]
+            }
+          ],
+          "verify": {
+            "stdout": "5\n7\n9\n"
+          },
+          "explanation": {
+            "en": "The loop variable name must match what you use inside the loop. Since the code uses item, the loop variable must be item.",
+            "tr": "Döngü değişkeni adı döngü içinde kullandığın adla eşleşmeli. Kod item kullandığından döngü değişkeni item olmalı."
+          }
+        },
+        {
+          "id": "py-u06-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a loop that prints each letter in the word dog on a separate line.",
+            "tr": "dog kelimesindeki her harfi ayrı satırda yazdıran bir döngü yaz."
+          },
+          "expected": "for letter in \"dog\":\n    print(letter)",
+          "acceptable": [
+            "for letter in 'dog':\n    print(letter)"
+          ],
+          "verify": {
+            "stdout": "d\no\ng\n"
+          },
+          "explanation": {
+            "en": "Looping over a string gives you each character one at a time. The loop variable letter will be 'd', then 'o', then 'g'.",
+            "tr": "Bir metin üzerinde döngü karşılıklı olarak her karakteri verir. letter döngü değişkeni sırasıyla 'd', 'o', 'g' olur."
+          }
+        },
+        {
+          "id": "py-u06-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "fruits = [apple, banana, cherry]",
+            "for fruit in fruits:",
+            "    print(fruit)"
+          ],
+          "buggyLineIndex": 0,
+          "fix": "fruits = [\"apple\", \"banana\", \"cherry\"]",
+          "verify": {
+            "raises": "NameError"
+          },
+          "explanation": {
+            "en": "Text in a list needs quotes, just like text in a print() call. Without quotes, Python looks for variables named apple, banana, and cherry.",
+            "tr": "Listedeki metin, print() çağrısındaki gibi tırnak ister. Tırnaksız hâlde Python apple, banana ve cherry adında değişken arar."
+          }
+        },
+        {
+          "id": "py-u06-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Check each number\nnums = [2, 4, 6]\nfor n in nums:\n    print(n * 2)",
+            "tr": "# Her sayıyı kontrol et\nnums = [2, 4, 6]\nfor n in nums:\n    print(n * 2)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores three numbers in a list",
+              "loops over each number in the list",
+              "multiplies each number by 2 and prints the result"
+            ],
+            "tr": [
+              "üç sayıyı bir listede saklar",
+              "listede her sayı üzerinde döngü yapar",
+              "her sayıyı ikiyle çarpar ve sonucu yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It creates a list with three numbers, loops through each one, doubles it by multiplying by 2, and prints each doubled value.",
+            "tr": "Üç sayıdan oluşan bir liste oluşturur, her birini gözden geçirir, ikiyle çarparak ikiye katlar ve her katlanmış değeri yazdırır."
+          },
+          "explanation": {
+            "en": "Looping over a list lets you process each element. Inside the loop, n holds one element at a time, and you can do math or anything else with it.",
+            "tr": "Bir liste üzerinde döngü her elemanı işlemenizi sağlar. Döngü içinde n bir seferde bir elemanı alır ve onunla matematik vb. yapabilirsin."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u06-l3",
+      "index": 3,
+      "title": {
+        "en": "Loops with Conditions",
+        "tr": "Şartlı Döngüler"
+      },
+      "concept": {
+        "headline": {
+          "en": "while loops repeat code as long as a condition is true",
+          "tr": "while döngüleri bir koşul doğru kaldığı sürece kodu tekrarlar"
+        },
+        "body": {
+          "en": "A while loop keeps running as long as its condition is true. It checks the condition before each run. Unlike a for loop, you must change something inside the loop so the condition eventually becomes false, or the loop will never stop. A while loop is useful when you do not know ahead of time how many times you need to repeat.",
+          "tr": "while döngüsü koşulu doğru kaldığı sürece çalışır. Her çalışmadan önce koşulu kontrol eder. for döngüsünden farklı olarak döngü içinde bir şeyi değiştirmelisin ki koşul sonunda yanlış olsun, yoksa döngü hiç durmaz. while döngüsü kaç kez tekrarlamanız gerektiğini önceden bilmediğinizde kullanışlıdır."
+        },
+        "example": {
+          "code": "count = 0\nwhile count < 3:\n    print(count)\n    count = count + 1",
+          "caption": {
+            "en": "Prints 0, 1, 2. count increases each time until it reaches 3.",
+            "tr": "0, 1, 2 yazdırır. count her seferde artır yani üçe ulaşana kadar."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u06-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "n = 0\nwhile n < 2:\n    print(n)\n    n = n + 1",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "0\n1",
+                "tr": "0\n1"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "0\n1\n2",
+                "tr": "0\n1\n2"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "0",
+                "tr": "0"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Nothing, it is an infinite loop",
+                "tr": "Hiçbir şey, sonsuz döngü"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The loop runs while n < 2. First n is 0 (less than 2, so print), then n is 1 (less than 2, so print), then n is 2 (not less than 2, so stop).",
+            "tr": "Döngü n < 2 iken çalışır. Önce n sıfır (ikiden küçük, yazdır), sonra n bir (ikiden küçük, yazdır), sonra n iki (ikiden küçük değil, dur)."
+          }
+        },
+        {
+          "id": "py-u06-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "How many times does this loop run?",
+            "tr": "Bu döngü kaç kez çalışır?"
+          },
+          "code": "x = 5\nwhile x > 0:\n    print(\"go\")\n    x = x - 1",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "5 times",
+                "tr": "5 kez"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "1 time",
+                "tr": "1 kez"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Infinite",
+                "tr": "Sonsuz"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "0 times",
+                "tr": "0 kez"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "x starts at 5 and decreases by 1 each time. The loop runs while x > 0, so it runs 5 times (x: 5, 4, 3, 2, 1) before x becomes 0.",
+            "tr": "x beşten başlar ve her seferde bire azalır. Döngü x > 0 iken çalışır; x (5, 4, 3, 2, 1) olurken beş kez çalışır, sonra x sıfır olur."
+          }
+        },
+        {
+          "id": "py-u06-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the loop to print the numbers 3, 2, 1 by starting at 3 and decreasing.",
+            "tr": "3'ten başlayıp azalarak 3, 2, 1 sayılarını yazdırmak için döngüyü tamamla."
+          },
+          "codeTemplate": "count = 3\nwhile count ___:\n    print(count)\n    count = count - 1",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "> 0",
+              "distractors": [
+                "< 4",
+                "!= 0",
+                ">= 1"
+              ]
+            }
+          ],
+          "verify": {
+            "stdout": "3\n2\n1\n"
+          },
+          "explanation": {
+            "en": "The condition > 0 means the loop runs while count is still greater than zero. Once count reaches 0, the loop stops.",
+            "tr": "> 0 koşulu count hâlâ sıfırdan büyükken döngünün çalışması demektir. count sıfıra ulaşınca döngü durur."
+          }
+        },
+        {
+          "id": "py-u06-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a while loop that counts up from 1 to 3.",
+            "tr": "1'den 3'e kadar sayan bir while döngüsü yaz."
+          },
+          "expected": "i = 1\nwhile i <= 3:\n    print(i)\n    i = i + 1",
+          "acceptable": [
+            "i = 1\nwhile i < 4:\n    print(i)\n    i = i + 1"
+          ],
+          "verify": {
+            "stdout": "1\n2\n3\n"
+          },
+          "explanation": {
+            "en": "You need to set up a counter before the loop, check a condition, and increase the counter inside the loop. When the counter reaches 4, i <= 3 is false and the loop stops.",
+            "tr": "Döngüden önce bir sayaç ayarlamak, koşulu kontrol etmek ve döngü içinde sayacı artırmak gerekir. Sayaç dörde ulaşınca i <= 3 yanlış olur ve döngü durur."
+          }
+        },
+        {
+          "id": "py-u06-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "x = 0",
+            "while x < 3:",
+            "    print(x)"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "    print(x)\n    x = x + 1",
+          "explanation": {
+            "en": "The loop never changes x, so x stays 0 forever and the condition x < 3 is always true. You must update the variable inside the loop.",
+            "tr": "Döngü x'i hiç değiştirmez, bu yüzden x selamlamaz sıfır kalır ve x < 3 koşulu her zaman doğrudur. Döngü içinde değişkeni güncellemelisin."
+          }
+        },
+        {
+          "id": "py-u06-l3-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Count down until zero\nnum = 5\nwhile num > 0:\n    print(num)\n    num = num - 1",
+            "tr": "# Sıfıra kadar geriye say\nnum = 5\nwhile num > 0:\n    print(num)\n    num = num - 1"
+          },
+          "keyPoints": {
+            "en": [
+              "starts with num at 5",
+              "uses a while loop with the condition num > 0",
+              "decreases num by 1 each time",
+              "stops when num reaches 0"
+            ],
+            "tr": [
+              "num'u beşle başlatır",
+              "num > 0 koşuluyla while döngüsü kullanır",
+              "num'u her seferde birle azaltır",
+              "num sıfıra ulaşınca durur"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It counts down from 5 to 1 using a while loop. Each time through, it prints num and then decreases num by 1 until num is no longer greater than 0.",
+            "tr": "while döngüsü kullanarak beşten bire kadar geriye sayar. Her seferde num'u yazdırır ve sonra num'u bire azaltır ta ki num artık sıfırdan büyük olmayana kadar."
+          },
+          "explanation": {
+            "en": "while loops are useful when the number of iterations depends on a condition rather than a fixed count. Here, the loop stops when the countdown reaches zero.",
+            "tr": "while döngüleri tekrar sayısı sabit sayı yerine koşula bağlı olduğunda kullanışlıdır. Burada döngü geri sayma sıfıra ulaşınca durur."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u06-l4",
+      "index": 4,
+      "title": {
+        "en": "Control and Patterns",
+        "tr": "Kontrol ve Kalıplar"
+      },
+      "concept": {
+        "headline": {
+          "en": "break and continue give you fine control; accumulator builds up a result",
+          "tr": "break ve continue size ince kontrol verir; biriktirim sonuç oluşturur"
+        },
+        "body": {
+          "en": "break stops a loop immediately and jumps out of it. continue skips the rest of the current iteration and goes to the next one. The accumulator pattern starts with a variable at zero (or an empty string), then inside the loop you add to it each time. This lets you build up a total, a product, or a combined string. These patterns help you solve real problems.",
+          "tr": "break döngüyü hemen durdurur ve çıkar. continue mevcut tekrarın geri kalanını atlar ve bir sonrakine gider. Biriktirim kalıbı bir değişkeni sıfırdan (veya boş metinle) başlatır, sonra döngü içinde her seferde ona eklersin. Bu sayede toplam, çarpım veya birleştirilmiş metin oluşturabilirsin. Bu kalıplar gerçek sorunları çözmenizi sağlar."
+        },
+        "example": {
+          "code": "# Accumulator: add up numbers\ntotal = 0\nfor num in [1, 2, 3]:\n    total = total + num\nprint(total)\n\n# break and continue\nfor i in range(5):\n    if i == 2:\n        continue\n    if i == 4:\n        break\n    print(i)",
+          "caption": {
+            "en": "top: total ends at 6. bottom: prints 0, 1, 3 (skips 2, stops at 4).",
+            "tr": "üst: toplam 6'da biter. alt: 0, 1, 3 yazdırır (2'yi atlar, 4'te durur)."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u06-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does this accumulator code print?",
+            "tr": "Bu biriktirim kodu ne yazdırır?"
+          },
+          "code": "total = 0\nfor n in [2, 3, 5]:\n    total = total + n\nprint(total)",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "10",
+                "tr": "10"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "2\n3\n5",
+                "tr": "2\n3\n5"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "235",
+                "tr": "235"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "[2, 3, 5]",
+                "tr": "[2, 3, 5]"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "total starts at 0. In the loop, it becomes 0+2=2, then 2+3=5, then 5+5=10. At the end, 10 is printed once.",
+            "tr": "total sıfırdan başlar. Döngüde 0+2=2 olur, sonra 2+3=5 olur, sonra 5+5=10 olur. Sonunda 10 bir kez yazdırılır."
+          }
+        },
+        {
+          "id": "py-u06-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "for i in range(5):\n    if i == 2:\n        continue\n    print(i)",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "0\n1\n3\n4",
+                "tr": "0\n1\n3\n4"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "0\n1\n2\n3\n4",
+                "tr": "0\n1\n2\n3\n4"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "1\n3",
+                "tr": "1\n3"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "0\n1\n2",
+                "tr": "0\n1\n2"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "continue skips the rest of the iteration when i is 2. So 2 is not printed, but 0, 1, 3, 4 are.",
+            "tr": "continue i iki olunca tekrarın geri kalanını atlar. Yani 2 yazdırılmaz ama 0, 1, 3, 4 yazdırılır."
+          }
+        },
+        {
+          "id": "py-u06-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code to calculate the sum 1 + 2 + 3.",
+            "tr": "1 + 2 + 3 toplamını hesaplamak için kodu tamamla."
+          },
+          "codeTemplate": "result = 0\nfor num in [1, 2, 3]:\n    result = ___ + num\nprint(result)",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "result",
+              "distractors": [
+                "num",
+                "0",
+                "total"
+              ]
+            }
+          ],
+          "verify": {
+            "stdout": "6\n"
+          },
+          "explanation": {
+            "en": "The accumulator pattern updates the variable by adding the new value to what it already holds. result = result + num means add num to result.",
+            "tr": "Biriktirim kalıbı değişkeni zaten tuttuğu şeye yeni değer ekleyerek günceller. result = result + num demek num'u result'a ekle demektir."
+          }
+        },
+        {
+          "id": "py-u06-l4-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write a loop that prints 1, 2, 3, then stops when it reaches 4.",
+            "tr": "1, 2, 3 yazdırıp 4'e ulaşınca duran bir döngü yaz."
+          },
+          "expected": "for i in range(1, 10):\n    if i == 4:\n        break\n    print(i)",
+          "acceptable": [
+            "for i in range(1, 4):\n    print(i)"
+          ],
+          "verify": {
+            "stdout": "1\n2\n3\n"
+          },
+          "explanation": {
+            "en": "break lets you exit the loop early when a condition is met. You can also use range(1, 4) which stops before 4 without needing break.",
+            "tr": "break koşul sağlanunca döngüden erken çıkmanıza izin verir. Ya da break kullanmadan dördün önce duran range(1, 4) kullanabilirsin."
+          }
+        },
+        {
+          "id": "py-u06-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Which line stops the accumulator from working?",
+            "tr": "Hangi satır biriktirim'in çalışmasını durdurur?"
+          },
+          "codeLines": [
+            "total = 0",
+            "for num in [10, 20, 30]:",
+            "    total + num",
+            "print(total)"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "    total = total + num",
+          "explanation": {
+            "en": "total + num just calculates but does not store the result. You must use = to assign: total = total + num. Without assignment, total stays at 0.",
+            "tr": "total + num sadece hesaplar ama sonucu saklamaz. Atamak için = kullanmalısın: total = total + num. Atama olmadan total sıfırda kalır."
+          }
+        },
+        {
+          "id": "py-u06-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Build a combined message\nmessage = \"\"\nfor word in [\"Hello\", \"World\"]:\n    message = message + word + \" \"\nprint(message)",
+            "tr": "# Birleşik bir mesaj oluştur\nmessage = \"\"\nfor word in [\"Hello\", \"World\"]:\n    message = message + word + \" \"\nprint(message)"
+          },
+          "keyPoints": {
+            "en": [
+              "starts with an empty string for the accumulator",
+              "loops over two words",
+              "adds each word and a space to the message",
+              "prints the combined result"
+            ],
+            "tr": [
+              "biriktirim için boş bir metinle başlar",
+              "iki sözcük üzerinde döngü yapar",
+              "her sözcüğü ve bir boşluğu mesaja ekler",
+              "birleşen sonucu yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It uses the accumulator pattern with a string. It starts with an empty message, then loops through the words and builds up the message by adding each word and a space.",
+            "tr": "Biriktirim kalıbını metinle kullanır. Boş bir mesajla başlar, sonra sözcükleri gezer ve her sözcükle bir boşluk ekleyerek mesajı oluşturur."
+          },
+          "explanation": {
+            "en": "The accumulator pattern works with strings too. You build up a result by repeatedly adding to a variable. message = message + word is the key operation.",
+            "tr": "Biriktirim kalıbı metinlerle de çalışır. Bir değişkene tekrar tekrar ekleyerek sonuç oluşturursunuz. message = message + word anahtar işlemdir."
+          }
+        }
+      ]
+    }
+  ]
+}

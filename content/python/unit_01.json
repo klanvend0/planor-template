@@ -1,0 +1,557 @@
+{
+  "id": "py-u01",
+  "courseId": "python",
+  "index": 1,
+  "title": { "en": "First Steps", "tr": "Ilk Adimlar" },
+  "description": {
+    "en": "Learn to print values and write your first Python program. Discover how text, code, and comments work together.",
+    "tr": "Degerleri yazdirmayi ve ilk Python programini yazmak ogreneceksin. Metin, kod ve yorumlarin birlikte nasil calismadığını keşfet."
+  },
+  "lessons": [
+    {
+      "id": "py-u01-l1",
+      "index": 1,
+      "title": { "en": "Printing Values", "tr": "Degerleri Yazdirmak" },
+      "concept": {
+        "headline": { "en": "print() shows values on screen", "tr": "print() ekranda degerleri gösterir" },
+        "body": {
+          "en": "Every Python program needs a way to show results to the user. The print() function does exactly that: whatever you put between the parentheses appears on the screen. When you print a number, it shows the number. When you print text, it shows the text. Each print() call starts a new line of output.",
+          "tr": "Her Python programinin sonuçları kullanıcıya göstermesi gerekir. print() fonksiyonu tam olarak bunu yapar: parantezlerin içine koyduğun şey ekranda görünür. Bir sayı yazdırırsan sayıyı gösterir. Metin yazdırırsan metni gösterir. Her print() çağrısı çıktının yeni bir satırını başlatır."
+        },
+        "example": {
+          "code": "print(42)\nprint(\"Hello\")",
+          "caption": {
+            "en": "Two separate values on two lines.",
+            "tr": "İki ayrı değer iki satırda."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u01-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(10)",
+          "options": [
+            { "id": "a", "text": { "en": "10", "tr": "10" } },
+            { "id": "b", "text": { "en": "print(10)", "tr": "print(10)" } },
+            { "id": "c", "text": { "en": "Nothing", "tr": "Hiçbir şey" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "print(10) displays the number 10 on the screen. The parentheses tell Python that 10 is what you want to show.",
+            "tr": "print(10) ekranda 10 sayısını gösterir. Parantezler Python'a 10'un göstermek istediğin şey olduğunu söyler."
+          }
+        },
+        {
+          "id": "py-u01-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line correctly prints a word?", "tr": "Hangi satır bir kelimeyi doğru yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "print(Cat)", "tr": "print(Cat)" } },
+            { "id": "b", "text": { "en": "print \"Cat\"", "tr": "print \"Cat\"" } },
+            { "id": "c", "text": { "en": "print(\"Cat\")", "tr": "print(\"Cat\")" } },
+            { "id": "d", "text": { "en": "Cat", "tr": "Cat" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "Text must go inside quotes, and print needs parentheses. Option (a) is missing quotes, (b) is missing parentheses, and (d) is missing print entirely.",
+            "tr": "Metin tırnak içinde olmak zorundadır ve print parantez gerektirir. Seçenek (a) tırnaklardan yoksundur, (b) parantezden yoksundur ve (d) print'i tamamen unutmuştur."
+          }
+        },
+        {
+          "id": "py-u01-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints the number 5.",
+            "tr": "Kodu 5 sayısını yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(___)",
+          "blanks": [
+            { "id": "1", "answer": "5", "distractors": ["\"5\"", "print", "five"] }
+          ],
+          "verify": { "stdout": "5\n" },
+          "explanation": {
+            "en": "Numbers do not need quotes. If you put 5 in quotes, Python treats it as the word five, not the number.",
+            "tr": "Sayılar tırnak gerektirmez. 5'i tırnak içine koyarsan Python bunu 5 sayısı değil, beş kelimesi olarak görür."
+          }
+        },
+        {
+          "id": "py-u01-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints the result of 3 multiplied by 4.",
+            "tr": "3 çarpı 4'ün sonucunu yazdıran satırı yaz."
+          },
+          "expected": "print(3 * 4)",
+          "acceptable": ["print(3*4)", "print( 3 * 4 )"],
+          "verify": { "stdout": "12\n" },
+          "explanation": {
+            "en": "The * symbol means multiply. Python calculates 3 * 4 = 12 and prints the result.",
+            "tr": "Çarpı işareti çarpma anlamına gelir. Python 3 ve 4'ü çarpar, sonuç 12'dir ve bunu yazdırır."
+          }
+        },
+        {
+          "id": "py-u01-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["print(7 + 2)", "print 15"],
+          "buggyLineIndex": 1,
+          "fix": "print(15)",
+          "explanation": {
+            "en": "print is a function and always needs parentheses. Without them, Python does not know what to print.",
+            "tr": "print bir fonksiyon ve her zaman parantez gerektirir. Parantez olmadan Python neyi yazdıracağını bilmez."
+          }
+        },
+        {
+          "id": "py-u01-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# This shows two numbers\nprint(6)\nprint(9)",
+            "tr": "# Bu iki sayıyı gösterir\nprint(6)\nprint(9)"
+          },
+          "keyPoints": {
+            "en": [
+              "the first print outputs 6",
+              "the second print outputs 9",
+              "each print creates a new line"
+            ],
+            "tr": [
+              "ilk print 6'yı çıktı verir",
+              "ikinci print 9'u çıktı verir",
+              "her print yeni bir satır oluşturur"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It uses two print() calls. The first one shows 6, the second shows 9. Each print starts a new line, so the output has 6 on the first line and 9 on the second.",
+            "tr": "İki print() çağrısı kullanır. İlki 6'yı, ikincisi 9'u gösterir. Her print yeni bir satır başlatır, bu yüzden çıktıda 6 birinci satırda ve 9 ikinci satırda yer alır."
+          },
+          "explanation": {
+            "en": "Each print() call sends output to a new line. The order of print statements tells Python what to show and when.",
+            "tr": "Her print() çağrısı çıktıyı yeni bir satıra gönderir. Print ifadelerinin sırası Python'a ne göstereceğini ve ne zaman göstereceğini söyler."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u01-l2",
+      "index": 2,
+      "title": { "en": "Comments and Multiple Values", "tr": "Yorumlar ve Çoklu Degerler" },
+      "concept": {
+        "headline": { "en": "Comments explain code, print can show multiple values", "tr": "Yorumlar kodu açıklar, print çoklu değerleri gösterebilir" },
+        "body": {
+          "en": "A comment is a note inside your code that Python ignores. It starts with # and runs to the end of the line. Comments help you remember why you wrote something. You can also print multiple values at once by separating them with commas. This is much easier than writing separate print lines.",
+          "tr": "Yorum, Python'un görmezden geldiği kodun içindeki bir nottur. # ile başlar ve satırın sonuna kadar devam eder. Yorumlar neden bir şey yazdığını hatırlamana yardımcı olur. Ayrıca virgüllerle ayırarak aynı anda birden fazla değeri yazdırabilirsin. Bu ayrı print satırları yazmaktan çok daha kolaydır."
+        },
+        "example": {
+          "code": "# This shows my age\nprint(\"I am\", 25, \"years old\")",
+          "caption": {
+            "en": "A comment explains the code, and print shows three values as one line.",
+            "tr": "Yorum kodu açıklar ve print üç değeri tek satır olarak gösterir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u01-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does Python do with this line?", "tr": "Python bu satırla ne yapar?" },
+          "code": "# Calculate the total",
+          "options": [
+            { "id": "a", "text": { "en": "Prints the text", "tr": "Metni yazdırır" } },
+            { "id": "b", "text": { "en": "Ignores it", "tr": "Görmezden gelir" } },
+            { "id": "c", "text": { "en": "Creates an error", "tr": "Hata oluşturur" } },
+            { "id": "d", "text": { "en": "Saves it in memory", "tr": "Bellekte saklar" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Anything after # is a comment. Python reads it but does not execute it. Comments are only for humans to read.",
+            "tr": "Hash işaretinden sonraki her şey bir yorumdur. Python bunu okur ama çalıştırmaz. Yorumlar sadece insanların okuması içindir."
+          }
+        },
+        {
+          "id": "py-u01-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(\"Score:\", 95)",
+          "options": [
+            { "id": "a", "text": { "en": "Score: 95", "tr": "Score: 95" } },
+            { "id": "b", "text": { "en": "Score:\n95", "tr": "Score:\n95" } },
+            { "id": "c", "text": { "en": "Score: 95 Score: 95", "tr": "Score: 95 Score: 95" } },
+            { "id": "d", "text": { "en": "\"Score:\" 95", "tr": "\"Score:\" 95" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Commas separate values in a print call. Python joins them with spaces and prints them all on one line.",
+            "tr": "Virgüller bir print çağrısında değerleri ayırır. Python onları boşluklarla birleştirir ve hepsini tek satırda yazdırır."
+          }
+        },
+        {
+          "id": "py-u01-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete so it prints Name Alice.",
+            "tr": "Kodu Name Alice yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(\"Name\", ___)",
+          "blanks": [
+            { "id": "1", "answer": "\"Alice\"", "distractors": ["Alice", "'Alice'", "Name"] }
+          ],
+          "verify": { "stdout": "Name Alice\n" },
+          "explanation": {
+            "en": "The comma separates two values. Text must have quotes. Python adds a space between the two values automatically.",
+            "tr": "Virgül iki değeri ayırır. Metinlerin tırnak olması gerekir. Python iki değer arasına otomatik olarak boşluk ekler."
+          }
+        },
+        {
+          "id": "py-u01-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints Your answer is 42.",
+            "tr": "Your answer is 42 yazdıran satırı yaz."
+          },
+          "expected": "print(\"Your answer is\", 42)",
+          "acceptable": ["print(\"Your answer is\" , 42)"],
+          "verify": { "stdout": "Your answer is 42\n" },
+          "explanation": {
+            "en": "Use a comma to separate the text from the number. Python puts a space between them automatically.",
+            "tr": "Metni sayıdan ayırmak için virgül kullan. Python otomatik olarak aralarına boşluk koyar."
+          }
+        },
+        {
+          "id": "py-u01-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line has the bug?", "tr": "Hangi satır hatası var?" },
+          "codeLines": ["# Show the result", "print(100)"],
+          "buggyLineIndex": 0,
+          "fix": "# Show the result",
+          "explanation": {
+            "en": "There is no bug! Comments start with # and do not cause errors. This tests that you understand comments are ignored.",
+            "tr": "Hata yok! Yorumlar # ile başlar ve hata oluşturmazlar. Bu, yorumların görmezden gelindiğini anladığını test eder."
+          }
+        },
+        {
+          "id": "py-u01-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Announce the winner\nprint(\"Winner:\", \"Alice\", \"Score:\", 98)",
+            "tr": "# Kazananı duyur\nprint(\"Winner:\", \"Alice\", \"Score:\", 98)"
+          },
+          "keyPoints": {
+            "en": [
+              "uses a comment to explain the code's purpose",
+              "prints four separate values using commas",
+              "Python joins them with spaces on one line"
+            ],
+            "tr": [
+              "kodun amacını açıklamak için bir yorum kullanır",
+              "virgülleri kullanarak dört ayrı değeri yazdırır",
+              "Python onları tek satırda boşluklarla birleştirir"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "The code uses a comment to note what it does. Then it prints four values separated by commas: Winner, Alice, Score, and 98. Python combines them into one line with spaces between.",
+            "tr": "Kod, ne yaptığını not etmek için bir yorum kullanır. Sonra virgüllerle ayrılmış dört değeri yazdırır: Winner, Alice, Score ve 98. Python bunları boşluklarla tek satırda birleştirir."
+          },
+          "explanation": {
+            "en": "Commas in print() create spaces between values. The comment explains the code but does not affect the output.",
+            "tr": "print() içindeki virgüller değerler arasına boşluk oluşturur. Yorum kodu açıklar ama çıktıyı etkilemez."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u01-l3",
+      "index": 3,
+      "title": { "en": "Strings and Variables", "tr": "Metinler ve Degiskenler" },
+      "concept": {
+        "headline": { "en": "Quotes make text, no quotes means a variable name", "tr": "Tırnaklar metin yapar, tırnak yoksa değişken adı" },
+        "body": {
+          "en": "In Python, anything inside quotes is text (called a string). When you write something without quotes, Python looks for a variable with that name. You can create a variable by writing a name, then =, then a value. For example, color = \"blue\" creates a variable called color that holds the text blue. Later, you can use color in a print statement and it will show blue.",
+          "tr": "Python'da tırnak içindeki her şey metindir (string adı verilir). Tırnak olmadan bir şey yazarsan Python o adlı bir değişken arar. color = \"blue\" yazarak color adlı bir değişken oluşturabilirsin ve bu, blue metnini tutar. Sonra print ifadesinde color'ı kullanabilirsin ve blue gösterecektir."
+        },
+        "example": {
+          "code": "name = \"Bob\"\nprint(\"Hello,\", name)",
+          "caption": {
+            "en": "The variable name holds the text Bob, then print shows it.",
+            "tr": "name değişkeni Bob metnini tutar, sonra print onu gösterir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u01-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What is the difference between these two lines?", "tr": "Bu iki satır arasındaki fark nedir?" },
+          "code": "print(word)\nprint(\"word\")",
+          "options": [
+            { "id": "a", "text": { "en": "They print the same thing", "tr": "Aynı şeyi yazdırırlar" } },
+            { "id": "b", "text": { "en": "First prints a variable, second prints the text word", "tr": "Birinci bir değişken yazdırır, ikincisi word metnini yazdırır" } },
+            { "id": "c", "text": { "en": "The second one creates an error", "tr": "İkincisi hata oluşturur" } },
+            { "id": "d", "text": { "en": "Only quotes work in print", "tr": "Sadece tırnaklar print'te çalışır" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Without quotes, word is a variable name. With quotes, \"word\" is text. If the variable word does not exist, the first line causes an error.",
+            "tr": "Tırnak olmadan word bir değişken adıdır. Tırnak ile \"word\" metindir. word değişkeni yoksa birinci satır hata verir."
+          }
+        },
+        {
+          "id": "py-u01-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "pet = \"dog\"\nprint(pet)",
+          "options": [
+            { "id": "a", "text": { "en": "pet", "tr": "pet" } },
+            { "id": "b", "text": { "en": "dog", "tr": "dog" } },
+            { "id": "c", "text": { "en": "\"dog\"", "tr": "\"dog\"" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "pet is a variable holding the text dog. When you print pet without quotes, Python looks up the variable and shows what it holds.",
+            "tr": "pet, dog metnini tutan bir değişkendir. pet'i tırnak olmadan yazdırırsan Python değişkene bakar ve tuttuğu değeri gösterir."
+          }
+        },
+        {
+          "id": "py-u01-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete so it stores the text sunny in a variable called weather.",
+            "tr": "Kodu sunny metnini weather adlı bir değişkende saklayacak şekilde tamamla."
+          },
+          "codeTemplate": "weather = ___",
+          "blanks": [
+            { "id": "1", "answer": "\"sunny\"", "distractors": ["sunny", "'sunny'", "weather"] }
+          ],
+          "explanation": {
+            "en": "Text needs quotes when stored in a variable. The = sign assigns the value to the variable name.",
+            "tr": "Metin bir değişkende saklanırken tırnak gerekir. = işareti değeri değişken adına atanır."
+          }
+        },
+        {
+          "id": "py-u01-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that creates a variable called age with the value 16.",
+            "tr": "age adlı bir değişken oluşturan ve değeri 16 olan satırı yaz."
+          },
+          "expected": "age = 16",
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "Use = to assign a value to a variable. Numbers do not need quotes.",
+            "tr": "= kullanarak bir değişkene değer ata. Sayıların tırnak gerekmez."
+          }
+        },
+        {
+          "id": "py-u01-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata oluşturacak?" },
+          "codeLines": ["city = \"Paris\"", "print(city)"],
+          "buggyLineIndex": 0,
+          "fix": "city = \"Paris\"",
+          "explanation": {
+            "en": "There is no bug here. Both lines are correct. This tests whether you understand variable assignment.",
+            "tr": "Burada hata yoktur. Her iki satır da doğrudur. Bu, değişken atamayı anladığını test eder."
+          }
+        },
+        {
+          "id": "py-u01-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Store a book title\ntitle = \"Python Basics\"\nprint(\"Reading:\", title)",
+            "tr": "# Bir kitap başlığını sakla\ntitle = \"Python Basics\"\nprint(\"Reading:\", title)"
+          },
+          "keyPoints": {
+            "en": [
+              "creates a variable called title",
+              "stores the text Python Basics in that variable",
+              "prints Reading followed by the value of the title variable"
+            ],
+            "tr": [
+              "title adlı bir değişken oluşturur",
+              "Python Basics metnini bu değişkende saklar",
+              "Reading'i takip eden title değişkeninin değerini yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "The code creates a variable named title and stores the text Python Basics in it. Then it prints Reading followed by the value of title, so the output shows Reading: Python Basics.",
+            "tr": "Kod title adlı bir değişken oluşturur ve Python Basics metnini içinde saklar. Sonra Reading'i ve title'ın değerini yazdırır, bu yüzden çıktı Reading: Python Basics gösterir."
+          },
+          "explanation": {
+            "en": "Variables store values so you can use them later. When you print a variable without quotes, Python shows the value it holds, not the variable name.",
+            "tr": "Değişkenler değerleri depolar, böylece daha sonra kullanabilirsin. Bir değişkeni tırnak olmadan yazdırırsan Python değişken adını değil, tuttuğu değeri gösterir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u01-l4",
+      "index": 4,
+      "title": { "en": "Order of Execution", "tr": "Yürütme Sirasi" },
+      "concept": {
+        "headline": { "en": "Code runs top to bottom, and syntax errors stop execution", "tr": "Kod yukarıdan aşağıya çalışır ve sözdizim hataları yürütmeyi durdurur" },
+        "body": {
+          "en": "Python reads and runs your code from the top line to the bottom line, one line at a time. When Python cannot understand the syntax (the rules of how code must be written), it raises a SyntaxError and stops immediately. A SyntaxError might be a missing colon, a missing quote, or unmatched parentheses. The computer also stops if you try to use a variable before you have created it.",
+          "tr": "Python kodunu yukarıdan aşağıya doğru, bir satır bir satır okur ve çalıştırır. Python sözdizimini (kodun nasıl yazılması gerektiğinin kurallarını) anlayamadığında SyntaxError yükseltir ve hemen durur. SyntaxError eksik bir iki nokta, eksik bir tırnak veya eşleşmeyen parantezler olabilir. Bir değişkeni oluşturmadan önce kullanmaya çalışırsanız bilgisayar da durur."
+        },
+        "example": {
+          "code": "color = \"red\"\nprint(color)\nprint(\"Done\")",
+          "caption": {
+            "en": "Lines execute in order: assign, print variable, print text.",
+            "tr": "Satırlar sırayla çalışır: ata, değişkeni yazdır, metni yazdır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u01-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "x = 3\nprint(x)\nx = 5\nprint(x)",
+          "options": [
+            { "id": "a", "text": { "en": "3\n5", "tr": "3\n5" } },
+            { "id": "b", "text": { "en": "5\n5", "tr": "5\n5" } },
+            { "id": "c", "text": { "en": "3\n3", "tr": "3\n3" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The code runs line by line. First x is 3 and prints 3. Then x changes to 5 and prints 5. Each print shows the current value.",
+            "tr": "Kod satır satır çalışır. Önce x 3 ve 3 yazdırır. Sonra x 5'e değişir ve 5 yazdırır. Her print geçerli değeri gösterir."
+          }
+        },
+        {
+          "id": "py-u01-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What error does this code have?", "tr": "Bu kodun hatası nedir?" },
+          "code": "print(z)\nz = 10",
+          "options": [
+            { "id": "a", "text": { "en": "No error, it prints 10", "tr": "Hata yok, 10 yazdırır" } },
+            { "id": "b", "text": { "en": "NameError: z is not defined before use", "tr": "NameError: z kullanılmadan önce tanımlanmamış" } },
+            { "id": "c", "text": { "en": "SyntaxError: missing quotes", "tr": "SyntaxError: eksik tırnaklar" } },
+            { "id": "d", "text": { "en": "You must use print before creating variables", "tr": "Değişkenler oluşturmadan önce print kullanmalısınız" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Code runs top to bottom. The first line tries to print z, but z does not exist yet because it is created on line 2. Python raises NameError.",
+            "tr": "Kod yukarıdan aşağıya çalışır. Birinci satır z'yi yazdırmaya çalışır, ama z henüz yoktur çünkü 2. satırda oluşturulur. Python NameError yükseltir."
+          }
+        },
+        {
+          "id": "py-u01-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Reorder the code so it works correctly. Put line 2 first.",
+            "tr": "Kodu doğru çalışacak şekilde yeniden sırala. Satır 2'yi öne al."
+          },
+          "codeTemplate": "___\nprint(x)",
+          "blanks": [
+            { "id": "1", "answer": "x = 7", "distractors": ["print(x)", "x", "7"] }
+          ],
+          "verify": { "stdout": "7\n" },
+          "explanation": {
+            "en": "You must create a variable before you can print it. Python executes code top to bottom, so the assignment must come first.",
+            "tr": "Bir değişkeni yazdırabilmek için önce oluşturmalısın. Python kod yukarıdan aşağıya çalışır, bu yüzden atama önce gelmeli."
+          }
+        },
+        {
+          "id": "py-u01-l4-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write the code that sets a variable num to 99, then prints it.",
+            "tr": "num değişkenini 99'a ayarlayan ve sonra yazdıran kodu yaz."
+          },
+          "expected": "num = 99\nprint(num)",
+          "verify": { "stdout": "99\n" },
+          "explanation": {
+            "en": "First line creates and assigns. Second line uses it. Order matters in Python.",
+            "tr": "İlk satır oluşturur ve atar. İkinci satır kullanır. Python'da sıra önemlidir."
+          }
+        },
+        {
+          "id": "py-u01-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata oluşturacak?" },
+          "codeLines": ["year = 2025", "print(\"Year:\", years)"],
+          "buggyLineIndex": 1,
+          "fix": "print(\"Year:\", year)",
+          "verify": { "raises": "NameError" },
+          "explanation": {
+            "en": "The variable is named year, but the code tries to print years (with an s). Python raises NameError because years does not exist.",
+            "tr": "Değişkenin adı year'dır, ama kod years'ı yazdırmaya çalışır (s ile). Python years mevcut olmadığı için NameError yükseltir."
+          }
+        },
+        {
+          "id": "py-u01-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Show a greeting\nname = \"Jordan\"\ngreeting = \"Hi\"\nprint(greeting, \"to\", name)",
+            "tr": "# Bir selamlamayı göster\nname = \"Jordan\"\ngreeting = \"Hi\"\nprint(greeting, \"to\", name)"
+          },
+          "keyPoints": {
+            "en": [
+              "creates variables in order: name then greeting",
+              "each variable stores a text value",
+              "prints all three values separated by commas"
+            ],
+            "tr": [
+              "sırayla değişkenler oluşturur: name sonra greeting",
+              "her değişken bir metin değerini depolar",
+              "virgüllerle ayrılmış üç değeri yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "The code creates two variables, name with the value Jordan and greeting with the value Hi. Then it prints the greeting variable, the text to, and the name variable together, resulting in Hi to Jordan.",
+            "tr": "Kod iki değişken oluşturur, name değeri Jordan ve greeting değeri Hi ile. Sonra greeting değişkenini, to metnini ve name değişkenini birlikte yazdırır, Hi to Jordan sonucunu verir."
+          },
+          "explanation": {
+            "en": "Variables must be created before use. When you print multiple variables, Python shows their stored values separated by spaces.",
+            "tr": "Değişkenler kullanılmadan önce oluşturulmalıdır. Birden fazla değişkeni yazdırırsan Python saklanmış değerlerini boşluklarla ayrılmış şekilde gösterir."
+          }
+        }
+      ]
+    }
+  ]
+}

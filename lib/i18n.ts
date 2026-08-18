@@ -1,32 +1,54 @@
+/**
+ * Localization.
+ *
+ * Wraps i18n-js with the two locales the app ships with (English and Turkish),
+ * device detection, persistence, and a typed `t()` whose keys are derived from
+ * `i18n/en.json` — a missing or misspelled key is a compile error, not a
+ * runtime "[missing translation]".
+ *
+ * Constraints:
+ * - Every learner-facing string in the app must come from here.
+ * - `initI18n()` must be awaited before the first render so the stored locale
+ *   is applied without a visible flash of English.
+ *
+ * @module lib/i18n
+ */
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
 import { I18n } from 'i18n-js';
+
 import en from '@/i18n/en.json';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import tr from '@/i18n/tr.json';
 
-const i18n = new I18n({ en });
+/** Locales with a complete dictionary. Mirrors `LOCALES` in content_schema. */
+export const SUPPORTED_LOCALES = ['en', 'tr'] as const;
 
-// Default locale
+export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+
+const STORAGE_KEY = 'settings.locale';
+
+const i18n = new I18n({ en, tr });
+
 i18n.defaultLocale = 'en';
+i18n.enableFallback = true;
 
-// Detect device locale; fallback to English
-const deviceLocales = Array.isArray(Localization.getLocales)
-  ? // Newer expo-localization returns getLocales(): Locale[]
-    // @ts-ignore: safeguard for differing versions
-    Localization.getLocales()
-  : // Older versions expose locales array directly
-    // @ts-ignore
-    Localization.locales;
+function isSupported(value: string | null | undefined): value is SupportedLocale {
+  return !!value && (SUPPORTED_LOCALES as readonly string[]).includes(value);
+}
 
-const primaryTag =
-  Array.isArray(deviceLocales) && deviceLocales.length > 0
-    ? (deviceLocales[0].languageCode ?? 'en')
-    : (Localization.getLocales()[0].languageCode ?? 'en');
+/** The locale the device asks for, or English when it is one we do not ship. */
+export function deviceLocale(): SupportedLocale {
+  const tag = Localization.getLocales()[0]?.languageCode;
+  return isSupported(tag) ? tag : 'en';
+}
 
-i18n.locale = ['en'].includes(primaryTag) ? primaryTag : 'en';
+i18n.locale = deviceLocale();
 
-// -----------------------------
-// Typed translation key support (bounded depth to avoid TS recursion limits)
-// -----------------------------
+// -----------------------------------------------------------------------------
+// Typed keys (bounded depth keeps TypeScript out of recursion limits)
+// -----------------------------------------------------------------------------
+
 type Keys<T> = Extract<keyof T, string>;
 type Join<K, P> = K extends string | number
   ? P extends string | number
@@ -61,46 +83,66 @@ type Level4<T> = {
     : never;
 }[Keys<T>];
 
-export type TranslationKeys =
-  | Level1<typeof en>
-  | Level2<typeof en>
-  | Level3<typeof en>
-  | Level4<typeof en>;
+export type TranslationKeys = Level1<typeof en> | Level2<typeof en> | Level3<typeof en> | Level4<typeof en>;
 
-export function t<Key extends TranslationKeys>(
-  key: Key,
-  options?: Parameters<I18n['t']>[1]
-): string {
-  // Casting to string is safe because TranslationKeys are derived from object keys
+/**
+ * Translate a key.
+ *
+ * @param key - Dotted key from `i18n/en.json`.
+ * @param options - i18n-js options: interpolation values, `count` for plurals.
+ */
+export function t<Key extends TranslationKeys>(key: Key, options?: Parameters<I18n['t']>[1]): string {
   return i18n.t(key as string, options);
 }
 
-// -----------------------------
-// Locale management helpers
-// -----------------------------
-type SupportedLocale = 'en';
+// -----------------------------------------------------------------------------
+// Locale management
+// -----------------------------------------------------------------------------
 
 const listeners = new Set<() => void>();
 
+/** The locale currently in use. */
 export function getLocale(): SupportedLocale {
   const current = String(i18n.locale);
-  return (current.startsWith('en') ? 'en' : 'en') as SupportedLocale;
+  return isSupported(current) ? current : 'en';
 }
 
+/** Switch locale, persist the choice, and notify subscribed components. */
 export async function setLocale(next: SupportedLocale): Promise<void> {
+  if (getLocale() === next) return;
   i18n.locale = next;
   try {
-    await AsyncStorage.setItem('i18n.locale', next);
-  } catch {}
-  listeners.forEach((fn) => fn());
+    await AsyncStorage.setItem(STORAGE_KEY, next);
+  } catch {
+    // A failed write only costs the preference on next launch; never block the UI.
+  }
+  listeners.forEach((listener) => listener());
 }
 
-export function addI18nChangeListener(listener: () => void): void {
+/**
+ * Restore the stored locale. Call once, before the first render.
+ *
+ * @returns The locale that ended up active.
+ */
+export async function initI18n(): Promise<SupportedLocale> {
+  try {
+    const stored = await AsyncStorage.getItem(STORAGE_KEY);
+    if (isSupported(stored)) {
+      i18n.locale = stored;
+      return stored;
+    }
+  } catch {
+    // Fall through to the device locale.
+  }
+  return getLocale();
+}
+
+/** Subscribe to locale changes. Returns the unsubscribe function. */
+export function subscribeToLocale(listener: () => void): () => void {
   listeners.add(listener);
-}
-
-export function removeI18nChangeListener(listener: () => void): void {
-  listeners.delete(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export default i18n;

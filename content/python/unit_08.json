@@ -1,0 +1,597 @@
+{
+  "id": "py-u08",
+  "courseId": "python",
+  "index": 8,
+  "title": { "en": "Your Own Functions", "tr": "Kendi Fonksiyonlarınız" },
+  "description": {
+    "en": "Learn how to create and use functions to organize and reuse your code.",
+    "tr": "Kodunuzu organize etmek ve tekrar kullanmak için fonksiyonlar oluşturmayı öğrenin."
+  },
+  "lessons": [
+    {
+      "id": "py-u08-l1",
+      "index": 1,
+      "title": { "en": "Defining and Calling", "tr": "Tanımlama ve Çağırma" },
+      "concept": {
+        "headline": { "en": "def creates a function, then call it by name", "tr": "def bir fonksiyon oluşturur, sonra adıyla çağırırsınız" },
+        "body": {
+          "en": "A function is a block of code with a name that you can run whenever you want. You define it once with def, followed by the name and parentheses and a colon, then indent the lines that belong inside. After that, you call it by writing its name with parentheses. Every time you call it, Python runs all the lines inside.",
+          "tr": "Fonksiyon, istediğiniz zaman çalıştırabileceğiniz adlı bir kod bloğudur. Bunu def ile tanımlarsınız, sonra isim ve parantezler ve iki nokta ile devam edersiniz, sonra içine ait satırları girintilersiniz. Bundan sonra onu adıyla parantezler koyarak çağırırsınız. Her çağırdığınızda Python içindeki tüm satırları çalıştırır."
+        },
+        "example": {
+          "code": "def greet():\n    print(\"Hello!\")\n\ngreet()\ngreet()",
+          "caption": {
+            "en": "Define greet once, call it twice.",
+            "tr": "greet'i bir kez tanımla, iki kez çağır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u08-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does the def keyword do?",
+            "tr": "def anahtar kelimesi ne yapar?"
+          },
+          "options": [
+            { "id": "a", "text": { "en": "Calls a function that already exists", "tr": "Zaten var olan bir fonksiyonu çağırır" } },
+            { "id": "b", "text": { "en": "Creates a new function", "tr": "Yeni bir fonksiyon oluşturur" } },
+            { "id": "c", "text": { "en": "Defines a variable", "tr": "Bir değişken tanımlar" } },
+            { "id": "d", "text": { "en": "Prints something to the screen", "tr": "Ekrana bir şeyler yazdırır" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "def stands for define, which means to create a new function that you can call later.",
+            "tr": "def define anlamına gelir, yani daha sonra çağırabileceğiniz yeni bir fonksiyon oluşturmak demektir."
+          }
+        },
+        {
+          "id": "py-u08-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "How do you run a function after defining it?",
+            "tr": "Bir fonksiyonu tanımladıktan sonra nasıl çalıştırırsınız?"
+          },
+          "options": [
+            { "id": "a", "text": { "en": "def myfunction", "tr": "def myfunction" } },
+            { "id": "b", "text": { "en": "myfunction:", "tr": "myfunction:" } },
+            { "id": "c", "text": { "en": "myfunction()", "tr": "myfunction()" } },
+            { "id": "d", "text": { "en": "call myfunction", "tr": "call myfunction" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "You call a function by typing its name followed by parentheses. The parentheses tell Python to run the function.",
+            "tr": "Bir fonksiyonu adıyla ve parantez koyarak çağırırsınız. Parantez Python'a fonksiyonu çalıştırmasını söyler."
+          }
+        },
+        {
+          "id": "py-u08-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code to call the function.",
+            "tr": "Fonksiyonu çağırmak için kodu tamamla."
+          },
+          "codeTemplate": "def say_hello():\n    print(\"hello\")\n\n___",
+          "blanks": [
+            { "id": "1", "answer": "say_hello()", "distractors": ["say_hello", "hello", "print(\"hello\")"] }
+          ],
+          "verify": { "stdout": "hello\n" },
+          "explanation": {
+            "en": "To run a function, type its name followed by parentheses. Without the parentheses, Python just sees the name as a reference, not a call.",
+            "tr": "Bir fonksiyonu çalıştırmak için adını parantezler ile yazarsınız. Parantez olmadan Python sadece ismi bir referans olarak görür, çağrı değil."
+          }
+        },
+        {
+          "id": "py-u08-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write the line that calls the greet function.",
+            "tr": "greet fonksiyonunu çağıran satırı yaz."
+          },
+          "code": "def greet():\n    print(\"Hi there\")",
+          "expected": "greet()",
+          "verify": { "stdout": "Hi there\n" },
+          "explanation": {
+            "en": "To call a function, type its name followed by empty parentheses.",
+            "tr": "Bir fonksiyonu çağırmak için adıyla ve boş parantezle yazarsınız."
+          }
+        },
+        {
+          "id": "py-u08-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "def hello():",
+            "print(\"Hello\")",
+            "hello()"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "    print(\"Hello\")",
+          "explanation": {
+            "en": "The line inside the function must be indented more than the def line. Without indentation, Python doesn't know it belongs inside the function.",
+            "tr": "Fonksiyon içindeki satır def satırından daha fazla girinti ile yazılmalıdır. Girinti olmadan Python bunun fonksiyon içine ait olduğunu bilmez."
+          }
+        },
+        {
+          "id": "py-u08-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# A function that greets\ndef wave():\n    print(\"Hello!\")\n\nwave()\nwave()",
+            "tr": "# Selamlaştıran bir fonksiyon\ndef wave():\n    print(\"Hello!\")\n\nwave()\nwave()"
+          },
+          "keyPoints": {
+            "en": [
+              "defines a function named wave",
+              "the function prints Hello!",
+              "calls wave twice, so it prints twice"
+            ],
+            "tr": [
+              "wave adında bir fonksiyon tanımlar",
+              "fonksiyon Hello! yazdırır",
+              "wave'i iki kez çağırır, bu nedenle iki kez yazdırılır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It defines a function called wave that prints Hello!, then calls that function twice, so Hello! appears on the screen twice.",
+            "tr": "Hello! yazdıran wave adında bir fonksiyon tanımlar, sonra bu fonksiyonu iki kez çağırır, bu nedenle Hello! ekranda iki kez görünür."
+          },
+          "explanation": {
+            "en": "Once you define a function, you can call it as many times as you want. Each call runs all the code inside it.",
+            "tr": "Bir fonksiyonu tanımladıktan sonra onu istediğiniz kadar çağırabilirsiniz. Her çağrı içindeki tüm kodu çalıştırır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u08-l2",
+      "index": 2,
+      "title": { "en": "Parameters and Arguments", "tr": "Parametreler ve Argümanlar" },
+      "concept": {
+        "headline": { "en": "Parameters let a function receive values", "tr": "Parametreler fonksiyonun değer almasını sağlar" },
+        "body": {
+          "en": "A parameter is a variable inside a function that receives a value when you call it. You list parameters in the parentheses when you define the function with def. When you call the function, you put the actual values (called arguments) in the parentheses. The function then uses those values inside.",
+          "tr": "Parametre, fonksiyonu çağırdığınızda bir değer alan bir fonksiyon içindeki değişkendir. Parametreleri def ile fonksiyonu tanımlarken parantez içinde listelersiz. Fonksiyonu çağırırken parantez içine gerçek değerleri (argümanlar denir) koyarsınız. Fonksiyon daha sonra bu değerleri içinde kullanır."
+        },
+        "example": {
+          "code": "def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(\"Alice\")\ngreet(\"Bob\")",
+          "caption": {
+            "en": "The parameter name gets different values each time.",
+            "tr": "Her seferde name parametresi farklı değerler alır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u08-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "In the function def add(x, y):, what are x and y?",
+            "tr": "def add(x, y): fonksiyonunda x ve y nedir?"
+          },
+          "options": [
+            { "id": "a", "text": { "en": "Arguments", "tr": "Argümanlar" } },
+            { "id": "b", "text": { "en": "Parameters", "tr": "Parametreler" } },
+            { "id": "c", "text": { "en": "Variables that are already defined", "tr": "Zaten tanımlı değişkenler" } },
+            { "id": "d", "text": { "en": "Numbers that the function will add", "tr": "Fonksiyonun toplayacağı sayılar" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "The names in parentheses after def are called parameters. They receive values when you call the function.",
+            "tr": "def'ten sonra parantez içindeki isimler parametreler denir. Fonksiyonu çağırdığınızda değer alırlar."
+          }
+        },
+        {
+          "id": "py-u08-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does this function do when you call double(5)?",
+            "tr": "double(5) çağrısında bu fonksiyon ne yapar?"
+          },
+          "code": "def double(num):\n    print(num * 2)",
+          "options": [
+            { "id": "a", "text": { "en": "5", "tr": "5" } },
+            { "id": "b", "text": { "en": "10", "tr": "10" } },
+            { "id": "c", "text": { "en": "num * 2", "tr": "num * 2" } },
+            { "id": "d", "text": { "en": "num", "tr": "num" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "When you call double(5), the parameter num receives the value 5. Then the function prints 5 * 2, which is 10.",
+            "tr": "double(5) çağırdığınızda, num parametresi 5 değerini alır. Sonra fonksiyon 5 * 2'yi yazdırır, bu 10'dur."
+          }
+        },
+        {
+          "id": "py-u08-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the function call with the argument.",
+            "tr": "Fonksiyon çağrısını argümanla tamamla."
+          },
+          "codeTemplate": "def make_loud(word):\n    print(word + \"!!!\")\n\nmake_loud(___)",
+          "blanks": [
+            { "id": "1", "answer": "\"shout\"", "distractors": ["shout", "'shout", "word"] }
+          ],
+          "verify": { "stdout": "shout!!!\n" },
+          "explanation": {
+            "en": "The argument is the actual value you pass when calling the function. The parameter (in this case word) receives that value.",
+            "tr": "Argüman, fonksiyonu çağırdığınızda geçen gerçek değerdir. Parametre (bu durumda word) bu değeri alır."
+          }
+        },
+        {
+          "id": "py-u08-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write the line that calls make_sound with the argument \"Moo\".",
+            "tr": "make_sound'u \"Moo\" argümanıyla çağıran satırı yaz."
+          },
+          "code": "def make_sound(sound):\n    print(sound)",
+          "expected": "make_sound(\"Moo\")",
+          "verify": { "stdout": "Moo\n" },
+          "explanation": {
+            "en": "When you call a function with arguments, put the values in the parentheses. The parameter receives that value.",
+            "tr": "Bir fonksiyonu argümanlarla çağırdığınızda değerleri parantez içine koyarsınız. Parametre bu değeri alır."
+          }
+        },
+        {
+          "id": "py-u08-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "def add(x, y):",
+            "    total = x + y",
+            "print(total)",
+            "add(3, 4)"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "    print(total)",
+          "explanation": {
+            "en": "The variable total is created inside the function, so it only exists there. You cannot use it outside the function. Trying to print(total) outside the function causes a NameError.",
+            "tr": "total değişkeni fonksiyon içinde oluşturuldu, bu nedenle sadece orada var. Fonksiyon dışında kullanamaz. Fonksiyon dışında print(total) yapmaya çalışmak NameError verir."
+          }
+        },
+        {
+          "id": "py-u08-l2-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Repeats a word\ndef repeat_word(word, times):\n    for i in range(times):\n        print(word)\n\nrepeat_word(\"Hi\", 3)",
+            "tr": "# Bir kelimeyi tekrar eder\ndef repeat_word(word, times):\n    for i in range(times):\n        print(word)\n\nrepeat_word(\"Hi\", 3)"
+          },
+          "keyPoints": {
+            "en": [
+              "takes two parameters: word and times",
+              "loops from 0 to times",
+              "prints the word each time through the loop"
+            ],
+            "tr": [
+              "iki parametre alır: word ve times",
+              "0'dan times'a kadar döngü yapar",
+              "her döngüde word'ü yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It defines a function that takes two parameters: a word and a number of times. It loops that many times and prints the word each time, so calling repeat_word(\"Hi\", 3) prints Hi three times.",
+            "tr": "Bir kelime ve kaç kez basılacağını alan iki parametreli bir fonksiyon tanımlar. O kadar döngü yapıp her seferde kelimeyi yazdırır, bu nedenle repeat_word(\"Hi\", 3) çağrısı Hi'yı üç kez yazdırır."
+          },
+          "explanation": {
+            "en": "Functions can take multiple parameters separated by commas. Each parameter receives its own argument when you call the function.",
+            "tr": "Fonksiyonlar virgülle ayrılan birden çok parametre alabilir. Her parametre fonksiyonu çağırdığınızda kendi argümanını alır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u08-l3",
+      "index": 3,
+      "title": { "en": "Return Values", "tr": "Dönüş Değerleri" },
+      "concept": {
+        "headline": { "en": "return sends a value back to the caller", "tr": "return çağırıcıya bir değer geri gönderir" },
+        "body": {
+          "en": "A function can compute a value and send it back to where it was called. You do this with the return keyword followed by the value. When Python sees return, it stops running the function and sends that value back. You can store the returned value in a variable or use it right away in an expression.",
+          "tr": "Bir fonksiyon bir değer hesaplayıp onu çağırıldığı yere geri gönderebilir. Bunu return anahtar kelimesi ve ardından değer ile yaparsınız. Python return gördüğünde fonksiyonu çalıştırmayı durdurur ve bu değeri geri gönderir. Dönen değeri bir değişkende saklayabilir veya bunu hemen bir ifadede kullanabilirsiniz."
+        },
+        "example": {
+          "code": "def add(x, y):\n    return x + y\n\nresult = add(3, 4)\nprint(result)",
+          "caption": {
+            "en": "The function computes 3 + 4 and sends back 7.",
+            "tr": "Fonksiyon 3 + 4 hesaplar ve 7'yi geri gönderir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u08-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does the return keyword do?",
+            "tr": "return anahtar kelimesi ne yapar?"
+          },
+          "options": [
+            { "id": "a", "text": { "en": "Stops the function and sends a value back", "tr": "Fonksiyonu durdurur ve bir değer geri gönderir" } },
+            { "id": "b", "text": { "en": "Prints a value to the screen", "tr": "Ekrana bir değer yazdırır" } },
+            { "id": "c", "text": { "en": "Calls the function again", "tr": "Fonksiyonu tekrar çağırır" } },
+            { "id": "d", "text": { "en": "Creates a new variable", "tr": "Yeni bir değişken oluşturur" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "return exits the function and sends a value back to where it was called, which you can then use.",
+            "tr": "return fonksiyondan çıkış yapıp çağırıldığı yere bir değer geri gönderir; bu değeri daha sonra kullanabilirsiniz."
+          }
+        },
+        {
+          "id": "py-u08-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does this function return?",
+            "tr": "Bu fonksiyon neyi döndürür?"
+          },
+          "code": "def square(x):\n    return x * x",
+          "options": [
+            { "id": "a", "text": { "en": "Nothing, it just prints", "tr": "Hiçbir şey, sadece yazdırır" } },
+            { "id": "b", "text": { "en": "The value x * x", "tr": "x * x değeri" } },
+            { "id": "c", "text": { "en": "The variable x", "tr": "x değişkeni" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "The return keyword sends the computed value x * x back to whoever called the function.",
+            "tr": "return anahtar kelimesi hesaplanan x * x değerini fonksiyonu çağırana geri gönderir."
+          }
+        },
+        {
+          "id": "py-u08-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the function to return double the input.",
+            "tr": "Fonksiyonu giriş değerinin iki katını döndürecek şekilde tamamla."
+          },
+          "codeTemplate": "def double(x):\n    ___",
+          "blanks": [
+            { "id": "1", "answer": "return x * 2", "distractors": ["x * 2", "print(x * 2)", "return x"] }
+          ],
+          "explanation": {
+            "en": "The return statement sends a value back from the function so the caller can use it.",
+            "tr": "return ifadesi fonksiyondan bir değer geri gönderir, böylece çağıran kullanabilir."
+          }
+        },
+        {
+          "id": "py-u08-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that calls the multiply function with 3 and 4, and stores the result in a variable called answer.",
+            "tr": "multiply fonksiyonunu 3 ve 4 ile çağıran ve sonucu answer değişkenine kaydeden satırı yaz."
+          },
+          "code": "def multiply(a, b):\n    return a * b",
+          "expected": "answer = multiply(3, 4)",
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "You capture a returned value by assigning it to a variable. Then you can use that variable later.",
+            "tr": "Dönen değeri bir değişkene atayarak yakala. Sonra bu değişkeni daha sonra kullanabilirsiniz."
+          }
+        },
+        {
+          "id": "py-u08-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "def get_half(x):",
+            "    half = x / 2",
+            "    print(half)",
+            "answer = get_half(10)"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "    return half",
+          "explanation": {
+            "en": "This function prints the half value but does not return it. If you want to use the result elsewhere, you need return, not print.",
+            "tr": "Bu fonksiyon yarı değeri yazdırır ancak döndürmez. Sonucu başka yerde kullanmak istiyorsanız print değil, return gerekir."
+          }
+        },
+        {
+          "id": "py-u08-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Returns the larger of two numbers\ndef max_of_two(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nlargest = max_of_two(7, 3)\nprint(largest)",
+            "tr": "# İki sayıdan büyüğünü döndürür\ndef max_of_two(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nlargest = max_of_two(7, 3)\nprint(largest)"
+          },
+          "keyPoints": {
+            "en": [
+              "defines a function with two parameters",
+              "uses an if-else to compare them",
+              "returns whichever is larger"
+            ],
+            "tr": [
+              "iki parametreli bir fonksiyon tanımlar",
+              "if-else ile onları karşılaştırır",
+              "hangisi büyük ise onu döndürür"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It defines a function that takes two numbers and returns the larger one. It compares them with if-else and returns the correct one, so max_of_two(7, 3) returns 7 and prints it.",
+            "tr": "İki sayı alan ve daha büyük olanı döndüren bir fonksiyon tanımlar. Bunları if-else ile karşılaştırıp doğru olanı döndürür, bu yüzden max_of_two(7, 3) 7'yi döndürüp yazdırır."
+          },
+          "explanation": {
+            "en": "A function can use if-else to decide what value to return. Each return statement sends a value back and stops the function.",
+            "tr": "Bir fonksiyon hangi değeri döndüreceğine karar vermek için if-else kullanabilir. Her return ifadesi bir değer geri gönderir ve fonksiyonu durdurur."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u08-l4",
+      "index": 4,
+      "title": { "en": "Defaults and Scope", "tr": "Varsayılanlar ve Kapsam" },
+      "concept": {
+        "headline": { "en": "Default parameters and variable scope", "tr": "Varsayılan parametreler ve değişken kapsamı" },
+        "body": {
+          "en": "You can give a parameter a default value so you do not have to provide it every time you call the function. Write the default after an equals sign in the parameter list. Variables created inside a function only exist inside that function (they have function scope). Variables outside functions exist everywhere. Understanding scope helps you avoid errors like using a variable that does not exist where you need it.",
+          "tr": "Bir parametreye varsayılan değer verebilirsiniz, böylece fonksiyonu her çağırdığınızda sağlamak zorunda kalmazsınız. Varsayılanı parametre listesinde eşittir işaretinden sonra yazın. Fonksiyon içinde oluşturulan değişkenler sadece o fonksiyon içinde var olur (fonksiyon kapsamı vardır). Fonksiyon dışındaki değişkenler her yerde var. Kapsamı anlamak, olmayan bir değişkeni kullanma hatalarından kaçınmanıza yardımcı olur."
+        },
+        "example": {
+          "code": "def greet(name=\"Friend\"):\n    print(\"Hello, \" + name)\n\ngreet()\ngreet(\"Alice\")",
+          "caption": {
+            "en": "With a default, greet() works without an argument.",
+            "tr": "Varsayılan ile greet() argüman olmadan çalışır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u08-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In def speak(text=\"Hi\"):, what does \"Hi\" do?",
+            "tr": "def speak(text=\"Hi\"): de \"Hi\" ne yapar?"
+          },
+          "options": [
+            { "id": "a", "text": { "en": "It is returned when the function finishes", "tr": "Fonksiyon bittiğinde döndürülür" } },
+            { "id": "b", "text": { "en": "It is the default value if no argument is passed", "tr": "Argüman geçirilmezse varsayılan değerdir" } },
+            { "id": "c", "text": { "en": "It is printed every time the function is called", "tr": "Fonksiyon her çağrıldığında yazdırılır" } },
+            { "id": "d", "text": { "en": "It is required and must be provided", "tr": "Zorunludur ve sağlanmalıdır" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "When you define a parameter with a default value, the function can be called without that argument, and it will use the default.",
+            "tr": "Bir parametreyi varsayılan değer ile tanımlandığında, fonksiyon bu argüman olmadan çağrılabilir ve varsayılanı kullanır."
+          }
+        },
+        {
+          "id": "py-u08-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "def show_number(num=5):\n    print(num)\n\nshow_number()\nshow_number(10)",
+          "options": [
+            { "id": "a", "text": { "en": "5\\n10", "tr": "5\\n10" } },
+            { "id": "b", "text": { "en": "10\\n5", "tr": "10\\n5" } },
+            { "id": "c", "text": { "en": "5\\n5", "tr": "5\\n5" } },
+            { "id": "d", "text": { "en": "num\\n10", "tr": "num\\n10" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The first call has no argument, so it uses the default 5. The second call passes 10, so it prints 10.",
+            "tr": "İlk çağrı argüman içermez, bu yüzden varsayılan 5'i kullanır. İkinci çağrı 10 geçirir, bu yüzden 10'u yazdırır."
+          }
+        },
+        {
+          "id": "py-u08-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the function with a default parameter value.",
+            "tr": "Fonksiyonu varsayılan parametre değeri ile tamamla."
+          },
+          "codeTemplate": "def multiply(x, y___):\n    return x * y",
+          "blanks": [
+            { "id": "1", "answer": "=2", "distractors": ["==2", "= 2", ": 2"] }
+          ],
+          "explanation": {
+            "en": "Use = (not ==) to give a parameter a default value in the function definition.",
+            "tr": "Fonksiyon tanımında parametreye varsayılan değer vermek için = (== değil) kullanın."
+          }
+        },
+        {
+          "id": "py-u08-l4-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write a function called power that takes a number and returns it raised to the power of 2 by default, but can also raise it to a different power if you pass a second argument.",
+            "tr": "number parametresini alan ve varsayılan olarak 2'nin kuvvetine yükselten, ancak ikinci argüman geçirirseniz farklı bir kuvvete yükseltebilen power adında bir fonksiyon yaz."
+          },
+          "expected": "def power(x, p=2):\n    return x ** p",
+          "acceptable": ["def power(x, p = 2):\n    return x ** p"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "A default parameter lets you call the function with fewer arguments. Here power(3) means power(3, 2) and power(3, 3) is different.",
+            "tr": "Varsayılan parametre fonksiyonu daha az argümanla çağırmanızı sağlar. Burada power(3), power(3, 2) anlamındadır ve power(3, 3) farklıdır."
+          }
+        },
+        {
+          "id": "py-u08-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "def compute():",
+            "    result = 10 * 5",
+            "    return result",
+            "print(result)"
+          ],
+          "buggyLineIndex": 3,
+          "fix": "print(compute())",
+          "verify": { "raises": "NameError" },
+          "explanation": {
+            "en": "The variable result only exists inside the compute function (function scope). Outside the function, Python does not know what result is. You need to call the function to get its return value.",
+            "tr": "result değişkeni sadece compute fonksiyonu içinde var olur (fonksiyon kapsamı). Fonksiyon dışında Python result'in ne olduğunu bilmez. Dönüş değerini almak için fonksiyonu çağırmanız gerekir."
+          }
+        },
+        {
+          "id": "py-u08-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Adds numbers with a default start\ndef add_to(num, start=0):\n    return start + num\n\nprint(add_to(5))\nprint(add_to(5, 10))",
+            "tr": "# Varsayılan başlangıçla sayıları toplar\ndef add_to(num, start=0):\n    return start + num\n\nprint(add_to(5))\nprint(add_to(5, 10))"
+          },
+          "keyPoints": {
+            "en": [
+              "has two parameters, one with a default",
+              "start defaults to 0 if not provided",
+              "returns start + num"
+            ],
+            "tr": [
+              "iki parametresi var, biri varsayılan değere sahip",
+              "sağlanmazsa start 0 varsayılır",
+              "start + num döndürür"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It defines a function that adds a number to a starting value, with the start defaulting to 0. So add_to(5) returns 5 (0+5) and add_to(5, 10) returns 15 (10+5).",
+            "tr": "Bir sayıyı başlangıç değerine ekleyen fonksiyon tanımlar, start varsayılan olarak 0'dır. Bu yüzden add_to(5) 5 (0+5) döndürür ve add_to(5, 10) 15 (10+5) döndürür."
+          },
+          "explanation": {
+            "en": "Default parameters make functions flexible. You can call them with fewer arguments and still get the expected behavior.",
+            "tr": "Varsayılan parametreler fonksiyonları esnek yapar. Bunları daha az argümanla çağırabilir ve yine de beklenen davranışı alabilirsiniz."
+          }
+        }
+      ]
+    }
+  ]
+}

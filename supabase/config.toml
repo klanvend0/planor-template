@@ -1,0 +1,43 @@
+# Supabase CLI configuration.
+#
+# `project_id` is only a local label; the real project is chosen by
+# `npm run supabase:link` and stored in supabase/.temp (git-ignored).
+project_id = "codeling"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[auth]
+enabled = true
+site_url = "codeling://"
+additional_redirect_urls = ["codeling://auth/callback"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+
+[auth.external.apple]
+enabled = true
+client_id = "env(APPLE_CLIENT_ID)"
+secret = "env(APPLE_SECRET)"
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_SECRET)"
+
+[functions.grade-explanation]
+verify_jwt = true
+
+[functions.revenuecat-webhook]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = true

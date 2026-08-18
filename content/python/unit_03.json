@@ -1,0 +1,884 @@
+{
+  "id": "py-u03",
+  "courseId": "python",
+  "index": 3,
+  "title": {
+    "en": "Working with Text",
+    "tr": "Metinle Çalışmak"
+  },
+  "description": {
+    "en": "Learn to join strings, measure their length, access individual characters, slice them, and use built-in string methods.",
+    "tr": "Metinleri birleştirmeyi, uzunluklarını ölçmeyi, karakterlerine erişmeyi, kesitler almayı ve yerleşik metin yöntemlerini kullanmayı öğren."
+  },
+  "lessons": [
+    {
+      "id": "py-u03-l1",
+      "index": 1,
+      "title": {
+        "en": "Joining and Repeating Strings",
+        "tr": "Metinleri Birleştirme ve Tekrarlama"
+      },
+      "concept": {
+        "headline": {
+          "en": "Use + to join strings and * to repeat them",
+          "tr": "Metinleri birleştirmek için + ve tekrarlamak için * kullan"
+        },
+        "body": {
+          "en": "Two strings can be glued together with the + operator, which concatenates them end to end. The * operator repeats a string a certain number of times. Both operations create new strings without changing the originals.",
+          "tr": "+ operatörü iki metni uç uca yapıştırarak birleştirir. * operatörü bir metni belirli bir sayı kadar tekrarlar. Her iki işlem de yeni metinler oluşturur; orijinalleri değiştirmez."
+        },
+        "example": {
+          "code": "first = \"Hello\"\nlast = \"World\"\nprint(first + \" \" + last)\nprint(\"na\" * 3)",
+          "caption": {
+            "en": "Joining three parts and repeating a string.",
+            "tr": "Üç parçayı birleştirme ve bir metni tekrarlama."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u03-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "print(\"Hello\" + \" \" + \"World\")",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Hello World",
+                "tr": "Hello World"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Hello + World",
+                "tr": "Hello + World"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "HelloWorld",
+                "tr": "HelloWorld"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "An error",
+                "tr": "Bir hata"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The + operator joins the three strings together. The space is important because it is its own string.",
+            "tr": "+ operatörü üç metni birleştirir. Boşluk kendi başına bir metin olduğu için önemlidir."
+          }
+        },
+        {
+          "id": "py-u03-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "print(\"ab\" * 3)",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "ab3",
+                "tr": "ab3"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "ababab",
+                "tr": "ababab"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "ab ab ab",
+                "tr": "ab ab ab"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "An error",
+                "tr": "Bir hata"
+              }
+            }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "The * operator repeats the string on its left as many times as the number on its right. No spaces are added.",
+            "tr": "Çarpma operatörü solundaki metni sağındaki sayı kadar tekrarlar. Boşluk eklenmez."
+          }
+        },
+        {
+          "id": "py-u03-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints abcabc.",
+            "tr": "Kodu abcabc yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "text = \"abc\"\nprint(text ___)",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "* 2",
+              "distractors": ["* \"2\"", "+ 2", "** 2"]
+            }
+          ],
+          "verify": {
+            "stdout": "abcabc\n"
+          },
+          "explanation": {
+            "en": "The * operator takes a number, not a string. Multiplying by 2 repeats the text twice.",
+            "tr": "Çarpma operatörü sayı ister, metin değil. 2 ile çarpmak metni iki kez tekrarlar."
+          }
+        },
+        {
+          "id": "py-u03-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write one line that joins the two strings with a hyphen between them.",
+            "tr": "İki metni aralarında bir tire olmak üzere birleştiren bir satır yaz."
+          },
+          "code": "first = \"hello\"\nlast = \"world\"",
+          "expected": "print(first + \"-\" + last)",
+          "acceptable": ["print(first + '-' + last)", "print( first + \"-\" + last )"],
+          "verify": {
+            "stdout": "hello-world\n"
+          },
+          "explanation": {
+            "en": "The three parts must be joined in order: first, then the hyphen string, then last.",
+            "tr": "Üç parça sırasıyla birleştirilir: first, sonra tire, sonra last."
+          }
+        },
+        {
+          "id": "py-u03-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "greeting = \"Hi\"",
+            "print(greeting + * 2)"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "print(greeting * 2)",
+          "verify": {
+            "raises": "SyntaxError"
+          },
+          "explanation": {
+            "en": "The * operator needs something on the left. Putting + before it makes a syntax error because there is nothing between + and *.",
+            "tr": "Çarpma operatörünün solunda bir şey olması gerekir. Bunun önüne toplama koymak sözdizim hatasına neden olur."
+          }
+        },
+        {
+          "id": "py-u03-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Builds a decorative line\nline = \"*\" * 10 + \"-\" * 3 + \"*\" * 10\nprint(line)",
+            "tr": "# Dekoratif bir satır oluşturur\nline = \"*\" * 10 + \"-\" * 3 + \"*\" * 10\nprint(line)"
+          },
+          "keyPoints": {
+            "en": [
+              "repeats the asterisk 10 times",
+              "repeats the hyphen 3 times",
+              "joins them together with +",
+              "prints the combined pattern"
+            ],
+            "tr": [
+              "yıldızı 10 kez tekrarlar",
+              "tireyi 3 kez tekrarlar",
+              "onları + ile birleştirir",
+              "birleşen deseni yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It repeats asterisks 10 times, joins them with 3 hyphens in the middle and 10 more asterisks, then prints the decorative line.",
+            "tr": "Yıldızları 10 kez tekrarlar, ortasında 3 tire ve 10 yıldız daha olacak şekilde birleştirir, sonra dekoratif satırı yazdırır."
+          },
+          "explanation": {
+            "en": "Building strings from small pieces with + and * is useful for creating patterns.",
+            "tr": "Metinleri + ve * ile küçük parçalardan oluşturmak desenler oluşturmak için faydalıdır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u03-l2",
+      "index": 2,
+      "title": {
+        "en": "Length and Indexing",
+        "tr": "Uzunluk ve İndeksleme"
+      },
+      "concept": {
+        "headline": {
+          "en": "Use len() to count characters, and [] to access individual ones",
+          "tr": "Karakterleri saymak için len() ve erişmek için [] kullan"
+        },
+        "body": {
+          "en": "Every string has a length that you can measure with len(). Each character in a string has a position, starting from 0 at the front. You can fetch a character by putting its position inside square brackets. Negative indexes count from the end: -1 is the last character, -2 is the second-to-last, and so on.",
+          "tr": "Her metnin len() ile ölçülen bir uzunluğu vardır. Bir metindeki her karakterin, öne doğru 0 ile başlayan bir konumu vardır. Köşeli parantez içinde konumunu yazarak bir karakteri alabilirsin. Negatif indeksler sondan sayılır: -1 son karakter, -2 sondan ikinci karakterdir."
+        },
+        "example": {
+          "code": "word = \"Python\"\nprint(len(word))\nprint(word[0])\nprint(word[-1])",
+          "caption": {
+            "en": "Measuring length, accessing first and last characters.",
+            "tr": "Uzunluğu ölçme, ilk ve son karaktere erişme."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u03-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does len(\"Python\") return?",
+            "tr": "len(\"Python\") ne döndürür?"
+          },
+          "code": "print(len(\"Python\"))",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "6",
+                "tr": "6"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "5",
+                "tr": "5"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Python",
+                "tr": "Python"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "7",
+                "tr": "7"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The word Python has 6 letters: P, y, t, h, o, n. len() counts all of them.",
+            "tr": "Python kelimesinin 6 harfi vardır: P, y, t, h, o, n. len() hepsini sayar."
+          }
+        },
+        {
+          "id": "py-u03-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
+          "code": "print(\"Hello\"[0])",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "H",
+                "tr": "H"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "0",
+                "tr": "0"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "e",
+                "tr": "e"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Hello",
+                "tr": "Hello"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Indexing starts at 0, so [0] gets the first character, which is H.",
+            "tr": "İndeksleme 0'dan başlar, bu yüzden [0] ilk karakter olan H'yi alır."
+          }
+        },
+        {
+          "id": "py-u03-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Fill in the index to print the last character of word.",
+            "tr": "word'ün son karakterini yazdıracak indeksi doldur."
+          },
+          "codeTemplate": "word = \"code\"\nprint(word[___])",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "-1",
+              "distractors": ["3", "4", "word"]
+            }
+          ],
+          "verify": {
+            "stdout": "e\n"
+          },
+          "explanation": {
+            "en": "The last character is at position -1. You could also use [3], but negative indexing is clearer.",
+            "tr": "Son karakter -1 konumundadır. [3] de kullanabilirdin ama negatif indeksleme daha açıktır."
+          }
+        },
+        {
+          "id": "py-u03-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints the third character of the word.",
+            "tr": "Kelimenin üçüncü karakterini yazdıran bir satır yaz."
+          },
+          "code": "word = \"spring\"",
+          "expected": "print(word[2])",
+          "acceptable": ["print(word[ 2 ])"],
+          "verify": {
+            "stdout": "r\n"
+          },
+          "explanation": {
+            "en": "The third character is at index 2 (since counting starts at 0). s is 0, p is 1, r is 2.",
+            "tr": "Üçüncü karakter indeks 2'dedir (saymak 0'dan başladığı için). s 0, p 1, r 2'dir."
+          }
+        },
+        {
+          "id": "py-u03-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "text = \"code\"",
+            "print(text[4])"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "print(text[3])",
+          "verify": {
+            "raises": "IndexError"
+          },
+          "explanation": {
+            "en": "The string code has only 4 characters (indices 0, 1, 2, 3). Index 4 is out of range.",
+            "tr": "code metni sadece 4 karaktere sahiptir (indeksler 0, 1, 2, 3). İndeks 4 aralık dışıdır."
+          }
+        },
+        {
+          "id": "py-u03-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Displays the first and last character of a word\nword = \"hello\"\nprint(word[0])\nprint(word[-1])",
+            "tr": "# Bir kelimenin ilk ve son karakterini gösterir\nword = \"hello\"\nprint(word[0])\nprint(word[-1])"
+          },
+          "keyPoints": {
+            "en": [
+              "stores hello in word",
+              "accesses the first character with [0]",
+              "accesses the last character with [-1]",
+              "prints each one on a separate line"
+            ],
+            "tr": [
+              "hello'yu word'e saklar",
+              "[0] ile ilk karaktere erişir",
+              "[-1] ile son karaktere erişir",
+              "her birini ayrı satırda yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores the word hello and prints its first character h and its last character o, using positive indexing for the front and negative for the back.",
+            "tr": "hello kelimesini saklar ve ilk karakteri h ile son karakteri o'yu yazdırır, ön için pozitif, arka için negatif indeksleme kullanarak."
+          },
+          "explanation": {
+            "en": "Negative indexing is a shortcut to reach characters from the end without calculating their position.",
+            "tr": "Negatif indeksleme, konumlarını hesaplamadan sondan karakterlere ulaşmanın kısa yoludur."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u03-l3",
+      "index": 3,
+      "title": {
+        "en": "String Slicing",
+        "tr": "Metin Dilimleme"
+      },
+      "concept": {
+        "headline": {
+          "en": "Use [start:end] to extract a part of a string",
+          "tr": "Bir metnin bir parçasını çıkarmak için [start:end] kullan"
+        },
+        "body": {
+          "en": "Slicing lets you extract a substring by specifying a start and end position. The syntax is [start:end], where start is the first index you want (inclusive) and end is the index where you stop (exclusive, not included). If you leave out start, it defaults to 0. If you leave out end, it goes all the way to the end.",
+          "tr": "Dilimleme, bir başlangıç ve bitiş konumu belirterek bir alt metni çıkarmanı sağlar. Sözdizimi [start:end]'dir; start dahil etmek istediğin ilk indeks, end durmak istediğin indekstir (dahil değil). start'ı boş bırakırsan 0'dan başlar. end'i boş bırakırsan sona kadar gider."
+        },
+        "example": {
+          "code": "word = \"Python\"\nprint(word[0:2])\nprint(word[2:])\nprint(word[:4])",
+          "caption": {
+            "en": "Three different slices of the same word.",
+            "tr": "Aynı kelimenin üç farklı dilimi."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u03-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does \"Python\"[0:2] return?",
+            "tr": "\"Python\"[0:2] ne döndürür?"
+          },
+          "code": "print(\"Python\"[0:2])",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Py",
+                "tr": "Py"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Pyth",
+                "tr": "Pyth"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Pyt",
+                "tr": "Pyt"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "0:2",
+                "tr": "0:2"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The slice [0:2] starts at index 0 (P) and stops before index 2, so it includes only P and y.",
+            "tr": "[0:2] dilimi indeks 0'dan (P) başlar ve indeks 2'den önce durur; yalnızca P ve y'yi içerir."
+          }
+        },
+        {
+          "id": "py-u03-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does \"Hello\"[1:4] return?",
+            "tr": "\"Hello\"[1:4] ne döndürür?"
+          },
+          "code": "print(\"Hello\"[1:4])",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "Hell",
+                "tr": "Hell"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "ell",
+                "tr": "ell"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "ello",
+                "tr": "ello"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "el",
+                "tr": "el"
+              }
+            }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Starting at 1 means we skip H and begin with e. Ending before 4 means we include indices 1, 2, 3: e, l, l.",
+            "tr": "1'den başlamak H'yi atlar ve e ile başlarız. 4'den önce bitmek indeksler 1, 2, 3'ü içerir: e, l, l."
+          }
+        },
+        {
+          "id": "py-u03-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Fill in the indices to extract the middle three characters.",
+            "tr": "Ortadaki üç karakteri çıkarmak için indeksleri doldur."
+          },
+          "codeTemplate": "word = \"lovely\"\nprint(word[___:___])",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "1",
+              "distractors": ["0", "2", "l"]
+            },
+            {
+              "id": "2",
+              "answer": "4",
+              "distractors": ["3", "5", "6"]
+            }
+          ],
+          "verify": {
+            "stdout": "ove\n"
+          },
+          "explanation": {
+            "en": "From lovely, indices 1 to 4 extract o, v, e (the 4 is exclusive; lovely: l=0, o=1, v=2, e=3, l=4).",
+            "tr": "lovely'den indeksler 1'den 4'e o, v, e'yi çıkarır (4 dahil değildir; lovely: l=0, o=1, v=2, e=3, l=4)."
+          }
+        },
+        {
+          "id": "py-u03-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that extracts and prints characters 2 through 5 (inclusive) from the word.",
+            "tr": "Kelimeden indeks 2'den 5'e kadar olan karakterleri çıkaran bir satır yaz."
+          },
+          "code": "word = \"computer\"",
+          "expected": "print(word[2:6])",
+          "acceptable": ["print(word[ 2 : 6 ])"],
+          "verify": {
+            "stdout": "mput\n"
+          },
+          "explanation": {
+            "en": "To include character 5, the end index must be 6 (since end is exclusive). Characters 2, 3, 4, 5 are m, p, u, t.",
+            "tr": "Karakter 5'i dahil etmek için son indeks 6 olmalıdır (son dahil değildir). Karakterler 2, 3, 4, 5 m, p, u, t'dir."
+          }
+        },
+        {
+          "id": "py-u03-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "text = \"slice\"",
+            "print(text[1:10])"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "print(text[1:5])",
+          "explanation": {
+            "en": "Even though 10 is beyond the end, Python does not raise an error; it just slices as far as it can. If you want only part of the string, use the actual end index.",
+            "tr": "10 sondan ötede olsa da, Python hata vermez; sadece yapabileceği kadar dilimler. Eğer metinin sadece bir parçasını istiyorsan gerçek son indeksi kullan."
+          }
+        },
+        {
+          "id": "py-u03-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Extracts the domain from an email\nemail = \"alice@example.com\"\nstart = email.index(\"@\") + 1\nend = email.index(\".\")\nprint(email[start:end])",
+            "tr": "# Bir e-postadan alan adını çıkarır\nemail = \"alice@example.com\"\nstart = email.index(\"@\") + 1\nend = email.index(\".\")\nprint(email[start:end])"
+          },
+          "keyPoints": {
+            "en": [
+              "uses index() to find the @ symbol position",
+              "uses index() to find the . symbol position",
+              "slices between those positions to extract the domain",
+              "prints the extracted domain"
+            ],
+            "tr": [
+              "@ sembolünün konumunu bulmak için index() kullanır",
+              "nokta sembolünün konumunu bulmak için index() kullanır",
+              "o konumlar arasında dilimler alan adını çıkarır",
+              "çıkarılan alan adını yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It finds the position of @ and the period, then slices the email string between those positions to extract just the domain name, which is example.",
+            "tr": "@ ve noktanın konumlarını bulur, sonra e-posta metnini bu konumlar arasında dilimleyerek sadece alan adını çıkarır; bu da example'dır."
+          },
+          "explanation": {
+            "en": "The index() method is already familiar from previous units. Slicing uses those positions to pull out a meaningful part of the string.",
+            "tr": "index() metodu önceki ünitelerden tanıdıktır. Dilimleme bu konumları metinin anlamlı bir parçasını çıkarmak için kullanır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u03-l4",
+      "index": 4,
+      "title": {
+        "en": "String Methods and F-Strings",
+        "tr": "Metin Yöntemleri ve F-String'ler"
+      },
+      "concept": {
+        "headline": {
+          "en": "Call methods on strings and use f-strings to embed variables",
+          "tr": "Metinler üzerinde yöntemler çağır ve değişkenleri gömmek için f-string'ler kullan"
+        },
+        "body": {
+          "en": "Strings come with built-in methods: .upper() converts to uppercase, .lower() converts to lowercase, .strip() removes leading and trailing spaces, and .replace(old, new) swaps one substring for another. F-strings (formatted strings) let you insert variables directly into text by wrapping them in curly braces, prefixed with f before the quotes.",
+          "tr": "Metinler yerleşik yöntemler ile gelir: .upper() büyük harfe çevirir, .lower() küçük harfe çevirir, .strip() başındaki ve sonundaki boşlukları kaldırır, .replace(old, new) bir alt metni başka bir metinle değiştirir. F-string'ler (biçimlendirilmiş metinler) değişkenleri süslü parantezler içine kapatıp f öneki koyarak metne doğrudan eklemeni sağlar."
+        },
+        "example": {
+          "code": "name = \"Ada\"\nprint(\"Hello, \" + name.upper())\nmessage = f\"Welcome, {name}!\"\nprint(message)",
+          "caption": {
+            "en": "Using methods and f-strings to format output.",
+            "tr": "Yöntemler ve f-string'ler kullanarak çıktıyı biçimlendirme."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u03-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "What does \"hello\".upper() return?",
+            "tr": "\"hello\".upper() ne döndürür?"
+          },
+          "code": "print(\"hello\".upper())",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "HELLO",
+                "tr": "HELLO"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Hello",
+                "tr": "Hello"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "hello",
+                "tr": "hello"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "HELL0",
+                "tr": "HELL0"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The .upper() method converts all lowercase letters to uppercase. Numbers and special characters are not affected.",
+            "tr": ".upper() yöntemi tüm küçük harfleri büyük harfe çevirir. Sayılar ve özel karakterler etkilenmez."
+          }
+        },
+        {
+          "id": "py-u03-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "What does \" hello \".strip() return?",
+            "tr": "\" hello \".strip() ne döndürür?"
+          },
+          "code": "print(\" hello \".strip())",
+          "options": [
+            {
+              "id": "a",
+              "text": {
+                "en": "hello",
+                "tr": "hello"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": " hello ",
+                "tr": " hello "
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": " hello",
+                "tr": " hello"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "helo",
+                "tr": "helo"
+              }
+            }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The .strip() method removes all leading (before) and trailing (after) whitespace, leaving only the text.",
+            "tr": ".strip() yöntemi başındaki (önceki) ve sonundaki (sonraki) tüm boşlukları kaldırır; sadece metni bırakır."
+          }
+        },
+        {
+          "id": "py-u03-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the line to print a personalized greeting using an f-string.",
+            "tr": "F-string kullanarak kişiselleştirilmiş bir selamlamayı yazdırmak için satırı tamamla."
+          },
+          "codeTemplate": "name = \"Bob\"\nprint(___)",
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "f\"Hello, {name}!\"",
+              "distractors": ["\"Hello, {name}!\"", "f\"Hello, name!\"", "f'Hello, {name}!'"]
+            }
+          ],
+          "verify": {
+            "stdout": "Hello, Bob!\n"
+          },
+          "explanation": {
+            "en": "F-strings need the f prefix and put variables in curly braces. Without the f, the braces are printed literally.",
+            "tr": "F-string'ler f öneki gerektirir ve değişkenleri süslü parantez içine koyar. f olmadan parantezler harfi harfine yazdırılır."
+          }
+        },
+        {
+          "id": "py-u03-l4-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that replaces every space in the text with a hyphen and prints the result.",
+            "tr": "Metindeki her boşluğu tireyle değiştiren ve sonucu yazdıran bir satır yaz."
+          },
+          "code": "text = \"Hello World\"",
+          "expected": "print(text.replace(\" \", \"-\"))",
+          "acceptable": ["print(text.replace(' ', '-'))"],
+          "verify": {
+            "stdout": "Hello-World\n"
+          },
+          "explanation": {
+            "en": "The .replace() method takes two arguments: the substring to find and the substring to replace it with.",
+            "tr": ".replace() yöntemi iki argüman alır: bulunacak alt metin ve onun yerine geçecek alt metin."
+          }
+        },
+        {
+          "id": "py-u03-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
+          "codeLines": [
+            "word = \"python\"",
+            "result = word.replace(\"o\", \"0\")",
+            "print(result.upper)"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "print(result.upper())",
+          "explain": "Methods need parentheses, even if there are no arguments. .upper is just the method itself, not calling it.",
+          "explanation": {
+            "en": "Methods need parentheses to be called. .upper without () is the method object, not the result.",
+            "tr": "Yöntemler çağrılmak için parantez ister. () olmadan .upper sadece yöntem nesnesidir, sonuç değil."
+          }
+        },
+        {
+          "id": "py-u03-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Creates a username from a full name\nfull_name = \"  Alice Johnson  \"\nclean = full_name.strip().lower()\nusername = clean.replace(\" \", \"_\")\nprint(f\"Username: {username}\")",
+            "tr": "# Tam bir addan kullanıcı adı oluşturur\nfull_name = \"  Alice Johnson  \"\nclean = full_name.strip().lower()\nusername = clean.replace(\" \", \"_\")\nprint(f\"Username: {username}\")"
+          },
+          "keyPoints": {
+            "en": [
+              "removes leading and trailing spaces with strip()",
+              "converts to lowercase with lower()",
+              "replaces spaces with underscores using replace()",
+              "uses an f-string to display the final username"
+            ],
+            "tr": [
+              "strip() ile başındaki ve sonundaki boşlukları kaldırır",
+              "lower() ile küçük harfe çevirir",
+              "replace() ile boşlukları alt çizgilerle değiştirir",
+              "son kullanıcı adını göstermek için f-string kullanır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It takes a full name with extra spaces, removes them and converts to lowercase, then replaces remaining spaces with underscores to create a valid username.",
+            "tr": "Fazla boşlukları olan bir tam adı alır, bunları kaldırır ve küçük harfe çevirir, sonra kalan boşlukları alt çizgilerle değiştirerek geçerli bir kullanıcı adı oluşturur."
+          },
+          "explanation": {
+            "en": "Method chaining (calling one after another) and combining methods with string operations are powerful techniques for text manipulation.",
+            "tr": "Yöntem zincirlemesi (birbiri ardına çağırma) ve yöntemleri metin işlemleriyle birleştirmek güçlü metin düzenleme teknikleridir."
+          }
+        }
+      ]
+    }
+  ]
+}

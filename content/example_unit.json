@@ -1,0 +1,150 @@
+{
+  "id": "py-u01",
+  "courseId": "python",
+  "index": 1,
+  "title": { "en": "Reference Unit", "tr": "Referans Ünitesi" },
+  "description": {
+    "en": "A worked example of every question type, kept in the repo as the authoring reference.",
+    "tr": "Her soru tipinin işlenmiş örneği; içerik yazarken referans olarak repoda tutulur."
+  },
+  "lessons": [
+    {
+      "id": "py-u01-l1",
+      "index": 1,
+      "title": { "en": "Printing", "tr": "Ekrana Yazdırma" },
+      "concept": {
+        "headline": { "en": "print() shows a value", "tr": "print() bir değeri gösterir" },
+        "body": {
+          "en": "print() is how a Python program talks to you. Whatever you put between the parentheses is written to the screen, and every call starts a new line. Text has to sit inside quotes, otherwise Python thinks you are naming a variable that does not exist yet.",
+          "tr": "print(), bir Python programının seninle konuşma şeklidir. Parantezin içine ne koyarsan ekrana o yazılır ve her çağrı yeni bir satır açar. Metinleri tırnak içine almak gerekir; yoksa Python onu henüz tanımlanmamış bir değişken sanır."
+        },
+        "example": {
+          "code": "print(\"Merhaba\")\nprint(42)",
+          "caption": {
+            "en": "Two calls, two lines of output.",
+            "tr": "İki çağrı, iki satır çıktı."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u01-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(2 + 3)",
+          "options": [
+            { "id": "a", "text": { "en": "5", "tr": "5" } },
+            { "id": "b", "text": { "en": "23", "tr": "23" } },
+            { "id": "c", "text": { "en": "2 + 3", "tr": "2 + 3" } },
+            { "id": "d", "text": { "en": "Nothing, it is an error", "tr": "Hiçbir şey, hata verir" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Python evaluates 2 + 3 first and prints the result, 5. Quotes would have made it text instead.",
+            "tr": "Python önce 2 + 3 işlemini yapar ve sonucu, yani 5 sayısını yazdırır. Tırnak kullansaydık metin olarak yazardı."
+          }
+        },
+        {
+          "id": "py-u01-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line prints text correctly?", "tr": "Hangi satır metni doğru yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "print(Merhaba)", "tr": "print(Merhaba)" } },
+            { "id": "b", "text": { "en": "print(\"Merhaba\")", "tr": "print(\"Merhaba\")" } },
+            { "id": "c", "text": { "en": "print Merhaba", "tr": "print Merhaba" } },
+            { "id": "d", "text": { "en": "Print(\"Merhaba\")", "tr": "Print(\"Merhaba\")" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Text needs quotes, the parentheses are required, and Python is case sensitive so Print is a different name.",
+            "tr": "Metin tırnak ister, parantez zorunludur ve Python büyük harfe duyarlı olduğu için Print başka bir isimdir."
+          }
+        },
+        {
+          "id": "py-u01-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the line so it prints Merhaba.",
+            "tr": "Satırı Merhaba yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(___)",
+          "blanks": [
+            { "id": "1", "answer": "\"Merhaba\"", "distractors": ["Merhaba", "'Merhaba", "print"] }
+          ],
+          "verify": { "stdout": "Merhaba\n" },
+          "explanation": {
+            "en": "The quotes tell Python this is text. Without them it looks for a variable called Merhaba.",
+            "tr": "Tırnaklar Python'a bunun metin olduğunu söyler. Tırnaksız hâlde Merhaba adında bir değişken arar."
+          }
+        },
+        {
+          "id": "py-u01-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that prints the value stored in name.",
+            "tr": "name içindeki değeri yazdıran satırı yaz."
+          },
+          "code": "name = \"Ada\"",
+          "expected": "print(name)",
+          "acceptable": ["print( name )"],
+          "verify": { "stdout": "Ada\n" },
+          "explanation": {
+            "en": "Without quotes, name is read as a variable, so Python prints what it holds instead of the word.",
+            "tr": "Tırnak olmadan name bir değişken olarak okunur, bu yüzden Python kelimeyi değil içindeki değeri yazdırır."
+          }
+        },
+        {
+          "id": "py-u01-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["age = 20", "print(agee)"],
+          "buggyLineIndex": 1,
+          "fix": "print(age)",
+          "verify": { "raises": "NameError" },
+          "explanation": {
+            "en": "The variable was stored as age but read back as agee, so Python raises NameError for a name it never saw.",
+            "tr": "Değişken age olarak saklandı ama agee diye okundu; Python hiç görmediği bu isim için NameError verir."
+          }
+        },
+        {
+          "id": "py-u01-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Greets the person whose name is stored below\nname = \"Ada\"\nprint(\"Hello, \" + name)",
+            "tr": "# Aşağıda saklanan isimdeki kişiyi selamlar\nname = \"Ada\"\nprint(\"Hello, \" + name)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the text Ada in the variable name",
+              "joins Hello with that name",
+              "prints the combined greeting"
+            ],
+            "tr": [
+              "Ada metnini name değişkeninde saklar",
+              "Hello ile bu ismi birleştirir",
+              "birleşen selamlamayı ekrana yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It saves the text Ada in a variable called name, glues it onto Hello with +, and prints the finished greeting Hello, Ada.",
+            "tr": "Ada metnini name adlı değişkende saklar, + ile Hello ifadesine ekler ve ortaya çıkan Hello, Ada selamlamasını yazdırır."
+          },
+          "explanation": {
+            "en": "Adding two strings with + joins them end to end, which is why the greeting and the name arrive as one line.",
+            "tr": "İki metni + ile toplamak onları uç uca ekler; selamlama ile isim bu yüzden tek satır hâlinde çıkar."
+          }
+        }
+      ]
+    }
+  ]
+}

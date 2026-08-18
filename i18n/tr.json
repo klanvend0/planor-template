@@ -1,0 +1,356 @@
+{
+  "app": {
+    "name": "Codeling",
+    "tagline": "Günde bir bulmacayla kod öğren"
+  },
+  "common": {
+    "continue": "Devam",
+    "next": "İleri",
+    "back": "Geri",
+    "skip": "Geç",
+    "done": "Tamam",
+    "cancel": "Vazgeç",
+    "close": "Kapat",
+    "retry": "Tekrar dene",
+    "save": "Kaydet",
+    "loading": "Yükleniyor",
+    "confirm": "Onayla",
+    "delete": "Sil",
+    "later": "Sonra bakarım",
+    "got_it": "Anladım",
+    "xp": "XP",
+    "of": "/"
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+    "network": "Bağlantı yok gibi görünüyor. İnternetini kontrol edip tekrar dene.",
+    "subscription_required": "Bu bir Pro özelliği.",
+    "rate_limited": "Biraz hızlısın. Bir dakika sonra tekrar dene.",
+    "sign_in_required": "Devam etmek için giriş yapmalısın.",
+    "answer_too_short": "Düzgün değerlendirebilmemiz için en az 100 karakter yaz.",
+    "answer_too_long": "200 karakteri geçmemeye çalış."
+  },
+  "auth": {
+    "sign_in": "Giriş Yap",
+    "sign_out": "Çıkış Yap",
+    "sign_in_with_google": "Google ile devam et",
+    "sign_in_with_apple": "Apple ile devam et",
+    "sign_in_title": "İlerlemeni kaydet",
+    "sign_in_subtitle": "Giriş yap ki serin, XP'n ve derslerin her cihazda seninle olsun.",
+    "terms_notice": "Devam ederek Kullanım Koşulları'nı ve Gizlilik Politikası'nı kabul etmiş olursun.",
+    "google_error": "Google girişi tamamlanamadı.",
+    "google_no_token": "Google'dan kimlik anahtarı gelmedi.",
+    "google_not_configured": "Google girişi henüz yapılandırılmamış.",
+    "apple_error": "Apple girişi tamamlanamadı.",
+    "apple_not_available": "Bu cihazda Apple ile giriş kullanılamıyor.",
+    "sign_in_cancelled": "Giriş iptal edildi.",
+    "sign_out_error": "Çıkış yapılamadı.",
+    "sign_out_confirm_title": "Çıkış yapılsın mı?",
+    "sign_out_confirm_body": "İlerlemen hesabında saklı kalır."
+  },
+  "onboarding": {
+    "slides": {
+      "welcome": {
+        "title": "Kod da bir dildir.\nOnu da öyle öğren.",
+        "body": "Uzun anlatımlar yerine kısa bulmacalar. Gerçek kod yazmaya başlamak için günde beş dakika yeter."
+      },
+      "puzzles": {
+        "title": "Beş farklı alıştırma",
+        "body": "Boşluğu doldur, satırı yaz, hatayı bul, çıktıyı seç ve kodu kendi cümlelerinle anlat."
+      },
+      "mistakes": {
+        "title": "En çok hatalar öğretir",
+        "body": "Her yanlış cevabın nedeni açıklanır; kaçırdığın sorular akılda kalana kadar geri gelir."
+      },
+      "ai": {
+        "title": "Cevabını okuyan bir yapay zekâ",
+        "body": "Bir kodun ne yaptığını kendi cümlelerinle anlat; neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin."
+      },
+      "streak": {
+        "title": "Yarın yine gel",
+        "body": "XP, seviye ve seri asıl mesele: acemiyi geliştiriciye dönüştüren şey alışkanlıktır."
+      }
+    },
+    "language": {
+      "title": "Hangi dilde daha rahat okursun?",
+      "subtitle": "Dersler ve açıklamalar bu dilde olacak.",
+      "english": "English",
+      "turkish": "Türkçe"
+    },
+    "course": {
+      "title": "Önce neyi öğrenmek istersin?",
+      "subtitle": "Kursu istediğin zaman değiştirebilirsin.",
+      "python": "Python",
+      "python_hint": "İlk dil için harika. Sade ve okunaklı.",
+      "javascript": "JavaScript",
+      "javascript_hint": "Web'in ve uygulamaların dili."
+    },
+    "experience": {
+      "title": "Ne kadar kod yazdın?",
+      "new": "Hiç yazmadım",
+      "new_hint": "print() ile başlıyoruz.",
+      "some": "Biraz",
+      "some_hint": "Bir iki eğitim videosu izledim.",
+      "confident": "Kod okuyabiliyorum",
+      "confident_hint": "Eksiklerimi kapatmak istiyorum."
+    },
+    "goal": {
+      "title": "Günlük hedefini seç",
+      "subtitle": "Az ama her gün, çok ama ara ara'dan iyidir.",
+      "casual": "Rahat",
+      "regular": "Düzenli",
+      "serious": "Ciddi",
+      "intense": "Yoğun",
+      "xp_per_day": "günde %{xp} XP",
+      "minutes": "yaklaşık %{minutes} dk"
+    },
+    "notifications": {
+      "title": "Günde bir hatırlatalım mı?",
+      "subtitle": "Seçtiğin saatte tek bir bildirim. Fazlası asla yok.",
+      "allow": "Hatırlat",
+      "deny": "Bildirim istemiyorum"
+    },
+    "ready": {
+      "title": "İlk dersin hazır",
+      "subtitle": "Pro'nun ilk üç günü bizden. İstediğin an iptal et.",
+      "cta": "Öğrenmeye başla"
+    },
+    "progress": "Adım %{current}/%{total}"
+  },
+  "learn": {
+    "title": "Öğren",
+    "greeting_morning": "Günaydın",
+    "greeting_afternoon": "İyi günler",
+    "greeting_evening": "İyi akşamlar",
+    "unit": "%{index}. Ünite",
+    "unit_progress": "%{done}/%{total} ders",
+    "start_lesson": "Başla",
+    "continue_lesson": "Devam et",
+    "review_lesson": "Tekrar et",
+    "locked_title": "Önce bir önceki dersi bitir",
+    "locked_body": "Dersler sırayla açılır ki hiçbir konu havada kalmasın.",
+    "daily_goal": "Günlük hedef",
+    "daily_goal_done": "Günlük hedef tamam",
+    "daily_goal_progress": "%{current}/%{target} XP",
+    "streak_days": {
+      "one": "%{count} günlük seri",
+      "other": "%{count} günlük seri"
+    },
+    "streak_start": "Serini başlat",
+    "hearts_left": {
+      "one": "%{count} can",
+      "other": "%{count} can"
+    },
+    "hearts_unlimited": "Sınırsız",
+    "course_switch": "Kurs değiştir",
+    "unit_complete": "Ünite tamamlandı",
+    "jump_back_in": "Kaldığın yerden devam"
+  },
+  "hearts": {
+    "empty_title": "Canların bitti",
+    "empty_body": "Canlar her 30 dakikada bir dolar; Pro ile anında tam dolar.",
+    "next_in": "Sonraki can: %{time}",
+    "refill": "Şimdi doldur",
+    "refill_free_used": "Bugünkü ücretsiz dolumu zaten kullandın.",
+    "go_pro": "Sınırsız can al",
+    "practice_instead": "Eski hatalarını çalış"
+  },
+  "lesson": {
+    "question_of": "%{current}/%{total}",
+    "check": "Kontrol et",
+    "continue": "Devam",
+    "skip_question": "Geç",
+    "correct": "Doğru",
+    "incorrect": "Tam değil",
+    "correct_answer": "Cevap",
+    "why": "Neden",
+    "exit_title": "Dersten çıkılsın mı?",
+    "exit_body": "Bu derste ilerlediğin kadarı kaybolur.",
+    "exit_confirm": "Çık",
+    "exit_stay": "Devam edeyim",
+    "tap_to_fill": "Boşluğu doldurmak için bir parçaya dokun",
+    "tap_to_remove": "Geri almak için dolu parçaya dokun",
+    "type_here": "Cevabını yaz",
+    "which_line": "Hatalı satıra dokun",
+    "reorder": "Satırlara doğru sırayla dokun",
+    "reorder_reset": "Sıfırla",
+    "choose_answer": "Cevabı seç",
+    "concept_cta": "Anladım, alıştırmaya geçelim",
+    "hint": "İpucu"
+  },
+  "explain": {
+    "title": "Bu kodu anlat",
+    "instruction": "100-200 karakterle bu kodun ne yaptığını yaz.",
+    "placeholder": "Sepetteki her fiyatı alıp...",
+    "counter": "%{count}/200",
+    "submit": "Değerlendir",
+    "grading": "Cevabın okunuyor",
+    "verdict_correct": "Tam isabet",
+    "verdict_partial": "Az kaldı",
+    "verdict_incorrect": "Henüz tam değil",
+    "score": "Anlama %{score}%",
+    "corrections": "Düzeltilmesi gerekenler",
+    "missed": "Atladığın noktalar",
+    "sample_title": "Şöyle de anlatılabilir",
+    "show_sample": "Örnek cevabı göster",
+    "locked_title": "Yapay zekâ değerlendirmesi Pro'da",
+    "locked_body": "Kodu kendi cümlelerinle anlat; yapay zekâ neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin.",
+    "locked_cta": "Pro'yu 3 gün ücretsiz dene",
+    "locked_skip": "Bu soruyu geç",
+    "offline": "Yapay zekâ değerlendirmesi için bağlantı gerekiyor."
+  },
+  "results": {
+    "title_perfect": "Kusursuz",
+    "title_great": "Eline sağlık",
+    "title_ok": "Ders tamamlandı",
+    "title_retry": "Bir kez daha dene",
+    "accuracy": "Doğruluk",
+    "xp_earned": "Kazanılan XP",
+    "time": "Süre",
+    "streak_extended": "Seri %{count} güne çıktı",
+    "streak_started": "Seri başladı",
+    "daily_goal_hit": "Günlük hedef tamam",
+    "perfect_bonus": "Kusursuz ders bonusu",
+    "streak_bonus": "Haftalık seri bonusu",
+    "continue": "Devam",
+    "practice_again": "Tekrar çalış",
+    "next_lesson": "Sonraki ders"
+  },
+  "practice": {
+    "title": "Alıştırma",
+    "mistakes_title": "Hataların",
+    "mistakes_body": "Yanlış cevapladığın sorular, düzeltilmeyi bekliyor.",
+    "mistakes_count": {
+      "one": "%{count} soru",
+      "other": "%{count} soru"
+    },
+    "mistakes_empty_title": "Düzeltilecek bir şey yok",
+    "mistakes_empty_body": "Bir ders bitir; kaçırdıkların burada birikir.",
+    "start": "Alıştırmaya başla",
+    "speed_title": "Hızlı tekrar",
+    "speed_body": "Şimdiye kadar bitirdiğin her şeyden on soru.",
+    "no_lessons_yet": "Önce bir ders tamamla."
+  },
+  "profile": {
+    "title": "Profil",
+    "level": "Seviye %{level}",
+    "level_progress": "%{next}. seviyeye %{current}/%{target} XP",
+    "stats": "İstatistikler",
+    "total_xp": "Toplam XP",
+    "current_streak": "Güncel seri",
+    "longest_streak": "En uzun seri",
+    "lessons_completed": "Ders",
+    "perfect_lessons": "Kusursuz ders",
+    "league": "Lig",
+    "league_progress": "Bu hafta %{xp} XP",
+    "leagues": {
+      "bronze": "Bronz",
+      "silver": "Gümüş",
+      "gold": "Altın",
+      "sapphire": "Safir",
+      "ruby": "Yakut",
+      "diamond": "Elmas"
+    },
+    "achievements": "Başarımlar",
+    "achievements_progress": "%{total} başarımdan %{unlocked} tanesi açık",
+    "member_since": "%{date} tarihinden beri öğreniyor",
+    "pro_member": "Pro üye",
+    "free_member": "Ücretsiz plan",
+    "manage_plan": "Planı yönet"
+  },
+  "achievements": {
+    "first_lesson": { "title": "İlk adım", "body": "İlk dersini bitir" },
+    "streak_3": { "title": "Üst üste üç", "body": "3 günlük seri yap" },
+    "streak_7": { "title": "Tam bir hafta", "body": "7 günlük seri yap" },
+    "streak_30": { "title": "Kırılmaz", "body": "30 günlük seri yap" },
+    "xp_100": { "title": "Isındık", "body": "100 XP kazan" },
+    "xp_1000": { "title": "Bin XP kulübü", "body": "1000 XP kazan" },
+    "perfect_5": { "title": "Hatasız", "body": "5 dersi kusursuz bitir" },
+    "unit_complete": { "title": "Ünite temiz", "body": "Bir ünitedeki tüm dersleri bitir" },
+    "explainer": { "title": "Kendi cümlelerinle", "body": "Yapay zekâ değerlendirmesinden geç" },
+    "polyglot": { "title": "İki dil", "body": "Her iki kursa da başla" },
+    "locked": "Kilitli"
+  },
+  "paywall": {
+    "title": "Codeling Pro",
+    "subtitle": "Her şey açık, ilk üç gün ücretsiz.",
+    "trial_badge": "3 gün ücretsiz",
+    "features": {
+      "ai": "Yazdığın her açıklamaya yapay zekâ geri bildirimi",
+      "hearts": "Sınırsız can; yanlış cevap seni durdurmaz",
+      "courses": "Bütün kurslar ve bütün üniteler açık",
+      "practice": "Sınırsız hata alıştırması ve hızlı tekrar",
+      "support": "Her hafta güncelleme yapan küçük bir ekibe destek"
+    },
+    "plan_weekly": "Haftalık",
+    "plan_annual": "Yıllık",
+    "plan_monthly": "Aylık",
+    "per_week": "%{price} / hafta",
+    "per_month": "%{price} / ay",
+    "per_year": "%{price} / yıl",
+    "best_value": "En avantajlı",
+    "save_percent": "%%{percent} tasarruf",
+    "trial_line": "3 gün ücretsiz, sonrasında %{price}. İstediğin an iptal et.",
+    "no_trial_line": "%{price}. İstediğin an iptal et.",
+    "cta_trial": "3 günüm ücretsiz başlasın",
+    "cta_buy": "Abone ol",
+    "restore": "Satın alımları geri yükle",
+    "restore_none": "Bu Apple kimliğinde önceki bir satın alım bulunamadı.",
+    "restore_done": "Aboneliğin geri geldi.",
+    "terms": "Kullanım Koşulları",
+    "privacy": "Gizlilik Politikası",
+    "legal": "Ücret, deneme süresi bitiminde Apple kimliğinden tahsil edilir. Dönem bitiminden en az 24 saat önce iptal edilmezse abonelik otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin.",
+    "purchase_failed": "Satın alma tamamlanamadı.",
+    "purchase_cancelled": "Satın alma iptal edildi.",
+    "already_pro": "Zaten Pro üyesin.",
+    "close": "Şimdi değil",
+    "unavailable": "Mağazaya şu an ulaşılamıyor. Lütfen sonra tekrar dene."
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "section_learning": "Öğrenme",
+    "section_app": "Uygulama",
+    "section_account": "Hesap",
+    "section_about": "Hakkında",
+    "language": "Uygulama dili",
+    "course": "Aktif kurs",
+    "daily_goal": "Günlük hedef",
+    "theme": "Görünüm",
+    "theme_system": "Sistem",
+    "theme_light": "Açık",
+    "theme_dark": "Koyu",
+    "haptics": "Titreşim",
+    "sound": "Ses efektleri",
+    "reminders": "Günlük hatırlatma",
+    "reminder_time": "Hatırlatma saati",
+    "reminders_denied": "Bildirimler iOS Ayarları'ndan kapalı.",
+    "subscription": "Abonelik",
+    "restore": "Satın alımları geri yükle",
+    "rate_app": "Codeling'i değerlendir",
+    "terms": "Kullanım Koşulları",
+    "privacy": "Gizlilik Politikası",
+    "support": "Destekle iletişime geç",
+    "sign_out": "Çıkış yap",
+    "delete_account": "Hesabı sil",
+    "delete_title": "Hesabın silinsin mi?",
+    "delete_body": "Profilin, XP'n, serin ve tüm ilerlemen kalıcı olarak silinir. Bu işlem geri alınamaz ve aktif aboneliğini iptal etmez; onu App Store üzerinden iptal etmelisin.",
+    "delete_confirm": "Her şeyi sil",
+    "delete_failed": "Hesap silinemedi. Lütfen destekle iletişime geç.",
+    "version": "Sürüm %{version}"
+  },
+  "notifications": {
+    "reminder_title": "Serin seni bekliyor",
+    "reminder_body": "Tek bir ders, %{count} günlük seriyi ayakta tutar.",
+    "reminder_body_zero": "Başlamak için beş dakika yeter."
+  },
+  "course": {
+    "python": {
+      "title": "Python",
+      "tagline": "Programlamaya en tatlı giriş"
+    },
+    "javascript": {
+      "title": "JavaScript",
+      "tagline": "Her tarayıcının konuştuğu dil"
+    }
+  }
+}

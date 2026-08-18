@@ -1,0 +1,557 @@
+{
+  "id": "js-u02",
+  "courseId": "javascript",
+  "index": 2,
+  "title": { "en": "Variables and Types", "tr": "Değişkenler ve Türler" },
+  "description": {
+    "en": "Learn to create variables with let and const, understand numbers and strings, check types, convert values, and work with booleans, null, and undefined.",
+    "tr": "let ve const ile değişken oluşturmayı, sayı ve metinleri anlamayı, türleri kontrol etmeyi, değerleri dönüştürmeyi ve boolean, null ile undefined kullanmayı öğren."
+  },
+  "lessons": [
+    {
+      "id": "js-u02-l1",
+      "index": 1,
+      "title": { "en": "let and const", "tr": "let ve const" },
+      "concept": {
+        "headline": { "en": "let creates a variable you can change, const creates one you cannot", "tr": "let değiştirilebilen bir değişken oluşturur, const ise oluşturmayanı" },
+        "body": {
+          "en": "In JavaScript, let and const both declare variables, but they behave differently. A let variable can be reassigned to a new value at any time. A const variable must be given a value when it is declared, and that value cannot change afterward. You choose const when you want to protect a value from accidental changes, and let when you know it will need to change.",
+          "tr": "JavaScript'te let ve const her ikisi de değişken bildirir ama farklı davranırlar. let değişkeni istediğin zaman yeni bir değerle yeniden atanabilir. const değişkeni bildirilirken bir değer almalı ve o değer sonradan değişemez. Bir değeri yanlışlıktan değişikliğe karşı korumak istediğinde const, değişeceğini bildiğinde ise let seçersin."
+        },
+        "example": {
+          "code": "let age = 25;\nage = 26;\nconst name = \"Alice\";\nconsole.log(age);\nconsole.log(name);",
+          "caption": {
+            "en": "age changes, but name stays the same.",
+            "tr": "age değişir ama name aynı kalır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u02-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "let count = 5;\ncount = 10;\nconsole.log(count);",
+          "options": [
+            { "id": "a", "text": { "en": "10", "tr": "10" } },
+            { "id": "b", "text": { "en": "5", "tr": "5" } },
+            { "id": "c", "text": { "en": "5 10", "tr": "5 10" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The variable count is first set to 5, then reassigned to 10. When printed, it shows 10 because that is the current value.",
+            "tr": "count değişkeni önce 5'e ayarlanır, sonra 10'a yeniden atanır. Yazdırıldığında 10 gösterir çünkü o anki değeridir."
+          }
+        },
+        {
+          "id": "js-u02-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line correctly declares a const variable?", "tr": "Hangi satır const değişkeni doğru bir şekilde bildirir?" },
+          "options": [
+            { "id": "a", "text": { "en": "const name;", "tr": "const name;" } },
+            { "id": "b", "text": { "en": "const name = \"Bob\";", "tr": "const name = \"Bob\";" } },
+            { "id": "c", "text": { "en": "const = \"Bob\";", "tr": "const = \"Bob\";" } },
+            { "id": "d", "text": { "en": "const name = Bob;", "tr": "const name = Bob;" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "const must have a value assigned when declared. Text needs quotes, and a valid name must follow const.",
+            "tr": "const bildirilirken bir değer atanmalı. Metin tırnak ister ve const'un ardından geçerli bir isim gelmeli."
+          }
+        },
+        {
+          "id": "js-u02-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the line to declare a variable that can be changed, with initial value 100.",
+            "tr": "Değiştirilebilen bir değişken bildirmek için satırı tamamla, başlangıç değeri 100."
+          },
+          "codeTemplate": "___ score = 100;",
+          "blanks": [
+            { "id": "1", "answer": "let", "distractors": ["const", "var", "let score"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "let declares a variable that you can reassign later. const would prevent that, and var is older style.",
+            "tr": "let sonradan yeniden atanabilecek bir değişken bildirir. const bunu engellerdi ve var eski tarzı ifade eder."
+          }
+        },
+        {
+          "id": "js-u02-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that declares a constant color with the value red.",
+            "tr": "red değeri ile bir color sabiti bildiren satırı yaz."
+          },
+          "expected": "const color = \"red\";",
+          "acceptable": ["const color = 'red';"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "const declares a value that will not change. The text red must be in quotes.",
+            "tr": "const değişmeyecek bir değeri bildirir. red metni tırnak içinde olmalı."
+          }
+        },
+        {
+          "id": "js-u02-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line will cause an error?", "tr": "Hangi satır hata vereceği?" },
+          "codeLines": ["let count = 100;", "console.log(count);", "console.log(cound);"],
+          "buggyLineIndex": 2,
+          "fix": "console.log(count);",
+          "verify": { "raises": "ReferenceError" },
+          "explanation": {
+            "en": "The variable is named count, but line 3 tries to use cound. JavaScript raises ReferenceError because cound was never declared.",
+            "tr": "Değişken count adında ama satır 3 cound kullanmaya çalışıyor. JavaScript hiç bildirilmediği için ReferenceError verir."
+          }
+        },
+        {
+          "id": "js-u02-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Declares a starting value that won't change\nconst principal = 1000;\nlet balance = principal;\nconsole.log(balance);",
+            "tr": "// Değişmeyecek bir başlangıç değeri bildirir\nconst principal = 1000;\nlet balance = principal;\nconsole.log(balance);"
+          },
+          "keyPoints": {
+            "en": [
+              "const principal stores an unchanging value",
+              "let balance starts with the same value",
+              "the code prints the current balance"
+            ],
+            "tr": [
+              "const principal değişmeyecek bir değer saklar",
+              "let balance aynı değerle başlar",
+              "kod o anki balansı yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It sets a constant principal to 1000, copies that value into a changeable variable balance, and prints the balance.",
+            "tr": "Sabit principal'ı 1000'e ayarlar, bu değeri değişebilir balance değişkenine kopyalar ve balansı yazdırır."
+          },
+          "explanation": {
+            "en": "const protects the original value, while let allows balance to change independently if needed later.",
+            "tr": "const orijinal değeri korur, let ise gerekirse sonradan balance'ı bağımsız olarak değiştirebilir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u02-l2",
+      "index": 2,
+      "title": { "en": "Numbers and Strings", "tr": "Sayılar ve Metinler" },
+      "concept": {
+        "headline": { "en": "Numbers and strings are different types; operations behave differently on them", "tr": "Sayılar ve metinler farklı türlerdir; işlemler onlarla farklı davranırlar" },
+        "body": {
+          "en": "In JavaScript, a number is just digits, like 42 or 3.14. A string is text, and must be in quotes, like \"hello\". When you use + with two numbers, JavaScript adds them mathematically. But when you use + with strings, JavaScript glues them together. If you mix a number and a string with +, JavaScript treats the number as text and concatenates them.",
+          "tr": "JavaScript'te sayı sadece rakamlardır, 42 ya da 3.14 gibi. String metin ve tırnak içinde olmalı, \"hello\" gibi. İki sayı ile + kullandığında JavaScript onları matematiksel olarak toplar. Fakat stringler ile + kullandığında JavaScript onları birleştirir. Bir sayı ile stringi + kullanırsan JavaScript sayıyı metin olarak davranır ve birleştirir."
+        },
+        "example": {
+          "code": "const a = 5 + 3;\nconst b = \"5\" + \"3\";\nconst c = 5 + \"3\";\nconsole.log(a);\nconsole.log(b);\nconsole.log(c);",
+          "caption": {
+            "en": "Numbers add, strings join, and mixing them joins as strings.",
+            "tr": "Sayılar toplanır, stringler birleşir, ikisini karıştırırsan string olarak birleşir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u02-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "console.log(10 + 5);",
+          "options": [
+            { "id": "a", "text": { "en": "15", "tr": "15" } },
+            { "id": "b", "text": { "en": "10 + 5", "tr": "10 + 5" } },
+            { "id": "c", "text": { "en": "105", "tr": "105" } },
+            { "id": "d", "text": { "en": "10", "tr": "10" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The + operator performs addition on numbers. 10 + 5 equals 15.",
+            "tr": "+ operatörü sayılar üzerinde toplama işlemi yapar. 10 + 5 eşittir 15."
+          }
+        },
+        {
+          "id": "js-u02-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "console.log(\"Hello\" + \" World\");",
+          "options": [
+            { "id": "a", "text": { "en": "Hello World", "tr": "Hello World" } },
+            { "id": "b", "text": { "en": "HelloWorld", "tr": "HelloWorld" } },
+            { "id": "c", "text": { "en": "Hello + World", "tr": "Hello + World" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The + operator joins strings together. \"Hello\" and \" World\" combine to form \"Hello World\".",
+            "tr": "+ operatörü stringleri birleştirir. \"Hello\" ve \" World\" birleşerek \"Hello World\" oluşturur."
+          }
+        },
+        {
+          "id": "js-u02-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the line to print the text Hello together with the value 42.",
+            "tr": "Hello metnini 42 değeriyle birlikte yazdırmak için satırı tamamla."
+          },
+          "codeTemplate": "console.log(\"Hello\" ___ 42);",
+          "blanks": [
+            { "id": "1", "answer": "+", "distractors": ["-", "*", "="] }
+          ],
+          "verify": { "stdout": "Hello42\n" },
+          "explanation": {
+            "en": "The + operator joins a string and a number, converting the number to a string. The result is Hello42.",
+            "tr": "+ operatörü string ile sayıyı birleştirir, sayıyı string'e dönüştürerek. Sonuç Hello42'dir."
+          }
+        },
+        {
+          "id": "js-u02-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that stores the number 7 in a variable named lucky.",
+            "tr": "7 sayısını lucky adlı bir değişkende saklayan satırı yaz."
+          },
+          "expected": "const lucky = 7;",
+          "acceptable": ["let lucky = 7;"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "A number is stored without quotes. Quotes would make it a string instead.",
+            "tr": "Sayı tırnak olmadan saklanır. Tırnak onu string haline getirirdi."
+          }
+        },
+        {
+          "id": "js-u02-l2-q5",
+          "type": "order_lines",
+          "difficulty": "medium",
+          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sıraya koy." },
+          "lines": ["let price = 15;", "let total = price + 10;", "console.log(total);"],
+          "verify": { "stdout": "25\n" },
+          "explanation": {
+            "en": "First declare the price, then calculate the total by adding, then print the result. Order matters because you must define a variable before using it.",
+            "tr": "Önce price'ı bildir, sonra toplama yaparak total'ı hesapla, sonra sonucu yazdır. Sıra önemlidir çünkü bir değişkeni kullanmadan önce tanımlamalısın."
+          }
+        },
+        {
+          "id": "js-u02-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Builds a message with a name and an age\nconst name = \"Alice\";\nconst age = 30;\nconsole.log(name + \" is \" + age + \" years old\");",
+            "tr": "// Bir isim ve yaş ile mesaj oluşturur\nconst name = \"Alice\";\nconst age = 30;\nconsole.log(name + \" is \" + age + \" years old\");"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the name Alice in a variable",
+              "stores the age 30 in a variable",
+              "joins them with text to create a sentence"
+            ],
+            "tr": [
+              "Alice ismini bir değişkende saklar",
+              "30 yaşını bir değişkende saklar",
+              "onları metinle birleştirerek cümle oluşturur"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores a name and age as variables, then joins them with text using + to create and print a sentence.",
+            "tr": "İsim ve yaşı değişken olarak saklar, sonra onları + ile metinle birleştirerek bir cümle oluşturur ve yazdırır."
+          },
+          "explanation": {
+            "en": "The + operator concatenates strings and converted values, allowing you to build messages from parts.",
+            "tr": "+ operatörü stringleri ve dönüştürülen değerleri birleştirir, parçalardan mesaj oluşturmanıza izin verir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u02-l3",
+      "index": 3,
+      "title": { "en": "typeof and Type Conversion", "tr": "typeof ve Tür Dönüştürme" },
+      "concept": {
+        "headline": { "en": "Use typeof to check a value's type, and Number() and String() to convert between types", "tr": "Bir değerin türünü kontrol etmek için typeof kullan, türler arasında dönüştürmek için Number() ve String() kullan" },
+        "body": {
+          "en": "Every value in JavaScript has a type. The typeof operator tells you what it is: \"number\", \"string\", \"boolean\", etc. Sometimes you need to convert one type to another. Number() turns text into a number if it can, and String() turns any value into text. These conversions are useful when you need numbers to do math, or when you need strings to display text.",
+          "tr": "JavaScript'teki her değerin bir türü vardır. typeof operatörü sana ne olduğunu söyler: \"number\", \"string\", \"boolean\" vs. Bazen bir türü başka türe dönüştürmen gerekir. Number() metni sayıya çevirir eğer yapabilirse, String() herhangi bir değeri metne çevirir. Bu dönüştürmeler sayılara ihtiyaç duyduğunda matematiksel işlem yapmak için ya da metne ihtiyaç duyduğunda metin görüntülemek için faydalıdır."
+        },
+        "example": {
+          "code": "console.log(typeof 42);\nconsole.log(typeof \"hello\");\nconst str = \"10\";\nconst num = Number(str);\nconsole.log(typeof num);",
+          "caption": {
+            "en": "Check types with typeof, and convert with Number().",
+            "tr": "typeof ile türleri kontrol et, Number() ile dönüştür."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u02-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does console.log(typeof 25) print?", "tr": "console.log(typeof 25) ne yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "number", "tr": "number" } },
+            { "id": "b", "text": { "en": "25", "tr": "25" } },
+            { "id": "c", "text": { "en": "string", "tr": "string" } },
+            { "id": "d", "text": { "en": "integer", "tr": "integer" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "typeof returns the type of the value. 25 is a number, so typeof 25 returns \"number\".",
+            "tr": "typeof değerin türünü döndürür. 25 bir sayıdır, yani typeof 25 \"number\" döndürür."
+          }
+        },
+        {
+          "id": "js-u02-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does console.log(typeof \"42\") print?", "tr": "console.log(typeof \"42\") ne yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "string", "tr": "string" } },
+            { "id": "b", "text": { "en": "number", "tr": "number" } },
+            { "id": "c", "text": { "en": "42", "tr": "42" } },
+            { "id": "d", "text": { "en": "text", "tr": "text" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The quotes make \"42\" a string, not a number. typeof \"42\" returns \"string\".",
+            "tr": "Tırnaklar \"42\"'yi sayı değil string haline getirir. typeof \"42\" \"string\" döndürür."
+          }
+        },
+        {
+          "id": "js-u02-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the line to convert the text \"100\" to a number.",
+            "tr": "\"100\" metnini sayıya dönüştürmek için satırı tamamla."
+          },
+          "codeTemplate": "const num = ___(\"100\");",
+          "blanks": [
+            { "id": "1", "answer": "Number", "distractors": ["String", "typeof", "convert"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "Number() converts text to a number. String() would go the other direction.",
+            "tr": "Number() metni sayıya dönüştürür. String() ters yöne giderdi."
+          }
+        },
+        {
+          "id": "js-u02-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that converts the string \"75\" to a number and stores it in a variable named score.",
+            "tr": "\"75\" stringini sayıya dönüştüren ve score değişkeninde saklayan satırı yaz."
+          },
+          "expected": "const score = Number(\"75\");",
+          "acceptable": ["let score = Number(\"75\");"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "Number() takes a string and converts it to a number value that can be used in calculations.",
+            "tr": "Number() bir stringi alır ve hesaplamalarda kullanılabilecek bir sayı değerine dönüştürür."
+          }
+        },
+        {
+          "id": "js-u02-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["const text = \"50\";", "const result = text + 10;", "console.log(result);"],
+          "buggyLineIndex": 1,
+          "fix": "const result = Number(text) + 10;",
+          "verify": { "stdout": "60\n" },
+          "explanation": {
+            "en": "Without Number(), text + 10 joins them as strings (\"5010\"), not adding them. Convert text to a number first.",
+            "tr": "Number() olmadan text + 10 onları string olarak birleştirir (\"5010\"), toplamaz. Önce text'i sayıya dönüştür."
+          }
+        },
+        {
+          "id": "js-u02-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does and why it works.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını ve neden çalıştığını anlat."
+          },
+          "code": {
+            "en": "// Combines a number and a string safely\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);",
+            "tr": "// Bir sayı ve stringi güvenle birleştirir\nconst num = 5;\nconst text = String(num) + \" apples\";\nconsole.log(text);"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the number 5 in a variable",
+              "converts it to a string using String()",
+              "joins it with \" apples\" to create a phrase"
+            ],
+            "tr": [
+              "5 sayısını bir değişkende saklar",
+              "String() kullanarak stringhe dönüştürür",
+              "bunu \" apples\" ile birleştirerek bir ifade oluşturur"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It converts the number 5 to a string, then joins it with \" apples\" using +, producing \"5 apples\". String() ensures proper concatenation.",
+            "tr": "5 sayısını string'e dönüştürür, sonra + ile \" apples\" ile birleştirerek \"5 apples\" üretir. String() doğru birleştirmeyi sağlar."
+          },
+          "explanation": {
+            "en": "Without String(), mixing a number and string with + can give unexpected results. String() makes the intent clear.",
+            "tr": "String() olmadan sayı ile stringi + ile karıştırmak beklenmeyen sonuçlar verebilir. String() amacı açık hale getirir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u02-l4",
+      "index": 4,
+      "title": { "en": "Booleans, null, and undefined", "tr": "Boolean, null ve undefined" },
+      "concept": {
+        "headline": { "en": "Booleans are true or false; null and undefined represent empty or missing values", "tr": "Boolean true ya da false; null ve undefined boş ya da eksik değerleri temsil eder" },
+        "body": {
+          "en": "A boolean is a value that is either true or false. You use booleans in comparisons and decisions. null is a value you can explicitly assign to mean \"no value here\", intentionally empty. undefined is what JavaScript uses when a variable is declared but never given a value, or a function returns nothing. Both null and undefined represent the absence of a value, but null is intentional while undefined usually means something was not set.",
+          "tr": "Boolean true ya da false olarak bir değerdir. Boolean değerleri karşılaştırmalarda ve kararlar alırken kullanırsın. null, \"burada değer yok\" anlamına gelecek şekilde açıkça atayabileceğin bir değerdir, kasten boş. undefined, bir değişken bildirildiği zaman ama hiç değer verilmediğinde ya da bir fonksiyon hiçbir şey döndürmediğinde JavaScript'in kullandığı şeydir. Hem null hem undefined bir değerin olmayışını temsil eder ama null kasten, undefined genellikle bir şey atanmadı anlamını verir."
+        },
+        "example": {
+          "code": "const isReady = true;\nconst isEmpty = false;\nconst nothing = null;\nlet maybe;\nconsole.log(isReady);\nconsole.log(isEmpty);\nconsole.log(nothing);\nconsole.log(maybe);",
+          "caption": {
+            "en": "true, false, null, and undefined are all valid values.",
+            "tr": "true, false, null ve undefined tümü geçerli değerlerdir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u02-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does console.log(true) print?", "tr": "console.log(true) ne yazdırır?" },
+          "options": [
+            { "id": "a", "text": { "en": "true", "tr": "true" } },
+            { "id": "b", "text": { "en": "1", "tr": "1" } },
+            { "id": "c", "text": { "en": "True", "tr": "True" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "true is a boolean value and prints as true (lowercase). JavaScript is case sensitive.",
+            "tr": "true bir boolean değerdir ve true (küçük harf) olarak yazdırır. JavaScript büyük harfe duyarlıdır."
+          }
+        },
+        {
+          "id": "js-u02-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line declares a boolean variable?", "tr": "Hangi satır bir boolean değişken bildirir?" },
+          "options": [
+            { "id": "a", "text": { "en": "const flag = \"true\";", "tr": "const flag = \"true\";" } },
+            { "id": "b", "text": { "en": "const flag = true;", "tr": "const flag = true;" } },
+            { "id": "c", "text": { "en": "const flag = True;", "tr": "const flag = True;" } },
+            { "id": "d", "text": { "en": "const flag = 1;", "tr": "const flag = 1;" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "true (lowercase, no quotes) is a boolean. \"true\" is a string, True is not valid, and 1 is a number.",
+            "tr": "true (küçük harf, tırnak yok) bir boolean'dır. \"true\" string, True geçersiz ve 1 sayıdır."
+          }
+        },
+        {
+          "id": "js-u02-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the line to store the boolean value false in a variable named isPaused.",
+            "tr": "false boolean değerini isPaused değişkeninde saklamak için satırı tamamla."
+          },
+          "codeTemplate": "const isPaused = ___;",
+          "blanks": [
+            { "id": "1", "answer": "false", "distractors": ["False", "0", "\"false\""] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "false is a boolean keyword, lowercase, and without quotes. False would be a name, 0 is a number, and \"false\" is text.",
+            "tr": "false boolean anahtar kelimesi, küçük harf ve tırnak yok. False bir isim olurdu, 0 sayı ve \"false\" metindir."
+          }
+        },
+        {
+          "id": "js-u02-l4-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that declares a variable named hasWon with the boolean value true.",
+            "tr": "Boolean değer true ile hasWon adlı bir değişken bildiren satırı yaz."
+          },
+          "expected": "const hasWon = true;",
+          "acceptable": ["let hasWon = true;"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "true is a boolean keyword, not a string. No quotes needed.",
+            "tr": "true bir boolean anahtar kelimesi, string değil. Tırnak gerekli değil."
+          }
+        },
+        {
+          "id": "js-u02-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line is wrong and why?", "tr": "Hangi satır hatalı ve neden?" },
+          "codeLines": ["let status;", "console.log(status);", "status = false;"],
+          "buggyLineIndex": 1,
+          "fix": "console.log(typeof status);",
+          "verify": { "stdout": "undefined\n" },
+          "explanation": {
+            "en": "status is declared but not given a value, so it is undefined. This is valid but prints undefined. If you want a false value, assign it.",
+            "tr": "status bildirildi ama değer verilmedi, yani undefined'dır. Bu geçerlidir fakat undefined yazdırır. false değer istersen ata."
+          }
+        },
+        {
+          "id": "js-u02-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain the difference between null and undefined shown here.",
+            "tr": "100-200 karakterle burada gösterilen null ve undefined arasındaki farkı anlat."
+          },
+          "code": {
+            "en": "// Intentional empty value\nconst a = null;\n// Unset variable\nlet b;\nconsole.log(typeof a);\nconsole.log(typeof b);",
+            "tr": "// Kasten boş değer\nconst a = null;\n// Atanmamış değişken\nlet b;\nconsole.log(typeof a);\nconsole.log(typeof b);"
+          },
+          "keyPoints": {
+            "en": [
+              "null is explicitly assigned to mean no value",
+              "undefined happens when a variable is not initialized",
+              "both represent absence but for different reasons"
+            ],
+            "tr": [
+              "null değer yok anlamında açıkça atanır",
+              "undefined değişken başlatılmadığında olur",
+              "her ikisi de yokluğu temsil eder ama farklı nedenlerle"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "null is a value you intentionally assign to mean no value. undefined occurs when a variable is declared but not initialized. Both represent absence, but null is deliberate while undefined is accidental.",
+            "tr": "null değer yok anlamında kasten atadığın değerdir. undefined bir değişken bildirildiği zaman ama başlatılmadığında ortaya çıkar. Her ikisi de yokluğu temsil eder ama null kasten undefined ise tesadüfi."
+          },
+          "explanation": {
+            "en": "Understanding this distinction helps you debug: if you see undefined, something was not initialized; if you see null, someone intentionally set it.",
+            "tr": "Bu farkı anlamak debug etmene yardımcı olur: undefined görürsen bir şey başlatılmadı; null görürsen biri kasten ayarladı."
+          }
+        }
+      ]
+    }
+  ]
+}

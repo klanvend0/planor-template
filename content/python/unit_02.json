@@ -1,0 +1,562 @@
+{
+  "id": "py-u02",
+  "courseId": "python",
+  "index": 2,
+  "title": { "en": "Variables and Types", "tr": "Değişkenler ve Türler" },
+  "description": {
+    "en": "Learn to store and name data, understand types, check and convert values between types, and work with booleans.",
+    "tr": "Verileri saklamayı ve adlandırmayı, türleri anlamayı, değerleri kontrol ve dönüştürmeyi, ve boolean'larla çalışmayı öğren."
+  },
+  "lessons": [
+    {
+      "id": "py-u02-l1",
+      "index": 1,
+      "title": { "en": "Assigning and Naming Variables", "tr": "Değişkenleri Atama ve Adlandırma" },
+      "concept": {
+        "headline": { "en": "A variable stores a value under a name", "tr": "Bir değişken bir değeri bir isim altında saklar" },
+        "body": {
+          "en": "A variable is like a labeled container. You create it by writing a name, then an equals sign, then the value you want to store. The name must start with a letter or underscore, can contain letters, numbers and underscores, and is case sensitive. Once assigned, you can use that name to retrieve the value later.",
+          "tr": "Bir değişken etiketli bir kutu gibidir. Bir isim yazarak, sonra bir eşittir işareti koyarak, sonra da saklamak istediğin değeri yazarak oluştursun. İsim harfle veya alt çizgiyle başlamalı, harf, rakam ve alt çizgi içerebilir ve büyük harfe duyarlıdır. Bir kez atandığında, o ismi kullanarak değeri sonradan geri alabilirsin."
+        },
+        "example": {
+          "code": "name = \"Alice\"\nage = 25\nprint(name)\nprint(age)",
+          "caption": {
+            "en": "Two variables, each storing a different value.",
+            "tr": "İki değişken, her biri farklı bir değer saklar."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u02-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "name = \"Bob\"\nprint(name)",
+          "options": [
+            { "id": "a", "text": { "en": "Bob", "tr": "Bob" } },
+            { "id": "b", "text": { "en": "name", "tr": "name" } },
+            { "id": "c", "text": { "en": "\"Bob\"", "tr": "\"Bob\"" } },
+            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The variable name stores the text Bob. When you print(name), Python looks up what name holds and prints Bob, not the word name.",
+            "tr": "name değişkeni Bob metnini saklar. print(name) yaptığında Python, name'in ne tuttuğuna bakar ve Bob'u yazdırır, name kelimesini değil."
+          }
+        },
+        {
+          "id": "py-u02-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which name is valid for a variable?", "tr": "Hangisi bir değişken için geçerli bir isimdir?" },
+          "options": [
+            { "id": "a", "text": { "en": "2name", "tr": "2name" } },
+            { "id": "b", "text": { "en": "my_name", "tr": "my_name" } },
+            { "id": "c", "text": { "en": "my-name", "tr": "my-name" } },
+            { "id": "d", "text": { "en": "name!", "tr": "name!" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Variables must start with a letter or underscore, and can only contain letters, numbers, and underscores. my_name follows the rules; the others do not.",
+            "tr": "Değişkenler harfle ya da alt çizgiyle başlamalı, sadece harf, rakam ve alt çizgi içerebilir. my_name kuralları takip eder; diğerleri değil."
+          }
+        },
+        {
+          "id": "py-u02-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code to store the number 42 in a variable called count.",
+            "tr": "42 sayısını count adlı bir değişkende saklamak için kodu tamamla."
+          },
+          "codeTemplate": "___ = 42",
+          "blanks": [
+            { "id": "1", "answer": "count", "distractors": ["\"count\"", "Count", "c"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "A variable name on the left of = tells Python where to store the value on the right. count is a valid name.",
+            "tr": "= işaretinin solundaki değişken ismi Python'a sağdaki değeri nereye koyacağını söyler. count geçerli bir isimdir."
+          }
+        },
+        {
+          "id": "py-u02-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Create a variable called favorite and assign it the text chocolate.",
+            "tr": "favorite adlı bir değişken oluştur ve ona chocolate metnini ata."
+          },
+          "expected": "favorite = \"chocolate\"",
+          "acceptable": ["favorite = 'chocolate'"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "Text must be in quotes. Without quotes, Python thinks chocolate is a variable name, not a value.",
+            "tr": "Metin tırnak içinde olmalı. Tırnaksız hâlde Python chocolate'ı bir değişken ismi sanır, değer değil."
+          }
+        },
+        {
+          "id": "py-u02-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["score = 95", "print(Score)"],
+          "buggyLineIndex": 1,
+          "fix": "print(score)",
+          "verify": { "raises": "NameError" },
+          "explanation": {
+            "en": "Python is case sensitive. The variable was assigned as score, but the code looks for Score with a capital S, which does not exist.",
+            "tr": "Python büyük harfe duyarlıdır. Değişken score olarak atandı, ama kod büyük S'li Score arıyor; bu yoktur."
+          }
+        },
+        {
+          "id": "py-u02-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Store and display information\nfirst_name = \"Sarah\"\nlast_name = \"Chen\"\nprint(first_name)\nprint(last_name)",
+            "tr": "# Bilgiyi sakla ve göster\nfirst_name = \"Sarah\"\nlast_name = \"Chen\"\nprint(first_name)\nprint(last_name)"
+          },
+          "keyPoints": {
+            "en": [
+              "creates a variable first_name and stores the text Sarah",
+              "creates a variable last_name and stores the text Chen",
+              "prints each variable on its own line"
+            ],
+            "tr": [
+              "first_name değişkenini oluşturur ve Sarah metnini saklar",
+              "last_name değişkenini oluşturur ve Chen metnini saklar",
+              "her değişkeni kendi satırında yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "The code assigns the text Sarah to a variable called first_name and Chen to last_name, then prints both names on separate lines.",
+            "tr": "Kod, Sarah metnini first_name değişkenine ve Chen'i last_name'e atayıp, sonra her iki ismi ayrı satırlarda yazdırır."
+          },
+          "explanation": {
+            "en": "Each variable assignment stores a piece of information under a name. print() uses that name to retrieve and display the stored value.",
+            "tr": "Her değişken ataması bir bilgi parçasını bir isim altında saklar. print() o ismi kullanarak saklanan değeri alır ve gösterir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u02-l2",
+      "index": 2,
+      "title": { "en": "Types: Whole Numbers, Decimals, and Text", "tr": "Türler: Tam Sayılar, Ondalık Sayılar ve Metin" },
+      "concept": {
+        "headline": { "en": "Different kinds of data have different types", "tr": "Farklı türde veriler farklı türlere aittir" },
+        "body": {
+          "en": "Python has three main types: int is for whole numbers like 5 or 100, float is for decimal numbers like 3.14 or 2.5, and str is for text like Hello. When you assign a value to a variable, Python remembers what type it is. If you write 42, Python treats it as an int. If you write 42.0, it is a float. If you write \"42\", it is text stored as a str.",
+          "tr": "Python'da üç ana tür vardır: int tam sayılar için (5 veya 100 gibi), float ondalık sayılar için (3.14 veya 2.5 gibi), str ise metin için (Hello gibi). Bir değeri değişkene atadığında Python bunun ne tür olduğunu hatırlar. 42 yazarsan Python bunu int olarak görür. 42.0 yazarsan float olur. \"42\" yazarsan metin olarak str'de saklanır."
+        },
+        "example": {
+          "code": "whole = 10\ndecimal = 3.5\ntext = \"hello\"\nprint(whole)\nprint(decimal)\nprint(text)",
+          "caption": {
+            "en": "An int, a float, and a str, each stored and printed.",
+            "tr": "Bir int, bir float ve bir str, her biri saklanıp yazdırılır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u02-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What is the type of the value 42?", "tr": "42 değerinin türü nedir?" },
+          "options": [
+            { "id": "a", "text": { "en": "int", "tr": "int" } },
+            { "id": "b", "text": { "en": "float", "tr": "float" } },
+            { "id": "c", "text": { "en": "str", "tr": "str" } },
+            { "id": "d", "text": { "en": "number", "tr": "number" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "42 is a whole number with no decimal point, so it is an int. If it were 42.0 it would be a float.",
+            "tr": "42 ondalık nokta olmayan tam bir sayıdır, bu yüzden int'tir. Eğer 42.0 olsaydı float olurdu."
+          }
+        },
+        {
+          "id": "py-u02-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which value is a str?", "tr": "Hangisi bir str'dir?" },
+          "options": [
+            { "id": "a", "text": { "en": "123", "tr": "123" } },
+            { "id": "b", "text": { "en": "12.3", "tr": "12.3" } },
+            { "id": "c", "text": { "en": "\"123\"", "tr": "\"123\"" } },
+            { "id": "d", "text": { "en": "1e3", "tr": "1e3" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "The quotes make 123 into text, so it is a str. Without quotes, 123 is an int.",
+            "tr": "Tırnaklar 123'ü metne dönüştürür, bu yüzden str'dir. Tırnaksız, 123 bir int'tir."
+          }
+        },
+        {
+          "id": "py-u02-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code to store a float value.",
+            "tr": "Float değeri saklamak için kodu tamamla."
+          },
+          "codeTemplate": "price = ___",
+          "blanks": [
+            { "id": "1", "answer": "9.99", "distractors": ["9", "\"9.99\"", "9,99"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "A float must have a decimal point. 9 would be an int, and \"9.99\" would be a str because of the quotes.",
+            "tr": "Float'ın bir ondalık nokta olması gerekir. 9 int olurdu, \"9.99\" ise tırnaklar yüzünden str olurdu."
+          }
+        },
+        {
+          "id": "py-u02-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that stores the text \"Python\" in a variable called language.",
+            "tr": "\"Python\" metnini language adlı değişkende saklamak için bir satır yaz."
+          },
+          "expected": "language = \"Python\"",
+          "acceptable": ["language = 'Python'"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "Strings must be wrapped in quotes. This creates a str type that holds the text Python.",
+            "tr": "Stringler tırnak içine alınmalı. Bu Python metnini tutan str türü oluşturur."
+          }
+        },
+        {
+          "id": "py-u02-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["value = \"15\"", "print(value + 2)"],
+          "buggyLineIndex": 1,
+          "fix": "print(int(value) + 2)",
+          "verify": { "raises": "TypeError" },
+          "explanation": {
+            "en": "You cannot add a number to a string. value is a str, so value + 2 fails. You must convert value to int first.",
+            "tr": "Bir sayıyı string'e ekleyemezsin. value str olduğu için value + 2 başarısız olur. Önce value'yu int'e dönüştürmen gerekir."
+          }
+        },
+        {
+          "id": "py-u02-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Store three different types\nage = 30\nheight = 5.9\ncity = \"Berlin\"\nprint(age)\nprint(height)\nprint(city)",
+            "tr": "# Üç farklı türü sakla\nage = 30\nheight = 5.9\ncity = \"Berlin\"\nprint(age)\nprint(height)\nprint(city)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the whole number 30 in age (int type)",
+              "stores the decimal number 5.9 in height (float type)",
+              "stores the text Berlin in city (str type)",
+              "prints each variable"
+            ],
+            "tr": [
+              "tam sayı 30'u age'de saklar (int türü)",
+              "ondalık sayı 5.9'u height'ta saklar (float türü)",
+              "metin Berlin'i city'de saklar (str türü)",
+              "her değişkeni yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores three different types: the int 30, the float 5.9, and the str Berlin in separate variables, then prints all three.",
+            "tr": "Üç farklı türü depolar: int 30, float 5.9 ve str Berlin'i ayrı değişkenlerde, sonra her üçünü yazdırır."
+          },
+          "explanation": {
+            "en": "Python lets you mix different types in one program. The type depends on how you write the value: numbers without decimals are int, numbers with decimals are float, and text in quotes is str.",
+            "tr": "Python bir programda farklı türleri karıştırmanı sağlar. Tür, değeri nasıl yazacağına bağlı: ondalık olmayan sayılar int, ondalık sayılar float, tırnaklı metin str'dir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u02-l3",
+      "index": 3,
+      "title": { "en": "Checking and Converting Types", "tr": "Türleri Kontrol Etme ve Dönüştürme" },
+      "concept": {
+        "headline": { "en": "type() shows what kind of data you have, and you can convert between types", "tr": "type() hangi türde veri olduğunu gösterir ve türler arasında dönüştürebilirsin" },
+        "body": {
+          "en": "The type() function tells you what type a value or variable is. Call it like type(42) or type(name). You can also convert between types: int() turns text into a whole number, float() turns text into a decimal number, and str() turns any value into text. Be careful: int(\"hello\") will fail because hello is not a number, but int(\"42\") works fine.",
+          "tr": "type() işlevi bir değer ya da değişkenin ne tür olduğunu söyler. type(42) ya da type(name) gibi çağırırsın. Türler arasında da dönüştürebilirsin: int() metni tam sayıya çevirici, float() metni ondalık sayıya çevirici, str() herhangi bir değeri metne çevirici. Dikkat: int(\"hello\") başarısız olur çünkü hello bir sayı değil; ama int(\"42\") işe yarar."
+        },
+        "example": {
+          "code": "value = \"25\"\nprint(type(value))\nconverted = int(value)\nprint(type(converted))\nprint(converted)",
+          "caption": {
+            "en": "Checking a type and then converting it to a different type.",
+            "tr": "Bir türü kontrol etme ve sonra onu farklı bir türe dönüştürme."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u02-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does type(\"hello\") tell you?", "tr": "type(\"hello\") sana ne söyler?" },
+          "options": [
+            { "id": "a", "text": { "en": "str", "tr": "str" } },
+            { "id": "b", "text": { "en": "int", "tr": "int" } },
+            { "id": "c", "text": { "en": "text", "tr": "text" } },
+            { "id": "d", "text": { "en": "hello", "tr": "hello" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "type() returns the name of the type. \"hello\" is text, so the type is str.",
+            "tr": "type() türün adını döner. \"hello\" metin olduğu için türü str'dir."
+          }
+        },
+        {
+          "id": "py-u02-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does int(\"100\") do?", "tr": "int(\"100\") ne yapar?" },
+          "options": [
+            { "id": "a", "text": { "en": "Converts the string \"100\" to the number 100", "tr": "\"100\" stringini 100 sayısına dönüştürür" } },
+            { "id": "b", "text": { "en": "Stores \"100\" in a variable called int", "tr": "\"100\"ü int adlı bir değişkene saklar" } },
+            { "id": "c", "text": { "en": "Creates an error because 100 is already a number", "tr": "100 zaten sayı olduğu için hata verir" } },
+            { "id": "d", "text": { "en": "Prints 100 to the screen", "tr": "100'ü ekrana yazdırır" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "int() converts its argument from one type to another. Here it changes the str \"100\" into the int 100.",
+            "tr": "int() argümanını bir türden başka türe dönüştürür. Burada str \"100\"ü int 100'e dönüştürür."
+          }
+        },
+        {
+          "id": "py-u02-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code to convert the text \"50\" to a whole number.",
+            "tr": "\"50\" metnini tam sayıya dönüştürmek için kodu tamamla."
+          },
+          "codeTemplate": "num = ___(\"50\")",
+          "blanks": [
+            { "id": "1", "answer": "int", "distractors": ["str", "float", "type"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "int() is the function that converts text to a whole number. float() would make it 50.0, and str() would keep it as text.",
+            "tr": "int() metni tam sayıya çeviren işlevdir. float() onu 50.0 yapardı, str() metinde kalmasını sağlardı."
+          }
+        },
+        {
+          "id": "py-u02-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that converts the number 42 to text.",
+            "tr": "42 sayısını metne dönüştüren satırı yaz."
+          },
+          "expected": "str(42)",
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "str() converts any value to text. str(42) becomes the string \"42\".",
+            "tr": "str() herhangi bir değeri metne dönüştürür. str(42) string \"42\" olur."
+          }
+        },
+        {
+          "id": "py-u02-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["data = \"hello\"", "num = int(data)"],
+          "buggyLineIndex": 1,
+          "fix": "num = int(\"42\")",
+          "verify": { "raises": "ValueError" },
+          "explanation": {
+            "en": "int() can only convert text that represents a number. \"hello\" is not a number, so Python raises ValueError.",
+            "tr": "int() yalnızca sayıyı temsil eden metni dönüştürebilir. \"hello\" bir sayı değil, bu yüzden Python ValueError verir."
+          }
+        },
+        {
+          "id": "py-u02-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Convert and check types\noriginal = \"99\"\nconverted = int(original)\nprint(type(original))\nprint(type(converted))",
+            "tr": "# Dönüştür ve türleri kontrol et\noriginal = \"99\"\nconverted = int(original)\nprint(type(original))\nprint(type(converted))"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the string \"99\" in original",
+              "converts it to the int 99 and stores in converted",
+              "type(original) shows the first is a str",
+              "type(converted) shows the second is an int"
+            ],
+            "tr": [
+              "string \"99\"'u original'da saklar",
+              "onu int 99'a dönüştürür ve converted'a saklar",
+              "type(original) birincinin str olduğunu gösterir",
+              "type(converted) ikincinin int olduğunu gösterir"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores the string 99 in original, converts it to the integer 99 in converted, then prints the type of each to show that the first is a str and the second is an int.",
+            "tr": "String 99'u original'da saklar, onu integer 99'a dönüştürüp converted'a koyar, sonra her birinin türünü yazdırarak birincinin str, ikincinin int olduğunu gösterir."
+          },
+          "explanation": {
+            "en": "int() changes the type from str to int, but the original variable is not affected. You create a new variable to hold the converted value.",
+            "tr": "int() türü str'den int'e değiştirir ama original değişkeni etkilenmez. Dönüştürülen değeri tutmak için yeni bir değişken oluşturursun."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u02-l4",
+      "index": 4,
+      "title": { "en": "Booleans and None", "tr": "Boolean'lar ve None" },
+      "concept": {
+        "headline": { "en": "True and False are boolean values, and None means no value", "tr": "True ve False boolean değerlerdir, None ise değer yok anlamına gelir" },
+        "body": {
+          "en": "A boolean value is either True or False. Python uses booleans for yes-or-no decisions, and they are a real data type just like int and str. You can store True or False in a variable. None is a special value that means nothing, or no value. It is useful when you want to say a variable has not been assigned yet or a function returned nothing.",
+          "tr": "Boolean değer ya True ya da False'tur. Python yes-or-no kararları için boolean'ları kullanır; int ve str gibi gerçek veri türüdür. True ya da False'u bir değişkende saklayabilirsin. None özel bir değerdir; hiçbir şey, ya da değer yok anlamına gelir. Bir değişkenin henüz atanmadığını ya da işlevin hiçbir şey döndüğünü söylemek istediğinde faydalıdır."
+        },
+        "example": {
+          "code": "is_student = True\nis_logged_in = False\nempty = None\nprint(is_student)\nprint(is_logged_in)\nprint(empty)",
+          "caption": {
+            "en": "A boolean True, a boolean False, and the None value.",
+            "tr": "Boolean True, boolean False ve None değeri."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u02-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(True)",
+          "options": [
+            { "id": "a", "text": { "en": "True", "tr": "True" } },
+            { "id": "b", "text": { "en": "true", "tr": "true" } },
+            { "id": "c", "text": { "en": "1", "tr": "1" } },
+            { "id": "d", "text": { "en": "nothing", "tr": "hiçbir şey" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "True is a boolean value. Python prints it exactly as True with a capital T.",
+            "tr": "True bir boolean değerdir. Python onu tam olarak büyük T ile True yazdırır."
+          }
+        },
+        {
+          "id": "py-u02-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What is the type of None?", "tr": "None'nin türü nedir?" },
+          "options": [
+            { "id": "a", "text": { "en": "NoneType", "tr": "NoneType" } },
+            { "id": "b", "text": { "en": "str", "tr": "str" } },
+            { "id": "c", "text": { "en": "bool", "tr": "bool" } },
+            { "id": "d", "text": { "en": "nothing", "tr": "nothing" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "None has its own type called NoneType. It is a distinct type for the absence of a value.",
+            "tr": "None'nin kendi türü vardır: NoneType. Değer yokluğu için ayrılmış bir türdür."
+          }
+        },
+        {
+          "id": "py-u02-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code to store a boolean False in a variable called verified.",
+            "tr": "Boolean False'u verified adlı bir değişkende saklamak için kodu tamamla."
+          },
+          "codeTemplate": "verified = ___",
+          "blanks": [
+            { "id": "1", "answer": "False", "distractors": ["false", "\"False\"", "0"] }
+          ],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "False is a boolean literal. It must be spelled with a capital F. false is not recognized by Python.",
+            "tr": "False boolean literalidir. Büyük F ile yazılmalı. false Python tarafından tanınmaz."
+          }
+        },
+        {
+          "id": "py-u02-l4-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write a line that stores None in a variable called result.",
+            "tr": "None'yi result adlı bir değişkende saklamak için satırı yaz."
+          },
+          "expected": "result = None",
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "None is assigned like any other value. It means the variable holds no meaningful data yet.",
+            "tr": "None diğer değerler gibi atanır. Değişkenin henüz anlamlı bir veri tutmadığı anlamına gelir."
+          }
+        },
+        {
+          "id": "py-u02-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["ready = true", "print(ready)"],
+          "buggyLineIndex": 0,
+          "fix": "ready = True",
+          "verify": { "raises": "NameError" },
+          "explanation": {
+            "en": "Python boolean values are True and False with capital letters. true (lowercase) is not a keyword; Python looks for a variable named true and fails.",
+            "tr": "Python'ın boolean değerleri büyük harfli True ve False'tur. true (küçük harf) anahtar sözcük değil; Python true adında bir değişken arar ve başarısız olur."
+          }
+        },
+        {
+          "id": "py-u02-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Track status with booleans and absence with None\nis_active = True\nis_admin = False\nlast_login = None\nprint(type(is_active))\nprint(type(is_admin))\nprint(type(last_login))",
+            "tr": "# Boolean'larla durumu ve None ile yokluğu takip et\nis_active = True\nis_admin = False\nlast_login = None\nprint(type(is_active))\nprint(type(is_admin))\nprint(type(last_login))"
+          },
+          "keyPoints": {
+            "en": [
+              "stores True in is_active (boolean type)",
+              "stores False in is_admin (boolean type)",
+              "stores None in last_login (NoneType)",
+              "prints the type of each variable"
+            ],
+            "tr": [
+              "True'yu is_active'e saklar (boolean türü)",
+              "False'u is_admin'e saklar (boolean türü)",
+              "None'yi last_login'e saklar (NoneType)",
+              "her değişkenin türünü yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores True in is_active and False in is_admin as boolean values, stores None in last_login to mean no value yet, then prints their types to show bool and NoneType.",
+            "tr": "is_active'e True'yu, is_admin'e False'u boolean değer olarak saklar, last_login'e henüz değer yok anlamında None saklar, sonra türlerini yazdırarak bool ve NoneType'ı gösterir."
+          },
+          "explanation": {
+            "en": "Booleans (True/False) are one type, and None is a separate type (NoneType). They serve different purposes: booleans for yes-or-no data, None for the absence of data.",
+            "tr": "Boolean'lar (True/False) bir türdür; None ayrı bir türdür (NoneType). Farklı amaçlara hizmet ederler: boolean'lar evet-ya-da-hayır verisi için, None veri yokluğu için."
+          }
+        }
+      ]
+    }
+  ]
+}

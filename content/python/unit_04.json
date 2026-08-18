@@ -1,0 +1,567 @@
+{
+  "id": "py-u04",
+  "courseId": "python",
+  "index": 4,
+  "title": { "en": "Numbers and Math", "tr": "Sayılar ve Matematik" },
+  "description": {
+    "en": "Master arithmetic operators, integer division, powers, and Python's built-in math functions for precise calculations.",
+    "tr": "Aritmetik işlemleri, tam sayı bölmesini, üssü ve Python'un yerleşik math fonksiyonlarını öğren."
+  },
+  "lessons": [
+    {
+      "id": "py-u04-l1",
+      "index": 1,
+      "title": { "en": "Arithmetic Operators", "tr": "Aritmetik İşleçler" },
+      "concept": {
+        "headline": { "en": "Math in Python with +, -, *, /", "tr": "Python'da +, -, *, / ile matematik" },
+        "body": {
+          "en": "Python handles basic math just like you learned in school. Use + to add, - to subtract, * to multiply, and / to divide. Python evaluates expressions left to right (with some exceptions we'll see later). Division always gives a decimal result, even if the answer is a whole number.",
+          "tr": "Python, okulda öğrendiğin gibi temel matematiği yapar. Toplamak için +, çıkarmak için -, çarpmak için *, bölmek için / kullan. Python ifadeleri soldan sağa değerlendirir (biraz sonra istisnaları göreceğiz). Bölme her zaman ondalık sonuç verir; cevap tam sayı olsa bile."
+        },
+        "example": {
+          "code": "print(5 + 3)\nprint(10 - 4)\nprint(6 * 7)\nprint(15 / 3)",
+          "caption": {
+            "en": "Four basic operations, each on a new line.",
+            "tr": "Dört temel işlem, her biri yeni satırda."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u04-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(8 + 7)",
+          "options": [
+            { "id": "a", "text": { "en": "15", "tr": "15" } },
+            { "id": "b", "text": { "en": "87", "tr": "87" } },
+            { "id": "c", "text": { "en": "8 + 7", "tr": "8 + 7" } },
+            { "id": "d", "text": { "en": "15.0", "tr": "15.0" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Python adds 8 and 7 first, then prints the result 15 as a whole number (not 15.0, because addition of two integers stays an integer).",
+            "tr": "Python 8 ile 7'yi toplar, sonra sonuç olan 15'i yazdırır; iki tamsayının toplamı tamsayı kalır, 15.0 olmaz."
+          }
+        },
+        {
+          "id": "py-u04-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which line correctly multiplies 4 and 5?", "tr": "Hangi satır 4 ile 5'i doğru çarpar?" },
+          "options": [
+            { "id": "a", "text": { "en": "print(4 * 5)", "tr": "print(4 * 5)" } },
+            { "id": "b", "text": { "en": "print(4 + 5)", "tr": "print(4 + 5)" } },
+            { "id": "c", "text": { "en": "print(4 ** 5)", "tr": "print(4 ** 5)" } },
+            { "id": "d", "text": { "en": "print(45)", "tr": "print(45)" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The multiplication operator multiplies two numbers. Addition adds them, the power operator raises to a power, and 45 is just the number written out.",
+            "tr": "Çarpma işleci iki sayıyı çarpar. Toplama toplar, üs işleci üsse yükseltir, 45 ise sadece yazılı sayıdır."
+          }
+        },
+        {
+          "id": "py-u04-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints 20.",
+            "tr": "Kodu 20 yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(25 ___ 5)",
+          "blanks": [
+            { "id": "1", "answer": "-", "distractors": ["+", "*", "/"] }
+          ],
+          "verify": { "stdout": "20\n" },
+          "explanation": {
+            "en": "25 minus 5 equals 20. The - operator subtracts the second number from the first.",
+            "tr": "25 eksi 5 eşittir 20. - işleci ikinci sayıyı birinciden çıkarır."
+          }
+        },
+        {
+          "id": "py-u04-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write code that calculates 18 divided by 3 and prints the result.",
+            "tr": "18'i 3'e bölen ve sonucu yazdıran kod yaz."
+          },
+          "expected": "print(18 / 3)",
+          "acceptable": ["print( 18 / 3 )"],
+          "verify": { "stdout": "6.0\n" },
+          "explanation": {
+            "en": "Division with / always returns a decimal number in Python 3, so 18 / 3 is 6.0, not 6. This is true even when the answer is a whole number.",
+            "tr": "Python 3'te / ile bölme her zaman ondalık sayı döndürür; 18 / 3 = 6.0'dır, 6 değil. Cevap tam sayı olsa bile böyle olur."
+          }
+        },
+        {
+          "id": "py-u04-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["a = 10", "b = 3", "print(a + b"],
+          "buggyLineIndex": 2,
+          "fix": "print(a + b)",
+          "verify": { "raises": "SyntaxError" },
+          "explanation": {
+            "en": "The closing parenthesis is missing at the end of the print() call. Python cannot parse this line, so it raises a SyntaxError.",
+            "tr": "print() çağrısının sonunda kapatma parantezi eksik. Python bu satırı ayrıştıramaz ve SyntaxError verir."
+          }
+        },
+        {
+          "id": "py-u04-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Calculate the cost of three items\nprice = 12\nquantity = 3\ntotal = price * quantity\nprint(total)",
+            "tr": "# Üç öğenin maliyetini hesapla\nprice = 12\nquantity = 3\ntotal = price * quantity\nprint(total)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the price 12 in a variable",
+              "stores the quantity 3 in another variable",
+              "multiplies price by quantity",
+              "prints the total result"
+            ],
+            "tr": [
+              "fiyat 12'yi bir değişkende saklar",
+              "miktarı 3'ü başka bir değişkende saklar",
+              "fiyat ile miktarı çarpar",
+              "toplam sonucu yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores a price of 12 and a quantity of 3 in two variables, multiplies them together to get 36, and prints that total.",
+            "tr": "12 fiyatı ve 3 miktarını iki değişkende saklar, onları çarparak 36 elde eder ve bu toplamı yazdırır."
+          },
+          "explanation": {
+            "en": "Multiplication combines price and quantity into a total cost. Variables let you store values by name and reuse them in calculations.",
+            "tr": "Çarpma, fiyat ile miktarı birleştirerek toplam maliyeti hesaplar. Değişkenler, değerleri isim tarafından saklayıp hesaplamalarda yeniden kullanmanı sağlar."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u04-l2",
+      "index": 2,
+      "title": { "en": "Integer Division and Remainder", "tr": "Tam Bölme ve Kalan" },
+      "concept": {
+        "headline": { "en": "// gives whole-number division, % finds the remainder", "tr": "// tam bölme verir, % kalanı bulur" },
+        "body": {
+          "en": "When you want to divide but keep only the whole-number part, use //. It drops any decimal. The % operator (modulo) gives you the remainder left over after division. These operators are very useful for finding patterns in numbers — for instance, % can tell you if a number is even or odd.",
+          "tr": "Sadece tam sayı kısmı istiyorsan // kullan. Ondalıkları atar. % işleci (modulo) bölmeden sonra kalan miktarını verir. Bu işleçler sayılardaki desenleri bulmak için çok yararlıdır; örneğin % bir sayının tek mi çift mi olduğunu söyleyebilir."
+        },
+        "example": {
+          "code": "print(17 // 5)\nprint(17 % 5)\nprint(20 % 3)",
+          "caption": {
+            "en": "17 divided by 5 is 3 with 2 left over (17 // 5 = 3, 17 % 5 = 2).",
+            "tr": "17'yi 5'e bölmek 3 kalıntı 2 verir (17 // 5 = 3, 17 % 5 = 2)."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u04-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(20 // 6)",
+          "options": [
+            { "id": "a", "text": { "en": "3", "tr": "3" } },
+            { "id": "b", "text": { "en": "3.333", "tr": "3.333" } },
+            { "id": "c", "text": { "en": "2", "tr": "2" } },
+            { "id": "d", "text": { "en": "3.33", "tr": "3.33" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "20 divided by 6 is 3 with a remainder (20 / 6 ≈ 3.33, but // drops the decimal part and keeps only 3).",
+            "tr": "20'yi 6'ya bölmek 3 kalıntı verir. // ondalık kısmı atar ve sadece 3'ü tutar."
+          }
+        },
+        {
+          "id": "py-u04-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(25 % 7)",
+          "options": [
+            { "id": "a", "text": { "en": "3", "tr": "3" } },
+            { "id": "b", "text": { "en": "4", "tr": "4" } },
+            { "id": "c", "text": { "en": "25", "tr": "25" } },
+            { "id": "d", "text": { "en": "7", "tr": "7" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "25 divided by 7 is 3 with remainder 4 (7 × 3 = 21, and 25 - 21 = 4). The % operator gives you that remainder.",
+            "tr": "25'i 7'ye bölmek 3 kalıntı 4 verir (7 × 3 = 21, ve 25 - 21 = 4). % işleci bu kalanı verir."
+          }
+        },
+        {
+          "id": "py-u04-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the code so it prints 4.",
+            "tr": "Kodu 4 yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(30 ___ 13)",
+          "blanks": [
+            { "id": "1", "answer": "%", "distractors": ["//", "/", "-"] }
+          ],
+          "verify": { "stdout": "4\n" },
+          "explanation": {
+            "en": "30 divided by 13 is 2 with remainder 4 (13 × 2 = 26, and 30 - 26 = 4). The % operator finds remainders.",
+            "tr": "30'u 13'e bölmek 2 kalıntı 4 verir. % kalanı bulur."
+          }
+        },
+        {
+          "id": "py-u04-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write code using % to find the remainder when 23 is divided by 5.",
+            "tr": "23'ü 5'e böldüğünde kalanı bulmak için % kullanan kod yaz."
+          },
+          "expected": "print(23 % 5)",
+          "acceptable": ["print( 23 % 5 )"],
+          "verify": { "stdout": "3\n" },
+          "explanation": {
+            "en": "23 divided by 5 is 4 with remainder 3 (5 × 4 = 20, and 23 - 20 = 3). Use % to calculate remainders.",
+            "tr": "23'ü 5'e bölmek 4 kalıntı 3 verir. Kalanları hesaplamak için % kullan."
+          }
+        },
+        {
+          "id": "py-u04-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["x = 19", "print(x / 3)", "print(x // 3)"],
+          "buggyLineIndex": 1,
+          "fix": "print(x / 3)",
+          "verify": {},
+          "explanation": {
+            "en": "Line 2 uses / instead of //, which gives a decimal result (6.333...) instead of the whole-number division we might expect. It is not wrong by syntax, but wrong for the lesson we are teaching.",
+            "tr": "Satır 2 // yerine / kullanır; ondalık sonuç (6.333...) verir. Sintaks açısından hatalı değil ama dersin konusu için yanlış."
+          }
+        },
+        {
+          "id": "py-u04-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Check if age is old enough to vote\nage = 17\nprint(age % 18)",
+            "tr": "# Yaşın oy vermek için yeterli olup olmadığını kontrol et\nage = 17\nprint(age % 18)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores age as 17",
+              "calculates the remainder when 17 is divided by 18",
+              "prints that remainder value"
+            ],
+            "tr": [
+              "yaşı 17 olarak saklar",
+              "17'nin 18'e bölünmesinden kalanı hesaplar",
+              "o kalan değeri yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores the age 17, then uses modulo to find the remainder when divided by 18, which is 17 (since 17 is less than 18).",
+            "tr": "Yaş 17'yi saklar, sonra 18'e bölünmeden kalanı bulur; 17 18'den küçük olduğu için kalan 17'dir."
+          },
+          "explanation": {
+            "en": "The % operator finds remainders. When the first number is smaller than the second (17 < 18), the remainder is just the first number itself.",
+            "tr": "% kalanı bulur. Birinci sayı ikinciden küçük olduğunda (17 < 18), kalan birinci sayının kendisidir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u04-l3",
+      "index": 3,
+      "title": { "en": "Powers and Precedence", "tr": "Üs ve İşlem Sırası" },
+      "concept": {
+        "headline": { "en": "Power operator raises to a power; multiply/divide/modulo before add/subtract", "tr": "Üs işleci üsse yükseltir; çarpma/bölme/modulo toplama/çıkarmadan önce yapılır" },
+        "body": {
+          "en": "The power operator (written as two asterisks) raises the left number to the power of the right one (2 to the power 3 means 2 times 2 times 2, which is 8). Python has a standard order of operations: power is evaluated first, then multiply/divide/modulo (left to right), then add and subtract (left to right). You can always use parentheses to force a different order.",
+          "tr": "Üs işleci (iki yıldız yazılır) solundaki sayıyı sağındaki sayının gücüne yükseltir (2 üzeri 3 demek 2 × 2 × 2, yani 8). Python standart işlem sırasını takip eder: üs önce, sonra çarpma/bölme/modulo, sonra toplama ve çıkarma. Her zaman parantezler kullanarak farklı bir sıra zorlayabilirsin."
+        },
+        "example": {
+          "code": "print(2 ** 3)\nprint(10 - 2 * 3)\nprint((10 - 2) * 3)",
+          "caption": {
+            "en": "2 to the power of 3 is 8; multiplication before subtraction; parentheses change the order.",
+            "tr": "2 üzeri 3 eşittir 8; çarpma çıkarmadan önce; parantezler sırayı değiştirir."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u04-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(3 ** 4)",
+          "options": [
+            { "id": "a", "text": { "en": "12", "tr": "12" } },
+            { "id": "b", "text": { "en": "7", "tr": "7" } },
+            { "id": "c", "text": { "en": "81", "tr": "81" } },
+            { "id": "d", "text": { "en": "64", "tr": "64" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "3 to the power of 4 means 3 × 3 × 3 × 3 = 81. The power operator (two asterisks) raises to a power.",
+            "tr": "3 üzeri 4 demek 3 × 3 × 3 × 3 = 81. Üs işleci (iki yıldız) üsse yükseltir."
+          }
+        },
+        {
+          "id": "py-u04-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(2 + 3 * 4)",
+          "options": [
+            { "id": "a", "text": { "en": "14", "tr": "14" } },
+            { "id": "b", "text": { "en": "20", "tr": "20" } },
+            { "id": "c", "text": { "en": "8", "tr": "8" } },
+            { "id": "d", "text": { "en": "9", "tr": "9" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Multiplication happens before addition (order of operations). 3 * 4 = 12 is calculated first, then 2 + 12 = 14.",
+            "tr": "Çarpma toplamadan önce yapılır (işlem sırası). 3 * 4 = 12 önce hesaplanır, sonra 2 + 12 = 14."
+          }
+        },
+        {
+          "id": "py-u04-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code so it prints 64.",
+            "tr": "Kodu 64 yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(4 ___ 3)",
+          "blanks": [
+            { "id": "1", "answer": "**", "distractors": ["+", "*", "^"] }
+          ],
+          "verify": { "stdout": "64\n" },
+          "explanation": {
+            "en": "4 to the power of 3 is 4 × 4 × 4 = 64. Use the power operator (two asterisks, not caret) to raise to a power.",
+            "tr": "4 üzeri 3 demek 4 × 4 × 4 = 64. Üsse yükseltmek için üs işlecini kullan (şapka işareti değil)."
+          }
+        },
+        {
+          "id": "py-u04-l3-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write code that calculates (5 + 2) * 3 and prints the result.",
+            "tr": "(5 + 2) * 3 hesaplayıp sonucu yazdıran kod yaz."
+          },
+          "expected": "print((5 + 2) * 3)",
+          "acceptable": ["print( (5 + 2) * 3 )"],
+          "verify": { "stdout": "21\n" },
+          "explanation": {
+            "en": "Without parentheses, multiplication would happen before addition. Parentheses force 5 + 2 = 7 first, then 7 * 3 = 21.",
+            "tr": "Parantez olmadan çarpma toplamadan önce yapılırdı. Parantezler 5 + 2 = 7 sonra 7 * 3 = 21 yapar."
+          }
+        },
+        {
+          "id": "py-u04-l3-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["a = 10", "b = 3", "print(a + b **2)"],
+          "buggyLineIndex": 2,
+          "fix": "print((a + b) ** 2)",
+          "verify": {},
+          "explanation": {
+            "en": "The code runs without error, but it calculates 10 plus 3 to the power 2 equals 10 plus 9 equals 19, not 10 plus 3 to the power 2 equals 169. The precedence is wrong for the intended calculation.",
+            "tr": "Kod hatasız çalışır ama 10 + (3 üzeri 2) = 10 + 9 = 19 hesaplar; (10 + 3) üzeri 2 = 169 değil. İşlem sırası yapılmak istenenle uyuşmaz."
+          }
+        },
+        {
+          "id": "py-u04-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Calculate the area of a square\nside = 5\narea = side ** 2\nprint(area)",
+            "tr": "# Karenin alanını hesapla\nside = 5\narea = side ** 2\nprint(area)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the side length 5",
+              "raises that side length to the power of 2 (multiplies it by itself)",
+              "saves the result in area",
+              "prints the area"
+            ],
+            "tr": [
+              "kenar uzunluğu 5'i saklar",
+              "o kenar uzunluğunu 2 üssüne yükseltir (kendisiyle çarpar)",
+              "sonucu area'da saklar",
+              "alanı yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores the side length 5, raises it to the power of 2 to calculate the area (5 * 5 = 25), and prints 25.",
+            "tr": "Kenar uzunluğu 5'i saklar, alanı hesaplamak için 2. kuvvete yükseltir (5 * 5 = 25) ve 25'i yazdırır."
+          },
+          "explanation": {
+            "en": "The power operator calculates powers. For a square, area equals side length squared (side to the power 2), which is why 5 to the power 2 equals 25.",
+            "tr": "Üs işleci kuvvetleri hesaplar. Kare için alan = kenar üzeri 2 olduğundan, 5 üzeri 2 = 25 olur."
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-u04-l4",
+      "index": 4,
+      "title": { "en": "Functions and Comparisons", "tr": "Fonksiyonlar ve Karşılaştırmalar" },
+      "concept": {
+        "headline": { "en": "round(), abs() convert numbers; <, >, ==, != compare", "tr": "round(), abs() sayıları dönüştürür; <, >, ==, != karşılaştırır" },
+        "body": {
+          "en": "Python has built-in functions to transform numbers: round() smooths a decimal to the nearest integer, and abs() gives the absolute value (distance from zero, always positive). Comparison operators test relationships: <, >, <=, >=, ==, !=. These always return True or False, which is a boolean value.",
+          "tr": "Python sayıları dönüştüren yerleşik fonksiyonlara sahiptir: round() ondalık sayıyı en yakın tamsayıya yuvarlar, abs() mutlak değeri verir. Karşılaştırma işleçleri ilişkileri test eder: <, >, <=, >=, ==, !=. Bunlar her zaman True ya da False döndürür."
+        },
+        "example": {
+          "code": "print(round(3.7))\nprint(abs(-5))\nprint(10 > 7)\nprint(10 == 7)",
+          "caption": {
+            "en": "Rounding 3.7 to 4, absolute value of -5 is 5, and two comparisons that return True and False.",
+            "tr": "3.7 yuvarlanan 4, -5 mutlak değeri 5, ve True/False dönen iki karşılaştırma."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "py-u04-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(round(2.6))",
+          "options": [
+            { "id": "a", "text": { "en": "2", "tr": "2" } },
+            { "id": "b", "text": { "en": "3", "tr": "3" } },
+            { "id": "c", "text": { "en": "2.6", "tr": "2.6" } },
+            { "id": "d", "text": { "en": "2.5", "tr": "2.5" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "round() rounds 2.6 to the nearest whole number, which is 3. Any decimal from 0.5 and up rounds to the next integer.",
+            "tr": "round() 2.6'yı en yakın tamsayıya yuvarlar; bu 3'tür. 0.5 ve üzeri herhangi bir ondalık sonraki tamsayıya yuvarlanır."
+          }
+        },
+        {
+          "id": "py-u04-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "print(15 <= 15)",
+          "options": [
+            { "id": "a", "text": { "en": "True", "tr": "True" } },
+            { "id": "b", "text": { "en": "False", "tr": "False" } },
+            { "id": "c", "text": { "en": "15", "tr": "15" } },
+            { "id": "d", "text": { "en": "1", "tr": "1" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "<= means less than or equal. 15 is equal to 15, so the comparison is True. Comparisons always return True or False.",
+            "tr": "<= demek küçük veya eşit. 15 eşittir 15'e, bu yüzden sonuç True'dur. Karşılaştırmalar her zaman True ya da False döner."
+          }
+        },
+        {
+          "id": "py-u04-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the code so it prints 8.",
+            "tr": "Kodu 8 yazdıracak şekilde tamamla."
+          },
+          "codeTemplate": "print(abs(___))",
+          "blanks": [
+            { "id": "1", "answer": "-8", "distractors": ["8", "-8.0", "round(-8)"] }
+          ],
+          "verify": { "stdout": "8\n" },
+          "explanation": {
+            "en": "abs() returns the absolute value, which is always positive. abs(-8) is 8, and abs(8) is also 8.",
+            "tr": "abs() mutlak değeri döndürür; her zaman pozitiftir. abs(-8) = 8, abs(8) = 8."
+          }
+        },
+        {
+          "id": "py-u04-l4-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write code that tests whether 20 is greater than 15 and prints the result.",
+            "tr": "20'nin 15'ten büyük olup olmadığını test eden ve sonucu yazdıran kod yaz."
+          },
+          "expected": "print(20 > 15)",
+          "acceptable": ["print( 20 > 15 )"],
+          "verify": { "stdout": "True\n" },
+          "explanation": {
+            "en": "20 is indeed greater than 15, so the > operator returns True. Comparison operators always return True or False.",
+            "tr": "20 gerçekten 15'ten büyük, bu yüzden > sonuç True'dur. Karşılaştırma işleçleri her zaman True ya da False döner."
+          }
+        },
+        {
+          "id": "py-u04-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": ["x = -7", "print(abs(x)", "print(x == -7)"],
+          "buggyLineIndex": 1,
+          "fix": "print(abs(x))",
+          "verify": { "raises": "SyntaxError" },
+          "explanation": {
+            "en": "The closing parenthesis is missing on the print() call. Python cannot parse this line without it, so it raises a SyntaxError.",
+            "tr": "print() çağrısında kapatma parantezi eksik. Python bunu olmadan ayrıştıramaz; SyntaxError verir."
+          }
+        },
+        {
+          "id": "py-u04-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "# Check if the temperature is below freezing\ntemp = -3\nprint(temp < 0)",
+            "tr": "# Sıcaklığın donma noktasının altında olup olmadığını kontrol et\ntemp = -3\nprint(temp < 0)"
+          },
+          "keyPoints": {
+            "en": [
+              "stores the temperature -3",
+              "compares it to 0 using the < operator",
+              "prints True because -3 is less than 0"
+            ],
+            "tr": [
+              "sıcaklığı -3 olarak saklar",
+              "onu 0 ile < kullanarak karşılaştırır",
+              "True yazdırır çünkü -3 0'dan küçüktür"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It stores the temperature -3, then tests if it is less than 0 (freezing point) and prints True because -3 is below zero.",
+            "tr": "Sıcaklığı -3 olarak saklar, sonra 0'dan küçük olup olmadığını test eder ve True yazdırır çünkü -3 sıfırın altındadır."
+          },
+          "explanation": {
+            "en": "The < operator compares two numbers and returns True if the first is smaller, False otherwise. -3 < 0 is true, so it prints True.",
+            "tr": "< işleci iki sayıyı karşılaştırır; birincisi daha küçükse True, değilse False döner. -3 < 0 doğru olduğu için True yazılır."
+          }
+        }
+      ]
+    }
+  ]
+}

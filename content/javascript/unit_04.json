@@ -1,0 +1,580 @@
+{
+  "id": "js-u04",
+  "courseId": "javascript",
+  "index": 4,
+  "title": { "en": "Making Decisions", "tr": "Kararlar Almak" },
+  "description": {
+    "en": "Control program flow with if and else, compare values with ===, combine tests with logical operators, and use ternary shortcuts.",
+    "tr": "if ve else ile program akışını kontrol et, === ile değerleri karşılaştır, mantıksal operatörlerle testleri birleştir ve ternary kısayollarını kullan."
+  },
+  "lessons": [
+    {
+      "id": "js-u04-l1",
+      "index": 1,
+      "title": { "en": "if and else", "tr": "if ve else" },
+      "concept": {
+        "headline": { "en": "Run different code based on a condition", "tr": "Koşula göre farklı kodu çalıştır" },
+        "body": {
+          "en": "if starts a block that runs only when a condition is true. Use else to run other code when the condition is false. Every if and else block is indented, and the condition sits inside parentheses. If the condition is false and there is no else, the indented lines are skipped.",
+          "tr": "if, bir koşul doğru olduğunda çalışan bir blok başlatır. Koşul yanlış olduğunda başka bir kod çalıştırmak için else kullan. Her if ve else bloğu girintili olur ve koşul parantez içine yazılır. Koşul yanlışsa ve else yoksa, girintili satırlar atlanır."
+        },
+        "example": {
+          "code": "age = 20;\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Not yet\");\n}",
+          "caption": {
+            "en": "Checks age and prints different messages.",
+            "tr": "Yaşı kontrol eder ve farklı mesajları yazdırır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u04-l1-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "score = 85;\nif (score > 80) {\n  console.log(\"Good\");\n}",
+          "options": [
+            { "id": "a", "text": { "en": "Good", "tr": "Good" } },
+            { "id": "b", "text": { "en": "80", "tr": "80" } },
+            { "id": "c", "text": { "en": "85", "tr": "85" } },
+            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "Score 85 is greater than 80, so the condition is true and the console.log() runs.",
+            "tr": "Skor 85, 80'den büyüktür, yani koşul doğru ve console.log() çalışır."
+          }
+        },
+        {
+          "id": "js-u04-l1-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "score = 70;\nif (score > 80) {\n  console.log(\"Good\");\n} else {\n  console.log(\"Try again\");\n}",
+          "options": [
+            { "id": "a", "text": { "en": "Good", "tr": "Good" } },
+            { "id": "b", "text": { "en": "Try again", "tr": "Try again" } },
+            { "id": "c", "text": { "en": "Good Try again", "tr": "Good Try again" } },
+            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+          ],
+          "answerId": "b",
+          "explanation": {
+            "en": "Score 70 is not greater than 80, so the condition is false and the else block runs.",
+            "tr": "Skor 70, 80'den büyük değildir, yani koşul yanlış ve else bloğu çalışır."
+          }
+        },
+        {
+          "id": "js-u04-l1-q3",
+          "type": "fill_blank",
+          "difficulty": "easy",
+          "prompt": {
+            "en": "Complete the condition so it checks if age is at least 18.",
+            "tr": "Koşulu age'in en az 18 olup olmadığını kontrol edecek şekilde tamamla."
+          },
+          "codeTemplate": "age = 18;\nif (age ___ 18) {\n  console.log(\"Adult\");\n}",
+          "blanks": [
+            { "id": "1", "answer": ">=", "distractors": ["=>", ">", "=="] }
+          ],
+          "verify": { "stdout": "Adult\n" },
+          "explanation": {
+            "en": "The >= operator means greater than or equal to. Use it to include the boundary value (18 in this case).",
+            "tr": ">= operatörü \"büyük veya eşit\" anlamında olur. Sınır değerini (bu durumda 18) dahil etmek için kullan."
+          }
+        },
+        {
+          "id": "js-u04-l1-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write an if statement that prints Raining when weather is rain, and Sunny otherwise.",
+            "tr": "weather rain olduğunda Raining yazdıran, aksi takdirde Sunny yazdıran bir if ifadesi yaz."
+          },
+          "code": "weather = \"rain\";",
+          "expected": "if (weather === \"rain\") {\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}",
+          "acceptable": ["if (weather === \"rain\")\n{\n  console.log(\"Raining\");\n} else {\n  console.log(\"Sunny\");\n}", "if (weather === \"rain\") {\n  console.log(\"Raining\");\n}\nelse {\n  console.log(\"Sunny\");\n}"],
+          "verify": { "stdout": "Raining\n" },
+          "explanation": {
+            "en": "The condition checks if weather equals the text rain, and runs different console.log() calls for true and false.",
+            "tr": "Koşul weather'ın metin rain'e eşit olup olmadığını kontrol eder ve doğru/yanlış durumlarında farklı console.log() çalıştırır."
+          }
+        },
+        {
+          "id": "js-u04-l1-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "number = 10;",
+            "console.log(numer);"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "console.log(number);",
+          "verify": { "raises": "ReferenceError" },
+          "explanation": {
+            "en": "The variable was stored as number but referenced as numer, a typo. JavaScript raises ReferenceError for undefined variables.",
+            "tr": "Değişken number olarak saklandı ama numer diye referans edildi, bir yazım hatası. JavaScript tanımlanmamış değişkenler için ReferenceError verir."
+          }
+        },
+        {
+          "id": "js-u04-l1-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Checks if the user is old enough\nage = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}",
+            "tr": "// Kullanıcının yeterince yaşlı olup olmadığını kontrol eder\nage = 16;\nif (age >= 13) {\n  console.log(\"Welcome\");\n} else {\n  console.log(\"Too young\");\n}"
+          },
+          "keyPoints": {
+            "en": [
+              "compares age to 13",
+              "prints Welcome if age is at least 13",
+              "prints Too young otherwise"
+            ],
+            "tr": [
+              "age'i 13 ile karşılaştırır",
+              "age en az 13 ise Welcome yazdırır",
+              "aksi takdirde Too young yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It checks if age is at least 13. If yes, it prints Welcome. If no, it prints Too young. This blocks access for young users.",
+            "tr": "age'in en az 13 olup olmadığını kontrol eder. Evetse Welcome yazdırır. Hayırsa Too young yazdırır. Bu genç kullanıcıları engeller."
+          },
+          "explanation": {
+            "en": "The >= operator means greater than or equal to, so age 13 through 200 would print Welcome.",
+            "tr": ">= operatörü \"büyük veya eşit\" anlamında olur, yani yaş 13'ten 200'e kadar Welcome yazdırır."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u04-l2",
+      "index": 2,
+      "title": { "en": "Comparisons and ===", "tr": "Karşılaştırmalar ve ===" },
+      "concept": {
+        "headline": { "en": "Always use === to compare values exactly", "tr": "Değerleri karşılaştırırken her zaman === kullan" },
+        "body": {
+          "en": "Comparisons use ===, !==, <, >, <=, >= to make yes-or-no decisions. The operator === checks if two values are exactly equal (same type and same value). The older == operator can hide bugs because it tries to convert types, so 5 == \"5\" is true but 5 === \"5\" is false. Always use === to avoid confusion.",
+          "tr": "Karşılaştırmalar ===, !==, <, >, <=, >= kullanarak evet-hayır kararları verirler. === operatörü iki değerin tam olarak eşit olup olmadığını kontrol eder (aynı tür ve aynı değer). Eski == operatörü türleri dönüştürmeyi denediği için hatalara neden olabilir; 5 == \"5\" doğru ama 5 === \"5\" yanlış olur. Karışıklığı önlemek için her zaman === kullan."
+        },
+        "example": {
+          "code": "x = 5;\nconsole.log(x === 5);      // true\nconsole.log(x === \"5\");    // false\nconsole.log(x == \"5\");     // true (confusing!)",
+          "caption": {
+            "en": "=== is exact; == converts types.",
+            "tr": "=== tam eşlik; == türleri dönüştürür."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u04-l2-q1",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "x = 10;\nif (x === 10) {\n  console.log(\"Match\");\n}",
+          "options": [
+            { "id": "a", "text": { "en": "Match", "tr": "Match" } },
+            { "id": "b", "text": { "en": "10", "tr": "10" } },
+            { "id": "c", "text": { "en": "true", "tr": "true" } },
+            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "x is 10 and 10 === 10 is true, so the if block runs and prints Match.",
+            "tr": "x değeri 10 ve 10 === 10 doğru olur, yani if bloğu çalışır ve Match yazdırır."
+          }
+        },
+        {
+          "id": "js-u04-l2-q2",
+          "type": "multiple_choice",
+          "difficulty": "easy",
+          "prompt": { "en": "Which statement is false?", "tr": "Hangi ifade yanlıştır?" },
+          "options": [
+            { "id": "a", "text": { "en": "3 !== 5", "tr": "3 !== 5" } },
+            { "id": "b", "text": { "en": "\"hello\" === \"hello\"", "tr": "\"hello\" === \"hello\"" } },
+            { "id": "c", "text": { "en": "7 > 10", "tr": "7 > 10" } },
+            { "id": "d", "text": { "en": "4 <= 4", "tr": "4 <= 4" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "7 is not greater than 10, so 7 > 10 is false. The other three are all true.",
+            "tr": "7, 10'dan büyük değildir, yani 7 > 10 yanlış olur. Diğer üçü de doğrudur."
+          }
+        },
+        {
+          "id": "js-u04-l2-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the condition to check if code and input are both the text apple.",
+            "tr": "code ve input'un her ikisinin de metin apple olup olmadığını kontrol eden koşulu tamamla."
+          },
+          "codeTemplate": "if (code ___ input) {\n  console.log(\"Correct\");\n}",
+          "blanks": [
+            { "id": "1", "answer": "===", "distractors": ["==", "=", "!=="] }
+          ],
+          "explanation": {
+            "en": "Use === to check if two values are exactly equal. The = operator assigns a value, not compares.",
+            "tr": "İki değerin tam olarak eşit olup olmadığını kontrol etmek için === kullan. = operatörü karşılaştırmaz, değer atar."
+          }
+        },
+        {
+          "id": "js-u04-l2-q4",
+          "type": "type_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Write an if statement that prints Too low if count is less than 5.",
+            "tr": "count 5'ten küçükse Too low yazdıran bir if ifadesi yaz."
+          },
+          "code": "count = 3;",
+          "expected": "if (count < 5) {\n  console.log(\"Too low\");\n}",
+          "acceptable": ["if (count < 5) {\nconsole.log(\"Too low\");\n}"],
+          "verify": { "stdout": "Too low\n" },
+          "explanation": {
+            "en": "The < operator means less than. Count 3 is less than 5, so the condition is true and the message prints.",
+            "tr": "< operatörü \"küçüktür\" anlamında olur. Count 3, 5'ten küçüktür, yani koşul doğu ve mesaj yazdırılır."
+          }
+        },
+        {
+          "id": "js-u04-l2-q5",
+          "type": "spot_bug",
+          "difficulty": "medium",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "password = \"secret\";",
+            "if (password == \"secret\") {",
+            "  console.log(\"Correct\");\n}"
+          ],
+          "buggyLineIndex": 1,
+          "fix": "if (password === \"secret\") {",
+          "explanation": {
+            "en": "The line uses == instead of ===. Always use === for exact comparison to avoid type confusion.",
+            "tr": "Satır == yerine === kullanmıştır. Tür karışıklığını önlemek için tam karşılaştırma için her zaman === kullan."
+          }
+        },
+        {
+          "id": "js-u04-l2-q6",
+          "type": "explain_code",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Detects when the password is correct\npassword = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}",
+            "tr": "// Şifreler doğru olduğunda algılar\npassword = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}"
+          },
+          "keyPoints": {
+            "en": [
+              "uses === to compare password exactly",
+              "prints Access granted if password matches",
+              "prints Wrong password if it does not match"
+            ],
+            "tr": [
+              "şifreyi tam olarak karşılaştırmak için === kullanır",
+              "password eşleşirse Access granted yazdırır",
+              "eşleşmezse Wrong password yazdırır"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It compares the password variable to the string secret123 using ===. If they match exactly, it grants access. If not, it denies access.",
+            "tr": "password değişkenini === ile secret123 metni ile karşılaştırır. Tam olarak eşleşirse erişim verir. Eşleşmezse erişimi reddeder."
+          },
+          "explanation": {
+            "en": "Using === ensures the password must be exactly the right type and value, preventing bugs from type coercion.",
+            "tr": "=== kullanmak şifrenin tam olarak doğru türde ve değerde olmasını sağlar ve tür dönüştürmeden kaynaklanan hataları önler."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u04-l3",
+      "index": 3,
+      "title": { "en": "Combining Tests", "tr": "Testleri Birleştirmek" },
+      "concept": {
+        "headline": { "en": "Use &&, ||, and ! to build complex conditions", "tr": "Karmaşık koşullar kurmak için &&, ||, ! kullan" },
+        "body": {
+          "en": "The && operator means AND: both conditions must be true. The || operator means OR: at least one must be true. The ! operator means NOT: it reverses a condition. These let you build if statements that check multiple things at once. For example, (age > 13 && role === \"admin\") runs only if age is over 13 AND role is exactly admin.",
+          "tr": "&&, AND anlamında olur: her iki koşul da doğru olmalı. || operatörü OR anlamında olur: en az biri doğru olmalı. ! operatörü NOT anlamında olur: bir koşulu tersine çevirir. Bunlar bir kerede birden fazla şeyi kontrol eden if ifadeleri kurmana izin verir. Örneğin, (age > 13 && role === \"admin\") sadece age 13'ten büyükse VE role tam olarak admin'se çalışır."
+        },
+        "example": {
+          "code": "age = 20;\nhasLicense = true;\nif (age > 18 && hasLicense) {\n  console.log(\"Can drive\");\n}",
+          "caption": {
+            "en": "Both must be true for && to allow the code to run.",
+            "tr": "&&'nin kodu çalıştırmasına izin vermesi için ikisi de doğru olmalı."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u04-l3-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "x = 5;\nif (x > 3 && x < 10) {\n  console.log(\"In range\");\n}",
+          "options": [
+            { "id": "a", "text": { "en": "In range", "tr": "In range" } },
+            { "id": "b", "text": { "en": "5", "tr": "5" } },
+            { "id": "c", "text": { "en": "true", "tr": "true" } },
+            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "5 > 3 is true AND 5 < 10 is true, so both sides of && are true and the if block runs.",
+            "tr": "5 > 3 doğu VE 5 < 10 doğu olur, yani &&'nin her iki tarafı da doğu ve if bloğu çalışır."
+          }
+        },
+        {
+          "id": "js-u04-l3-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "animal = \"cat\";\nif (animal === \"dog\" || animal === \"cat\") {\n  console.log(\"Pet\");\n}",
+          "options": [
+            { "id": "a", "text": { "en": "Pet", "tr": "Pet" } },
+            { "id": "b", "text": { "en": "cat", "tr": "cat" } },
+            { "id": "c", "text": { "en": "dog", "tr": "dog" } },
+            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The first part (animal === \"dog\") is false, but the second part (animal === \"cat\") is true. Since || means OR, only one needs to be true.",
+            "tr": "İlk kısım (animal === \"dog\") yanlış ama ikinci kısım (animal === \"cat\") doğu olur. || OR anlamında olduğundan sadece biri doğru olması yeterlidir."
+          }
+        },
+        {
+          "id": "js-u04-l3-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the condition using ! to run code when level is NOT 1.",
+            "tr": "level'in 1 OLMAMASI durumunda kodu çalıştıracak koşulu ! kullanarak tamamla."
+          },
+          "codeTemplate": "if (___ level === 1) {\n  console.log(\"Not the first level\");\n}",
+          "blanks": [
+            { "id": "1", "answer": "!", "distractors": ["!!", "not", "~"] }
+          ],
+          "explanation": {
+            "en": "The ! operator reverses a condition. ! (level === 1) means NOT (level equals 1), which is true when level is anything but 1.",
+            "tr": "! operatörü bir koşulu tersine çevirir. !(level === 1) demek NOT (level eşittir 1) anlamına gelir ve level 1 dışında bir şey olduğunda doğu olur."
+          }
+        },
+        {
+          "id": "js-u04-l3-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write an if statement that prints Approved if score is at least 80 and name is not empty.",
+            "tr": "score en az 80 VE name boş değilse Approved yazdıran bir if ifadesi yaz."
+          },
+          "code": "score = 85;\nname = \"Alice\";",
+          "expected": "if (score >= 80 && name !== \"\") {\n  console.log(\"Approved\");\n}",
+          "acceptable": ["if (score >= 80 && name != \"\") {\n  console.log(\"Approved\");\n}", "if (score >= 80 && !(name === \"\")) {\n  console.log(\"Approved\");\n}"],
+          "verify": { "stdout": "Approved\n" },
+          "explanation": {
+            "en": "Use && to require both conditions. >= means greater than or equal, and !== means not equal. This checks two things before approving.",
+            "tr": "Her iki koşulu da gerektirmek için && kullan. >= demek büyük veya eşit, !== demek eşit değil olur. Bu onay vermeden önce iki şeyi kontrol eder."
+          }
+        },
+        {
+          "id": "js-u04-l3-q5",
+          "type": "order_lines",
+          "difficulty": "hard",
+          "prompt": { "en": "Put the lines in the right order.", "tr": "Satırları doğru sıraya koy." },
+          "lines": [
+            "x = 7;",
+            "if (x > 5 && x < 10) {",
+            "  console.log(\"In range\");",
+            "} else {",
+            "  console.log(\"Out\");\n}"
+          ],
+          "verify": { "stdout": "In range\n" },
+          "explanation": {
+            "en": "The && operator requires both conditions to be true. x=7 is both greater than 5 and less than 10, so it prints In range.",
+            "tr": "&& operatörü her iki koşulun da doğru olmasını gerektirir. x=7 hem 5'ten büyük hem de 10'dan küçüktür, bu yüzden In range yazdırır."
+          }
+        },
+        {
+          "id": "js-u04-l3-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Determines discount level\nprice = 100;\nisMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}",
+            "tr": "// İndirim seviyesini belirler\nprice = 100;\nisMember = true;\nif (price > 50 && isMember) {\n  console.log(\"20% off\");\n} else if (price > 50) {\n  console.log(\"10% off\");\n} else {\n  console.log(\"No discount\");\n}"
+          },
+          "keyPoints": {
+            "en": [
+              "checks if price is over 50 AND isMember is true",
+              "gives 20% off if both conditions are true",
+              "gives 10% off if only price is over 50",
+              "gives no discount otherwise"
+            ],
+            "tr": [
+              "price 50'den büyükse VE isMember doğruysa kontrol eder",
+              "her iki koşul da doğruysa %20 indirim verir",
+              "sadece price 50'den büyükse %10 indirim verir",
+              "aksi takdirde indirim vermez"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It gives discounts based on two conditions: high price and membership. Members who spend over 50 get 20% off. Non-members spending over 50 get 10%. Under 50 gets no discount.",
+            "tr": "İki koşula göre indirim verir: yüksek fiyat ve üyelik. 50'nin üzerinde harcayan üyeler %20 indirim alırlar. 50'nin üzerinde harcayan üye olmayanlar %10 alırlar. 50'nin altında indirim yoktur."
+          },
+          "explanation": {
+            "en": "else if adds a second test after the first condition fails, allowing you to check for partial matches or escalating conditions.",
+            "tr": "else if ilk koşul başarısız olduktan sonra ikinci bir test ekler ve kısmi eşleşmeleri veya basamaklı koşulları kontrol etmene izin verir."
+          }
+        }
+      ]
+    },
+    {
+      "id": "js-u04-l4",
+      "index": 4,
+      "title": { "en": "Ternary and Truthiness", "tr": "Ternary ve Truthiness" },
+      "concept": {
+        "headline": { "en": "Write short conditions with ternary and understand truthiness", "tr": "Ternary ile kısa koşullar yaz ve truthiness'i anla" },
+        "body": {
+          "en": "The ternary operator is a shorthand for if/else: value = condition ? ifTrue : ifFalse. It runs one of two expressions depending on whether the condition is true or false. Truthiness means every value in JavaScript can be treated as true or false: empty strings, 0, null, and undefined are falsy (act like false), while non-empty strings and non-zero numbers are truthy (act like true). You can use any value directly in an if condition without comparing it.",
+          "tr": "Ternary operatörü if/else'in kısa versiyonudur: value = condition ? ifTrue : ifFalse. Koşulun doğru veya yanlış olmasına bağlı olarak iki ifadeden birini çalıştırır. Truthiness, JavaScript'te her değerin doğru veya yanlış olarak kabul edilebileceği anlamına gelir: boş metinler, 0, null ve undefined falsy'dir (yanlış gibi davranırlar), boş olmayan metinler ve sıfır dışı sayılar truthy'dir (doğru gibi davranırlar). Bir if koşulunda herhangi bir değeri onu karşılaştırmadan doğrudan kullanabilirsin."
+        },
+        "example": {
+          "code": "age = 20;\nmessage = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(message);\n\nname = \"Alice\";\nif (name) {\n  console.log(\"Name is set\");  // Runs even without ===\n}",
+          "caption": {
+            "en": "Ternary picks a value; truthiness works in if without comparisons.",
+            "tr": "Ternary bir değer seçer; truthiness karşılaştırma olmadan if'te çalışır."
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "js-u04-l4-q1",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "code": "age = 25;\nstatus = age >= 18 ? \"Adult\" : \"Minor\";\nconsole.log(status);",
+          "options": [
+            { "id": "a", "text": { "en": "Adult", "tr": "Adult" } },
+            { "id": "b", "text": { "en": "Minor", "tr": "Minor" } },
+            { "id": "c", "text": { "en": "25", "tr": "25" } },
+            { "id": "d", "text": { "en": "true", "tr": "true" } }
+          ],
+          "answerId": "a",
+          "explanation": {
+            "en": "The ternary checks if age >= 18 (true), so it picks the first value after the ? which is Adult.",
+            "tr": "Ternary age >= 18 olup olmadığını kontrol eder (doğu), yani ? sonrasındaki ilk değer olan Adult'ı seçer."
+          }
+        },
+        {
+          "id": "js-u04-l4-q2",
+          "type": "multiple_choice",
+          "difficulty": "medium",
+          "prompt": { "en": "Which value is falsy?", "tr": "Hangi değer falsy'dir?" },
+          "options": [
+            { "id": "a", "text": { "en": "\"hello\"", "tr": "\"hello\"" } },
+            { "id": "b", "text": { "en": "5", "tr": "5" } },
+            { "id": "c", "text": { "en": "\"\"", "tr": "\"\"" } },
+            { "id": "d", "text": { "en": "\"false\"", "tr": "\"false\"" } }
+          ],
+          "answerId": "c",
+          "explanation": {
+            "en": "An empty string \"\" is falsy. Non-empty strings like \"hello\" or even \"false\" are truthy because they have content.",
+            "tr": "Boş metin \"\" falsy'dir. \"hello\" veya \"false\" gibi boş olmayan metinler truthy'dir çünkü içerik vardır."
+          }
+        },
+        {
+          "id": "js-u04-l4-q3",
+          "type": "fill_blank",
+          "difficulty": "medium",
+          "prompt": {
+            "en": "Complete the ternary expression to assign High to result if score is more than 80, otherwise Low.",
+            "tr": "score 80'den fazlaysa result'a High, aksi takdirde Low atayacak ternary ifadesini tamamla."
+          },
+          "codeTemplate": "result = score > 80 ___ \"High\" : \"Low\";",
+          "blanks": [
+            { "id": "1", "answer": "?", "distractors": [":", "?:", "??"] }
+          ],
+          "explanation": {
+            "en": "The ? comes first in a ternary, separating the condition from the true value. The : separates the true value from the false value.",
+            "tr": "Ternary'de ? ilk gelir ve koşulu doğru değerden ayırır. : doğru değeri yanlış değerden ayırır."
+          }
+        },
+        {
+          "id": "js-u04-l4-q4",
+          "type": "type_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "Write code that assigns status based on this ternary: if points is at least 100, status is Winner, otherwise Trying.",
+            "tr": "Bu ternary'ye dayalı olarak status'u atayan kodu yaz: points en az 100'se status Winner, aksi takdirde Trying olur."
+          },
+          "code": "points = 120;",
+          "expected": "status = points >= 100 ? \"Winner\" : \"Trying\";",
+          "acceptable": ["status = (points >= 100) ? \"Winner\" : \"Trying\";"],
+          "verify": { "stdout": "" },
+          "explanation": {
+            "en": "The ternary operator picks between two values based on a condition. This is a short way to assign a value without using if/else.",
+            "tr": "Ternary operatörü bir koşula dayanarak iki değer arasında seçim yapar. Bu if/else kullanmadan bir değer atamak için kısa bir yoldur."
+          }
+        },
+        {
+          "id": "js-u04-l4-q5",
+          "type": "spot_bug",
+          "difficulty": "hard",
+          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "codeLines": [
+            "password = \"secret\";",
+            "if (password) {",
+            "  console.log(\"Set\");"
+          ],
+          "buggyLineIndex": 2,
+          "fix": "  console.log(\"Set\");\n}",
+          "explanation": {
+            "en": "The if block is missing its closing brace. Every { needs a matching } at the same indentation level.",
+            "tr": "if bloğunun kapatma süslü parantezi eksik. Her { için aynı girinti seviyesinde eşleşen bir } gerekir."
+          }
+        },
+        {
+          "id": "js-u04-l4-q6",
+          "type": "explain_code",
+          "difficulty": "hard",
+          "prompt": {
+            "en": "In 100-200 characters, explain what this code does.",
+            "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
+          },
+          "code": {
+            "en": "// Suggests an action based on inventory\ninventory = 5;\nmessage = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}",
+            "tr": "// Envantere dayalı olarak bir eylem önerir\ninventory = 5;\nmessage = inventory > 0 ? \"In stock\" : \"Out of stock\";\nif (message) {\n  console.log(message);\n}"
+          },
+          "keyPoints": {
+            "en": [
+              "uses ternary to pick In stock or Out of stock",
+              "assigns the result to message",
+              "uses if with truthiness to print if message is not empty",
+              "any non-empty string is truthy"
+            ],
+            "tr": [
+              "In stock veya Out of stock'u seçmek için ternary kullanır",
+              "sonucu message'a atar",
+              "message boş değilse yazdırmak için if ile truthiness kullanır",
+              "boş olmayan herhangi bir metin truthy'dir"
+            ]
+          },
+          "sampleAnswer": {
+            "en": "It checks if inventory is above zero using a ternary, storing In stock or Out of stock in message. Then it prints the message because any non-empty string is truthy.",
+            "tr": "Ternary kullanarak inventory'nin sıfırdan büyük olup olmadığını kontrol eder ve In stock veya Out of stock'u message'da saklar. Sonra mesajı yazdırır çünkü boş olmayan herhangi bir metin truthy'dir."
+          },
+          "explanation": {
+            "en": "Truthiness means you can use any value in an if without an explicit comparison. Non-empty strings, non-zero numbers, and objects are all truthy.",
+            "tr": "Truthiness demek herhangi bir değeri if'te açık bir karşılaştırma olmadan kullanabileceğin anlamına gelir. Boş olmayan metinler, sıfır dışı sayılar ve nesneler truthy'dir."
+          }
+        }
+      ]
+    }
+  ]
+}

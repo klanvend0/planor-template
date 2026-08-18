@@ -1,24 +1,356 @@
 {
-  "welcome": "Welcome to __APP_NAME__",
-  "supabase_connected": "Supabase Connected",
-  "supabase_not_connected": "Supabase Not Connected",
+  "app": {
+    "name": "Codeling",
+    "tagline": "Learn to code, one puzzle a day"
+  },
+  "common": {
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip",
+    "done": "Done",
+    "cancel": "Cancel",
+    "close": "Close",
+    "retry": "Try again",
+    "save": "Save",
+    "loading": "Loading",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "later": "Maybe later",
+    "got_it": "Got it",
+    "xp": "XP",
+    "of": "of"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "You seem to be offline. Check your connection and try again.",
+    "subscription_required": "This is a Pro feature.",
+    "rate_limited": "You are going fast. Give it a minute and try again.",
+    "sign_in_required": "Please sign in to continue.",
+    "answer_too_short": "Write at least 100 characters so we can grade it properly.",
+    "answer_too_long": "Keep it under 200 characters."
+  },
   "auth": {
     "sign_in": "Sign In",
     "sign_out": "Sign Out",
-    "sign_in_with_google": "Sign in with Google",
-    "sign_in_with_apple": "Sign in with Apple",
-    "sign_in_subtitle": "Sign in to continue to your account",
-    "terms_notice": "By continuing, you agree to our Terms of Service and Privacy Policy",
-    "google_error": "An error occurred during Google sign-in",
-    "google_no_token": "No ID token received from Google",
-    "google_not_configured": "Google Sign-In is not configured. Please set EXPO_PUBLIC_GOOGLE_CLIENT_ID.",
-    "apple_error": "An error occurred during Apple sign-in",
-    "apple_not_available": "Apple Sign-In is not available on this device",
-    "sign_in_cancelled": "Sign-in was cancelled",
-    "sign_out_error": "An error occurred during sign-out",
-    "continue_with": "Or continue with"
+    "sign_in_with_google": "Continue with Google",
+    "sign_in_with_apple": "Continue with Apple",
+    "sign_in_title": "Save your progress",
+    "sign_in_subtitle": "Sign in so your streak, XP and lessons follow you everywhere.",
+    "terms_notice": "By continuing you agree to our Terms of Use and Privacy Policy.",
+    "google_error": "Google sign-in did not complete.",
+    "google_no_token": "No ID token received from Google.",
+    "google_not_configured": "Google Sign-In is not configured yet.",
+    "apple_error": "Apple sign-in did not complete.",
+    "apple_not_available": "Apple Sign-In is not available on this device.",
+    "sign_in_cancelled": "Sign-in was cancelled.",
+    "sign_out_error": "Could not sign out.",
+    "sign_out_confirm_title": "Sign out?",
+    "sign_out_confirm_body": "Your progress is saved to your account."
   },
-  "protected": {
-    "welcome_back": "Welcome Back!"
+  "onboarding": {
+    "slides": {
+      "welcome": {
+        "title": "Code is a language.\nLearn it like one.",
+        "body": "Short puzzles instead of long tutorials. Five minutes a day is enough to start writing real code."
+      },
+      "puzzles": {
+        "title": "Five ways to practice",
+        "body": "Fill the blank, type the line, spot the bug, pick the output, and explain code in your own words."
+      },
+      "mistakes": {
+        "title": "Bugs teach you the most",
+        "body": "Every wrong answer explains itself, and the ones you miss come back until they stick."
+      },
+      "ai": {
+        "title": "An AI that reads your answer",
+        "body": "Explain what a snippet does in your own words and get told exactly what you understood and what you missed."
+      },
+      "streak": {
+        "title": "Come back tomorrow",
+        "body": "XP, levels and streaks are the point: the habit is what turns a beginner into a developer."
+      }
+    },
+    "language": {
+      "title": "Which language do you read best?",
+      "subtitle": "Lessons and explanations will be in this language.",
+      "english": "English",
+      "turkish": "Türkçe"
+    },
+    "course": {
+      "title": "What do you want to learn first?",
+      "subtitle": "You can switch course any time.",
+      "python": "Python",
+      "python_hint": "Great first language. Clean and readable.",
+      "javascript": "JavaScript",
+      "javascript_hint": "The language of the web and of apps."
+    },
+    "experience": {
+      "title": "How much code have you written?",
+      "new": "None at all",
+      "new_hint": "We start from print().",
+      "some": "A little",
+      "some_hint": "I have followed a tutorial or two.",
+      "confident": "I can read code",
+      "confident_hint": "I want to fill in the gaps."
+    },
+    "goal": {
+      "title": "Pick a daily goal",
+      "subtitle": "Small and daily beats big and rare.",
+      "casual": "Casual",
+      "regular": "Regular",
+      "serious": "Serious",
+      "intense": "Intense",
+      "xp_per_day": "%{xp} XP a day",
+      "minutes": "about %{minutes} min"
+    },
+    "notifications": {
+      "title": "One nudge a day?",
+      "subtitle": "A single reminder at the time you choose. No spam, ever.",
+      "allow": "Remind me",
+      "deny": "No reminders"
+    },
+    "ready": {
+      "title": "Your first lesson is ready",
+      "subtitle": "Three days of Pro are on us. Cancel any time.",
+      "cta": "Start learning"
+    },
+    "progress": "Step %{current} of %{total}"
+  },
+  "learn": {
+    "title": "Learn",
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "unit": "Unit %{index}",
+    "unit_progress": "%{done}/%{total} lessons",
+    "start_lesson": "Start",
+    "continue_lesson": "Continue",
+    "review_lesson": "Review",
+    "locked_title": "Finish the lesson before this one",
+    "locked_body": "Lessons unlock in order so nothing surprises you.",
+    "daily_goal": "Daily goal",
+    "daily_goal_done": "Daily goal reached",
+    "daily_goal_progress": "%{current}/%{target} XP",
+    "streak_days": {
+      "one": "%{count} day streak",
+      "other": "%{count} day streak"
+    },
+    "streak_start": "Start your streak",
+    "hearts_left": {
+      "one": "%{count} heart",
+      "other": "%{count} hearts"
+    },
+    "hearts_unlimited": "Unlimited",
+    "course_switch": "Switch course",
+    "unit_complete": "Unit complete",
+    "jump_back_in": "Jump back in"
+  },
+  "hearts": {
+    "empty_title": "Out of hearts",
+    "empty_body": "Hearts come back one every 30 minutes, or refill them instantly with Pro.",
+    "next_in": "Next heart in %{time}",
+    "refill": "Refill now",
+    "refill_free_used": "You already used today's free refill.",
+    "go_pro": "Get unlimited hearts",
+    "practice_instead": "Practice old mistakes"
+  },
+  "lesson": {
+    "question_of": "%{current} of %{total}",
+    "check": "Check",
+    "continue": "Continue",
+    "skip_question": "Skip",
+    "correct": "Correct",
+    "incorrect": "Not quite",
+    "correct_answer": "Answer",
+    "why": "Why",
+    "exit_title": "Leave the lesson?",
+    "exit_body": "Your progress in this lesson will be lost.",
+    "exit_confirm": "Leave",
+    "exit_stay": "Keep going",
+    "tap_to_fill": "Tap a token to fill the blank",
+    "tap_to_remove": "Tap a filled token to take it back",
+    "type_here": "Type your answer",
+    "which_line": "Tap the line with the bug",
+    "reorder": "Tap the lines in the right order",
+    "reorder_reset": "Reset",
+    "choose_answer": "Choose the answer",
+    "concept_cta": "Got it, let's practice",
+    "hint": "Hint"
+  },
+  "explain": {
+    "title": "Explain this code",
+    "instruction": "In 100-200 characters, say what this code does.",
+    "placeholder": "It takes each price in the cart and...",
+    "counter": "%{count}/200",
+    "submit": "Get feedback",
+    "grading": "Reading your answer",
+    "verdict_correct": "You got it",
+    "verdict_partial": "Almost there",
+    "verdict_incorrect": "Not quite yet",
+    "score": "Understanding %{score}%",
+    "corrections": "What to fix",
+    "missed": "What you missed",
+    "sample_title": "One way to say it",
+    "show_sample": "Show a model answer",
+    "locked_title": "AI feedback is a Pro feature",
+    "locked_body": "Write an explanation in your own words and an AI tells you exactly what you understood and what you missed.",
+    "locked_cta": "Try Pro free for 3 days",
+    "locked_skip": "Skip this question",
+    "offline": "AI feedback needs a connection."
+  },
+  "results": {
+    "title_perfect": "Flawless",
+    "title_great": "Nicely done",
+    "title_ok": "Lesson complete",
+    "title_retry": "Give it another go",
+    "accuracy": "Accuracy",
+    "xp_earned": "XP earned",
+    "time": "Time",
+    "streak_extended": "Streak extended to %{count} days",
+    "streak_started": "Streak started",
+    "daily_goal_hit": "Daily goal reached",
+    "perfect_bonus": "Perfect lesson bonus",
+    "streak_bonus": "Weekly streak bonus",
+    "continue": "Continue",
+    "practice_again": "Practice again",
+    "next_lesson": "Next lesson"
+  },
+  "practice": {
+    "title": "Practice",
+    "mistakes_title": "Your mistakes",
+    "mistakes_body": "The questions you got wrong, waiting to be fixed.",
+    "mistakes_count": {
+      "one": "%{count} question",
+      "other": "%{count} questions"
+    },
+    "mistakes_empty_title": "Nothing to fix",
+    "mistakes_empty_body": "Finish a lesson and anything you miss shows up here.",
+    "start": "Start practice",
+    "speed_title": "Quick review",
+    "speed_body": "Ten questions from everything you have finished so far.",
+    "no_lessons_yet": "Complete a lesson first."
+  },
+  "profile": {
+    "title": "Profile",
+    "level": "Level %{level}",
+    "level_progress": "%{current}/%{target} XP to level %{next}",
+    "stats": "Stats",
+    "total_xp": "Total XP",
+    "current_streak": "Current streak",
+    "longest_streak": "Longest streak",
+    "lessons_completed": "Lessons",
+    "perfect_lessons": "Perfect lessons",
+    "league": "League",
+    "league_progress": "%{xp} XP this week",
+    "leagues": {
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold",
+      "sapphire": "Sapphire",
+      "ruby": "Ruby",
+      "diamond": "Diamond"
+    },
+    "achievements": "Achievements",
+    "achievements_progress": "%{unlocked} of %{total} unlocked",
+    "member_since": "Learning since %{date}",
+    "pro_member": "Pro member",
+    "free_member": "Free plan",
+    "manage_plan": "Manage plan"
+  },
+  "achievements": {
+    "first_lesson": { "title": "First steps", "body": "Finish your first lesson" },
+    "streak_3": { "title": "Three in a row", "body": "Keep a 3 day streak" },
+    "streak_7": { "title": "A full week", "body": "Keep a 7 day streak" },
+    "streak_30": { "title": "Unbreakable", "body": "Keep a 30 day streak" },
+    "xp_100": { "title": "Warmed up", "body": "Earn 100 XP" },
+    "xp_1000": { "title": "Thousand club", "body": "Earn 1000 XP" },
+    "perfect_5": { "title": "No mistakes", "body": "Finish 5 lessons flawlessly" },
+    "unit_complete": { "title": "Unit cleared", "body": "Complete every lesson in a unit" },
+    "explainer": { "title": "In your own words", "body": "Pass an AI-graded explanation" },
+    "polyglot": { "title": "Two languages", "body": "Start both courses" },
+    "locked": "Locked"
+  },
+  "paywall": {
+    "title": "Codeling Pro",
+    "subtitle": "Everything unlocked, three days free.",
+    "trial_badge": "3 days free",
+    "features": {
+      "ai": "AI feedback on every explanation you write",
+      "hearts": "Unlimited hearts, so a wrong answer never stops you",
+      "courses": "Every course and every unit, unlocked",
+      "practice": "Unlimited mistake practice and quick reviews",
+      "support": "Support a tiny team that ships every week"
+    },
+    "plan_weekly": "Weekly",
+    "plan_annual": "Annual",
+    "plan_monthly": "Monthly",
+    "per_week": "%{price} / week",
+    "per_month": "%{price} / month",
+    "per_year": "%{price} / year",
+    "best_value": "Best value",
+    "save_percent": "Save %{percent}%",
+    "trial_line": "3 days free, then %{price}. Cancel any time.",
+    "no_trial_line": "%{price}. Cancel any time.",
+    "cta_trial": "Start my 3 free days",
+    "cta_buy": "Subscribe",
+    "restore": "Restore purchases",
+    "restore_none": "No previous purchase found on this Apple ID.",
+    "restore_done": "Your subscription is back.",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "legal": "Payment is charged to your Apple ID at the end of the free trial. The subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings.",
+    "purchase_failed": "The purchase did not go through.",
+    "purchase_cancelled": "Purchase cancelled.",
+    "already_pro": "You are already a Pro member.",
+    "close": "Not now",
+    "unavailable": "The store is unavailable right now. Please try again later."
+  },
+  "settings": {
+    "title": "Settings",
+    "section_learning": "Learning",
+    "section_app": "App",
+    "section_account": "Account",
+    "section_about": "About",
+    "language": "App language",
+    "course": "Current course",
+    "daily_goal": "Daily goal",
+    "theme": "Appearance",
+    "theme_system": "System",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "haptics": "Haptics",
+    "sound": "Sound effects",
+    "reminders": "Daily reminder",
+    "reminder_time": "Reminder time",
+    "reminders_denied": "Notifications are off in iOS Settings.",
+    "subscription": "Subscription",
+    "restore": "Restore purchases",
+    "rate_app": "Rate Codeling",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "support": "Contact support",
+    "sign_out": "Sign out",
+    "delete_account": "Delete account",
+    "delete_title": "Delete your account?",
+    "delete_body": "This permanently removes your profile, XP, streak and progress. It cannot be undone, and it does not cancel an active subscription — cancel that in the App Store.",
+    "delete_confirm": "Delete everything",
+    "delete_failed": "The account could not be deleted. Please contact support.",
+    "version": "Version %{version}"
+  },
+  "notifications": {
+    "reminder_title": "Your streak is waiting",
+    "reminder_body": "One lesson keeps the %{count} day streak alive.",
+    "reminder_body_zero": "Five minutes is all it takes to start."
+  },
+  "course": {
+    "python": {
+      "title": "Python",
+      "tagline": "The friendliest way into programming"
+    },
+    "javascript": {
+      "title": "JavaScript",
+      "tagline": "The language every browser speaks"
+    }
   }
 }
