@@ -53,6 +53,7 @@ type GameStoreActions = {
     correct: number;
     total: number;
     baseXp: number;
+    playedOn?: string;
   }) => Promise<LessonResult>;
   refill: () => Promise<void>;
   /** Overwrite the subscription flag when RevenueCat reports a change. */
@@ -184,7 +185,10 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
       const appError = toAppError(error);
       if (appError.code !== 'network') throw appError;
 
-      useSyncQueue.getState().enqueue({ kind: 'lesson', payload: params });
+      useSyncQueue.getState().enqueue({
+        kind: 'lesson',
+        payload: { ...params, playedOn: new Date().toISOString().slice(0, 10) },
+      });
       const result = localLessonResult(get().state, params);
 
       set((current) => ({

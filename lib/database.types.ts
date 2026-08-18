@@ -70,6 +70,7 @@ export interface Database {
           streak_freezes: number;
           lessons_completed: number;
           perfect_lessons: number;
+          last_free_refill_at: string | null;
           updated_at: string;
         };
         Insert: { user_id: string };
@@ -139,8 +140,44 @@ export interface Database {
           trial_end: string | null;
           will_renew: boolean;
           environment: string | null;
+          rc_event_id: string | null;
+          last_event_at: string | null;
           updated_at: string;
           raw_event: Json | null;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      lesson_catalog: {
+        Row: {
+          lesson_id: string;
+          unit_id: string;
+          course_id: CourseIdColumn;
+          question_count: number;
+          base_xp: number;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      ai_review_quota: {
+        Row: {
+          user_id: string;
+          window_kind: 'hour' | 'day';
+          window_start: string;
+          used: number;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      apple_credentials: {
+        Row: {
+          user_id: string;
+          refresh_token: string;
+          updated_at: string;
         };
         Insert: never;
         Update: never;
@@ -205,6 +242,7 @@ export interface Database {
           p_correct: number;
           p_total: number;
           p_base_xp: number;
+          p_played_on?: string | null;
         };
         Returns: {
           total_xp: number;
@@ -246,8 +284,8 @@ export interface Database {
         Args: { p_course_id: string; p_limit?: number };
         Returns: { question_id: string; lesson_id: string; missed_at: string }[];
       };
-      has_active_subscription: {
-        Args: { p_user_id: string };
+      claim_ai_review: {
+        Args: { p_user_id: string; p_hourly?: number; p_daily?: number };
         Returns: boolean;
       };
     };

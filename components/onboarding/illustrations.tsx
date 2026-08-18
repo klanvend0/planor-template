@@ -1,22 +1,44 @@
 /**
- * Onboarding illustrations.
+ * Onboarding illustrations — the "Cabinet Vector" scene set.
  *
- * Drawn as inline SVG rather than shipped as images: they stay crisp at every
- * density, weigh nothing in the bundle, and — the reason that matters here —
- * they recolour themselves from the theme tokens, so light and dark are one
- * drawing rather than two exports.
+ * Every scene is inline `react-native-svg` rather than a bundled raster, and
+ * the deciding reason is not sharpness or bundle size (though it is both of
+ * those): the drawings recolour themselves from `themeTokens()` and
+ * `syntaxPalette()`, so light and dark are one drawing instead of two exports
+ * that quietly drift apart. Nothing here contains a colour literal.
  *
- * Every illustration is authored on a 320x240 canvas and scales with `width`.
+ * The style rules, all of which the scenes below obey:
+ *
+ * - One canvas: `viewBox="0 0 280 220"`, drawn at `width` with
+ *   `preserveAspectRatio="xMidYMid meet"`.
+ * - Whole-number coordinates. 2px strokes, 3px for feature strokes. Square
+ *   caps, miter joins. Corners come only from `rx`, and only 2, 4, 8 or 12.
+ * - No `<Filter>` / `feGaussianBlur`: RNSVG's filter support is unreliable on
+ *   Android and silently drops the shape on some drivers. A glow is therefore a
+ *   second copy of the same shape, larger and at low opacity. Depth is the
+ *   "slab" trick — the same shape offset +4 on Y in `ledgeCard`, behind it.
+ * - No text inside the SVG: an illustration must never carry translatable copy.
+ *
+ * `Bit`, the CRT-headed mascot, is authored once at a local origin and
+ * translated into the scenes that want him, so his proportions cannot drift
+ * between scenes. The phosphor block cursor is the through-line: it appears in
+ * all five scenes and moves — end of a line, into a blank, onto a buggy token,
+ * onto the XP bar, then beside the unlocked plate.
+ *
+ * These are static drawings. There is no enter animation and no caret blink;
+ * the scenes are read for a second or two while the slide copy is read.
  *
  * @module components/onboarding/illustrations
  */
 
 import Svg, {
-  Circle,
   Defs,
   G,
+  Line,
   LinearGradient,
   Path,
+  Polygon,
+  Polyline,
   Rect,
   Stop,
   type SvgProps,
@@ -24,8 +46,14 @@ import Svg, {
 
 import { syntaxPalette, themeTokens } from '@/lib/theme';
 
-const WIDTH = 320;
-const HEIGHT = 240;
+/** The shared canvas. Every scene is composed inside this box, in whole pixels. */
+const WIDTH = 280;
+const HEIGHT = 220;
+
+/** Hard corners everywhere — spread onto anything that carries a stroke. */
+const STROKE = { strokeLinecap: 'square', strokeLinejoin: 'miter' } as const;
+
+type Tokens = ReturnType<typeof themeTokens>;
 
 export type IllustrationProps = {
   width?: number;
@@ -33,45 +61,126 @@ export type IllustrationProps = {
 } & Omit<SvgProps, 'width' | 'height' | 'viewBox'>;
 
 function useFrame(width: number) {
-  return { width, height: (width / WIDTH) * HEIGHT, viewBox: `0 0 ${WIDTH} ${HEIGHT}` };
+  return {
+    width,
+    height: (width / WIDTH) * HEIGHT,
+    viewBox: `0 0 ${WIDTH} ${HEIGHT}`,
+    preserveAspectRatio: 'xMidYMid meet',
+  };
 }
 
-/** A rounded "editor" panel used as the base of several illustrations. */
-function EditorPanel({
-  x = 44,
-  y = 40,
-  width = 232,
-  height = 160,
-  fill,
-  stroke,
+/**
+ * The protagonist: a phosphor block cursor, 10 wide and 12 tall (18 when it
+ * stands beside a bar). It carries its own glow, which is a second copy of the
+ * rectangle at low opacity rather than a blur.
+ */
+function BlockCursor({
+  x,
+  y,
+  height = 12,
+  color,
 }: {
-  x?: number;
-  y?: number;
-  width?: number;
+  x: number;
+  y: number;
   height?: number;
-  fill: string;
-  stroke: string;
+  color: string;
 }) {
   return (
     <G>
-      <Rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={20}
-        fill={fill}
-        stroke={stroke}
-        strokeWidth={2}
-      />
-      <Circle cx={x + 20} cy={y + 20} r={4} fill="#FF6B6B" />
-      <Circle cx={x + 34} cy={y + 20} r={4} fill="#FFC46B" />
-      <Circle cx={x + 48} cy={y + 20} r={4} fill="#6BE39B" />
+      <Rect x={x - 4} y={y - 4} width={18} height={height + 8} rx={4} fill={color} opacity={0.16} />
+      <Rect x={x} y={y} width={10} height={height} rx={2} fill={color} />
     </G>
   );
 }
 
-/** Welcome: code is a language, learn it like one. */
+/** What Bit is showing on his screen. `blank` lets a scene draw its own. */
+type BitScreen = 'face' | 'thinking' | 'blank';
+
+/**
+ * "Bit" — a cabinet with a CRT for a head, never a face on a blob.
+ *
+ * Authored once at a local origin: head at (0,0), antenna tip at y=-22, feet at
+ * y=146. Scenes place him with `translate(x, y) scale(s)`, which is why this is
+ * a component and not five copies of the same geometry.
+ */
+function Bit({
+  tokens,
+  x,
+  y,
+  scale = 1,
+  screen = 'face',
+}: {
+  tokens: Tokens;
+  x: number;
+  y: number;
+  scale?: number;
+  screen?: BitScreen;
+}) {
+  return (
+    <G transform={`translate(${x}, ${y}) scale(${scale})`}>
+      {/* Antenna first, so the head sits over its base. The diamond lights up
+          in accent while Bit is thinking. */}
+      <Line x1={48} y1={0} x2={48} y2={-14} stroke={tokens.border} strokeWidth={2} {...STROKE} />
+      <Polygon
+        points="48,-22 54,-16 48,-10 42,-16"
+        fill={screen === 'thinking' ? tokens.accent : tokens.border}
+      />
+
+      {/* Legs, then body, then head — back to front. */}
+      <Rect x={30} y={128} width={10} height={18} fill={tokens.border} />
+      <Rect x={56} y={128} width={10} height={18} fill={tokens.border} />
+      <Rect
+        x={20}
+        y={84}
+        width={56}
+        height={44}
+        rx={8}
+        fill={tokens.surface2}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
+      <Rect
+        x={0}
+        y={0}
+        width={96}
+        height={80}
+        rx={12}
+        fill={tokens.surface2}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
+      <Rect x={10} y={10} width={76} height={56} rx={4} fill={tokens.codeBg} />
+
+      {screen === 'face' ? (
+        <G>
+          <Rect x={26} y={30} width={12} height={12} fill={tokens.primary} />
+          <Rect x={58} y={30} width={12} height={12} fill={tokens.primary} />
+          <Rect x={36} y={50} width={24} height={4} fill={tokens.primary} />
+        </G>
+      ) : null}
+
+      {screen === 'thinking' ? (
+        <G>
+          <Rect x={24} y={34} width={10} height={10} fill={tokens.primary} />
+          <Rect x={43} y={34} width={10} height={10} fill={tokens.primary} />
+          <Rect x={62} y={34} width={10} height={10} fill={tokens.primary} />
+        </G>
+      ) : null}
+    </G>
+  );
+}
+
+/** The flame silhouette, reused at four sizes to build scene 4's fire. */
+const FLAME = '140,24 156,48 148,48 160,72 120,72 132,48 124,48';
+
+/**
+ * Scene 1 — "The screen wakes".
+ *
+ * Bit stands at the left with one arm on a code card whose four bars have just
+ * lit up; the cursor waits at the end of the last line. Also the login hero.
+ */
 export function WelcomeIllustration({
   width = 280,
   scheme = 'light',
@@ -82,56 +191,75 @@ export function WelcomeIllustration({
   const frame = useFrame(width);
 
   return (
-    <Svg {...frame} {...props}>
-      <Defs>
-        <LinearGradient id="welcomeGlow" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0" stopColor={tokens.primary} stopOpacity="0.35" />
-          <Stop offset="1" stopColor={tokens.accent} stopOpacity="0.12" />
-        </LinearGradient>
-      </Defs>
+    <Svg {...frame} {...STROKE} {...props}>
+      {/* Sparkles are 4x4 squares — this style has no star glyphs. */}
+      <Rect x={24} y={30} width={4} height={4} fill={tokens.accent} />
+      <Rect x={268} y={36} width={4} height={4} fill={tokens.accent} />
 
-      <Circle cx={160} cy={120} r={104} fill="url(#welcomeGlow)" />
-      <EditorPanel fill={tokens.codeBg} stroke={tokens.codeBorder} />
+      {/* The card: slab copy +4 on Y for depth, then the screen itself. */}
+      <Rect x={140} y={58} width={120} height={96} rx={12} fill={tokens.ledgeCard} />
+      <Rect
+        x={140}
+        y={54}
+        width={120}
+        height={96}
+        rx={12}
+        fill={tokens.codeBg}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
 
-      {/* Code lines, with the accent line reading as the "spoken" one. */}
-      <Rect x={64} y={78} width={92} height={9} rx={4.5} fill={syntax.keyword} />
-      <Rect x={162} y={78} width={54} height={9} rx={4.5} fill={syntax.string} />
-      <Rect x={64} y={100} width={132} height={9} rx={4.5} fill={syntax.plain} opacity={0.55} />
-      <Rect x={78} y={122} width={70} height={9} rx={4.5} fill={syntax.function} />
-      <Rect x={154} y={122} width={46} height={9} rx={4.5} fill={syntax.number} />
-      <Rect x={64} y={144} width={108} height={9} rx={4.5} fill={syntax.plain} opacity={0.35} />
+      {/* Three lines of code coming up on the screen. */}
+      <Rect x={152} y={70} width={56} height={8} rx={2} fill={syntax.keyword} />
+      <Rect x={214} y={70} width={32} height={8} rx={2} fill={syntax.string} />
+      <Rect x={152} y={90} width={80} height={8} rx={2} fill={syntax.plain} opacity={0.5} />
+      <Rect x={164} y={110} width={44} height={8} rx={2} fill={syntax.function} />
 
-      {/* Speech bubble: the code says something back. */}
-      <G>
-        <Rect x={196} y={150} width={92} height={54} rx={16} fill={tokens.primary} />
-        <Path d="M214 204 L206 222 L232 204 Z" fill={tokens.primary} />
-        <Rect
-          x={210}
-          y={168}
-          width={40}
-          height={7}
-          rx={3.5}
-          fill={tokens.primaryForeground}
-          opacity={0.9}
-        />
-        <Rect
-          x={210}
-          y={182}
-          width={62}
-          height={7}
-          rx={3.5}
-          fill={tokens.primaryForeground}
-          opacity={0.6}
-        />
-      </G>
+      {/* Scanlines: the CRT tell, barely there. */}
+      <Line
+        x1={140}
+        y1={84}
+        x2={260}
+        y2={84}
+        stroke={tokens.foreground}
+        strokeWidth={2}
+        opacity={0.06}
+        {...STROKE}
+      />
+      <Line
+        x1={140}
+        y1={124}
+        x2={260}
+        y2={124}
+        stroke={tokens.foreground}
+        strokeWidth={2}
+        opacity={0.06}
+        {...STROKE}
+      />
 
-      <Circle cx={62} cy={54} r={7} fill={tokens.accent} />
-      <Circle cx={276} cy={70} r={5} fill={tokens.streak} />
+      <BlockCursor x={214} y={108} color={tokens.primary} />
+
+      <Bit tokens={tokens} x={24} y={44} scale={0.8} />
+      {/* Bit's arm is drawn in scene space, because it reaches out of his own
+          box and onto the card's left edge. */}
+      <Polyline
+        points="100,96 128,96 140,88"
+        fill="none"
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
     </Svg>
   );
 }
 
-/** Five ways to practise: chips, blanks and choices. */
+/**
+ * Scene 2 — "Five ways to practise".
+ *
+ * A line with a dashed blank in it, the cursor already parked inside, and a
+ * bank of three token chips below with the middle one lifting into place.
+ */
 export function PuzzlesIllustration({
   width = 280,
   scheme = 'light',
@@ -142,64 +270,87 @@ export function PuzzlesIllustration({
   const frame = useFrame(width);
 
   return (
-    <Svg {...frame} {...props}>
-      <Circle cx={160} cy={118} r={100} fill={tokens.accent} opacity={0.12} />
-      <EditorPanel y={28} height={128} fill={tokens.codeBg} stroke={tokens.codeBorder} />
-
-      {/* A line with a blank waiting to be filled */}
-      <Rect x={64} y={70} width={48} height={9} rx={4.5} fill={syntax.builtin} />
+    <Svg {...frame} {...STROKE} {...props}>
       <Rect
-        x={118}
-        y={64}
-        width={62}
-        height={21}
-        rx={7}
-        fill="none"
+        x={28}
+        y={40}
+        width={224}
+        height={110}
+        rx={12}
+        fill={tokens.codeBg}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
+
+      <Rect x={44} y={60} width={48} height={8} rx={2} fill={syntax.keyword} />
+      <Rect x={98} y={60} width={64} height={8} rx={2} fill={syntax.plain} opacity={0.45} />
+
+      {/* The blank waiting to be filled. */}
+      <Rect
+        x={44}
+        y={82}
+        width={72}
+        height={24}
+        rx={4}
+        fill={syntax.blankSlot}
         stroke={tokens.primary}
         strokeWidth={2}
-        strokeDasharray="6 5"
+        strokeDasharray="6 4"
+        {...STROKE}
       />
-      <Rect x={186} y={70} width={34} height={9} rx={4.5} fill={syntax.plain} opacity={0.5} />
+      <BlockCursor x={52} y={88} color={tokens.primary} />
 
-      <Rect x={64} y={98} width={120} height={9} rx={4.5} fill={syntax.string} opacity={0.85} />
-      <Rect x={64} y={122} width={86} height={9} rx={4.5} fill={syntax.plain} opacity={0.35} />
+      {/* The rest of the snippet, dimmed — it is context, not the question. */}
+      <Rect x={44} y={120} width={136} height={8} rx={2} fill={syntax.plain} opacity={0.25} />
 
-      {/* Token chips below, one lifting towards the blank */}
-      <G>
-        <Rect
-          x={52}
-          y={172}
-          width={68}
-          height={34}
-          rx={12}
-          fill={tokens.card}
-          stroke={tokens.border}
-          strokeWidth={2}
-        />
-        <Rect x={66} y={185} width={40} height={8} rx={4} fill={tokens.mutedForeground} />
-      </G>
-      <G>
-        <Rect x={128} y={164} width={68} height={34} rx={12} fill={tokens.primary} />
-        <Rect x={142} y={177} width={40} height={8} rx={4} fill={tokens.primaryForeground} />
-      </G>
-      <G>
-        <Rect
-          x={204}
-          y={172}
-          width={64}
-          height={34}
-          rx={12}
-          fill={tokens.card}
-          stroke={tokens.border}
-          strokeWidth={2}
-        />
-        <Rect x={218} y={185} width={36} height={8} rx={4} fill={tokens.mutedForeground} />
-      </G>
+      {/* Glow behind the chip that is on its way up. */}
+      <Rect x={104} y={158} width={60} height={32} rx={8} fill={tokens.primary} opacity={0.14} />
+
+      {/* Motion ticks trailing the lifted chip. */}
+      <Rect x={100} y={174} width={4} height={4} fill={tokens.primary} opacity={0.7} />
+      <Rect x={92} y={174} width={4} height={4} fill={tokens.primary} opacity={0.45} />
+      <Rect x={84} y={174} width={4} height={4} fill={tokens.primary} opacity={0.25} />
+
+      {/* Token bank. The middle chip is lifted and takes the 3px feature stroke. */}
+      {[44, 108, 172].map((chipX, index) => {
+        const lifted = index === 1;
+        const chipY = lifted ? 162 : 170;
+        return (
+          <G key={chipX}>
+            <Rect
+              x={chipX}
+              y={chipY}
+              width={52}
+              height={24}
+              rx={4}
+              fill={tokens.surface2}
+              stroke={lifted ? tokens.primary : tokens.input}
+              strokeWidth={lifted ? 3 : 2}
+              {...STROKE}
+            />
+            <Rect
+              x={chipX + 12}
+              y={chipY + 10}
+              width={28}
+              height={4}
+              rx={2}
+              fill={syntax.punctuation}
+            />
+          </G>
+        );
+      })}
     </Svg>
   );
 }
 
-/** Bugs teach you the most. */
+/**
+ * Scene 3 — "Spot the bug".
+ *
+ * An editor with a gutter, a highlighted suspect line rail-marked in warning, a
+ * wavy error underline beneath the offending token, and Bit peering up from the
+ * bottom right with a question mark on his screen.
+ */
 export function MistakesIllustration({
   width = 280,
   scheme = 'light',
@@ -210,193 +361,260 @@ export function MistakesIllustration({
   const frame = useFrame(width);
 
   return (
-    <Svg {...frame} {...props}>
-      <Circle cx={160} cy={118} r={100} fill={tokens.destructive} opacity={0.1} />
-      <EditorPanel y={36} height={150} fill={tokens.codeBg} stroke={tokens.codeBorder} />
+    <Svg {...frame} {...STROKE} {...props}>
+      <Rect
+        x={28}
+        y={34}
+        width={224}
+        height={120}
+        rx={12}
+        fill={tokens.codeBg}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
 
-      <Rect x={64} y={76} width={110} height={9} rx={4.5} fill={syntax.plain} opacity={0.4} />
+      {/* Gutter rule and three line numbers, reduced to blocks. */}
+      <Line
+        x1={52}
+        y1={34}
+        x2={52}
+        y2={154}
+        stroke={tokens.codeBorder}
+        strokeWidth={2}
+        {...STROKE}
+      />
+      <Rect x={40} y={54} width={4} height={8} fill={syntax.gutter} />
+      <Rect x={40} y={86} width={4} height={8} fill={syntax.gutter} />
+      <Rect x={40} y={118} width={4} height={8} fill={syntax.gutter} />
 
-      {/* The offending line, highlighted */}
-      <Rect x={56} y={96} width={208} height={26} rx={9} fill={tokens.destructive} opacity={0.22} />
-      <Rect x={64} y={105} width={64} height={9} rx={4.5} fill={syntax.builtin} />
-      <Rect x={134} y={105} width={58} height={9} rx={4.5} fill={tokens.destructive} />
+      {/* The suspect line: active-line well plus a warning rail in the gutter. */}
+      <Rect x={54} y={82} width={196} height={20} fill={syntax.activeLine} />
+      <Rect x={52} y={82} width={3} height={20} fill={tokens.warning} />
 
-      <Rect x={64} y={136} width={92} height={9} rx={4.5} fill={syntax.plain} opacity={0.4} />
-      <Rect x={64} y={158} width={130} height={9} rx={4.5} fill={syntax.plain} opacity={0.25} />
+      <Rect x={64} y={54} width={72} height={8} rx={2} fill={syntax.keyword} />
+      <Rect x={64} y={88} width={48} height={8} rx={2} fill={syntax.builtin} />
+      <Rect x={64} y={122} width={96} height={8} rx={2} fill={syntax.plain} opacity={0.4} />
 
-      {/* Bug: body, head, legs, antennae */}
-      <G>
-        <Circle cx={236} cy={150} r={22} fill={tokens.destructive} />
-        <Circle cx={236} cy={128} r={11} fill={tokens.destructive} />
-        <Path
-          d="M214 140 L198 132 M214 150 L196 150 M214 160 L198 168 M258 140 L274 132 M258 150 L276 150 M258 160 L274 168"
-          stroke={tokens.destructive}
-          strokeWidth={4}
-          strokeLinecap="round"
-        />
-        <Path
-          d="M230 120 L224 108 M242 120 L248 108"
-          stroke={tokens.destructive}
-          strokeWidth={3}
-          strokeLinecap="round"
-        />
-        <Circle cx={231} cy={126} r={2.6} fill={tokens.background} />
-        <Circle cx={241} cy={126} r={2.6} fill={tokens.background} />
-        <Path d="M236 138 L236 164" stroke={tokens.background} strokeWidth={2} opacity={0.5} />
-      </G>
+      {/* The one curve in the whole set, and it has to be one. */}
+      <Path
+        d="M 64,102 q 3,-3 6,0 t 6,0 t 6,0 t 6,0 t 6,0 t 6,0 t 6,0 t 6,0"
+        fill="none"
+        stroke={syntax.errorUnderline}
+        strokeWidth={2}
+        {...STROKE}
+      />
 
-      {/* The fix, arriving */}
-      <G>
-        <Circle cx={72} cy={196} r={20} fill={tokens.success} />
-        <Path
-          d="M62 196 L69 203 L83 189"
-          stroke={tokens.successForeground}
-          strokeWidth={4}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </G>
+      <BlockCursor x={120} y={86} color={tokens.primary} />
+
+      <Bit tokens={tokens} x={196} y={158} scale={0.42} screen="blank" />
+      {/* The "?" is drawn in scene space rather than inside Bit: at 0.42 scale a
+          3px feature stroke authored in his local box would come out at 1.3px. */}
+      <Polyline
+        points="207,170 211,165 219,165 223,169"
+        fill="none"
+        stroke={tokens.primary}
+        strokeWidth={3}
+        {...STROKE}
+      />
+      <Polyline
+        points="223,169 215,174 215,177"
+        fill="none"
+        stroke={tokens.primary}
+        strokeWidth={3}
+        {...STROKE}
+      />
+      <Rect x={213} y={180} width={4} height={4} fill={tokens.primary} />
     </Svg>
   );
 }
 
-/** An AI that reads your answer. */
+/**
+ * Scene 5 — "Everything unlocked".
+ *
+ * A scoreboard panel: four rows of label / dotted leader / value, three earned
+ * marks, and an open padlock with the cursor beside it. This is the scene the
+ * spec also earmarks for the paywall hero and the lesson-clear panel; on the
+ * "an AI reads your answer" slide it reads as the graded readout, with Bit
+ * thinking it over at the left.
+ */
 export function AiIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
   const tokens = themeTokens(scheme);
   const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
 
   return (
-    <Svg {...frame} {...props}>
-      <Defs>
-        <LinearGradient id="aiGlow" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0" stopColor={tokens.primary} stopOpacity="0.4" />
-          <Stop offset="1" stopColor={tokens.accent} stopOpacity="0.15" />
-        </LinearGradient>
-      </Defs>
-
-      <Circle cx={160} cy={116} r={102} fill="url(#aiGlow)" />
-
-      {/* The snippet being explained */}
+    <Svg {...frame} {...STROKE} {...props}>
+      {/* Slab copy +4 on Y, then the panel. */}
+      <Rect x={28} y={34} width={224} height={132} rx={12} fill={tokens.ledgeCard} />
       <Rect
-        x={34}
-        y={44}
-        width={150}
-        height={106}
-        rx={18}
+        x={28}
+        y={30}
+        width={224}
+        height={132}
+        rx={12}
         fill={tokens.codeBg}
-        stroke={tokens.codeBorder}
-        strokeWidth={2}
-      />
-      <Rect x={50} y={66} width={70} height={8} rx={4} fill={syntax.comment} />
-      <Rect x={50} y={86} width={104} height={8} rx={4} fill={syntax.keyword} />
-      <Rect x={62} y={106} width={82} height={8} rx={4} fill={syntax.function} />
-      <Rect x={50} y={126} width={58} height={8} rx={4} fill={syntax.number} />
-
-      {/* The learner's written answer */}
-      <Rect
-        x={96}
-        y={164}
-        width={188}
-        height={56}
-        rx={16}
-        fill={tokens.card}
         stroke={tokens.border}
         strokeWidth={2}
-      />
-      <Rect x={112} y={182} width={124} height={7} rx={3.5} fill={tokens.mutedForeground} />
-      <Rect
-        x={112}
-        y={198}
-        width={92}
-        height={7}
-        rx={3.5}
-        fill={tokens.mutedForeground}
-        opacity={0.6}
+        {...STROKE}
       />
 
-      {/* The grader, checking it */}
-      <G>
-        <Circle cx={238} cy={88} r={40} fill={tokens.primary} />
-        <Circle cx={224} cy={82} r={5.5} fill={tokens.primaryForeground} />
-        <Circle cx={252} cy={82} r={5.5} fill={tokens.primaryForeground} />
-        <Path
-          d="M222 102 Q238 114 254 102"
-          stroke={tokens.primaryForeground}
-          strokeWidth={4}
-          strokeLinecap="round"
-          fill="none"
+      {/* Four scoreboard rows. */}
+      {[52, 76, 100, 124].map((rowY) => (
+        <G key={rowY}>
+          <Rect x={44} y={rowY} width={52} height={6} rx={2} fill={syntax.punctuation} />
+          <Line
+            x1={104}
+            y1={rowY + 4}
+            x2={200}
+            y2={rowY + 4}
+            stroke={tokens.border}
+            strokeWidth={2}
+            strokeDasharray="2 4"
+            {...STROKE}
+          />
+          <Rect x={208} y={rowY} width={28} height={8} rx={2} fill={tokens.xp} />
+        </G>
+      ))}
+
+      {/* Three earned marks: 12x12 squares stood on a corner. */}
+      {[112, 140, 168].map((cx) => (
+        <Rect
+          key={cx}
+          x={-6}
+          y={-6}
+          width={12}
+          height={12}
+          fill={tokens.xp}
+          transform={`translate(${cx}, 150) rotate(45)`}
         />
-        <Path
-          d="M238 44 L242 56 L254 60 L242 64 L238 76 L234 64 L222 60 L234 56 Z"
-          fill={tokens.accent}
-        />
-      </G>
+      ))}
+
+      {/* The plate, with its glow as a larger duplicate behind it. */}
+      <Rect x={118} y={166} width={44} height={36} rx={8} fill={tokens.primary} opacity={0.14} />
+      <Path
+        d="M 130,172 L 130,164 A 8,8 0 0 1 146,164"
+        fill="none"
+        stroke={tokens.primary}
+        strokeWidth={3}
+        {...STROKE}
+      />
+      <Rect x={124} y={172} width={32} height={24} rx={4} fill={tokens.primary} />
+      <Rect x={138} y={180} width={4} height={8} rx={2} fill={tokens.codeBg} />
+
+      <BlockCursor x={168} y={176} height={18} color={tokens.primary} />
+
+      <Bit tokens={tokens} x={22} y={164} scale={0.36} screen="thinking" />
     </Svg>
   );
 }
 
-/** Come back tomorrow: the streak. */
+/**
+ * Scene 4 — "Keep the streak".
+ *
+ * The one scene allowed two heroes, because streak and XP are both gamification
+ * tokens: an angular flame, a seven-day strip with today outlined and tomorrow
+ * still to earn, and the XP meter with the cursor standing at its end.
+ */
 export function StreakIllustration({ width = 280, scheme = 'light', ...props }: IllustrationProps) {
   const tokens = themeTokens(scheme);
-  const syntax = syntaxPalette(scheme);
   const frame = useFrame(width);
+  const meterId = `xpMeterFill-${scheme}`;
+  // The spec's flame core is a pale cream literal and the palette has no such
+  // token, so take the scheme's near-white plane: white-hot in both themes.
+  const core = scheme === 'dark' ? tokens.foreground : tokens.background;
 
   return (
-    <Svg {...frame} {...props}>
+    <Svg {...frame} {...STROKE} {...props}>
       <Defs>
-        <LinearGradient id="flame" x1="0" y1="1" x2="0" y2="0">
-          <Stop offset="0" stopColor={tokens.streak} />
-          <Stop offset="1" stopColor={tokens.warning} />
+        {/* The single gradient this scene is allowed: 2-stop, vertical. */}
+        <LinearGradient id={meterId} x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0" stopColor={tokens.primary} />
+          <Stop offset="1" stopColor={tokens.accent} />
         </LinearGradient>
       </Defs>
 
-      <Circle cx={160} cy={112} r={98} fill={tokens.streak} opacity={0.14} />
-
-      {/* Flame */}
-      <Path
-        d="M160 36 C186 74 206 90 206 122 C206 152 186 174 160 174 C134 174 114 152 114 122 C114 96 132 84 142 62 C150 82 152 92 160 100 C166 88 162 62 160 36 Z"
-        fill="url(#flame)"
+      {/* Flame: the same polygon four times, scaled about its base at (140,72).
+          The largest copy is the glow — a duplicate shape, never a blur. */}
+      <Polygon
+        points={FLAME}
+        fill={tokens.streak}
+        opacity={0.16}
+        transform="translate(140,72) scale(1.4) translate(-140,-72)"
       />
-      <Path
-        d="M160 92 C172 110 178 118 178 132 C178 146 170 156 160 156 C150 156 142 146 142 132 C142 118 148 110 160 92 Z"
-        fill={tokens.background}
-        opacity={0.75}
+      <Polygon points={FLAME} fill={tokens.streak} />
+      <Polygon
+        points={FLAME}
+        fill={tokens.xp}
+        transform="translate(140,72) scale(0.7) translate(-140,-72)"
+      />
+      <Polygon
+        points={FLAME}
+        fill={core}
+        transform="translate(140,72) scale(0.4) translate(-140,-72)"
       />
 
-      {/* Seven days, the last one still to earn */}
-      <G>
-        {[0, 1, 2, 3, 4, 5, 6].map((index) => {
-          const x = 44 + index * 39;
-          const done = index < 5;
-          return (
-            <G key={index}>
-              <Rect
-                x={x}
-                y={196}
-                width={28}
-                height={28}
-                rx={10}
-                fill={done ? tokens.streak : tokens.muted}
-                stroke={index === 5 ? tokens.streak : 'none'}
+      {/* Seven days: five kept, today outlined, tomorrow struck through. */}
+      {[0, 1, 2, 3, 4, 5, 6].map((index) => {
+        const x = 56 + index * 24;
+        const kept = index < 5;
+        const today = index === 5;
+        return (
+          <G key={index}>
+            <Rect
+              x={x}
+              y={110}
+              width={16}
+              height={16}
+              rx={4}
+              fill={kept ? tokens.streak : tokens.muted}
+              stroke={today ? tokens.primary : undefined}
+              strokeWidth={today ? 2 : undefined}
+              {...STROKE}
+            />
+            {index === 6 ? (
+              <Line
+                x1={x}
+                y1={110}
+                x2={x + 16}
+                y2={126}
+                stroke={tokens.border}
                 strokeWidth={2}
-                strokeDasharray={index === 5 ? '4 4' : undefined}
+                {...STROKE}
               />
-              {done ? (
-                <Path
-                  d={`M${x + 8} 210 L${x + 12} 215 L${x + 21} 205`}
-                  stroke={tokens.background}
-                  strokeWidth={3}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-              ) : null}
-            </G>
-          );
-        })}
-      </G>
+            ) : null}
+          </G>
+        );
+      })}
+
+      {/* XP meter. rx=8 on a 14-tall track clamps to a 7px pill, which keeps the
+          allowed radius set intact without changing the shape. */}
+      <Rect
+        x={56}
+        y={150}
+        width={168}
+        height={14}
+        rx={8}
+        fill={tokens.surface2}
+        stroke={tokens.border}
+        strokeWidth={2}
+        {...STROKE}
+      />
+      <Rect x={58} y={152} width={104} height={10} rx={8} fill={`url(#${meterId})`} />
+      {[100, 140, 180].map((x) => (
+        <Line
+          key={x}
+          x1={x}
+          y1={152}
+          x2={x}
+          y2={162}
+          stroke={tokens.border}
+          strokeWidth={2}
+          {...STROKE}
+        />
+      ))}
+
+      <BlockCursor x={228} y={148} height={18} color={tokens.primary} />
     </Svg>
   );
 }

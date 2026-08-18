@@ -134,6 +134,12 @@ export async function completeLesson(params: {
   correct: number;
   total: number;
   baseXp: number;
+  /**
+   * The learner's local date when the lesson was actually played. It matters
+   * for a lesson finished offline and synced days later; the server clamps it
+   * to the last two days so it cannot be used to fabricate a streak.
+   */
+  playedOn?: string;
 }): Promise<LessonResult> {
   const { data, error } = await supabase.rpc('complete_lesson', {
     p_lesson_id: params.lessonId,
@@ -142,6 +148,7 @@ export async function completeLesson(params: {
     p_correct: params.correct,
     p_total: params.total,
     p_base_xp: params.baseXp,
+    p_played_on: params.playedOn ?? new Date().toISOString().slice(0, 10),
   });
   if (error) throw toAppError(error);
 

@@ -52,6 +52,8 @@ export type QueuedLesson = {
     correct: number;
     total: number;
     baseXp: number;
+    /** Local date the lesson was played, so a late sync still counts that day. */
+    playedOn?: string;
   };
 };
 

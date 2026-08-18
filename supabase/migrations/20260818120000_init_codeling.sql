@@ -50,6 +50,9 @@ create table if not exists public.game_state (
   streak_freezes smallint not null default 0 check (streak_freezes between 0 and 2),
   lessons_completed integer not null default 0 check (lessons_completed >= 0),
   perfect_lessons integer not null default 0 check (perfect_lessons >= 0),
+  -- Tracked separately from hearts_updated_at, which moves every time hearts
+  -- regenerate and so can never be used to gate a once-a-day action.
+  last_free_refill_at timestamptz,
   updated_at timestamptz not null default now()
 );
 
@@ -153,6 +156,33 @@ create table if not exists public.subscriptions (
 create index if not exists subscriptions_rc_app_user_idx on public.subscriptions (rc_app_user_id);
 
 comment on table public.subscriptions is 'Mirror of RevenueCat entitlements, written only by the webhook (service role).';
+
+-- ---------------------------------------------------------------------------
+-- lesson_catalog
+-- ---------------------------------------------------------------------------
+
+/**
+ * What each lesson is worth, mirrored from the bundled content by
+ * `npm run content:seed`.
+ *
+ * Without it the client would tell the server how much XP to pay out and how
+ * many questions a lesson has, which is an invitation to mint XP. With it the
+ * client only reports how many it answered correctly.
+ */
+create table if not exists public.lesson_catalog (
+  lesson_id text primary key,
+  unit_id text not null,
+  course_id text not null check (course_id in ('python', 'javascript')),
+  question_count smallint not null check (question_count between 1 and 20),
+  base_xp integer not null check (base_xp between 1 and 500),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.lesson_catalog enable row level security;
+
+create policy "the catalog is readable by signed in users"
+  on public.lesson_catalog for select to authenticated
+  using (true);
 
 -- ---------------------------------------------------------------------------
 -- question_rubrics + ai_reviews (the premium "explain this code" feature)
@@ -309,8 +339,16 @@ begin
   select hearts, hearts_updated_at into v_hearts, v_since
   from public.game_state where user_id = p_user_id for update;
 
+  -- A learner whose trigger-created row is missing (restored backup, manual
+  -- insert into auth.users) would otherwise be stranded with zero hearts.
   if not found then
-    return null;
+    insert into public.game_state (user_id) values (p_user_id)
+    on conflict (user_id) do nothing;
+    select hearts, hearts_updated_at into v_hearts, v_since
+    from public.game_state where user_id = p_user_id for update;
+    if not found then
+      return null;
+    end if;
   end if;
 
   if v_hearts >= 5 then
@@ -402,11 +440,22 @@ end;
 $$;
 
 /**
- * Completes a lesson: awards XP once per improvement, advances the streak,
- * and returns the fresh game state. Called after the last question of a lesson.
+ * Completes a lesson: awards XP for however much the learner improved, advances
+ * the streak, and returns the fresh game state.
  *
- * Scoring: `p_correct` / `p_total` becomes a 0-100 score; 3 stars at 100%,
- * 2 stars from 80%, 1 star from 50%.
+ * What the client is trusted for: how many questions it answered correctly.
+ * What it is not trusted for: how many questions the lesson has, what it pays,
+ * or what the score is — those come from `lesson_catalog`, which is seeded from
+ * the bundled content. A tampered client can therefore claim a perfect run it
+ * did not have, but it can never mint more XP than the lesson is worth, and
+ * replaying a lesson pays only for the improvement over its best score.
+ *
+ * Scoring: `p_correct` / catalog question count becomes a 0-100 score; 3 stars
+ * at 100%, 2 from 80%, 1 from 50%.
+ *
+ * @param p_played_on  The learner's local date, for a lesson finished offline
+ *                     and synced later. Clamped to the last two days so it
+ *                     cannot be used to fabricate a streak.
  */
 create or replace function public.complete_lesson(
   p_lesson_id text,
@@ -414,7 +463,8 @@ create or replace function public.complete_lesson(
   p_course_id text,
   p_correct integer,
   p_total integer,
-  p_base_xp integer
+  p_base_xp integer,
+  p_played_on date default null
 )
 returns table (
   total_xp integer,
@@ -432,51 +482,75 @@ set search_path = public
 as $$
 declare
   v_user uuid := auth.uid();
+  v_catalog public.lesson_catalog%rowtype;
+  v_questions integer;
+  v_base_xp integer;
   v_score smallint;
   v_stars smallint;
   v_previous public.lesson_progress%rowtype;
+  v_best_before smallint := 0;
   v_first boolean := false;
   v_award integer := 0;
   v_perfect_bonus integer := 0;
   v_streak_bonus integer := 0;
   v_today date := (now() at time zone 'utc')::date;
+  v_played date;
   v_state public.game_state%rowtype;
   v_daily integer;
 begin
   if v_user is null then
     raise exception 'authentication required' using errcode = '28000';
   end if;
-  if p_total <= 0 then
-    raise exception 'a lesson needs at least one question';
-  end if;
-  if p_base_xp < 0 or p_base_xp > 500 then
-    raise exception 'implausible xp payload';
+  if p_correct is null or p_correct < 0 then
+    raise exception 'implausible answer count';
   end if;
 
-  v_score := round((p_correct::numeric / p_total) * 100)::smallint;
+  select * into v_catalog from public.lesson_catalog where lesson_id = p_lesson_id;
+
+  if found then
+    v_questions := v_catalog.question_count;
+    v_base_xp := v_catalog.base_xp;
+  else
+    -- The catalog has not been seeded (fresh project, or content newer than the
+    -- last `npm run content:seed`). Fall back to the client's numbers, clamped
+    -- hard enough that the worst case is one ordinary lesson's worth of XP.
+    v_questions := least(greatest(coalesce(p_total, 1), 1), 20);
+    v_base_xp := least(greatest(coalesce(p_base_xp, 0), 0), 200);
+  end if;
+
+  v_score := round((least(p_correct, v_questions)::numeric / v_questions) * 100)::smallint;
   v_stars := case when v_score = 100 then 3 when v_score >= 80 then 2 when v_score >= 50 then 1 else 0 end;
 
-  select * into v_previous from public.lesson_progress
-    where user_id = v_user and lesson_id = p_lesson_id;
-
-  v_first := v_previous.user_id is null or v_previous.status <> 'completed';
-
-  -- XP is proportional to how much of the lesson was answered correctly, and is
-  -- only paid out on the first completion or when the learner beats their score.
-  if v_first then
-    v_award := round(p_base_xp * (v_score / 100.0))::integer;
-  elsif v_score > coalesce(v_previous.best_score, 0) then
-    v_award := round(p_base_xp * ((v_score - v_previous.best_score) / 100.0))::integer;
+  -- Lock the learner's game state first: it serializes two devices (or a double
+  -- tap) finishing the same lesson at once, so the award below is computed from
+  -- state nobody else is mutating.
+  select * into v_state from public.game_state where user_id = v_user for update;
+  if not found then
+    insert into public.game_state (user_id) values (v_user)
+    on conflict (user_id) do nothing;
+    select * into v_state from public.game_state where user_id = v_user for update;
   end if;
 
-  if v_score = 100 and (v_first or coalesce(v_previous.best_score, 0) < 100) then
+  select * into v_previous from public.lesson_progress
+    where user_id = v_user and lesson_id = p_lesson_id for update;
+
+  v_first := v_previous.user_id is null or v_previous.status <> 'completed';
+  v_best_before := coalesce(v_previous.best_score, 0);
+
+  -- XP is paid for improvement only, so replaying a lesson at the same score
+  -- pays nothing and grinding a deliberately bad score cannot farm it either.
+  if v_score > v_best_before then
+    v_award := round(v_base_xp * ((v_score - v_best_before) / 100.0))::integer;
+  end if;
+
+  if v_score = 100 and v_best_before < 100 then
     v_perfect_bonus := 10;
   end if;
 
   insert into public.lesson_progress as lp (
     user_id, lesson_id, course_id, unit_id, status, best_score, stars, attempts, xp_earned, first_completed_at
   ) values (
-    v_user, p_lesson_id, p_course_id, p_unit_id,
+    v_user, p_lesson_id, coalesce(v_catalog.course_id, p_course_id), coalesce(v_catalog.unit_id, p_unit_id),
     case when v_score >= 50 then 'completed' else 'in_progress' end,
     v_score, v_stars, 1, v_award + v_perfect_bonus,
     case when v_score >= 50 then now() else null end
@@ -490,29 +564,29 @@ begin
     first_completed_at = coalesce(lp.first_completed_at, excluded.first_completed_at),
     updated_at = now();
 
-  select * into v_state from public.game_state where user_id = v_user for update;
-  if not found then
-    insert into public.game_state (user_id) values (v_user) returning * into v_state;
-  end if;
+  -- Streak: the day the lesson was played, not the day it reached the server.
+  -- Clamped to the last two days so an offline claim cannot invent history.
+  v_played := greatest(least(coalesce(p_played_on, v_today), v_today), v_today - 2);
 
-  -- Streak: same day is a no-op, yesterday extends, anything older resets
-  -- unless a streak freeze is available to cover exactly one missed day.
   if v_state.last_active_date is null then
     v_state.streak_days := 1;
-  elsif v_state.last_active_date = v_today then
+  elsif v_state.last_active_date >= v_played then
     null;
-  elsif v_state.last_active_date = v_today - 1 then
+  elsif v_state.last_active_date = v_played - 1 then
     v_state.streak_days := v_state.streak_days + 1;
-  elsif v_state.last_active_date = v_today - 2 and v_state.streak_freezes > 0 then
+  elsif v_state.last_active_date = v_played - 2 and v_state.streak_freezes > 0 then
     v_state.streak_days := v_state.streak_days + 1;
     v_state.streak_freezes := (v_state.streak_freezes - 1)::smallint;
   else
     v_state.streak_days := 1;
   end if;
 
-  if v_state.last_active_date is distinct from v_today and v_state.streak_days > 0
-     and v_state.streak_days % 7 = 0 then
+  -- Every seventh day pays a bonus and banks a freeze (capped at two), which is
+  -- what makes the freeze branch above reachable.
+  if v_state.last_active_date is distinct from v_played
+     and v_state.streak_days > 0 and v_state.streak_days % 7 = 0 then
     v_streak_bonus := 25;
+    v_state.streak_freezes := least(2, v_state.streak_freezes + 1)::smallint;
   end if;
 
   update public.game_state set
@@ -520,7 +594,7 @@ begin
     streak_days = v_state.streak_days,
     longest_streak = greatest(longest_streak, v_state.streak_days),
     streak_freezes = v_state.streak_freezes,
-    last_active_date = v_today,
+    last_active_date = greatest(coalesce(last_active_date, v_played), v_played),
     lessons_completed = lessons_completed + case when v_first and v_score >= 50 then 1 else 0 end,
     perfect_lessons = perfect_lessons + case when v_score = 100 and v_perfect_bonus > 0 then 1 else 0 end,
     updated_at = now()
@@ -528,16 +602,16 @@ begin
   returning * into v_state;
 
   if v_award > 0 then
-    insert into public.xp_events (user_id, amount, source, lesson_id)
-    values (v_user, v_award, 'lesson', p_lesson_id);
+    insert into public.xp_events (user_id, amount, source, lesson_id, earned_on)
+    values (v_user, v_award, 'lesson', p_lesson_id, v_played);
   end if;
   if v_perfect_bonus > 0 then
-    insert into public.xp_events (user_id, amount, source, lesson_id)
-    values (v_user, v_perfect_bonus, 'perfect_bonus', p_lesson_id);
+    insert into public.xp_events (user_id, amount, source, lesson_id, earned_on)
+    values (v_user, v_perfect_bonus, 'perfect_bonus', p_lesson_id, v_played);
   end if;
   if v_streak_bonus > 0 then
-    insert into public.xp_events (user_id, amount, source, lesson_id)
-    values (v_user, v_streak_bonus, 'streak_bonus', p_lesson_id);
+    insert into public.xp_events (user_id, amount, source, lesson_id, earned_on)
+    values (v_user, v_streak_bonus, 'streak_bonus', p_lesson_id, v_played);
   end if;
 
   select coalesce(sum(amount), 0)::integer into v_daily
@@ -606,7 +680,13 @@ begin
 end;
 $$;
 
-/** Refills hearts to full. Free once every 24h; subscribers never need it. */
+/**
+ * Refill hearts to full.
+ *
+ * Free once every 24 hours, and always available to subscribers. The cooldown
+ * keys off `last_free_refill_at` rather than `hearts_updated_at`, which moves
+ * every time hearts regenerate and would make the free refill unreachable.
+ */
 create or replace function public.refill_hearts()
 returns smallint
 language plpgsql
@@ -615,28 +695,48 @@ set search_path = public
 as $$
 declare
   v_user uuid := auth.uid();
-  v_hearts smallint;
+  v_unlimited boolean;
+  v_state public.game_state%rowtype;
 begin
   if v_user is null then
     raise exception 'authentication required' using errcode = '28000';
   end if;
 
-  update public.game_state
-    set hearts = 5, hearts_updated_at = now(), updated_at = now()
-    where user_id = v_user
-      and (public.has_active_subscription(v_user) or hearts_updated_at < now() - interval '24 hours')
-    returning hearts into v_hearts;
+  v_unlimited := public.has_active_subscription(v_user);
 
-  if v_hearts is null then
+  select * into v_state from public.game_state where user_id = v_user for update;
+  if not found then
+    insert into public.game_state (user_id) values (v_user)
+    on conflict (user_id) do nothing;
+    select * into v_state from public.game_state where user_id = v_user for update;
+  end if;
+
+  if not v_unlimited
+     and v_state.last_free_refill_at is not null
+     and v_state.last_free_refill_at > now() - interval '24 hours' then
     raise exception 'hearts can only be refilled once a day on the free plan'
       using errcode = 'P0001';
   end if;
 
-  return v_hearts;
+  update public.game_state
+    set hearts = 5,
+        hearts_updated_at = now(),
+        last_free_refill_at = case when v_unlimited then last_free_refill_at else now() end,
+        updated_at = now()
+    where user_id = v_user
+    returning * into v_state;
+
+  return v_state.hearts;
 end;
 $$;
 
-/** The last N distinct questions the learner got wrong, for the mistakes deck. */
+/**
+ * The most recent questions the learner got wrong and has not since fixed.
+ *
+ * `distinct on` has to sort by the column it deduplicates, so newest-first is
+ * applied in an outer query; sorting only inside would return whichever ids
+ * happen to sort first alphabetically.
+ */
 create or replace function public.get_mistake_questions(p_course_id text, p_limit integer default 20)
 returns table (question_id text, lesson_id text, missed_at timestamptz)
 language sql
@@ -644,28 +744,36 @@ stable
 security definer
 set search_path = public
 as $$
-  select distinct on (qa.question_id) qa.question_id, qa.lesson_id, qa.created_at
-  from public.question_attempts qa
-  where qa.user_id = auth.uid()
-    and qa.course_id = p_course_id
-    and qa.is_correct = false
-    and not exists (
-      select 1 from public.question_attempts later
-      where later.user_id = qa.user_id
-        and later.question_id = qa.question_id
-        and later.is_correct = true
-        and later.created_at > qa.created_at
-    )
-  order by qa.question_id, qa.created_at desc
+  select m.question_id, m.lesson_id, m.missed_at
+  from (
+    select distinct on (qa.question_id)
+      qa.question_id, qa.lesson_id, qa.created_at as missed_at
+    from public.question_attempts qa
+    where qa.user_id = auth.uid()
+      and qa.course_id = p_course_id
+      and qa.is_correct = false
+      and not exists (
+        select 1 from public.question_attempts later
+        where later.user_id = qa.user_id
+          and later.question_id = qa.question_id
+          and later.is_correct = true
+          and later.created_at > qa.created_at
+      )
+    order by qa.question_id, qa.created_at desc
+  ) m
+  order by m.missed_at desc
   limit least(coalesce(p_limit, 20), 50);
 $$;
 
 grant execute on function public.record_answer(text, text, text, text, boolean, text, integer, boolean) to authenticated;
-grant execute on function public.complete_lesson(text, text, text, integer, integer, integer) to authenticated;
+grant execute on function public.complete_lesson(text, text, text, integer, integer, integer, date) to authenticated;
 grant execute on function public.get_game_state() to authenticated;
 grant execute on function public.refill_hearts() to authenticated;
 grant execute on function public.get_mistake_questions(text, integer) to authenticated;
-grant execute on function public.has_active_subscription(uuid) to authenticated;
+-- Not granted to `authenticated`: it takes a user id, so exposing it would let
+-- any signed-in learner probe whether another account subscribes. The client
+-- reads its own status from get_game_state().
+revoke execute on function public.has_active_subscription(uuid) from public, anon, authenticated;
 
 revoke execute on function public.settle_hearts(uuid) from public, anon, authenticated;
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
@@ -676,6 +784,9 @@ revoke execute on function public.handle_new_user() from public, anon, authentic
  * Practice is deliberately cheaper than a lesson: 5 XP per correct answer,
  * capped at 50 XP a day, so grinding old questions cannot outpace learning new
  * ones. It never touches hearts, stars or the streak.
+ *
+ * The game state row is locked first so two runs finishing at once cannot both
+ * see the same daily total and pay twice.
  */
 create or replace function public.record_practice(
   p_course_id text,
@@ -692,7 +803,7 @@ declare
   v_today date := (now() at time zone 'utc')::date;
   v_already integer;
   v_award integer;
-  v_total integer;
+  v_state public.game_state%rowtype;
   v_daily integer;
 begin
   if v_user is null then
@@ -700,6 +811,13 @@ begin
   end if;
   if p_total <= 0 or p_correct < 0 or p_correct > p_total or p_total > 50 then
     raise exception 'implausible practice payload';
+  end if;
+
+  select * into v_state from public.game_state where user_id = v_user for update;
+  if not found then
+    insert into public.game_state (user_id) values (v_user)
+    on conflict (user_id) do nothing;
+    select * into v_state from public.game_state where user_id = v_user for update;
   end if;
 
   select coalesce(sum(amount), 0)::integer into v_already
@@ -712,14 +830,14 @@ begin
     insert into public.xp_events (user_id, amount, source) values (v_user, v_award, 'practice');
     update public.game_state
       set total_xp = total_xp + v_award, updated_at = now()
-      where user_id = v_user;
+      where user_id = v_user
+      returning * into v_state;
   end if;
 
-  select gs.total_xp into v_total from public.game_state gs where gs.user_id = v_user;
   select coalesce(sum(amount), 0)::integer into v_daily
     from public.xp_events where user_id = v_user and earned_on = v_today;
 
-  return query select v_award, coalesce(v_total, 0), v_daily;
+  return query select v_award, v_state.total_xp, v_daily;
 end;
 $$;
 
@@ -739,9 +857,12 @@ grant execute on function public.record_practice(text, integer, integer) to auth
  */
 create table if not exists public.ai_review_quota (
   user_id uuid not null references auth.users (id) on delete cascade,
+  -- 'hour' and 'day' are separate counters; without this column they collide
+  -- into one row between 00:00 and 00:59, when both windows start at midnight.
+  window_kind text not null check (window_kind in ('hour', 'day')),
   window_start timestamptz not null,
   used integer not null default 0 check (used >= 0),
-  primary key (user_id, window_start)
+  primary key (user_id, window_kind, window_start)
 );
 
 alter table public.ai_review_quota enable row level security;
@@ -774,22 +895,24 @@ declare
   v_hour_used integer;
   v_day_used integer;
 begin
-  insert into public.ai_review_quota (user_id, window_start, used)
-  values (p_user_id, v_hour, 1)
-  on conflict (user_id, window_start)
+  insert into public.ai_review_quota (user_id, window_kind, window_start, used)
+  values (p_user_id, 'hour', v_hour, 1)
+  on conflict (user_id, window_kind, window_start)
     do update set used = public.ai_review_quota.used + 1
   returning used into v_hour_used;
 
-  insert into public.ai_review_quota (user_id, window_start, used)
-  values (p_user_id, v_day, 1)
-  on conflict (user_id, window_start)
+  insert into public.ai_review_quota (user_id, window_kind, window_start, used)
+  values (p_user_id, 'day', v_day, 1)
+  on conflict (user_id, window_kind, window_start)
     do update set used = public.ai_review_quota.used + 1
   returning used into v_day_used;
 
   if v_hour_used > p_hourly or v_day_used > p_daily then
     -- Give the slot back so a rejected request does not consume quota.
     update public.ai_review_quota set used = greatest(0, used - 1)
-      where user_id = p_user_id and window_start in (v_hour, v_day);
+      where user_id = p_user_id
+        and ((window_kind = 'hour' and window_start = v_hour)
+          or (window_kind = 'day' and window_start = v_day));
     return false;
   end if;
 
