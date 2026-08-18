@@ -14,6 +14,7 @@ import { AppState, type AppStateStatus } from 'react-native';
 
 import { identify as identifyAnalytics, resetAnalytics } from '@/lib/analytics';
 import { initI18n } from '@/lib/i18n';
+import { scheduleDailyReminder } from '@/services/notifications_service';
 import { useAuthStore } from '@/stores/auth_store';
 import { useGameStore } from '@/stores/game_store';
 import { useProgressStore } from '@/stores/progress_store';
@@ -79,7 +80,17 @@ export function useAppBootstrap(): BootstrapState {
     void refreshGame();
   }, [clearGame, clearProgress, identify, refreshGame, userId]);
 
-  // 4. Keep state fresh across foreground transitions, and land offline writes.
+  // 4. Keep the daily reminder's copy in step with the streak it talks about.
+  const remindersEnabled = useSettingsStore((state) => state.remindersEnabled);
+  const reminderHour = useSettingsStore((state) => state.reminderHour);
+  const streakDays = useGameStore((state) => state.state?.streakDays ?? 0);
+
+  useEffect(() => {
+    if (!remindersEnabled) return;
+    void scheduleDailyReminder(reminderHour, streakDays);
+  }, [reminderHour, remindersEnabled, streakDays]);
+
+  // 5. Keep state fresh across foreground transitions, and land offline writes.
   useEffect(() => {
     const onChange = (status: AppStateStatus) => {
       if (status !== 'active' || !userId) return;

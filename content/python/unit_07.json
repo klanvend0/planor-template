@@ -4,8 +4,8 @@
   "index": 7,
   "title": { "en": "Lists and Dictionaries", "tr": "Listeler ve Sözlükler" },
   "description": {
-    "en": "Store multiple values in lists and organize data with dictionaries. Learn to access, modify, and loop through collections.",
-    "tr": "Listelerde birden fazla değeri saklayın ve sözlüklerle verileri düzenleyin. Koleksiyonları erişin, değiştirin ve üzerinde dolaşın."
+    "en": "Store multiple values in lists and organize data with dictionaries. Access, modify, and loop through collections.",
+    "tr": "Listelerde çok değer saklayın, sözlüklerle verileri düzenleyin. Erişmeyi, değiştirmeyi ve üzerinde gezinmeyi öğrenin."
   },
   "lessons": [
     {
@@ -15,7 +15,7 @@
       "concept": {
         "headline": {
           "en": "Create a list with [] and access items by position",
-          "tr": "[] ile liste oluştur ve konuma göre elemanları eriş"
+          "tr": "[] ile liste oluştur ve konuma göre elemanlara eriş"
         },
         "body": {
           "en": "A list is a container that holds multiple values in a sequence, written with square brackets and items separated by commas. Each item has a position, or index, starting from 0 for the first item. Like strings, you can use negative indexes to count from the end: -1 is the last item, -2 is second-to-last.",
@@ -25,7 +25,7 @@
           "code": "colors = [\"red\", \"green\", \"blue\"]\nprint(colors[0])\nprint(colors[-1])",
           "caption": {
             "en": "Access the first and last items.",
-            "tr": "İlk ve son elemanları eriş."
+            "tr": "İlk ve son elemanlara eriş."
           }
         }
       },
@@ -44,8 +44,8 @@
           ],
           "answerId": "a",
           "explanation": {
-            "en": "The index 0 refers to the first item in the list, which is 10.",
-            "tr": "Dizin 0, listedeki ilk elemanı gösterir; o da 10'dur."
+            "en": "Index 0 always refers to the first item because Python starts counting positions from zero, not one, so numbers[0] gives 10.",
+            "tr": "Dizin 0 her zaman ilk elemanı gösterir; çünkü Python sayımını 0'dan başlatır, 1'den değil. Bu yüzden numbers[0] 10'u verir."
           }
         },
         {
@@ -80,8 +80,8 @@
           "blanks": [{ "id": "1", "answer": "[-1]", "distractors": ["[3]", "[2]", "[0]"] }],
           "verify": { "stdout": "bird\n" },
           "explanation": {
-            "en": "The negative index -1 always points to the last item, just like in strings.",
-            "tr": "Negatif dizin -1 her zaman son elemanı gösterir; dizeler gibi."
+            "en": "Negative indexes count backward from the end of the list, so -1 always points to the last item, exactly as it does with strings.",
+            "tr": "Negatif dizinler listenin sonundan geriye doğru sayar; bu yüzden -1 her zaman son elemanı gösterir, tıpkı dizelerde olduğu gibi."
           }
         },
         {
@@ -94,11 +94,10 @@
           },
           "code": "fruits = [\"apple\", \"banana\", \"cherry\"]",
           "expected": "print(fruits[1])",
-          "acceptable": ["print( fruits[1] )"],
           "verify": { "stdout": "banana\n" },
           "explanation": {
-            "en": "The second item has index 1 because indexing starts at 0.",
-            "tr": "İkinci eleman 1 dizinine sahiptir; çünkü dizinleme 0'dan başlar."
+            "en": "Indexing starts at 0, so the first item is index 0 and the second item is index 1 — one less than its everyday position.",
+            "tr": "Dizinleme 0'dan başlar; bu yüzden ilk eleman 0, ikinci eleman ise 1 dizinindedir — günlük sayışından bir eksik."
           }
         },
         {

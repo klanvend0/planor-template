@@ -58,9 +58,9 @@ Before starting, ensure you have:
 ### Step 5: Configure Supabase Redirect URLs
 
 1. Go to **Authentication > URL Configuration**
-2. Set **Site URL** to: `__APP_SLUG__://`
+2. Set **Site URL** to: `codeling://`
 3. Add to **Redirect URLs**:
-   - `__APP_SLUG__://auth/callback`
+   - `codeling://auth/callback`
 4. Click **Save**
 
 ---
@@ -79,7 +79,7 @@ Before starting, ensure you have:
 6. Select **App** and click **Continue**
 7. Fill in:
    - **Description**: Your app name
-   - **Bundle ID**: `__BUNDLE_ID__` (Explicit)
+   - **Bundle ID**: `com.planor.codeling` (Explicit)
 8. Scroll down to **Capabilities**
 9. Check ✅ **Sign In with Apple**
 10. Click **Continue**, then **Register**
@@ -109,7 +109,7 @@ The script will ask for:
 
 - **Team ID**: Found in Apple Developer Portal (top right, under your name)
 - **Key ID**: From Step 2
-- **Service ID**: Your bundle ID (e.g., `__BUNDLE_ID__`)
+- **Service ID**: Your bundle ID (e.g., `com.planor.codeling`)
 - **Path to .p8 file**: The key file you downloaded
 
 Copy the generated secret for the next step.
@@ -120,7 +120,7 @@ Copy the generated secret for the next step.
 2. Navigate to **Authentication > Providers**
 3. Find **Apple** and click to enable
 4. Fill in:
-   - **Client IDs**: `__BUNDLE_ID__`
+   - **Client IDs**: `com.planor.codeling`
    - **Secret Key**: Paste the JWT secret from Step 3
 5. Click **Save**
 
@@ -132,7 +132,7 @@ Open `app.json` and ensure these values are set:
 {
   "expo": {
     "ios": {
-      "bundleIdentifier": "__BUNDLE_ID__",
+      "bundleIdentifier": "com.planor.codeling",
       "usesAppleSignIn": true,
       "appleTeamId": "__APPLE_TEAM_ID__"
     }
