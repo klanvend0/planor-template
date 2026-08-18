@@ -9,8 +9,10 @@
  */
 
 import { Check, Crown, Lock, Play, Star } from 'lucide-react-native';
+import { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, {
+  cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -51,9 +53,15 @@ export function LessonNode({
     transform: [{ scale: 1 + halo.value * 0.12 }],
   }));
 
-  if (isCurrent && halo.value === 0) {
+  useEffect(() => {
+    if (!isCurrent) {
+      cancelAnimation(halo);
+      halo.value = 0;
+      return;
+    }
     halo.value = withRepeat(withTiming(1, { duration: 1400 }), -1, true);
-  }
+    return () => cancelAnimation(halo);
+  }, [halo, isCurrent]);
 
   const locked = status === 'locked' || status === 'premium_locked';
 

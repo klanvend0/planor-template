@@ -37,6 +37,13 @@ export type SessionPhase =
 export type SessionState = {
   phase: SessionPhase;
   question: Question | null;
+  /**
+   * Changes every time a question is presented, including when the same
+   * question comes back after being missed. Screens key their draft state on
+   * this rather than on the question id, which would not change if a re-queued
+   * question is the only one left.
+   */
+  presentation: number;
   /** 1-based position across the *original* question list, for the progress bar. */
   position: number;
   total: number;
@@ -114,13 +121,16 @@ export function useLessonSession(
   const [isFinishing, setIsFinishing] = useState(false);
   const [error, setError] = useState<AppError | null>(null);
   const [outcome, setOutcome] = useState<LessonResult | null>(null);
+  const [presentation, setPresentation] = useState(0);
 
   /** Questions answered right the first time — this is what the score is made of. */
   const firstTryCorrect = useRef(new Set<string>());
   /** Questions already sent to the back of the queue, so they re-queue only once. */
   const requeued = useRef(new Set<string>());
-  /** Questions the learner has seen, for the progress bar. */
+  /** Questions the learner has seen, for the question counter. */
   const seen = useRef(new Set<string>());
+  /** Questions that will not be asked again — right, or already retried once. */
+  const resolved = useRef(new Set<string>());
   /**
    * Questions skipped rather than answered — in practice the AI-graded one when
    * the learner is on the free plan. They leave the denominator, so a free
@@ -138,9 +148,14 @@ export function useLessonSession(
     () => ({
       phase,
       question,
-      position: Math.min(total, seen.current.size + (question ? 1 : 0)),
+      presentation,
+      // During feedback the counter stays on the question being discussed
+      // rather than jumping ahead to the next one.
+      position: Math.min(total, Math.max(1, resolved.current.size + (question ? 1 : 0))),
       total,
-      progress: total === 0 ? 0 : Math.min(1, firstTryCorrect.current.size / total),
+      // Progress counts questions that are done with, so finishing a lesson
+      // always fills the bar — even one that took a second attempt.
+      progress: total === 0 ? 0 : Math.min(1, resolved.current.size / total),
       lastResult,
       review,
       isGrading,
@@ -182,8 +197,20 @@ export function useLessonSession(
         void incorrectFeedback();
       }
 
+      // The queue is updated before anything is awaited: a learner who taps
+      // Continue while the write is still in flight must not lose the retry.
+      if (result.isCorrect || requeued.current.has(current.id)) {
+        // Right, or already had its second chance: it will not come back.
+        resolved.current.add(current.id);
+      } else {
+        requeued.current.add(current.id);
+        setQueue((items) => [...items, current]);
+      }
+
       setLastResult(result);
       setPhase('feedback');
+
+      const answeredAt = presentation;
 
       try {
         // In a practice run the questions come from all over the course, so the
@@ -199,10 +226,13 @@ export function useLessonSession(
           isPractice: mode === 'practice',
         });
 
+        // Only interrupt if the learner is still looking at this answer; they
+        // may have moved on while the request was in flight.
         if (
           !result.isCorrect &&
           !outcomeOfAnswer.unlimitedHearts &&
-          outcomeOfAnswer.heartsLeft <= 0
+          outcomeOfAnswer.heartsLeft <= 0 &&
+          answeredAt === presentation
         ) {
           setPhase('out_of_hearts');
         }
@@ -210,13 +240,8 @@ export function useLessonSession(
         // Feedback is already on screen; a failed write must not eat the answer.
         setError(toAppError(caught));
       }
-
-      if (!result.isCorrect && !requeued.current.has(current.id)) {
-        requeued.current.add(current.id);
-        setQueue((items) => [...items, current]);
-      }
     },
-    [lesson.id, location.course.id, mode, submitAnswer]
+    [lesson.id, location.course.id, mode, presentation, submitAnswer]
   );
 
   const submit = useCallback(
@@ -316,6 +341,7 @@ export function useLessonSession(
   const advance = useCallback(async () => {
     setLastResult(null);
     setReview(null);
+    setPresentation((value) => value + 1);
     questionStartedAt.current = Date.now();
 
     const remaining = queue.slice(1);
@@ -335,12 +361,17 @@ export function useLessonSession(
       skipped.current.add(question.id);
       setSkippedCount(skipped.current.size);
     }
+    resolved.current.delete(question.id);
     void advance();
   }, [advance, question]);
 
   const resume = useCallback(() => {
-    if (phase === 'out_of_hearts') setPhase('question');
-  }, [phase]);
+    if (phase !== 'out_of_hearts') return;
+    // The question that emptied the hearts was already answered and its feedback
+    // computed, so the learner returns to that feedback rather than being asked
+    // it again with the answer showing.
+    setPhase(lastResult ? 'feedback' : 'question');
+  }, [lastResult, phase]);
 
   return {
     ...state,

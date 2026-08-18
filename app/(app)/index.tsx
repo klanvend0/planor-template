@@ -10,7 +10,7 @@
 
 import { router, useFocusEffect } from 'expo-router';
 import { ChevronDown, Settings } from 'lucide-react-native';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -67,11 +67,15 @@ export default function LearnScreen() {
   );
 
   // The trial offer is made once, the first time the learner reaches the map.
-  useEffect(() => {
-    if (!gameState || hasSubscription || lastPaywallAt !== null) return;
-    const timer = setTimeout(() => router.push('/paywall'), 600);
-    return () => clearTimeout(timer);
-  }, [gameState, hasSubscription, lastPaywallAt]);
+  // Scheduled on focus so a learner who opens a lesson in the meantime does not
+  // get the modal dropped on top of it.
+  useFocusEffect(
+    useCallback(() => {
+      if (!gameState || hasSubscription || lastPaywallAt !== null) return;
+      const timer = setTimeout(() => router.push('/paywall'), 600);
+      return () => clearTimeout(timer);
+    }, [gameState, hasSubscription, lastPaywallAt])
+  );
 
   const nextId = useMemo(
     () => nextLessonId(byLesson, activeCourse, hasSubscription),

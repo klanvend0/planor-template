@@ -65,11 +65,13 @@ export function SessionRunner({
   const isPro = gameState?.hasSubscription ?? false;
   const language = location.course.language;
 
-  // A new question always starts from a clean slate.
+  // A new question always starts from a clean slate. Keyed on the presentation
+  // counter, not the question id: a re-queued question that is the only one left
+  // would otherwise keep the draft and the feedback from its first attempt.
   useEffect(() => {
     setDraft(null);
     setExplanation('');
-  }, [session.question?.id]);
+  }, [session.presentation]);
 
   useEffect(() => {
     if (session.phase !== 'finished' || !session.outcome) return;

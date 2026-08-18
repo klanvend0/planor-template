@@ -540,7 +540,7 @@ export function StreakIllustration({ width = 280, scheme = 'light', ...props }: 
         points={FLAME}
         fill={tokens.streak}
         opacity={0.16}
-        transform="translate(140,72) scale(1.4) translate(-140,-72)"
+        transform="translate(140,72) scale(1.25) translate(-140,-72)"
       />
       <Polygon points={FLAME} fill={tokens.streak} />
       <Polygon

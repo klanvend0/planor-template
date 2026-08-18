@@ -85,11 +85,15 @@ export default function PaywallScreen() {
   const packages = useMemo(() => offering?.availablePackages ?? [], [offering]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  // One impression per open: the offering arriving must not re-count it.
   useEffect(() => {
     markPaywallSeen();
     track('paywall_viewed', { source: 'modal' });
+  }, [markPaywallSeen]);
+
+  useEffect(() => {
     if (!offering) void loadOffering();
-  }, [loadOffering, markPaywallSeen, offering]);
+  }, [loadOffering, offering]);
 
   // Default to the annual plan when there is one — it is the best value and the
   // one most people keep.

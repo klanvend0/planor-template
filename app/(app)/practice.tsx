@@ -87,13 +87,16 @@ export default function PracticeScreen() {
   const mistakes = useMistakesDeck(activeCourse);
   const review = useQuickReviewDeck(activeCourse);
 
+  // Reloading on focus keeps the counts honest after a lesson. Both reload
+  // functions are stable per course, so they belong in the dependency list.
+  const reloadMistakes = mistakes.reload;
+  const reloadReview = review.reload;
+
   useFocusEffect(
     useCallback(() => {
-      void mistakes.reload();
-      void review.reload();
-      // Reloading on focus keeps the counts honest after a lesson.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeCourse])
+      void reloadMistakes();
+      void reloadReview();
+    }, [reloadMistakes, reloadReview])
   );
 
   const hasMistakes = mistakes.questions.length > 0;

@@ -10,7 +10,7 @@
 
 import { create } from 'zustand';
 
-import { MAX_HEARTS } from '@/lib/gamification';
+import { MAX_HEARTS, starsForScore } from '@/lib/gamification';
 import { AppError, toAppError } from '@/lib/errors';
 import type { CourseId, Question } from '@/lib/content_schema';
 import {
@@ -21,6 +21,7 @@ import {
   type GameState,
   type LessonResult,
 } from '@/services/progress_service';
+import { useProgressStore } from '@/stores/progress_store';
 import { useSyncQueue } from '@/stores/sync_queue';
 
 type GameStoreState = {
