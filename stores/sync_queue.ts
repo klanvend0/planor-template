@@ -37,6 +37,7 @@ export type QueuedAnswer = {
     isCorrect: boolean;
     answer?: string;
     durationMs?: number;
+    isPractice?: boolean;
   };
 };
 
@@ -109,6 +110,7 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
                   isCorrect: entry.payload.isCorrect,
                   answer: entry.payload.answer,
                   durationMs: entry.payload.durationMs,
+                  isPractice: entry.payload.isPractice,
                 });
               } else {
                 await completeLesson(entry.payload);

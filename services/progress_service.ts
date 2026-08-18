@@ -104,6 +104,8 @@ export async function recordAnswer(params: {
   isCorrect: boolean;
   answer?: string;
   durationMs?: number;
+  /** Practice runs log the attempt but never spend a heart. */
+  isPractice?: boolean;
 }): Promise<AnswerOutcome> {
   const { data, error } = await supabase.rpc('record_answer', {
     p_question_id: params.question.id,
@@ -113,6 +115,7 @@ export async function recordAnswer(params: {
     p_is_correct: params.isCorrect,
     p_answer: params.answer ?? null,
     p_duration_ms: params.durationMs ?? null,
+    p_practice: params.isPractice ?? false,
   });
   if (error) throw toAppError(error);
 

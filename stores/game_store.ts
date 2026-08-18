@@ -43,6 +43,7 @@ type GameStoreActions = {
     isCorrect: boolean;
     answer?: string;
     durationMs?: number;
+    isPractice?: boolean;
   }) => Promise<{ heartsLeft: number; unlimitedHearts: boolean }>;
   /** Close a lesson and collect the reward. */
   finishLesson: (params: {
@@ -140,11 +141,12 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
           isCorrect: params.isCorrect,
           answer: params.answer,
           durationMs: params.durationMs,
+          isPractice: params.isPractice,
         },
       });
 
       const heartsLeft =
-        params.isCorrect || unlimited
+        params.isCorrect || unlimited || params.isPractice
           ? (state?.hearts ?? MAX_HEARTS)
           : Math.max(0, (state?.hearts ?? MAX_HEARTS) - 1);
 

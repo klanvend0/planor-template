@@ -196,6 +196,7 @@ export function useLessonSession(
           isCorrect: result.isCorrect,
           answer: result.submitted,
           durationMs: Date.now() - questionStartedAt.current,
+          isPractice: mode === 'practice',
         });
 
         if (
@@ -215,7 +216,7 @@ export function useLessonSession(
         setQueue((items) => [...items, current]);
       }
     },
-    [lesson.id, location.course.id, submitAnswer]
+    [lesson.id, location.course.id, mode, submitAnswer]
   );
 
   const submit = useCallback(

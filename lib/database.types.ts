@@ -193,6 +193,7 @@ export interface Database {
           p_is_correct: boolean;
           p_answer?: string | null;
           p_duration_ms?: number | null;
+          p_practice?: boolean;
         };
         Returns: { hearts_left: number; unlimited_hearts: boolean }[];
       };

@@ -349,7 +349,10 @@ $$;
 
 /**
  * Records one answer. Returns the hearts left afterwards.
- * A wrong answer costs a heart unless the learner has an active subscription.
+ *
+ * A wrong answer costs a heart unless the learner has an active subscription or
+ * the answer came from a practice run — practice is a warm-up over questions
+ * already met, so it never puts the lesson path out of reach.
  */
 create or replace function public.record_answer(
   p_question_id text,
@@ -358,7 +361,8 @@ create or replace function public.record_answer(
   p_question_type text,
   p_is_correct boolean,
   p_answer text default null,
-  p_duration_ms integer default null
+  p_duration_ms integer default null,
+  p_practice boolean default false
 )
 returns table (hearts_left smallint, unlimited_hearts boolean)
 language plpgsql
@@ -384,7 +388,7 @@ begin
   v_unlimited := public.has_active_subscription(v_user);
   v_hearts := public.settle_hearts(v_user);
 
-  if not p_is_correct and not v_unlimited then
+  if not p_is_correct and not v_unlimited and not coalesce(p_practice, false) then
     update public.game_state
       set hearts = greatest(0, hearts - 1)::smallint,
           hearts_updated_at = case when hearts = 5 then now() else hearts_updated_at end,
@@ -656,7 +660,7 @@ as $$
   limit least(coalesce(p_limit, 20), 50);
 $$;
 
-grant execute on function public.record_answer(text, text, text, text, boolean, text, integer) to authenticated;
+grant execute on function public.record_answer(text, text, text, text, boolean, text, integer, boolean) to authenticated;
 grant execute on function public.complete_lesson(text, text, text, integer, integer, integer) to authenticated;
 grant execute on function public.get_game_state() to authenticated;
 grant execute on function public.refill_hearts() to authenticated;
