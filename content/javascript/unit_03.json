@@ -600,19 +600,19 @@
           "type": "spot_bug",
           "difficulty": "hard",
           "prompt": {
-            "en": "Which line has the wrong output?",
-            "tr": "Hangi satırın çıktısı yanlış?"
+            "en": "This code should add 1 to the rounded price and print 21, but it prints 20.001. Which line is wrong?",
+            "tr": "Bu kod yuvarlanmış fiyata 1 eklemeli ve 21 yazdırmalı, ama 20.001 yazdırıyor. Hangi satır hatalı?"
           },
           "codeLines": [
-            "console.log(Math.round(2.5));",
-            "console.log(Math.floor(2.5));",
-            "console.log((2.5).toFixed(0));"
+            "let price = 19.999;",
+            "let rounded = price.toFixed(2);",
+            "console.log(rounded + 1);"
           ],
           "buggyLineIndex": 2,
-          "fix": "console.log((2.5).toFixed(1));",
+          "fix": "console.log(Number(rounded) + 1);",
           "explanation": {
-            "en": "toFixed(0) removes all decimals, so (2.5).toFixed(0) prints 2 or 3 depending on JavaScript's rounding. toFixed(1) would print 2.5 as is.",
-            "tr": "toFixed(0) tüm ondalıkları kaldırır, bu yüzden (2.5).toFixed(0) JavaScript'in yuvarlama kuralına göre 2 veya 3 yazdırır. toFixed(1) 2.5'i olduğu gibi yazdırırdı."
+            "en": "toFixed() returns a string, not a number. So rounded + 1 concatenates \"20.00\" and 1 into \"20.001\" instead of adding. Number(rounded) converts it back to a number first.",
+            "tr": "toFixed() sayı değil, string döndürür. Bu yüzden rounded + 1, \"20.00\" ile 1'i toplamaz, birleştirip \"20.001\" yapar. Number(rounded) önce onu tekrar sayıya çevirir."
           }
         },
         {
@@ -624,28 +624,28 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "// Check divisibility and round a calculation\nlet price = 9.99;\nconsole.log(price * 100);\nconsole.log(Math.round(price * 100));\nconsole.log((price * 100).toFixed(0));",
-            "tr": "// Bölünebilirliği kontrol et ve bir hesaplamayı yuvarla\nlet price = 9.99;\nconsole.log(price * 100);\nconsole.log(Math.round(price * 100));\nconsole.log((price * 100).toFixed(0));"
+            "en": "// Convert a price to cents and round it\nlet price = 19.99;\nconsole.log(price * 100);\nconsole.log(Math.round(price * 100));\nconsole.log((price * 100).toFixed(0));",
+            "tr": "// Bir fiyatı sent'e çevirip yuvarla\nlet price = 19.99;\nconsole.log(price * 100);\nconsole.log(Math.round(price * 100));\nconsole.log((price * 100).toFixed(0));"
           },
           "keyPoints": {
             "en": [
-              "multiplies 9.99 by 100 to get cents",
-              "uses Math.round to round the result",
-              "uses toFixed to show only whole numbers"
+              "multiplies 19.99 by 100, which lands on 1998.9999999999998 due to floating-point rounding",
+              "uses Math.round to clean the result up to the nearest integer, 1999",
+              "uses toFixed(0) to format the same result as the string \"1999\""
             ],
             "tr": [
-              "9.99'u 100 ile çarparak sent cinsine çevirir",
-              "sonucu yuvarlamak için Math.round kullanır",
-              "sadece tam sayıları göstermek için toFixed kullanır"
+              "19.99'u 100 ile çarpar, kayan nokta yuvarlama hatası yüzünden sonuç 1998.9999999999998 çıkar",
+              "Math.round ile sonucu en yakın tam sayı olan 1999'a temizler",
+              "toFixed(0) ile aynı sonucu \"1999\" string'i olarak biçimlendirir"
             ]
           },
           "sampleAnswer": {
-            "en": "The code converts a price to cents (9.99 * 100 = 999), then shows how to round that result using both Math.round and toFixed to get 999 or 1000.",
-            "tr": "Kod bir fiyatı sent'e çevirir (9.99 * 100 = 999), sonra Math.round ve toFixed kullanarak sonucu yuvarlamanın yollarını gösterir."
+            "en": "The code multiplies 19.99 by 100, which due to floating-point math gives 1998.9999999999998 instead of a clean 1999. Both Math.round and toFixed(0) correct this to 1999.",
+            "tr": "Kod 19.99'u 100 ile çarpar; kayan nokta hesaplaması yüzünden tam 1999 yerine 1998.9999999999998 çıkar. Math.round ve toFixed(0) bu sonucu 1999'a düzeltir."
           },
           "explanation": {
-            "en": "Math.round and toFixed both handle rounding, but they work differently. toFixed returns a string; Math.round returns a number. Both are useful in different situations.",
-            "tr": "Math.round ve toFixed ikisi de yuvarlama yapır ama farklı şekilde çalışırlar. toFixed metin döndürür; Math.round sayı döndürür. Her ikisi farklı durumlarda faydalıdır."
+            "en": "Floating-point multiplication can produce tiny errors like 1998.9999999999998. Math.round and toFixed(0) both clean this up, but Math.round returns a number while toFixed returns a string.",
+            "tr": "Kayan nokta çarpımı 1998.9999999999998 gibi küçük hatalar üretebilir. Math.round ve toFixed(0) bunu düzeltir, ama Math.round sayı, toFixed ise string döndürür."
           }
         }
       ]

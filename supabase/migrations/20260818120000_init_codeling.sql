@@ -9,9 +9,19 @@
 --     writable only by the service role (the RevenueCat webhook).
 --   * Game state is advanced through SECURITY DEFINER functions so the client can
 --     never mint XP, refill hearts or fake a streak by writing rows directly.
---   * Question content itself is bundled with the app; only the grading rubric of
---     AI-graded questions is mirrored here so the edge function never trusts the
---     client for it.
+--   * Question content itself is bundled with the app; what each lesson is worth
+--     and the rubric of every AI-graded question are mirrored here, so neither
+--     the payout nor the grading standard is taken from the client.
+--
+-- Threat model, stated plainly:
+--   A tampered client CAN claim it answered correctly — the answers for every
+--   non-AI question ship inside the app, so grading them server-side would
+--   change nothing. What it CANNOT do is decide what that claim is worth: the
+--   question count and the XP come from `lesson_catalog`, XP is paid only for
+--   improvement over the lesson's best score, practice is capped per day, and
+--   the one feature that costs real money (AI grading) is gated on the
+--   subscription mirror and an atomic per-user quota. The worst outcome is a
+--   learner inflating their own numbers, which costs nothing and fools nobody.
 
 set check_function_bodies = off;
 

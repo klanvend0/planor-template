@@ -249,7 +249,7 @@
           "difficulty": "medium",
           "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
           "codeLines": [
-            "password = \"secret\";",
+            "let password = \"secret\";",
             "if (password == \"secret\") {",
             "  console.log(\"Correct\");\n}"
           ],
@@ -269,8 +269,8 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını anlat."
           },
           "code": {
-            "en": "// Detects when the password is correct\npassword = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}",
-            "tr": "// Şifreler doğru olduğunda algılar\npassword = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}"
+            "en": "// Detects when the password is correct\nlet password = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}",
+            "tr": "// Şifre doğru olduğunda algılar\nlet password = \"secret123\";\nif (password === \"secret123\") {\n  console.log(\"Access granted\");\n} else {\n  console.log(\"Wrong password\");\n}"
           },
           "keyPoints": {
             "en": [
@@ -306,10 +306,10 @@
         },
         "body": {
           "en": "The && operator means AND: both conditions must be true. The || operator means OR: at least one must be true. The ! operator means NOT: it reverses a condition. These let you build if statements that check multiple things at once. For example, (age > 13 && role === \"admin\") runs only if age is over 13 AND role is exactly admin.",
-          "tr": "&&, AND anlamında olur: her iki koşul da doğru olmalı. || operatörü OR anlamında olur: en az biri doğru olmalı. ! operatörü NOT anlamında olur: bir koşulu tersine çevirir. Bunlar bir kerede birden fazla şeyi kontrol eden if ifadeleri kurmana izin verir. Örneğin, (age > 13 && role === \"admin\") sadece age 13'ten büyükse VE role tam olarak admin'se çalışır."
+          "tr": "&& operatörü AND anlamında olur: her iki koşul da doğru olmalı. || operatörü OR anlamında olur: en az biri doğru olmalı. ! operatörü NOT anlamında olur: bir koşulu tersine çevirir. Bunlar bir kerede birden fazla şeyi kontrol eden if ifadeleri kurmana izin verir. Örneğin, (age > 13 && role === \"admin\") sadece age 13'ten büyükse VE role tam olarak admin'se çalışır."
         },
         "example": {
-          "code": "age = 20;\nhasLicense = true;\nif (age > 18 && hasLicense) {\n  console.log(\"Can drive\");\n}",
+          "code": "let age = 20;\nlet hasLicense = true;\nif (age > 18 && hasLicense) {\n  console.log(\"Can drive\");\n}",
           "caption": {
             "en": "Both must be true for && to allow the code to run.",
             "tr": "&&'nin kodu çalıştırmasına izin vermesi için ikisi de doğru olmalı."
@@ -322,7 +322,7 @@
           "type": "multiple_choice",
           "difficulty": "medium",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "x = 5;\nif (x > 3 && x < 10) {\n  console.log(\"In range\");\n}",
+          "code": "let x = 5;\nif (x > 3 && x < 10) {\n  console.log(\"In range\");\n}",
           "options": [
             { "id": "a", "text": { "en": "In range", "tr": "In range" } },
             { "id": "b", "text": { "en": "5", "tr": "5" } },
@@ -332,7 +332,7 @@
           "answerId": "a",
           "explanation": {
             "en": "5 > 3 is true AND 5 < 10 is true, so both sides of && are true and the if block runs.",
-            "tr": "5 > 3 doğu VE 5 < 10 doğu olur, yani &&'nin her iki tarafı da doğu ve if bloğu çalışır."
+            "tr": "5 > 3 doğru VE 5 < 10 doğru olur, yani &&'nin her iki tarafı da doğru olduğundan if bloğu çalışır."
           }
         },
         {
@@ -340,7 +340,7 @@
           "type": "multiple_choice",
           "difficulty": "medium",
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
-          "code": "animal = \"cat\";\nif (animal === \"dog\" || animal === \"cat\") {\n  console.log(\"Pet\");\n}",
+          "code": "let animal = \"cat\";\nif (animal === \"dog\" || animal === \"cat\") {\n  console.log(\"Pet\");\n}",
           "options": [
             { "id": "a", "text": { "en": "Pet", "tr": "Pet" } },
             { "id": "b", "text": { "en": "cat", "tr": "cat" } },
@@ -350,7 +350,7 @@
           "answerId": "a",
           "explanation": {
             "en": "The first part (animal === \"dog\") is false, but the second part (animal === \"cat\") is true. Since || means OR, only one needs to be true.",
-            "tr": "İlk kısım (animal === \"dog\") yanlış ama ikinci kısım (animal === \"cat\") doğu olur. || OR anlamında olduğundan sadece biri doğru olması yeterlidir."
+            "tr": "İlk kısım (animal === \"dog\") yanlış ama ikinci kısım (animal === \"cat\") doğru olur. || OR anlamına geldiğinden sadece birinin doğru olması yeterlidir."
           }
         },
         {
@@ -361,11 +361,11 @@
             "en": "Complete the condition using ! to run code when level is NOT 1.",
             "tr": "level'in 1 OLMAMASI durumunda kodu çalıştıracak koşulu ! kullanarak tamamla."
           },
-          "codeTemplate": "if (___ level === 1) {\n  console.log(\"Not the first level\");\n}",
+          "codeTemplate": "if (___(level === 1)) {\n  console.log(\"Not the first level\");\n}",
           "blanks": [{ "id": "1", "answer": "!", "distractors": ["!!", "not", "~"] }],
           "explanation": {
-            "en": "The ! operator reverses a condition. ! (level === 1) means NOT (level equals 1), which is true when level is anything but 1.",
-            "tr": "! operatörü bir koşulu tersine çevirir. !(level === 1) demek NOT (level eşittir 1) anlamına gelir ve level 1 dışında bir şey olduğunda doğu olur."
+            "en": "The ! operator reverses a condition. !(level === 1) means NOT (level equals 1), which is true whenever level is anything other than 1.",
+            "tr": "! operatörü bir koşulu tersine çevirir. !(level === 1) demek (level eşittir 1) DEĞİL anlamına gelir ve level 1 dışında herhangi bir değerde true olur."
           }
         },
         {
@@ -376,7 +376,7 @@
             "en": "Write an if statement that prints Approved if score is at least 80 and name is not empty.",
             "tr": "score en az 80 VE name boş değilse Approved yazdıran bir if ifadesi yaz."
           },
-          "code": "score = 85;\nname = \"Alice\";",
+          "code": "let score = 85;\nlet name = \"Alice\";",
           "expected": "if (score >= 80 && name !== \"\") {\n  console.log(\"Approved\");\n}",
           "acceptable": [
             "if (score >= 80 && name != \"\") {\n  console.log(\"Approved\");\n}",
@@ -397,11 +397,12 @@
             "tr": "Satırları doğru sıraya koy."
           },
           "lines": [
-            "x = 7;",
+            "let x = 7;",
             "if (x > 5 && x < 10) {",
             "  console.log(\"In range\");",
             "} else {",
-            "  console.log(\"Out\");\n}"
+            "  console.log(\"Out\");",
+            "}"
           ],
           "verify": { "stdout": "In range\n" },
           "explanation": {
