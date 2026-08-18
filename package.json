@@ -24,7 +24,8 @@
     "generate:apple-secret": "node scripts/generate_apple_secret.js",
     "expo:doctor": "npx expo-doctor",
     "test": "jest",
-    "content:seed": "node scripts/generate_content_seed.mts"
+    "content:seed": "node scripts/generate_content_seed.mts",
+    "i18n:check": "node scripts/check_i18n.mts"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",

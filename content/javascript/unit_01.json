@@ -181,12 +181,12 @@
             "tr": "Bilgisayar bir yorumla ne yapar?"
           },
           "options": [
-            { "id": "a", "text": { "en": "Ignores it completely", "tr": "Tamamen yok sayar" } },
-            { "id": "b", "text": { "en": "Prints it to the screen", "tr": "Ekrana yazdırır" } },
-            { "id": "c", "text": { "en": "Causes an error", "tr": "Hata üretir" } },
-            { "id": "d", "text": { "en": "Saves it to a file", "tr": "Bir dosyaya kaydeder" } }
+            { "id": "a", "text": { "en": "Prints it to the screen", "tr": "Ekrana yazdırır" } },
+            { "id": "b", "text": { "en": "Causes an error", "tr": "Hata üretir" } },
+            { "id": "c", "text": { "en": "Saves it to a file", "tr": "Bir dosyaya kaydeder" } },
+            { "id": "d", "text": { "en": "Ignores it completely", "tr": "Tamamen yok sayar" } }
           ],
-          "answerId": "a",
+          "answerId": "d",
           "explanation": {
             "en": "Comments are only for humans to read. JavaScript skips everything after // on a line and never executes it.",
             "tr": "Yorumlar sadece insanlar için yazılır. JavaScript satırda // den sonrasını atlar ve asla çalıştırmaz."
@@ -323,12 +323,12 @@
           "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
           "code": "console.log(\"25\");",
           "options": [
-            { "id": "a", "text": { "en": "25", "tr": "25" } },
-            { "id": "b", "text": { "en": "The text 25", "tr": "25 metni" } },
-            { "id": "c", "text": { "en": "An error", "tr": "Bir hata" } },
-            { "id": "d", "text": { "en": "\"25\"", "tr": "\"25\"" } }
+            { "id": "a", "text": { "en": "The text 25", "tr": "25 metni" } },
+            { "id": "b", "text": { "en": "An error", "tr": "Bir hata" } },
+            { "id": "c", "text": { "en": "\"25\"", "tr": "\"25\"" } },
+            { "id": "d", "text": { "en": "25", "tr": "25" } }
           ],
-          "answerId": "a",
+          "answerId": "d",
           "explanation": {
             "en": "When 25 is in quotes, it is text, so JavaScript prints exactly 25. The quotes are not part of the output; they just tell JavaScript to treat 25 as a string.",
             "tr": "25 tırnak içindeyken bir string'e dönüşür, bu yüzden JavaScript tam olarak 25 yazdırır. Tırnaklar çıktının bir parçası değildir; sadece JavaScript'in 25'i string olarak ele almasını sağlar."

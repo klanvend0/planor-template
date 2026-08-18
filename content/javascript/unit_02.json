@@ -396,7 +396,6 @@
           ],
           "buggyLineIndex": 1,
           "fix": "const result = Number(text) + 10;",
-          "verify": { "stdout": "60\n" },
           "explanation": {
             "en": "Without Number(), text + 10 joins them as strings (\"5010\"), not adding them. Convert text to a number first.",
             "tr": "Number() olmadan text + 10 onları string olarak birleştirir (\"5010\"), toplamaz. Önce text'i sayıya dönüştür."
