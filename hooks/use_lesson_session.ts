@@ -16,11 +16,7 @@ import { isPremiumQuestion, questionXp, type Lesson, type Question } from '@/lib
 import { starsForScore } from '@/lib/gamification';
 import { correctFeedback, incorrectFeedback } from '@/lib/haptics';
 import { toAppError, type AppError } from '@/lib/errors';
-import {
-  getLessonBaseXp,
-  getQuestionLocation,
-  type LessonLocation,
-} from '@/services/content_service';
+import { getQuestionLocation, type LessonLocation } from '@/services/content_service';
 import { gradeExplanation, type ExplanationReview } from '@/services/grading_service';
 import { recordPractice, type LessonResult } from '@/services/progress_service';
 import { useGameStore } from '@/stores/game_store';
@@ -125,11 +121,18 @@ export function useLessonSession(
   const requeued = useRef(new Set<string>());
   /** Questions the learner has seen, for the progress bar. */
   const seen = useRef(new Set<string>());
+  /**
+   * Questions skipped rather than answered — in practice the AI-graded one when
+   * the learner is on the free plan. They leave the denominator, so a free
+   * learner can still finish a lesson at 100% instead of being capped at 5/6.
+   */
+  const skipped = useRef(new Set<string>());
+  const [skippedCount, setSkippedCount] = useState(0);
   const questionStartedAt = useRef(Date.now());
   const sessionStartedAt = useRef(Date.now());
 
   const question = queue[0] ?? null;
-  const total = sourceQuestions.length;
+  const total = Math.max(1, sourceQuestions.length - skippedCount);
 
   const state = useMemo<SessionState>(
     () => ({
@@ -147,7 +150,7 @@ export function useLessonSession(
       outcome,
       elapsedMs: Date.now() - sessionStartedAt.current,
     }),
-    [phase, question, total, lastResult, review, isGrading, isFinishing, error, outcome]
+    [phase, question, total, lastResult, review, isGrading, isFinishing, error, outcome, skippedCount]
   );
 
   const begin = useCallback(() => {
@@ -264,13 +267,19 @@ export function useLessonSession(
           dailyXp: practice.dailyXp,
         });
       } else {
+        // Skipped questions leave the reward too, not just the denominator —
+        // otherwise skipping the premium question would pay for itself.
+        const baseXp = sourceQuestions
+          .filter((entry) => !skipped.current.has(entry.id))
+          .reduce((sum, entry) => sum + questionXp(entry), 0);
+
         const result = await finishLesson({
           lessonId: lesson.id,
           unitId: location.unit.id,
           courseId: location.course.id,
           correct,
           total,
-          baseXp: getLessonBaseXp(lesson),
+          baseXp,
         });
         setOutcome(result);
       }
@@ -288,6 +297,7 @@ export function useLessonSession(
     location.course.id,
     location.unit.id,
     mode,
+    sourceQuestions,
     total,
   ]);
 
@@ -309,6 +319,10 @@ export function useLessonSession(
   const skip = useCallback(() => {
     if (!question) return;
     seen.current.add(question.id);
+    if (!skipped.current.has(question.id)) {
+      skipped.current.add(question.id);
+      setSkippedCount(skipped.current.size);
+    }
     void advance();
   }, [advance, question]);
 
