@@ -17,33 +17,31 @@ import { completeLesson, recordAnswer } from '@/services/progress_service';
 const recordAnswerMock = recordAnswer as jest.MockedFunction<typeof recordAnswer>;
 const completeLessonMock = completeLesson as jest.MockedFunction<typeof completeLesson>;
 
-const answer = (questionId: string) =>
-  ({
-    kind: 'answer' as const,
-    payload: {
-      questionId,
-      questionType: 'multiple_choice' as const,
-      lessonId: 'py-u01-l1',
-      courseId: 'python' as const,
-      isCorrect: true,
-    },
-  });
+const answer = (questionId: string) => ({
+  kind: 'answer' as const,
+  payload: {
+    questionId,
+    questionType: 'multiple_choice' as const,
+    lessonId: 'py-u01-l1',
+    courseId: 'python' as const,
+    isCorrect: true,
+  },
+});
 
-const lesson = () =>
-  ({
-    kind: 'lesson' as const,
-    payload: {
-      lessonId: 'py-u01-l1',
-      unitId: 'py-u01',
-      courseId: 'python' as const,
-      correct: 6,
-      total: 6,
-      baseXp: 90,
-    },
-  });
+const lesson = () => ({
+  kind: 'lesson' as const,
+  payload: {
+    lessonId: 'py-u01-l1',
+    unitId: 'py-u01',
+    courseId: 'python' as const,
+    correct: 6,
+    total: 6,
+    baseXp: 90,
+  },
+});
 
 beforeEach(() => {
-  useSyncQueue.setState({ entries: [], flushing: false });
+  useSyncQueue.setState({ entries: [], flushing: false, ownerId: 'learner-1' });
   recordAnswerMock.mockReset();
   completeLessonMock.mockReset();
   recordAnswerMock.mockResolvedValue({ heartsLeft: 5, unlimitedHearts: false });
@@ -134,6 +132,44 @@ describe('sync queue', () => {
     expect(recordAnswerMock).not.toHaveBeenCalled();
   });
 
+  it('drops the backlog when a different learner signs in', () => {
+    const { enqueue, setOwner } = useSyncQueue.getState();
+    enqueue(answer('q1'));
+    expect(useSyncQueue.getState().entries).toHaveLength(1);
+
+    setOwner('learner-2');
+    expect(useSyncQueue.getState().entries).toHaveLength(0);
+    expect(useSyncQueue.getState().ownerId).toBe('learner-2');
+  });
+
+  it('sends nothing while signed out', async () => {
+    const { enqueue } = useSyncQueue.getState();
+    enqueue(answer('q1'));
+    useSyncQueue.setState({ ownerId: null });
+
+    expect(await useSyncQueue.getState().flush()).toBe(0);
+    expect(recordAnswerMock).not.toHaveBeenCalled();
+  });
+
+  it('refuses to replay a write stamped with another learner', async () => {
+    useSyncQueue.setState({
+      ownerId: 'learner-2',
+      entries: [
+        {
+          id: 'a',
+          kind: 'answer',
+          queuedAt: 1,
+          userId: 'learner-1',
+          payload: answer('q1').payload,
+        },
+      ],
+    });
+
+    expect(await useSyncQueue.getState().flush()).toBe(0);
+    expect(recordAnswerMock).not.toHaveBeenCalled();
+    expect(useSyncQueue.getState().entries).toHaveLength(0);
+  });
+
   it('caps the backlog instead of growing without bound', () => {
     const { enqueue } = useSyncQueue.getState();
     for (let index = 0; index < 250; index += 1) enqueue(answer(`q${index}`));
@@ -141,8 +177,8 @@ describe('sync queue', () => {
     const entries = useSyncQueue.getState().entries;
     expect(entries).toHaveLength(200);
     // The oldest are dropped first, so the most recent play survives.
-    expect((entries[entries.length - 1] as { payload: { questionId: string } }).payload.questionId).toBe(
-      'q249'
-    );
+    expect(
+      (entries[entries.length - 1] as { payload: { questionId: string } }).payload.questionId
+    ).toBe('q249');
   });
 });

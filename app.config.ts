@@ -15,6 +15,10 @@ import appJson from './app.json';
 const baseConfig = appJson.expo as ExpoConfig;
 
 export default ({ config }: ConfigContext): ExpoConfig => {
+  // `eas init` writes the project id into app.json's extra.eas. Only override it
+  // when an id is explicitly provided, or a build would blank the linked one.
+  const projectId = process.env.EAS_PROJECT_ID;
+
   return {
     ...baseConfig,
     // Merge any dynamic config from the default config context
@@ -22,12 +26,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     // Ensure the name and slug are always set from app.json
     name: baseConfig.name,
     slug: baseConfig.slug,
-    // Extra field for runtime environment variables if needed
     extra: {
+      ...baseConfig.extra,
       ...config.extra,
-      eas: {
-        projectId: process.env.EAS_PROJECT_ID,
-      },
+      ...(projectId ? { eas: { projectId } } : {}),
     },
   };
 };

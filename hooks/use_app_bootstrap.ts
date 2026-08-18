@@ -68,10 +68,14 @@ export function useAppBootstrap(): BootstrapState {
     if (!userId) {
       identifiedUser.current = null;
       resetAnalytics();
+      // Anything still queued belonged to the account that just left.
+      useSyncQueue.getState().setOwner(null);
       clearGame();
       clearProgress();
       return;
     }
+
+    useSyncQueue.getState().setOwner(userId);
     if (identifiedUser.current === userId) return;
 
     identifiedUser.current = userId;

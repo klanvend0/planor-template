@@ -112,7 +112,7 @@
     },
     "ready": {
       "title": "Your first lesson is ready",
-      "subtitle": "%{days} days of Pro are on us. Cancel any time.",
+      "subtitle": "Pro is on us while you try it. Cancel any time.",
       "cta": "Start learning"
     },
     "progress": "Step %{current} of %{total}"
@@ -195,7 +195,7 @@
     "show_sample": "Show a model answer",
     "locked_title": "AI feedback is a Pro feature",
     "locked_body": "Write an explanation in your own words and an AI tells you exactly what you understood and what you missed.",
-    "locked_cta": "Try Pro free for %{days} days",
+    "locked_cta": "Unlock Pro",
     "locked_skip": "Skip this question",
     "offline": "AI feedback needs a connection."
   },
@@ -337,7 +337,22 @@
     "unavailable": "The store is unavailable right now. Please try again later.",
     "period_week": "/ week",
     "period_month": "/ month",
-    "period_year": "/ year"
+    "period_year": "/ year",
+    "plan_two_month": "Every 2 months",
+    "plan_three_month": "Quarterly",
+    "plan_six_month": "Every 6 months",
+    "plan_lifetime": "Lifetime",
+    "plan_other": "Pro",
+    "per_two_month": "%{price} / 2 months",
+    "per_three_month": "%{price} / 3 months",
+    "per_six_month": "%{price} / 6 months",
+    "per_once": "%{price} once",
+    "period_two_month": "/ 2 months",
+    "period_three_month": "/ 3 months",
+    "period_six_month": "/ 6 months",
+    "period_once": "one time",
+    "purchase_done": "You are Pro. Everything is unlocked.",
+    "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings."
   },
   "settings": {
     "title": "Settings",

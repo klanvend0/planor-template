@@ -29,6 +29,8 @@ export type QueuedAnswer = {
   id: string;
   kind: 'answer';
   queuedAt: number;
+  /** The learner this write belongs to; see {@link setQueueOwner}. */
+  userId?: string;
   payload: {
     questionId: string;
     questionType: QuestionType;
@@ -45,6 +47,7 @@ export type QueuedLesson = {
   id: string;
   kind: 'lesson';
   queuedAt: number;
+  userId?: string;
   payload: {
     lessonId: string;
     unitId: string;
@@ -62,12 +65,20 @@ export type QueuedWrite = QueuedAnswer | QueuedLesson;
 type SyncQueueState = {
   entries: QueuedWrite[];
   flushing: boolean;
+  /**
+   * Who the queued writes belong to. Devices are shared and accounts are
+   * deleted, so writes from a previous session must never be replayed into
+   * whoever signs in next.
+   */
+  ownerId: string | null;
 };
 
 type SyncQueueActions = {
   enqueue: (
     entry: Omit<QueuedAnswer, 'id' | 'queuedAt'> | Omit<QueuedLesson, 'id' | 'queuedAt'>
   ) => void;
+  /** Bind the queue to a learner, dropping anything left by a different one. */
+  setOwner: (userId: string | null) => void;
   /** Replay pending writes oldest-first. Stops at the first network failure. */
   flush: () => Promise<number>;
   clear: () => void;
@@ -84,6 +95,14 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
     (set, get) => ({
       entries: [],
       flushing: false,
+      ownerId: null,
+
+      setOwner: (userId) =>
+        set((state) => {
+          // A different learner (or none): their queue is not this one's to send.
+          if (state.ownerId === userId) return { ownerId: userId };
+          return { ownerId: userId, entries: [] };
+        }),
 
       enqueue: (entry) =>
         set((state) => {
@@ -96,6 +115,7 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
 
       flush: async () => {
         if (get().flushing || get().entries.length === 0) return 0;
+        if (!get().ownerId) return 0;
         set({ flushing: true });
 
         let replayed = 0;
@@ -103,6 +123,14 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
           // Re-read the queue each round: a lesson can finish mid-flush.
           while (get().entries.length > 0) {
             const [entry, ...rest] = get().entries;
+
+            // Belt and braces: an entry stamped with another learner is dropped
+            // rather than sent, even if setOwner was missed somehow.
+            if (entry.userId && entry.userId !== get().ownerId) {
+              set({ entries: rest });
+              continue;
+            }
+
             try {
               if (entry.kind === 'answer') {
                 await recordAnswer({
@@ -140,7 +168,7 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
       name: 'codeling.sync_queue',
       storage: createJSONStorage(() => AsyncStorage),
       version: 1,
-      partialize: ({ entries }) => ({ entries }),
+      partialize: ({ entries, ownerId }) => ({ entries, ownerId }),
     }
   )
 );

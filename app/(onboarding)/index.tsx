@@ -36,7 +36,6 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
 import { track } from '@/lib/analytics';
-import { TRIAL_DAYS } from '@/lib/constants';
 import type { CourseId } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
 import type { SupportedLocale } from '@/lib/i18n';
@@ -360,7 +359,7 @@ export default function OnboardingScreen() {
                 {t('onboarding.ready.title')}
               </Text>
               <Text className="text-center text-[15px] leading-6 text-muted-foreground">
-                {t('onboarding.ready.subtitle', { days: TRIAL_DAYS })}
+                {t('onboarding.ready.subtitle')}
               </Text>
             </Animated.View>
           ) : null}

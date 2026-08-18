@@ -16,7 +16,7 @@
 import { router } from 'expo-router';
 import { Check, Sparkles, X } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, Pressable, ScrollView, View } from 'react-native';
 import type { PurchasesPackage } from 'react-native-purchases';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -125,7 +125,7 @@ export default function PaywallScreen() {
           product_id: selected.product.identifier,
           trial: eligibleForTrial,
         });
-        Alert.alert(t('paywall.title'), t('paywall.restore_done'));
+        Alert.alert(t('paywall.title'), t('paywall.purchase_done'));
         close();
       }
     } catch (error) {
@@ -282,7 +282,7 @@ export default function PaywallScreen() {
         />
 
         <Text className="text-center text-[11px] leading-4 text-muted-foreground">
-          {t('paywall.legal')}
+          {eligibleForTrial ? t('paywall.legal') : t('paywall.legal_no_trial')}
         </Text>
 
         <View className="flex-row items-center justify-center gap-6">

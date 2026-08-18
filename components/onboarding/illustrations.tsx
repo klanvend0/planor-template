@@ -172,8 +172,15 @@ function Bit({
   );
 }
 
-/** The flame silhouette, reused at four sizes to build scene 4's fire. */
-const FLAME = '140,24 156,48 148,48 160,72 120,72 132,48 124,48';
+/**
+ * The flame silhouette, reused at four sizes to build scene 4's fire.
+ *
+ * Deliberately asymmetric — a tall tip leaning right and one short lick on the
+ * left, notched at (134,56). A left/right symmetric two-tier silhouette reads
+ * as a fir tree at this size, not as fire. The base stays flat on y=72 so the
+ * four nested copies, which scale about (140,72), all stand on the same line.
+ */
+const FLAME = '144,22 150,40 162,56 156,72 124,72 118,58 128,46 134,56';
 
 /**
  * Scene 1 — "The screen wakes".
@@ -307,10 +314,13 @@ export function PuzzlesIllustration({
       {/* Glow behind the chip that is on its way up. */}
       <Rect x={104} y={158} width={60} height={32} rx={8} fill={tokens.primary} opacity={0.14} />
 
-      {/* Motion ticks trailing the lifted chip. */}
-      <Rect x={100} y={174} width={4} height={4} fill={tokens.primary} opacity={0.7} />
-      <Rect x={92} y={174} width={4} height={4} fill={tokens.primary} opacity={0.45} />
-      <Rect x={84} y={174} width={4} height={4} fill={tokens.primary} opacity={0.25} />
+      {/* Motion ticks, directly under the lifted chip and fading downwards: the
+          chip is rising towards the blank, so the trail is what it left behind.
+          They cannot sit to its left — that band is where the first chip is,
+          which is drawn after these and would hide two of the three. */}
+      <Rect x={132} y={192} width={4} height={4} fill={tokens.primary} opacity={0.7} />
+      <Rect x={132} y={200} width={4} height={4} fill={tokens.primary} opacity={0.45} />
+      <Rect x={132} y={208} width={4} height={4} fill={tokens.primary} opacity={0.25} />
 
       {/* Token bank. The middle chip is lifted and takes the 3px feature stroke. */}
       {[44, 108, 172].map((chipX, index) => {
@@ -561,6 +571,10 @@ export function StreakIllustration({ width = 280, scheme = 'light', ...props }: 
         const today = index === 5;
         return (
           <G key={index}>
+            {/* An unearned day is a `muted` square, which is barely off the page
+                colour in light mode, so it carries an outline: today's is the
+                brand colour, tomorrow's is plain border. Without it the strike
+                below reads as a slash floating on nothing. */}
             <Rect
               x={x}
               y={110}
@@ -568,8 +582,8 @@ export function StreakIllustration({ width = 280, scheme = 'light', ...props }: 
               height={16}
               rx={4}
               fill={kept ? tokens.streak : tokens.muted}
-              stroke={today ? tokens.primary : undefined}
-              strokeWidth={today ? 2 : undefined}
+              stroke={kept ? undefined : today ? tokens.primary : tokens.border}
+              strokeWidth={kept ? undefined : 2}
               {...STROKE}
             />
             {index === 6 ? (

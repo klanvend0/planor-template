@@ -23,7 +23,7 @@ import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
 import { track } from '@/lib/analytics';
 import { localized } from '@/lib/content_schema';
-import { FREE_UNIT_LIMIT, TRIAL_DAYS } from '@/lib/constants';
+import { FREE_UNIT_LIMIT } from '@/lib/constants';
 import { getCourse, getLesson } from '@/services/content_service';
 import { useGameStore } from '@/stores/game_store';
 import {
@@ -221,7 +221,7 @@ export default function LearnScreen() {
 
               {unitLocked ? (
                 <GameButton
-                  label={t('explain.locked_cta', { days: TRIAL_DAYS })}
+                  label={t('explain.locked_cta')}
                   variant="secondary"
                   onPress={() => router.push('/paywall')}
                 />

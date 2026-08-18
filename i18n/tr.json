@@ -112,7 +112,7 @@
     },
     "ready": {
       "title": "İlk dersin hazır",
-      "subtitle": "Pro'nun ilk %{days} günü bizden. İstediğin an iptal et.",
+      "subtitle": "Denerken Pro bizden. İstediğin an iptal et.",
       "cta": "Öğrenmeye başla"
     },
     "progress": "Adım %{current}/%{total}"
@@ -195,7 +195,7 @@
     "show_sample": "Örnek cevabı göster",
     "locked_title": "Yapay zekâ değerlendirmesi Pro'da",
     "locked_body": "Kodu kendi cümlelerinle anlat; yapay zekâ neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin.",
-    "locked_cta": "Pro'yu %{days} gün ücretsiz dene",
+    "locked_cta": "Pro'yu aç",
     "locked_skip": "Bu soruyu geç",
     "offline": "Yapay zekâ değerlendirmesi için bağlantı gerekiyor."
   },
@@ -337,7 +337,22 @@
     "unavailable": "Mağazaya şu an ulaşılamıyor. Lütfen sonra tekrar dene.",
     "period_week": "/ hafta",
     "period_month": "/ ay",
-    "period_year": "/ yıl"
+    "period_year": "/ yıl",
+    "plan_two_month": "2 ayda bir",
+    "plan_three_month": "3 aylık",
+    "plan_six_month": "6 ayda bir",
+    "plan_lifetime": "Ömür boyu",
+    "plan_other": "Pro",
+    "per_two_month": "%{price} / 2 ay",
+    "per_three_month": "%{price} / 3 ay",
+    "per_six_month": "%{price} / 6 ay",
+    "per_once": "tek seferlik %{price}",
+    "period_two_month": "/ 2 ay",
+    "period_three_month": "/ 3 ay",
+    "period_six_month": "/ 6 ay",
+    "period_once": "tek seferlik",
+    "purchase_done": "Artık Pro üyesin. Her şey açık.",
+    "legal_no_trial": "Ücret, satın alma onayıyla birlikte Apple kimliğinden tahsil edilir. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin."
   },
   "settings": {
     "title": "Ayarlar",

@@ -20,7 +20,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
 import { signOut } from '@/lib/auth';
-import { LINKS } from '@/lib/constants';
+import { APP_STORE_ID, LINKS } from '@/lib/constants';
 import { errorMessageKey, toAppError } from '@/lib/errors';
 import { openExternal } from '@/lib/links';
 import { cn } from '@/lib/utils';
@@ -148,6 +148,8 @@ export default function SettingsScreen() {
         text: t('auth.sign_out'),
         style: 'destructive',
         onPress: async () => {
+          // The reminder talks about a streak this device can no longer see.
+          await cancelDailyReminder();
           await subscriptionSignOut();
           await signOut();
           router.replace('/(auth)/login');
@@ -165,6 +167,7 @@ export default function SettingsScreen() {
         onPress: async () => {
           setDeleting(true);
           try {
+            await cancelDailyReminder();
             await subscriptionSignOut();
             await deleteAccount();
             settings.reset();
@@ -196,7 +199,13 @@ export default function SettingsScreen() {
       await StoreReview.requestReview();
       return;
     }
-    await openExternal(LINKS.support);
+    // No in-app prompt available (already reviewed, or no App Store id yet):
+    // fall back to the store listing, and only then to support.
+    await openExternal(
+      APP_STORE_ID
+        ? `https://apps.apple.com/app/id${APP_STORE_ID}?action=write-review`
+        : LINKS.support
+    );
   };
 
   const themeLabel: Record<ColorSchemePreference, string> = {
