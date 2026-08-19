@@ -169,6 +169,7 @@ or Pro will not unlock for the reviewer even though their purchase succeeded.
 ```bash
 npm run verify            # types, formatting, tests, i18n and the question bank
 npm run db:check          # the RPCs, against a throwaway PostgreSQL
+npm run functions:check   # the edge functions, against a stand-in for Supabase
 npm run expo:doctor
 ```
 

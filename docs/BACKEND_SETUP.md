@@ -91,6 +91,11 @@ to parse as a Supabase JWT and reject before the handler runs. This is the singl
 most common reason a RevenueCat → Supabase webhook silently never fires. The
 function checks the secret itself.
 
+`npm run functions:check` runs the handlers locally against a stand-in for
+GoTrue, PostgREST, RevenueCat and the AI provider (`supabase/functions/_tests`),
+so what they send is checked before a deploy rather than after one. It needs
+Deno, and says so and passes if Deno is not installed.
+
 ### Secrets
 
 ```bash
