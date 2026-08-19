@@ -13,7 +13,7 @@ import * as Application from 'expo-application';
 import * as StoreReview from 'expo-store-review';
 import { ArrowLeft, ChevronRight } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Alert, AppState, Pressable, ScrollView, Switch, View } from 'react-native';
+import { Alert, AppState, Platform, Pressable, ScrollView, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Kicker } from '@/components/kicker';
@@ -24,7 +24,7 @@ import { signOut } from '@/lib/auth';
 import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { APP_STORE_ID, LINKS } from '@/lib/constants';
 import { errorMessageKey, toAppError } from '@/lib/errors';
-import { openExternal } from '@/lib/links';
+import { openExternal, openStoreUrl } from '@/lib/links';
 import { cn } from '@/lib/utils';
 import { deleteAccount } from '@/services/account_service';
 import {
@@ -132,7 +132,7 @@ export default function SettingsScreen() {
     return () => subscription.remove();
   }, []);
 
-  const remindersLive = settings.remindersEnabled && reminderPermission;
+  const remindersBlocked = settings.remindersEnabled && !reminderPermission;
 
   const toggleReminders = async (enabled: boolean) => {
     if (!enabled) {
@@ -186,7 +186,11 @@ export default function SettingsScreen() {
   };
 
   const confirmDelete = () => {
-    Alert.alert(t('settings.delete_title'), t('settings.delete_body'), [
+    // Name the store the subscription is actually in. Telling an Android
+    // learner to cancel in the App Store leaves them charged and looking in the
+    // wrong place; on the local backend there is no store at all.
+    const store = t(Platform.OS === 'android' ? 'settings.store_google' : 'settings.store_apple');
+    Alert.alert(t('settings.delete_title'), t('settings.delete_body', { store }), [
       { text: t('common.cancel'), style: 'cancel' },
       {
         text: t('settings.delete_confirm'),
@@ -236,13 +240,23 @@ export default function SettingsScreen() {
       await StoreReview.requestReview();
       return;
     }
-    // No in-app prompt available (already reviewed, or no App Store id yet):
-    // fall back to the store listing, and only then to support.
-    await openExternal(
-      APP_STORE_ID
-        ? `https://apps.apple.com/app/id${APP_STORE_ID}?action=write-review`
-        : LINKS.support
-    );
+    // No in-app prompt available (already reviewed, or no store id yet): fall
+    // back to this platform's own listing, and only then to support. Sending an
+    // Android learner to the App Store would be a dead end.
+    const listing =
+      Platform.OS === 'android'
+        ? Application.applicationId
+          ? `https://play.google.com/store/apps/details?id=${Application.applicationId}`
+          : null
+        : APP_STORE_ID
+          ? `https://apps.apple.com/app/id${APP_STORE_ID}?action=write-review`
+          : null;
+
+    if (listing) {
+      await openStoreUrl(listing);
+      return;
+    }
+    await openExternal(LINKS.support);
   };
 
   const themeLabel: Record<ColorSchemePreference, string> = {
@@ -322,14 +336,15 @@ export default function SettingsScreen() {
           />
           <Row
             label={t('settings.reminders')}
-            value={
-              settings.remindersEnabled && !reminderPermission
-                ? t('settings.reminders_denied')
-                : undefined
-            }
+            // The switch shows the learner's own preference, so turning it off
+            // always works. Whether the OS will actually deliver anything is a
+            // separate fact, said next to it rather than folded into the switch
+            // — a switch that renders off can only ever emit "on", which would
+            // strand the preference permanently once permission was revoked.
+            value={remindersBlocked ? t('settings.reminders_blocked') : undefined}
             right={
               <Switch
-                value={remindersLive}
+                value={settings.remindersEnabled}
                 onValueChange={(value) => void toggleReminders(value)}
                 accessibilityLabel={t('settings.reminders')}
               />
@@ -349,7 +364,7 @@ export default function SettingsScreen() {
             value={isPro ? t('profile.pro_member') : t('profile.free_member')}
             onPress={() =>
               isPro && !USES_LOCAL_BACKEND
-                ? void openExternal(LINKS.manageSubscription)
+                ? void openStoreUrl(LINKS.manageSubscription)
                 : router.push('/paywall')
             }
           />

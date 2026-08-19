@@ -25,7 +25,7 @@ import { useProfileStats } from '@/hooks/use_profile_stats';
 import { useTranslation } from '@/hooks/use_translation';
 import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { LINKS } from '@/lib/constants';
-import { openExternal } from '@/lib/links';
+import { openStoreUrl } from '@/lib/links';
 import { ACHIEVEMENTS, isUnlocked, leagueFromWeeklyXp, levelFromXp } from '@/lib/gamification';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth_store';
@@ -140,7 +140,7 @@ export default function ProfileScreen() {
             size="sm"
             onPress={() =>
               isPro && !USES_LOCAL_BACKEND
-                ? void openExternal(LINKS.manageSubscription)
+                ? void openStoreUrl(LINKS.manageSubscription)
                 : router.push('/paywall')
             }
           />

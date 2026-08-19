@@ -286,7 +286,7 @@ export async function completeLesson(
 }
 
 export async function recordPractice(
-  params: { correct: number; total: number },
+  params: { correct: number; total: number; runId?: string },
   now: number = Date.now()
 ): Promise<{ xpAwarded: number; totalXp: number; dailyXp: number }> {
   // The same bounds the RPC refuses on: a practice run is at most one deck.
@@ -301,13 +301,29 @@ export async function recordPractice(
 
   const { document, result } = await mutateDocument((current) => {
     const today = toIsoDate(now);
+
+    // A run that already paid pays nothing more. The results screen lets the
+    // learner retry a finish that failed on its way back, and without this the
+    // retry would bank the same practice run a second time.
+    if (params.runId) {
+      const paid = current.xpEvents.find((event) => event.runId === params.runId);
+      if (paid) return paid.amount;
+    }
+
     const alreadyFromPractice = current.xpEvents
       .filter((event) => event.source === 'practice' && event.earnedOn === today)
       .reduce((sum, event) => sum + event.amount, 0);
 
     const award = practiceAward(params.correct, alreadyFromPractice);
+    // Nothing earned, nothing written — the ledger only holds real XP, exactly
+    // as the RPC does. A retry of a capped-out run recomputes the same zero.
     if (award > 0) {
-      current.xpEvents.push({ amount: award, source: 'practice', earnedOn: today });
+      current.xpEvents.push({
+        amount: award,
+        source: 'practice',
+        earnedOn: today,
+        runId: params.runId ?? null,
+      });
       current.game.totalXp += award;
     }
     return award;

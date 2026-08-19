@@ -127,6 +127,10 @@ export const useSubscriptionStore = create<SubscriptionStoreState & Subscription
           // they just bought; if it fails, the webhook is still coming.
           await syncSubscription();
           await useGameStore.getState().refresh({ silent: true });
+          // `refresh` replaces the whole row, and its subscription flag comes
+          // from that mirror — so when the sync did not land it says "free" and
+          // would take back what was just bought. The store is the truth here.
+          publish(outcome.snapshot);
           return 'purchased';
         }
         set({ isPurchasing: false });
@@ -146,6 +150,9 @@ export const useSubscriptionStore = create<SubscriptionStoreState & Subscription
         if (snapshot?.isSubscribed) {
           await syncSubscription();
           await useGameStore.getState().refresh({ silent: true });
+          // Same reason as in `buy`: a refresh that predates the mirror write
+          // must not undo an entitlement the store has confirmed.
+          publish(snapshot);
         }
         return snapshot?.isSubscribed ?? false;
       } catch (error) {

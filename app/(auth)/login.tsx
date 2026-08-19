@@ -143,6 +143,14 @@ export default function LoginScreen() {
             {Platform.OS === 'ios' ? (
               <View
                 pointerEvents={busy === null ? 'auto' : 'none'}
+                // While a sign-in is running the native button is inert, and a
+                // dimmed pixel is not something a screen reader can perceive.
+                // The wrapper takes over as one element that says so; when idle
+                // it steps aside and Apple's own button is what is announced.
+                accessible={busy !== null}
+                accessibilityRole={busy !== null ? 'button' : undefined}
+                accessibilityLabel={busy !== null ? t('auth.sign_in_with_apple') : undefined}
+                accessibilityState={busy !== null ? { disabled: true, busy: true } : undefined}
                 style={{ opacity: busy === null ? 1 : 0.6 }}>
                 <AppleAuthentication.AppleAuthenticationButton
                   buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}

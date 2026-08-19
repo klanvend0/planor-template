@@ -116,6 +116,7 @@ export interface Database {
           user_id: string;
           amount: number;
           source: XpSource;
+          run_id: string | null;
           lesson_id: string | null;
           earned_on: string;
           created_at: string;
@@ -279,7 +280,12 @@ export interface Database {
         Returns: number;
       };
       record_practice: {
-        Args: { p_course_id: string; p_correct: number; p_total: number };
+        Args: {
+          p_course_id: string;
+          p_correct: number;
+          p_total: number;
+          p_run_id?: string | null;
+        };
         Returns: { xp_awarded: number; total_xp: number; daily_xp: number }[];
       };
       get_mistake_questions: {

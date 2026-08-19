@@ -35,7 +35,8 @@
     "apple_not_available": "Bu cihazda Apple ile giriş kullanılamıyor.",
     "sign_out_error": "Çıkış yapılamadı.",
     "sign_out_confirm_title": "Çıkış yapılsın mı?",
-    "sign_out_confirm_body": "İlerlemen hesabında saklı kalır."
+    "sign_out_confirm_body": "İlerlemen hesabında saklı kalır.",
+    "sign_in_with_apple": "Apple ile devam et"
   },
   "onboarding": {
     "slides": {
@@ -357,7 +358,8 @@
     "haptics": "Titreşim",
     "reminders": "Günlük hatırlatma",
     "reminder_time": "Hatırlatma saati",
-    "reminders_denied": "Bildirimler iOS Ayarları'ndan kapalı.",
+    "reminders_denied": "Bildirimler cihaz ayarlarında kapalı. Önce oradan aç.",
+    "reminders_blocked": "Cihaz ayarlarında kapalı",
     "subscription": "Abonelik",
     "restore": "Satın alımları geri yükle",
     "rate_app": "Codeling'i değerlendir",
@@ -367,7 +369,9 @@
     "sign_out": "Çıkış yap",
     "delete_account": "Hesabı sil",
     "delete_title": "Hesabın silinsin mi?",
-    "delete_body": "Profilin, XP'n, serin ve tüm ilerlemen kalıcı olarak silinir. Bu işlem geri alınamaz ve aktif aboneliğini iptal etmez; onu App Store üzerinden iptal etmelisin.",
+    "delete_body": "Profilin, XP'n, serin ve tüm ilerlemen kalıcı olarak silinir. Bu işlem geri alınamaz ve aktif aboneliğini iptal etmez; onu %{store} üzerinden iptal etmelisin.",
+    "store_apple": "App Store",
+    "store_google": "Google Play",
     "delete_confirm": "Her şeyi sil",
     "delete_failed": "Hesap silinemedi. Lütfen destekle iletişime geç.",
     "version": "Sürüm %{version}"

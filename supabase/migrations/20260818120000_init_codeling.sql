@@ -135,11 +135,17 @@ create table if not exists public.xp_events (
   amount integer not null check (amount > 0),
   source text not null check (source in ('lesson', 'perfect_bonus', 'streak_bonus', 'daily_goal', 'practice', 'ai_review')),
   lesson_id text,
+  -- The client's id for one practice run. A retried call carries the same one,
+  -- which is what stops a lost response from paying the run twice.
+  run_id uuid,
   earned_on date not null default (now() at time zone 'utc')::date,
   created_at timestamptz not null default now()
 );
 
 create index if not exists xp_events_user_day_idx on public.xp_events (user_id, earned_on desc);
+create unique index if not exists xp_events_run_idx
+  on public.xp_events (user_id, run_id)
+  where run_id is not null;
 
 comment on table public.xp_events is 'Append-only XP ledger; daily goals and weekly leagues are derived from it.';
 
@@ -864,7 +870,8 @@ revoke execute on function public.handle_new_user() from public, anon, authentic
 create or replace function public.record_practice(
   p_course_id text,
   p_correct integer,
-  p_total integer
+  p_total integer,
+  p_run_id uuid default null
 )
 returns table (xp_awarded integer, total_xp integer, daily_xp integer)
 language plpgsql
@@ -878,12 +885,27 @@ declare
   v_award integer;
   v_state public.game_state%rowtype;
   v_daily integer;
+  v_paid integer;
 begin
   if v_user is null then
     raise exception 'authentication required' using errcode = '28000';
   end if;
   if p_total <= 0 or p_correct < 0 or p_correct > p_total or p_total > 50 then
     raise exception 'implausible practice payload';
+  end if;
+
+  -- This run already paid: a retry after a lost response answers with the same
+  -- numbers rather than awarding a second time.
+  if p_run_id is not null then
+    select amount into v_paid from public.xp_events
+      where user_id = v_user and run_id = p_run_id;
+    if found then
+      select * into v_state from public.game_state where user_id = v_user;
+      select coalesce(sum(amount), 0)::integer into v_daily
+        from public.xp_events where user_id = v_user and earned_on = v_today;
+      return query select v_paid, v_state.total_xp, v_daily;
+      return;
+    end if;
   end if;
 
   select * into v_state from public.game_state where user_id = v_user for update;
@@ -900,7 +922,8 @@ begin
   v_award := greatest(0, least(p_correct * 5, 50 - v_already));
 
   if v_award > 0 then
-    insert into public.xp_events (user_id, amount, source) values (v_user, v_award, 'practice');
+    insert into public.xp_events (user_id, amount, source, run_id)
+    values (v_user, v_award, 'practice', p_run_id);
     update public.game_state
       set total_xp = total_xp + v_award, updated_at = now()
       where user_id = v_user
@@ -914,7 +937,7 @@ begin
 end;
 $$;
 
-grant execute on function public.record_practice(text, integer, integer) to authenticated;
+grant execute on function public.record_practice(text, integer, integer, uuid) to authenticated;
 
 -- ---------------------------------------------------------------------------
 -- AI grading quota

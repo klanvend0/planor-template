@@ -197,12 +197,15 @@ export async function recordPractice(params: {
   courseId: CourseId;
   correct: number;
   total: number;
+  /** This run's id, reused on a retry so it cannot be paid for twice. */
+  runId?: string;
 }): Promise<{ xpAwarded: number; totalXp: number; dailyXp: number }> {
   if (USES_LOCAL_BACKEND) return local.recordPractice(params);
   const { data, error } = await supabase.rpc('record_practice', {
     p_course_id: params.courseId,
     p_correct: params.correct,
     p_total: params.total,
+    p_run_id: params.runId ?? null,
   });
   if (error) throw toAppError(error);
 

@@ -32,6 +32,13 @@ const CORS_HEADERS = {
 
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
 const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
+/**
+ * Sandbox purchases are free to make — a TestFlight tester or anyone with a
+ * sandbox Apple ID can "buy" Pro. The webhook refuses them for that reason, and
+ * so must this: reading the same entitlement over REST would otherwise be a way
+ * around the guard. Set `REVENUECAT_ALLOW_SANDBOX=true` on a staging project.
+ */
+const ALLOW_SANDBOX = (Deno.env.get('REVENUECAT_ALLOW_SANDBOX') ?? '') === 'true';
 
 type SubscriptionStatus = 'trialing' | 'active' | 'expired';
 
@@ -50,6 +57,7 @@ async function fetchEntitlement(appUserId: string): Promise<
       expiresAt: string | null;
       periodType: string | null;
       store: string | null;
+      environment: 'PRODUCTION' | 'SANDBOX';
     }
   | 'unavailable'
 > {
@@ -61,7 +69,14 @@ async function fetchEntitlement(appUserId: string): Promise<
   // A 404 means RevenueCat has never seen this id, which is a real answer:
   // the learner owns nothing. Anything else is an outage, not an answer.
   if (response.status === 404) {
-    return { status: 'expired', productId: null, expiresAt: null, periodType: null, store: null };
+    return {
+      status: 'expired',
+      productId: null,
+      expiresAt: null,
+      periodType: null,
+      store: null,
+      environment: 'PRODUCTION',
+    };
   }
   if (!response.ok) {
     console.error('[sync-subscription] lookup failed', response.status, await response.text());
@@ -70,22 +85,43 @@ async function fetchEntitlement(appUserId: string): Promise<
 
   const payload = await response.json();
   const entitlement = payload?.subscriber?.entitlements?.[ENTITLEMENT];
-  if (!entitlement) {
-    return { status: 'expired', productId: null, expiresAt: null, periodType: null, store: null };
-  }
+  const nothing = {
+    status: 'expired' as const,
+    productId: null,
+    expiresAt: null,
+    periodType: null,
+    store: null,
+    environment: 'PRODUCTION' as const,
+  };
+  if (!entitlement) return nothing;
 
   const expiresAt: string | null = entitlement.expires_date ?? null;
   const active = !expiresAt || new Date(expiresAt).getTime() > Date.now();
   const productId: string | null = entitlement.product_identifier ?? null;
+
+  // A renewing product is under `subscriptions`; a lifetime or consumable one is
+  // under `non_subscriptions`, as an array. Both carry `is_sandbox`, and missing
+  // that on the second kind would fail open on the purchase that never expires.
   const subscription = payload?.subscriber?.subscriptions?.[productId ?? ''];
-  const periodType: string | null = subscription?.period_type ?? null;
+  const purchases = payload?.subscriber?.non_subscriptions?.[productId ?? ''];
+  const lastPurchase = Array.isArray(purchases) ? purchases[purchases.length - 1] : null;
+  const source = subscription ?? lastPurchase ?? null;
+
+  const sandbox = source?.is_sandbox === true;
+  if (sandbox && !ALLOW_SANDBOX) {
+    console.warn('[sync-subscription] sandbox entitlement ignored', { productId });
+    return nothing;
+  }
+
+  const periodType: string | null = source?.period_type ?? null;
 
   return {
     status: active ? (periodType === 'trial' ? 'trialing' : 'active') : 'expired',
     productId,
     expiresAt,
     periodType,
-    store: subscription?.store ?? null,
+    store: source?.store ?? null,
+    environment: sandbox ? 'SANDBOX' : 'PRODUCTION',
   };
 }
 
@@ -134,6 +170,7 @@ Deno.serve(async (request: Request) => {
       current_period_end: entitlement.expiresAt,
       trial_end: entitlement.periodType === 'trial' ? entitlement.expiresAt : null,
       will_renew: entitlement.status === 'active' || entitlement.status === 'trialing',
+      environment: entitlement.environment,
       updated_at: new Date().toISOString(),
     },
     { onConflict: 'user_id' }

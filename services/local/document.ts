@@ -56,6 +56,12 @@ export type LocalXpEvent = {
   amount: number;
   source: XpSource;
   earnedOn: string;
+  /**
+   * The run this XP was paid for, when the caller named one. Mirrors
+   * `xp_events.run_id`: a retried practice run carries the same id, and finding
+   * it here is how the second call knows not to pay again.
+   */
+  runId?: string | null;
 };
 
 /** Mirrors `public.profiles`, defaults included, so the shapes stay swappable. */

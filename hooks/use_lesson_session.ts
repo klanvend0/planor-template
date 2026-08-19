@@ -9,6 +9,7 @@
  * @module hooks/use_lesson_session
  */
 
+import { randomUUID } from 'expo-crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { checkAnswer, type AnswerInput, type CheckResult } from '@/lib/answer_check';
@@ -148,6 +149,12 @@ export function useLessonSession(
   const [skippedCount, setSkippedCount] = useState(0);
   const questionStartedAt = useRef(Date.now());
   const sessionStartedAt = useRef(Date.now());
+  /**
+   * This practice run's id, minted once and reused by every retry. A finish can
+   * fail on the way back after the server has already banked the XP, so the
+   * retry has to arrive under the same id or the run would pay twice.
+   */
+  const practiceRunId = useRef<string | null>(null);
 
   const question = queue[0] ?? null;
   const total = Math.max(1, sourceQuestions.length - skippedCount);
@@ -307,10 +314,12 @@ export function useLessonSession(
 
     try {
       if (mode === 'practice') {
+        practiceRunId.current ??= randomUUID();
         const practice = await recordPractice({
           courseId: location.course.id,
           correct,
           total: played,
+          runId: practiceRunId.current,
         });
         const score = Math.round((correct / played) * 100);
         setOutcome({

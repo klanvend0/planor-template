@@ -198,6 +198,23 @@ describe('practice', () => {
     expect((await backend.recordPractice({ correct: 6, total: 6 }, NOW)).xpAwarded).toBe(0);
     expect((await backend.recordPractice({ correct: 6, total: 6 }, NOW + DAY)).xpAwarded).toBe(30);
   });
+
+  it('pays a retried run once', async () => {
+    const first = await backend.recordPractice({ correct: 4, total: 4, runId: 'run-1' }, NOW);
+    const retry = await backend.recordPractice({ correct: 4, total: 4, runId: 'run-1' }, NOW);
+
+    expect(first.xpAwarded).toBe(20);
+    // The retry answers with what the first call banked, and banks nothing.
+    expect(retry.xpAwarded).toBe(20);
+    expect(retry.totalXp).toBe(first.totalXp);
+    expect((await backend.fetchGameState(NOW)).totalXp).toBe(20);
+
+    // A different run is still a different run.
+    expect(
+      (await backend.recordPractice({ correct: 2, total: 2, runId: 'run-2' }, NOW)).xpAwarded
+    ).toBe(10);
+    expect((await backend.fetchGameState(NOW)).totalXp).toBe(30);
+  });
 });
 
 describe('mistakes deck', () => {
