@@ -49,11 +49,20 @@ async function revokeAppleGrant(
 ): Promise<'revoked' | 'skipped' | 'failed'> {
   if (!APPLE_CLIENT_ID || !APPLE_CLIENT_SECRET) return 'skipped';
 
-  const { data } = await admin
+  const { data, error } = await admin
     .from('apple_credentials')
     .select('refresh_token')
     .eq('user_id', userId)
     .maybeSingle();
+
+  // A read that failed is not the same fact as "there was nothing to revoke",
+  // and the difference is permanent: the account is about to be deleted, the
+  // cascade takes the token with it, and nothing can retry afterwards. Say it
+  // failed, so the response and the logs show a grant that is still standing.
+  if (error) {
+    console.error('[delete-account] could not read the apple credential', error);
+    return 'failed';
+  }
 
   const refreshToken = data?.refresh_token;
   if (!refreshToken) return 'skipped';

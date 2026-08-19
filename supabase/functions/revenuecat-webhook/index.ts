@@ -48,6 +48,9 @@ type RevenueCatEvent = {
 type SubscriptionStatus =
   'trialing' | 'active' | 'grace' | 'expired' | 'cancelled' | 'billing_issue' | 'paused';
 
+/** The statuses that actually unlock anything. */
+const ENTITLED = new Set<string>(['active', 'trialing', 'grace']);
+
 const WEBHOOK_SECRET = Deno.env.get('REVENUECAT_WEBHOOK_SECRET') ?? '';
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
 const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
@@ -299,29 +302,39 @@ export async function handleRevenueCatWebhook(request: Request): Promise<Respons
     for (const userId of to) {
       const state = await fetchSubscriberState(userId);
 
-      const row = state
-        ? {
-            product_id: state.productId,
-            store: source?.store ?? null,
-            status: state.status,
-            period_type: state.periodType,
-            current_period_end: state.expiresAt,
-            trial_end: state.periodType === 'trial' ? state.expiresAt : null,
-            will_renew: state.status === 'active' || state.status === 'trialing',
-            environment: event.environment ?? source?.environment ?? null,
-          }
-        : source
+      // A read taken before the transfer has propagated says the winner owns
+      // nothing. Believing it would write an expired row and then revoke the
+      // loser on the strength of it, leaving a paying customer entitled on
+      // neither account — so an "owns nothing" answer never outranks a mirror
+      // that still shows the subscription being moved.
+      const authoritative =
+        state !== null &&
+        (ENTITLED.has(state.status) || source === null || !ENTITLED.has(source.status));
+
+      const row =
+        authoritative && state
           ? {
-              product_id: source.product_id,
-              store: source.store,
-              status: source.status,
-              period_type: source.period_type,
-              current_period_end: source.current_period_end,
-              trial_end: source.trial_end,
-              will_renew: source.will_renew,
-              environment: event.environment ?? source.environment,
+              product_id: state.productId,
+              store: source?.store ?? null,
+              status: state.status,
+              period_type: state.periodType,
+              current_period_end: state.expiresAt,
+              trial_end: state.periodType === 'trial' ? state.expiresAt : null,
+              will_renew: state.status === 'active' || state.status === 'trialing',
+              environment: event.environment ?? source?.environment ?? null,
             }
-          : null;
+          : source
+            ? {
+                product_id: source.product_id,
+                store: source.store,
+                status: source.status,
+                period_type: source.period_type,
+                current_period_end: source.current_period_end,
+                trial_end: source.trial_end,
+                will_renew: source.will_renew,
+                environment: event.environment ?? source.environment,
+              }
+            : null;
 
       if (!row) {
         // Neither the API nor the mirror can say what this account should own.
@@ -355,7 +368,10 @@ export async function handleRevenueCatWebhook(request: Request): Promise<Respons
         console.error('[revenuecat-webhook] transfer grant failed', grantError);
         return json({ error: 'persist_failed' }, 500);
       }
-      granted += 1;
+      // Only a row that actually carries the entitlement counts as moved. The
+      // revoke below is keyed off this, so writing an expired row to the target
+      // must not be what takes the subscription away from the source.
+      if (ENTITLED.has(String(row.status))) granted += 1;
     }
 
     if (from.length > 0 && (granted > 0 || to.length === 0)) {

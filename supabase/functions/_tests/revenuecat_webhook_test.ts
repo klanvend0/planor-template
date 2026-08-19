@@ -626,24 +626,68 @@ Deno.test('drops a retried transfer rather than revoking a re-granted account', 
   );
 });
 
-Deno.test('revokes the loser even when the store says the winner owns nothing', async () => {
+Deno.test(
+  'moves the mirror\u2019s subscription when the store says the winner owns nothing',
+  async () => {
+    await withWorld(
+      {
+        environment: { REVENUECAT_API_KEY: 'sk_test' },
+        source: [
+          {
+            product_id: 'codeling_pro_annual',
+            store: 'APP_STORE',
+            status: 'active',
+            period_type: 'NORMAL',
+            current_period_end: EXPIRES_AT,
+            trial_end: null,
+            will_renew: true,
+            environment: 'PRODUCTION',
+          },
+        ],
+        // The subscriber exists but carries no entitlement, which is what a read
+        // taken before the transfer has propagated looks like.
+        revenuecat: {
+          [`GET ${REVENUECAT}/v1/subscribers/*`]: {
+            body: { subscriber: { entitlements: {}, subscriptions: {} } },
+          },
+        },
+      },
+      async (module, harness) => {
+        const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+        assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+
+        // The read lost the race, not the customer: what the mirror still shows
+        // on the losing account is what moves, and only then is it revoked there.
+        const granted = writes(harness)[0];
+        assertEquals(granted.status, 'active');
+        assertEquals(granted.product_id, 'codeling_pro_annual');
+        assertEquals(granted.current_period_end, EXPIRES_AT);
+        assertEquals(granted.will_renew, true);
+        assertEquals((revokes(harness)[0].body as Row).status, 'expired');
+      }
+    );
+  }
+);
+
+Deno.test('leaves both accounts alone when the winner is genuinely expired', async () => {
   await withWorld(
     {
       environment: { REVENUECAT_API_KEY: 'sk_test' },
+      // The losing account has nothing live either, so there is nothing to move
+      // and nothing worth taking away.
       source: [
         {
           product_id: 'codeling_pro_annual',
           store: 'APP_STORE',
-          status: 'active',
+          status: 'expired',
           period_type: 'NORMAL',
-          current_period_end: EXPIRES_AT,
+          current_period_end: '2020-01-01T00:00:00.000Z',
           trial_end: null,
-          will_renew: true,
+          will_renew: false,
           environment: 'PRODUCTION',
         },
       ],
-      // The subscriber exists but carries no entitlement, which is what a read
-      // taken before the transfer has propagated looks like.
       revenuecat: {
         [`GET ${REVENUECAT}/v1/subscribers/*`]: {
           body: { subscriber: { entitlements: {}, subscriptions: {} } },
@@ -653,14 +697,11 @@ Deno.test('revokes the loser even when the store says the winner owns nothing', 
     async (module, harness) => {
       const response = await module.handleRevenueCatWebhook(delivery(transfer()));
 
-      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
-
-      const granted = writes(harness)[0];
-      assertEquals(granted.status, 'expired');
-      assertEquals(granted.product_id, null);
-      assertEquals(granted.current_period_end, null);
-      assertEquals(granted.will_renew, false);
-      assertEquals((revokes(harness)[0].body as Row).status, 'expired');
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 0 });
+      assertEquals(writes(harness)[0].status, 'expired');
+      // Nothing moved, so nothing is revoked: a revoke here would be the only
+      // write that could take a live subscription away by accident.
+      assertEquals(revokes(harness).length, 0);
     }
   );
 });
