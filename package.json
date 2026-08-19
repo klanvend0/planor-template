@@ -9,6 +9,7 @@
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
     "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run format:check && npm test && npm run i18n:check && npm run content:check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "content:check": "node scripts/check_content.mts",

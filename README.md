@@ -36,7 +36,7 @@ JavaScript course.
 
 ```bash
 npm install
-npm run dev
+npm run web        # opens in a browser, nothing else to install
 ```
 
 That is the whole setup. With no `.env` the app runs entirely on the device:
@@ -59,12 +59,18 @@ XP, the AI grader and RevenueCat. Backend setup — migrations, edge functions,
 the AI provider, the webhook and Apple's revoke flow — is in
 [docs/BACKEND_SETUP.md](docs/BACKEND_SETUP.md).
 
-RevenueCat is a native module and throws inside Expo Go, so working on the real
-store flow needs a development build:
+`npm run web` is the fastest way to see the whole app, and every screen works
+there. For the real thing on a device — haptics, notifications, Sign in with
+Apple and StoreKit — you need a development build, because RevenueCat is a
+native module that Expo Go cannot load:
 
 ```bash
 npx eas build --profile development --platform ios
+npm run dev
 ```
+
+`npm run verify` runs everything CI would: types, formatting, tests, the
+localization check and the content check.
 
 ## Everyday commands
 

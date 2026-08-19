@@ -27,7 +27,10 @@ with `eas env:create --environment production`. Do not add an `env` block to a
 build profile: those values _override_ the environment's, which is how a
 placeholder ends up in a signed build.
 
-The paywall's own copy is the tell: a build in local mode says "Demo mode:
+`app.config.ts` refuses to resolve a production EAS build whose Supabase
+variables are missing or still the placeholders, so a misconfigured build fails
+on the builder instead of becoming a signed IPA that gives Pro away. The
+paywall's own copy is the other tell: a build in local mode says "Demo mode:
 nothing is charged" where the billing terms should be.
 
 ---

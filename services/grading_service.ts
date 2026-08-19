@@ -121,6 +121,14 @@ async function gradeOnDevice(params: {
   }
 
   const review = gradeLocally(params.answer, question.keyPoints[params.locale], params.locale);
-  await recordAiReview(params.questionId, review.verdict);
+
+  try {
+    await recordAiReview(params.questionId, review.verdict);
+  } catch (error) {
+    // The mark is what the learner asked for; the tally behind the "explainer"
+    // achievement is not worth losing it over.
+    console.warn('[grading] could not record the review', error);
+  }
+
   return review;
 }
