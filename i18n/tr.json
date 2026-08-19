@@ -101,7 +101,7 @@
     },
     "ready": {
       "title": "İlk dersin hazır",
-      "subtitle": "Denerken Pro bizden. İstediğin an iptal et.",
+      "subtitle": "İlk %{units} ünite ücretsiz. Hazır olduğunda başla.",
       "cta": "Öğrenmeye başla"
     },
     "progress": "Adım %{current}/%{total}"

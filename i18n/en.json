@@ -101,7 +101,7 @@
     },
     "ready": {
       "title": "Your first lesson is ready",
-      "subtitle": "Pro is on us while you try it. Cancel any time.",
+      "subtitle": "The first %{units} units are free. Start whenever you are ready.",
       "cta": "Start learning"
     },
     "progress": "Step %{current} of %{total}"

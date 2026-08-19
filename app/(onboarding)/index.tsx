@@ -35,6 +35,7 @@ import {
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { FREE_UNIT_LIMIT } from '@/lib/constants';
 import { track } from '@/lib/analytics';
 import type { CourseId } from '@/lib/content_schema';
 import { tapFeedback } from '@/lib/haptics';
@@ -359,7 +360,7 @@ export default function OnboardingScreen() {
                 {t('onboarding.ready.title')}
               </Text>
               <Text className="text-center text-[15px] leading-6 text-muted-foreground">
-                {t('onboarding.ready.subtitle')}
+                {t('onboarding.ready.subtitle', { units: FREE_UNIT_LIMIT })}
               </Text>
             </Animated.View>
           ) : null}
