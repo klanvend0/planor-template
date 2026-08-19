@@ -9,6 +9,8 @@
  */
 
 import { supabase } from '@/lib/supabase';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
+import * as local from '@/services/local/backend';
 import { toAppError } from '@/lib/errors';
 import type { CourseId, Question, QuestionType } from '@/lib/content_schema';
 import type { SupportedLocale } from '@/lib/i18n';
@@ -76,6 +78,7 @@ export type AnswerOutcome = {
 
 /** Read the caller's game state; hearts are settled server-side on the way out. */
 export async function fetchGameState(): Promise<GameState> {
+  if (USES_LOCAL_BACKEND) return local.fetchGameState();
   const { data, error } = await supabase.rpc('get_game_state');
   if (error) throw toAppError(error);
 
@@ -117,6 +120,7 @@ export async function recordAnswer(params: {
    */
   attemptId?: string;
 }): Promise<AnswerOutcome> {
+  if (USES_LOCAL_BACKEND) return local.recordAnswer(params);
   const { data, error } = await supabase.rpc('record_answer', {
     p_question_id: params.question.id,
     p_lesson_id: params.lessonId,
@@ -152,6 +156,7 @@ export async function completeLesson(params: {
    */
   playedOn?: string;
 }): Promise<LessonResult> {
+  if (USES_LOCAL_BACKEND) return local.completeLesson(params);
   const { data, error } = await supabase.rpc('complete_lesson', {
     p_lesson_id: params.lessonId,
     p_unit_id: params.unitId,
@@ -191,6 +196,7 @@ export async function recordPractice(params: {
   correct: number;
   total: number;
 }): Promise<{ xpAwarded: number; totalXp: number; dailyXp: number }> {
+  if (USES_LOCAL_BACKEND) return local.recordPractice(params);
   const { data, error } = await supabase.rpc('record_practice', {
     p_course_id: params.courseId,
     p_correct: params.correct,
@@ -208,6 +214,7 @@ export async function recordPractice(params: {
 
 /** Refill hearts. Free once per day; unlimited for subscribers. */
 export async function refillHearts(): Promise<number> {
+  if (USES_LOCAL_BACKEND) return local.refillHearts();
   const { data, error } = await supabase.rpc('refill_hearts');
   if (error) throw toAppError(error);
   return data ?? 0;
@@ -215,6 +222,7 @@ export async function refillHearts(): Promise<number> {
 
 /** Every lesson the learner has touched in a course. */
 export async function fetchLessonProgress(courseId: CourseId): Promise<LessonProgress[]> {
+  if (USES_LOCAL_BACKEND) return local.fetchLessonProgress(courseId);
   const { data, error } = await supabase
     .from('lesson_progress')
     .select(
@@ -238,6 +246,7 @@ export async function fetchLessonProgress(courseId: CourseId): Promise<LessonPro
 
 /** Every lesson row the learner has, across all courses, for profile stats. */
 export async function fetchAllLessonProgress(): Promise<LessonProgress[]> {
+  if (USES_LOCAL_BACKEND) return local.fetchLessonProgress();
   const { data, error } = await supabase
     .from('lesson_progress')
     .select(
@@ -260,6 +269,7 @@ export async function fetchAllLessonProgress(): Promise<LessonProgress[]> {
 
 /** Question ids the learner got wrong and has not since fixed. */
 export async function fetchMistakeQuestionIds(courseId: CourseId, limit = 20): Promise<string[]> {
+  if (USES_LOCAL_BACKEND) return local.fetchMistakeQuestionIds(courseId, limit);
   const { data, error } = await supabase.rpc('get_mistake_questions', {
     p_course_id: courseId,
     p_limit: limit,
@@ -270,6 +280,7 @@ export async function fetchMistakeQuestionIds(courseId: CourseId, limit = 20): P
 
 /** The caller's profile row, created by the `handle_new_user` trigger. */
 export async function fetchProfile(userId: string): Promise<Profile | null> {
+  if (USES_LOCAL_BACKEND) return local.fetchProfile();
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
@@ -305,6 +316,8 @@ export async function updateProfile(
     experienceLevel: 'new' | 'some' | 'confident';
   }>
 ): Promise<void> {
+  if (USES_LOCAL_BACKEND) return local.updateProfile(patch);
+
   const { error } = await supabase
     .from('profiles')
     .update({
@@ -324,6 +337,7 @@ export async function updateProfile(
 
 /** How many AI-graded explanations the learner has passed, for achievements. */
 export async function countPassedAiReviews(): Promise<number> {
+  if (USES_LOCAL_BACKEND) return local.countPassedAiReviews();
   const { count, error } = await supabase
     .from('ai_reviews')
     .select('id', { count: 'exact', head: true })

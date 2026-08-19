@@ -13,6 +13,7 @@ import { create } from 'zustand';
 
 import { PASS_SCORE } from '@/lib/constants';
 import { MAX_HEARTS, starsForScore } from '@/lib/gamification';
+import { lessonAward, scoreFor, streakAfter, toIsoDate } from '@/lib/scoring';
 import { AppError, toAppError } from '@/lib/errors';
 import type { CourseId, Question } from '@/lib/content_schema';
 import {
@@ -73,14 +74,13 @@ const emptyState: GameStoreState = {
 };
 
 /**
- * Local mirror of the server's scoring, used when a write has to be queued.
+ * The offline estimate.
  *
- * It follows `complete_lesson`'s rules — improvement-only XP, the perfect and
- * seven-day bonuses, the streak with its freeze — because the number it
- * produces is the one the results screen shows. It remains an estimate: the
- * server scores against `lesson_catalog`, and the cached lesson row this reads
- * may be missing on a cold offline start, in which case the run is treated as a
- * first completion.
+ * When the write has to be queued, this is the number the results screen shows,
+ * so it follows {@link lib/scoring} — the same rules `complete_lesson` applies.
+ * It remains an estimate: the server scores against `lesson_catalog`, and the
+ * cached lesson row read here may be missing on a cold offline start, in which
+ * case the run is treated as a first completion.
  */
 function localLessonResult(
   state: GameState | null,
@@ -91,48 +91,31 @@ function localLessonResult(
     baseXp: number;
   }
 ): LessonResult {
-  const score = Math.round((params.correct / Math.max(1, params.total)) * 100);
+  const score = scoreFor(params.correct, params.total);
 
   const previous = useProgressStore.getState().byLesson[params.lessonId];
   const bestBefore = previous?.bestScore ?? 0;
   // The server counts an `in_progress` row as still unfinished, so a failed
-  // first attempt does not spend the first-completion.
+  // first attempt does not spend the first completion.
   const isFirstCompletion = previous?.status !== 'completed';
 
-  // XP pays for improvement only: replaying a cleared lesson pays nothing.
-  const award = score > bestBefore ? Math.round(params.baseXp * ((score - bestBefore) / 100)) : 0;
-  const perfectBonus = score === 100 && bestBefore < 100 ? 10 : 0;
+  const { award, perfectBonus } = lessonAward({ score, bestBefore, baseXp: params.baseXp });
+  const today = toIsoDate(Date.now());
+  const streak = streakAfter({
+    lastActiveDate: state?.lastActiveDate ?? null,
+    playedOn: today,
+    streakDays: state?.streakDays ?? 0,
+    streakFreezes: state?.streakFreezes ?? 0,
+  });
 
-  const today = new Date().toISOString().slice(0, 10);
-  const lastActive = state?.lastActiveDate ?? null;
-  const daysSince = lastActive
-    ? Math.round(
-        (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${lastActive}T00:00:00Z`)) / 86_400_000
-      )
-    : null;
-  const current = state?.streakDays ?? 0;
-  const streakDays =
-    daysSince === null
-      ? 1
-      : daysSince <= 0
-        ? current
-        : daysSince === 1
-          ? current + 1
-          : daysSince === 2 && (state?.streakFreezes ?? 0) > 0
-            ? current + 1
-            : 1;
-
-  // Only the first lesson of a day can reach a seven-day mark, exactly as the
-  // RPC's `last_active_date is distinct from` guard has it.
-  const streakBonus = lastActive !== today && streakDays > 0 && streakDays % 7 === 0 ? 25 : 0;
-  const awarded = award + perfectBonus + streakBonus;
+  const awarded = award + perfectBonus + streak.bonus;
 
   return {
     totalXp: (state?.totalXp ?? 0) + awarded,
     xpAwarded: awarded,
     perfectBonus,
-    streakBonus,
-    streakDays,
+    streakBonus: streak.bonus,
+    streakDays: streak.streakDays,
     hearts: state?.hearts ?? MAX_HEARTS,
     stars: starsForScore(score),
     score,

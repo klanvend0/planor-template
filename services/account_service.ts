@@ -10,8 +10,10 @@
 
 import { FunctionsHttpError } from '@supabase/supabase-js';
 
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { AppError } from '@/lib/errors';
 import { supabase } from '@/lib/supabase';
+import * as local from '@/services/local/backend';
 
 /**
  * Permanently delete the signed-in learner's account and every row that hangs
@@ -20,6 +22,9 @@ import { supabase } from '@/lib/supabase';
  * @throws {AppError} when the backend refuses; the caller shows a support hint.
  */
 export async function deleteAccount(): Promise<void> {
+  // Nothing was ever sent anywhere: deleting is wiping the device's own copy.
+  if (USES_LOCAL_BACKEND) return local.deleteAccount();
+
   const { error } = await supabase.functions.invoke('delete-account', { body: {} });
 
   if (error) {
