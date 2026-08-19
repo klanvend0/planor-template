@@ -299,6 +299,41 @@ describe('useLessonSession', () => {
     expect(result.current.phase).toBe('feedback');
   });
 
+  it('retries a practice finish under the id the first attempt used', async () => {
+    const recordPractice = jest.requireMock('@/services/progress_service')
+      .recordPractice as jest.Mock;
+    recordPractice.mockReset();
+    recordPractice.mockRejectedValueOnce(new Error('offline'));
+    recordPractice.mockResolvedValueOnce({ xpAwarded: 5, totalXp: 5, dailyXp: 5 });
+
+    const questions = [choice('q1')];
+    const { result } = renderHook(() =>
+      useLessonSession(makeLocation(questions), { mode: 'practice', questions })
+    );
+
+    act(() => result.current.begin());
+    await act(async () => {
+      await result.current.submit({ type: 'multiple_choice', optionId: 'a' });
+    });
+    await act(async () => {
+      await result.current.next();
+    });
+
+    await waitFor(() => expect(result.current.finishError).not.toBeNull());
+
+    await act(async () => {
+      await result.current.retryFinish();
+    });
+
+    expect(recordPractice).toHaveBeenCalledTimes(2);
+    const [first, second] = recordPractice.mock.calls;
+    // The server may already have banked the first call; the retry has to
+    // arrive under the same id or the run is paid for twice.
+    expect(first[0].runId).toBeTruthy();
+    expect(second[0].runId).toBe(first[0].runId);
+    expect(result.current.outcome?.xpAwarded).toBe(5);
+  });
+
   it('keeps playing when the answer cannot be written', async () => {
     mockSubmitAnswer.mockRejectedValue(new Error('offline'));
 
