@@ -62,15 +62,23 @@ The paywall must disclose, in the binary and not from a remote config:
 - **you** — the same Terms of Use in App Store Connect → App Information →
   License Agreement (or Apple's standard EULA), and the Privacy Policy URL field
 
-The trial is only promised when RevenueCat confirms the learner is eligible.
-Apple grants one introductory offer per subscription group per Apple ID, so
-promising it unconditionally is a rejection risk.
+The trial is only promised when the store reports a genuinely free introductory
+phase _and_, on iOS, confirms this Apple ID may still take it — headline,
+price line, button and legal text all follow the same flag. Apple grants one
+introductory offer per subscription group per Apple ID, so promising it
+unconditionally is a rejection risk, and a paid introductory offer is not a
+free trial either.
+
+The billing disclosure is branched by platform: the Apple ID and App Store
+settings on iOS, the Google Play account and its subscription settings on
+Android.
 
 ---
 
 ## 3. Account and sign-in
 
-- **code** — Sign in with Apple is offered alongside Google (Guideline 4.8)
+- **code** — Sign in with Apple is offered alongside Google (Guideline 4.8),
+  using Apple's own `AppleAuthenticationButton` rather than a themed lookalike
 - **code** — account deletion happens in the app, deletes rather than
   deactivates, and revokes the Apple sign-in grant (Guideline 5.1.1(v))
 - **you** — set `APPLE_CLIENT_ID` / `APPLE_CLIENT_SECRET` for the edge functions,
@@ -88,9 +96,11 @@ promising it unconditionally is a rejection risk.
 - **code** — no ATT prompt: PostHog runs without IDFA, so nothing here is
   "tracking" under Apple's definition
 - **you** — App Privacy answers in App Store Connect. What the app actually
-  collects: an email address (through Apple/Google sign-in, linked to the user),
-  product interaction and diagnostics (PostHog, linked to the user id), and
+  collects, which is also what `NSPrivacyCollectedDataTypes` declares: a name and
+  an email address (through Apple/Google sign-in, linked to the user), the user
+  id, product interaction and diagnostics (PostHog, linked to the user id), and
   learner-written explanations (sent to the AI grader, stored in `ai_reviews`).
+  The provider's avatar URL is deliberately not collected.
 
 ---
 
