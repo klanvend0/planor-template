@@ -52,6 +52,14 @@ describe('lessonAward', () => {
     });
   });
 
+  it('rounds the way Postgres rounds, not the way doubles do', () => {
+    // 150 * (57/100) is exactly 85.5 in decimal and 85.49999999999999 in
+    // binary, so the naive expression pays one XP less than the server.
+    expect(lessonAward({ score: 57, bestBefore: 0, baseXp: 150 })).toMatchObject({ award: 86 });
+    expect(lessonAward({ score: 60, bestBefore: 25, baseXp: 90 })).toMatchObject({ award: 32 });
+    expect(lessonAward({ score: 70, bestBefore: 0, baseXp: 45 })).toMatchObject({ award: 32 });
+  });
+
   it('pays nothing for matching or falling short of the best run', () => {
     expect(lessonAward({ score: 100, bestBefore: 100, baseXp: 90 })).toEqual({
       award: 0,

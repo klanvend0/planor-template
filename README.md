@@ -27,7 +27,8 @@ JavaScript course.
   depends on React Navigation, so themes and tab types come from `expo-router`
 - **NativeWind 4** (Tailwind v3) with CSS-variable design tokens
 - **React Native Reusables** (`@rn-primitives/*`) for the shadcn-style primitives
-- **Supabase** — auth, Postgres, edge functions
+- **Supabase** — auth, Postgres, edge functions (optional: without it the app
+  runs on the device, see below)
 - **RevenueCat** — subscriptions with a 3-day free trial
 - **Zustand** for state, **Zod** for validating anything that crosses a boundary
 
@@ -35,22 +36,35 @@ JavaScript course.
 
 ```bash
 npm install
-cp .env.example .env        # fill in Supabase + RevenueCat keys
-npm run dev                 # development build (not Expo Go — see below)
+npm run dev
 ```
 
-RevenueCat is a native module and throws inside Expo Go, so day-to-day work needs
-a development build:
+That is the whole setup. With no `.env` the app runs entirely on the device:
+sign-in becomes "start learning", progress is kept in AsyncStorage under the
+same rules the server applies, the paywall sells a local entitlement and says
+plainly that nothing is charged, and explanations are marked against the key
+points the question bank already ships. Every screen works and nothing leaves
+the phone — enough to write lessons, build screens, and see the whole flow.
+
+To run against real infrastructure:
+
+```bash
+cp .env.example .env        # Supabase decides; RevenueCat and the rest are optional
+```
+
+`.env.example` lists every variable and what happens when it is missing.
+Setting `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY` is what
+switches the app from the device to the backend — accounts, server-authoritative
+XP, the AI grader and RevenueCat. Backend setup — migrations, edge functions,
+the AI provider, the webhook and Apple's revoke flow — is in
+[docs/BACKEND_SETUP.md](docs/BACKEND_SETUP.md).
+
+RevenueCat is a native module and throws inside Expo Go, so working on the real
+store flow needs a development build:
 
 ```bash
 npx eas build --profile development --platform ios
 ```
-
-The app still runs without any RevenueCat key at all: everyone is simply treated
-as a free user, which is enough for building lessons and screens.
-
-Backend setup — migrations, edge functions, the AI provider, the webhook and
-Apple's revoke flow — is in [docs/BACKEND_SETUP.md](docs/BACKEND_SETUP.md).
 
 ## Everyday commands
 

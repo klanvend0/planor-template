@@ -90,7 +90,7 @@ function localLessonResult(
     total: number;
     baseXp: number;
   }
-): LessonResult {
+): { result: LessonResult; streakFreezes: number; clearedFirstTime: boolean; wasPerfect: boolean } {
   const score = scoreFor(params.correct, params.total);
 
   const previous = useProgressStore.getState().byLesson[params.lessonId];
@@ -111,16 +111,23 @@ function localLessonResult(
   const awarded = award + perfectBonus + streak.bonus;
 
   return {
-    totalXp: (state?.totalXp ?? 0) + awarded,
-    xpAwarded: awarded,
-    perfectBonus,
-    streakBonus: streak.bonus,
-    streakDays: streak.streakDays,
-    hearts: state?.hearts ?? MAX_HEARTS,
-    stars: starsForScore(score),
-    score,
-    isFirstCompletion,
-    dailyXp: (state?.dailyXp ?? 0) + awarded,
+    result: {
+      totalXp: (state?.totalXp ?? 0) + awarded,
+      xpAwarded: awarded,
+      perfectBonus,
+      streakBonus: streak.bonus,
+      streakDays: streak.streakDays,
+      hearts: state?.hearts ?? MAX_HEARTS,
+      stars: starsForScore(score),
+      score,
+      isFirstCompletion,
+      dailyXp: (state?.dailyXp ?? 0) + awarded,
+    },
+    // A spent freeze has to leave the local state too, or the same one rescues
+    // every missed day until the next refresh.
+    streakFreezes: streak.streakFreezes,
+    clearedFirstTime: isFirstCompletion && score >= PASS_SCORE,
+    wasPerfect: perfectBonus > 0,
   };
 }
 
@@ -222,7 +229,10 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
         kind: 'lesson',
         payload: { ...params, playedOn: new Date().toISOString().slice(0, 10) },
       });
-      const result = localLessonResult(get().state, params);
+      const { result, streakFreezes, clearedFirstTime, wasPerfect } = localLessonResult(
+        get().state,
+        params
+      );
 
       set((current) => ({
         state: current.state
@@ -231,6 +241,9 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
               totalXp: result.totalXp,
               streakDays: result.streakDays,
               longestStreak: Math.max(current.state.longestStreak, result.streakDays),
+              streakFreezes,
+              lessonsCompleted: current.state.lessonsCompleted + (clearedFirstTime ? 1 : 0),
+              perfectLessons: current.state.perfectLessons + (wasPerfect ? 1 : 0),
               dailyXp: result.dailyXp,
               lastActiveDate: new Date().toISOString().slice(0, 10),
             }

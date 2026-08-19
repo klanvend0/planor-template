@@ -6,6 +6,28 @@ Everything marked **code** is already handled in the repo; everything marked
 
 ---
 
+## 0. The build must not ship in local mode
+
+With no `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_KEY` the app runs
+entirely on the device: no accounts, and a paywall that grants Pro locally
+without charging. That is the right behaviour for a fresh clone and the wrong
+thing to submit — it would hand every reviewer and every customer a free
+subscription.
+
+So before any production build:
+
+```bash
+grep -E 'EXPO_PUBLIC_SUPABASE_(URL|KEY)' .env    # both set, and pointing at production
+npx eas env:list --environment production        # same two present in EAS
+```
+
+`eas.json`'s production profile reads them from EAS environment variables, not
+from the local `.env`, so having them on your machine is not enough. The
+paywall's own copy is the tell: a build in local mode says "Demo mode: nothing
+is charged" where the billing terms should be.
+
+---
+
 ## 1. Placeholders to replace
 
 | Where      | Key                                                | Currently                              |

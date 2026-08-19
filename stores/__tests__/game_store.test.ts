@@ -134,6 +134,30 @@ describe('offline lesson estimate', () => {
     expect((await useGameStore.getState().finishLesson(finishParams)).streakDays).toBe(1);
   });
 
+  it('spends the freeze it used, and banks the one it earned', async () => {
+    useGameStore.setState({
+      state: gameState({ streakDays: 9, lastActiveDate: dayBefore(2), streakFreezes: 1 }),
+    });
+    await useGameStore.getState().finishLesson(finishParams);
+    // The rescued day cost the freeze; leaving it in place would rescue every
+    // missed day until the next refresh.
+    expect(useGameStore.getState().state?.streakFreezes).toBe(0);
+
+    useGameStore.setState({ state: gameState({ streakDays: 6, lastActiveDate: dayBefore(1) }) });
+    await useGameStore.getState().finishLesson(finishParams);
+    expect(useGameStore.getState().state?.streakFreezes).toBe(1);
+  });
+
+  it('counts the lesson it just cleared', async () => {
+    useGameStore.setState({ state: gameState({ lessonsCompleted: 4, perfectLessons: 1 }) });
+
+    await useGameStore.getState().finishLesson(finishParams);
+
+    const state = useGameStore.getState().state;
+    expect(state?.lessonsCompleted).toBe(5);
+    expect(state?.perfectLessons).toBe(2);
+  });
+
   it('pays the seven-day bonus on the day the streak reaches it, once', async () => {
     useGameStore.setState({ state: gameState({ streakDays: 6, lastActiveDate: dayBefore(1) }) });
     const first = await useGameStore.getState().finishLesson(finishParams);

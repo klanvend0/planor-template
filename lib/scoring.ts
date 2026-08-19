@@ -79,9 +79,24 @@ export function lessonAward(params: { score: number; bestBefore: number; baseXp:
 } {
   const { score, bestBefore, baseXp } = params;
   return {
-    award: score > bestBefore ? Math.round(baseXp * ((score - bestBefore) / 100)) : 0,
+    award: score > bestBefore ? awardFor(baseXp, score - bestBefore) : 0,
     perfectBonus: score === 100 && bestBefore < 100 ? PERFECT_BONUS_XP : 0,
   };
+}
+
+/**
+ * `round(baseXp * (delta / 100))`, done the way Postgres does it.
+ *
+ * The SQL divides by the numeric literal `100.0`, so the whole expression is
+ * exact decimal and `round()` breaks ties away from zero. In doubles the same
+ * expression lands just under the boundary — 150 * (57/100) is 85.49999999999999
+ * — and pays one XP less than the server on thirteen reachable pairs. Both
+ * operands here are integers, so the remainder decides the tie exactly.
+ */
+function awardFor(baseXp: number, delta: number): number {
+  const scaled = baseXp * delta;
+  const whole = Math.floor(scaled / 100);
+  return scaled - whole * 100 >= 50 ? whole + 1 : whole;
 }
 
 export type StreakInput = {

@@ -6,11 +6,18 @@ one, so you can bring them up gradually.
 
 | Piece                         | Without it                                                     |
 | ----------------------------- | -------------------------------------------------------------- |
-| Supabase project + migrations | The app cannot sign in or save progress                        |
+| Supabase project + migrations | The app runs entirely on the device (see below)                |
 | RevenueCat                    | Everyone is a free user; the paywall shows "store unavailable" |
 | RevenueCat webhook            | Subscribers still get the app, but AI grading refuses them     |
 | AI provider key               | The explain-the-code question returns "grader unavailable"     |
 | Apple client secret           | Account deletion works but does not revoke the Apple grant     |
+
+None of it is needed to run the app. With no `EXPO_PUBLIC_SUPABASE_URL` the
+whole game runs on the device — `services/local/` implements every RPC below
+against one AsyncStorage document, using the same rules (`lib/scoring.ts`) the
+SQL applies. That is what a fresh clone does. Setting the Supabase URL and key
+is what switches the app onto everything described here; nothing else in this
+file changes that decision.
 
 ---
 
