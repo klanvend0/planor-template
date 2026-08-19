@@ -31,6 +31,7 @@ import { expectedAnswerText } from '@/lib/answer_check';
 import { track } from '@/lib/analytics';
 import { localized } from '@/lib/content_schema';
 import { errorMessageKey } from '@/lib/errors';
+import { canRefillHearts } from '@/lib/scoring';
 import { celebrateFeedback } from '@/lib/haptics';
 import type { LessonLocation } from '@/services/content_service';
 import { useGameStore } from '@/stores/game_store';
@@ -94,7 +95,10 @@ export function SessionRunner({
 
   useEffect(() => {
     if (!session.error) return;
-    Alert.alert(t('app.name'), t(errorMessageKey(session.error.code)));
+    // The results screen below carries the same message when a run could not be
+    // saved, so an alert on top of it would only say it twice.
+    const shownOnScreen = session.phase === 'finished' && !session.outcome;
+    if (!shownOnScreen) Alert.alert(t('app.name'), t(errorMessageKey(session.error.code)));
     session.clearError();
   }, [session, t]);
 
@@ -115,16 +119,23 @@ export function SessionRunner({
 
   if (session.phase === 'finished') {
     if (!session.outcome) {
-      // The write failed and no result came back; do not invent numbers.
+      // The write failed and no result came back, so there are no numbers to
+      // show. Say what went wrong — the cause is rarely the network — and offer
+      // the run again rather than throwing it away.
       return (
         <View className="flex-1 items-center justify-center gap-5 bg-background px-8">
           <Text className="text-center font-display text-2xl text-foreground">
-            {t('results.title_ok')}
+            {t('results.not_saved')}
           </Text>
           <Text className="text-center text-[15px] text-muted-foreground">
-            {t('errors.network')}
+            {t(errorMessageKey(session.finishError?.code ?? 'unknown'))}
           </Text>
-          <GameButton label={t('common.continue')} onPress={onFinish} />
+          <GameButton
+            label={t('results.try_again')}
+            busy={session.isFinishing}
+            onPress={() => void session.retryFinish()}
+          />
+          <GameButton label={t('common.continue')} variant="ghost" flat onPress={onFinish} />
         </View>
       );
     }
@@ -151,6 +162,11 @@ export function SessionRunner({
       <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
         <OutOfHearts
           heartsUpdatedAt={gameState?.heartsUpdatedAt ?? new Date().toISOString()}
+          refillAvailable={canRefillHearts(
+            gameState?.lastFreeRefillAt ?? null,
+            gameState?.hasSubscription ?? false,
+            Date.now()
+          )}
           refillBusy={refillBusy}
           onRefill={async () => {
             setRefillBusy(true);

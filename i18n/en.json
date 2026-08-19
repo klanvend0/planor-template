@@ -15,6 +15,7 @@
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "network": "You seem to be offline. Check your connection and try again.",
+    "storage_unavailable": "This device would not let the app read your progress. Restart the app and try again.",
     "subscription_required": "This is a Pro feature.",
     "rate_limited": "You are going fast. Give it a minute and try again.",
     "sign_in_required": "Please sign in to continue.",
@@ -191,6 +192,8 @@
     "title_great": "Nicely done",
     "title_ok": "Lesson complete",
     "title_retry": "Give it another go",
+    "not_saved": "We could not save this run",
+    "try_again": "Save it again",
     "accuracy": "Accuracy",
     "xp_earned": "XP earned",
     "time": "Time",

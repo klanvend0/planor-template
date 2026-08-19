@@ -174,6 +174,15 @@ describe('hearts', () => {
     expect(await backend.refillHearts(NOW + 25 * 3_600_000)).toBe(MAX_HEARTS);
   });
 
+  it('reports the spent refill, so the screen can stop offering it', async () => {
+    expect((await backend.fetchGameState(NOW)).lastFreeRefillAt).toBeNull();
+
+    await answer(`${LESSON}-q1`, false);
+    await backend.refillHearts(NOW);
+
+    expect((await backend.fetchGameState(NOW)).lastFreeRefillAt).not.toBeNull();
+  });
+
   it('regenerates one every half hour', async () => {
     await answer(`${LESSON}-q1`, false);
     await answer(`${LESSON}-q2`, false);
@@ -216,6 +225,26 @@ describe('mistakes deck', () => {
       NOW + 120_000
     );
     expect(await backend.fetchMistakeQuestionIds('python')).toEqual(['q-new']);
+  });
+
+  it('still owes a question after hundreds of later answers', async () => {
+    await answer('q-missed-long-ago', false);
+
+    // One pass of the bundled content is over 300 answers; the deck must not
+    // forget a miss just because the learner kept playing.
+    for (let index = 0; index < 800; index += 1) {
+      await backend.recordAnswer(
+        {
+          question: { id: `q-filler-${index}`, type: 'multiple_choice' },
+          lessonId: LESSON,
+          courseId: 'python',
+          isCorrect: true,
+        },
+        NOW + index * 1000
+      );
+    }
+
+    expect(await backend.fetchMistakeQuestionIds('python')).toContain('q-missed-long-ago');
   });
 
   it('keeps the other course out of it', async () => {

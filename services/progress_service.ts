@@ -25,6 +25,8 @@ export type GameState = {
   streakFreezes: number;
   lessonsCompleted: number;
   perfectLessons: number;
+  /** When the free heart refill was last taken; null while one is available. */
+  lastFreeRefillAt: string | null;
   dailyXp: number;
   weeklyXp: number;
   hasSubscription: boolean;
@@ -94,6 +96,7 @@ export async function fetchGameState(): Promise<GameState> {
     streakFreezes: row.streak_freezes,
     lessonsCompleted: row.lessons_completed,
     perfectLessons: row.perfect_lessons,
+    lastFreeRefillAt: row.last_free_refill_at,
     dailyXp: row.daily_xp,
     weeklyXp: row.weekly_xp,
     hasSubscription: row.has_subscription,

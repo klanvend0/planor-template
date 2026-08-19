@@ -268,6 +268,7 @@ export interface Database {
           streak_freezes: number;
           lessons_completed: number;
           perfect_lessons: number;
+          last_free_refill_at: string | null;
           daily_xp: number;
           weekly_xp: number;
           has_subscription: boolean;

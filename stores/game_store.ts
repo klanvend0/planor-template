@@ -257,9 +257,17 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
 
   refill: async () => {
     const hearts = await refillHeartsRpc();
+    const now = new Date().toISOString();
     set((current) => ({
       state: current.state
-        ? { ...current.state, hearts, heartsUpdatedAt: new Date().toISOString() }
+        ? {
+            ...current.state,
+            hearts,
+            heartsUpdatedAt: now,
+            // A subscriber's refill is not the free one, so it does not start
+            // the cooldown that greys the button out.
+            lastFreeRefillAt: current.state.hasSubscription ? current.state.lastFreeRefillAt : now,
+          }
         : current.state,
     }));
   },

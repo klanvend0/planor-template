@@ -24,6 +24,7 @@ const mockGameState = {
   streakFreezes: 0,
   lessonsCompleted: 0,
   perfectLessons: 0,
+  lastFreeRefillAt: null,
   dailyXp: 0,
   weeklyXp: 0,
   hasSubscription: false,

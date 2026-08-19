@@ -55,6 +55,8 @@ export type SessionState = {
   isGrading: boolean;
   isFinishing: boolean;
   error: AppError | null;
+  /** Why the run could not be saved, kept until the next attempt to save it. */
+  finishError: AppError | null;
   correctCount: number;
   /** Result of `complete_lesson`, available once the phase is `finished`. */
   outcome: LessonResult | null;
@@ -75,6 +77,8 @@ export type LessonSession = SessionState & {
   /** Retry after hearts were refilled. */
   resume: () => void;
   clearError: () => void;
+  /** Try to close out the run again after a failure. */
+  retryFinish: () => Promise<void>;
 };
 
 export type SessionOptions = {
@@ -120,6 +124,12 @@ export function useLessonSession(
   const [isGrading, setIsGrading] = useState(false);
   const [isFinishing, setIsFinishing] = useState(false);
   const [error, setError] = useState<AppError | null>(null);
+  /**
+   * Why the run could not be closed out. Kept apart from `error`, which the
+   * screen clears as soon as it has shown its alert — this one has to outlive
+   * that, because the results screen is built from it.
+   */
+  const [finishError, setFinishError] = useState<AppError | null>(null);
   const [outcome, setOutcome] = useState<LessonResult | null>(null);
   const [presentation, setPresentation] = useState(0);
 
@@ -166,6 +176,7 @@ export function useLessonSession(
       isGrading,
       isFinishing,
       error,
+      finishError,
       correctCount: firstTryCorrect.current.size,
       outcome,
       elapsedMs: Date.now() - sessionStartedAt.current,
@@ -180,6 +191,7 @@ export function useLessonSession(
       isGrading,
       isFinishing,
       error,
+      finishError,
       outcome,
       skippedCount,
     ]
@@ -287,6 +299,7 @@ export function useLessonSession(
 
   const finish = useCallback(async () => {
     setIsFinishing(true);
+    setFinishError(null);
     const correct = firstTryCorrect.current.size;
     // Read the skipped set rather than the rendered count: skipping the last
     // question queues a state update that has not landed by the time this runs.
@@ -330,7 +343,9 @@ export function useLessonSession(
         setOutcome(result);
       }
     } catch (caught) {
-      setError(toAppError(caught));
+      const appError = toAppError(caught);
+      setError(appError);
+      setFinishError(appError);
     } finally {
       setIsFinishing(false);
       setPhase('finished');
@@ -389,6 +404,7 @@ export function useLessonSession(
     next: advance,
     resume,
     clearError: () => setError(null),
+    retryFinish: finish,
   };
 }
 

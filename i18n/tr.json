@@ -15,6 +15,7 @@
   "errors": {
     "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
     "network": "Bağlantı yok gibi görünüyor. İnternetini kontrol edip tekrar dene.",
+    "storage_unavailable": "Uygulama bu cihazda ilerlemeni okuyamadı. Uygulamayı yeniden başlatıp tekrar dene.",
     "subscription_required": "Bu bir Pro özelliği.",
     "rate_limited": "Biraz hızlısın. Bir dakika sonra tekrar dene.",
     "sign_in_required": "Devam etmek için giriş yapmalısın.",
@@ -191,6 +192,8 @@
     "title_great": "Eline sağlık",
     "title_ok": "Ders tamamlandı",
     "title_retry": "Bir kez daha dene",
+    "not_saved": "Bu turu kaydedemedik",
+    "try_again": "Tekrar kaydet",
     "accuracy": "Doğruluk",
     "xp_earned": "Kazanılan XP",
     "time": "Süre",

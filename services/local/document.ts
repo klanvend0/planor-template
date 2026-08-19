@@ -14,6 +14,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import type { CourseId } from '@/lib/content_schema';
+import { AppError } from '@/lib/errors';
 import { MAX_HEARTS } from '@/lib/gamification';
 import type { SupportedLocale } from '@/lib/i18n';
 import type { ExplanationVerdict } from '@/services/grading_service';
@@ -21,7 +22,7 @@ import type { LessonProgress } from '@/services/progress_service';
 
 const STORAGE_KEY = 'codeling.local-backend.v1';
 
-/** Attempts are kept for the mistakes deck, so the tail can be dropped. */
+/** How many attempts are kept once older ones for the same question are gone. */
 const MAX_ATTEMPTS = 600;
 /** XP events older than this are only summed for "this week". */
 const MAX_XP_EVENTS = 400;
@@ -131,6 +132,38 @@ export function emptyDocument(now: number = Date.now()): LocalDocument {
   };
 }
 
+/**
+ * Forget attempts nothing can still read.
+ *
+ * Cutting the oldest entries off the tail would silently empty the mistakes
+ * deck: the oldest attempts are exactly the oldest *unfixed* misses, and the
+ * server owes the learner those questions until they answer them right. What
+ * the deck actually reads is the newest attempt per question, so history is
+ * collapsed to that instead — which for the bundled content is a few hundred
+ * rows, well under the cap.
+ */
+function pruneAttempts(attempts: LocalAttempt[]): LocalAttempt[] {
+  if (attempts.length <= MAX_ATTEMPTS) return attempts;
+
+  const byTime = (a: LocalAttempt, b: LocalAttempt) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0);
+
+  // One entry per question: the newest. Older attempts for the same question
+  // cannot change the answer, and collapsing them can never resurrect a miss,
+  // because the correct attempt that cancelled it survives in its place.
+  const newest = new Map<string, LocalAttempt>();
+  for (const attempt of attempts) newest.set(attempt.questionId, attempt);
+  const kept = [...newest.values()].sort(byTime);
+  if (kept.length <= MAX_ATTEMPTS) return kept;
+
+  // Still over: give up the questions already answered right first. Those are
+  // finished; the misses are what is still owed.
+  const misses = kept.filter((attempt) => !attempt.isCorrect);
+  const fixed = kept.filter((attempt) => attempt.isCorrect);
+  const room = Math.max(0, MAX_ATTEMPTS - misses.length);
+
+  return [...fixed.slice(-room), ...misses].sort(byTime).slice(-MAX_ATTEMPTS);
+}
+
 let cached: LocalDocument | null = null;
 let loading: Promise<LocalDocument> | null = null;
 let writing: Promise<void> = Promise.resolve();
@@ -206,11 +239,14 @@ export async function mutateDocument<T>(
     if (readFailed) {
       // Writing now would put an empty document over a save that is only
       // temporarily unreadable.
-      throw new Error('local storage is unreadable; refusing to write over it');
+      throw new AppError(
+        'storage_unavailable',
+        'local storage is unreadable; refusing to write over it'
+      );
     }
     const result = change(document);
 
-    document.attempts = document.attempts.slice(-MAX_ATTEMPTS);
+    document.attempts = pruneAttempts(document.attempts);
     document.xpEvents = document.xpEvents.slice(-MAX_XP_EVENTS);
     cached = document;
 

@@ -710,6 +710,9 @@ returns table (
   streak_freezes smallint,
   lessons_completed integer,
   perfect_lessons integer,
+  -- So the app can tell a spent free refill from an available one, rather than
+  -- offering a button that only produces an error.
+  last_free_refill_at timestamptz,
   daily_xp integer,
   weekly_xp integer,
   has_subscription boolean
@@ -739,6 +742,7 @@ begin
       gs.streak_freezes,
       gs.lessons_completed,
       gs.perfect_lessons,
+      gs.last_free_refill_at,
       coalesce((select sum(amount)::integer from public.xp_events e
                 where e.user_id = v_user and e.earned_on = v_today), 0),
       coalesce((select sum(amount)::integer from public.xp_events e

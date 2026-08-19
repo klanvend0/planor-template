@@ -72,11 +72,13 @@ describe('the local document', () => {
       // The read hands back a blank stand-in rather than throwing at the screen…
       expect((await readDocument()).game.totalXp).toBe(0);
       // …but nothing may persist it over the save that is merely unreadable.
+      // The code matters: the screen turns it into "the device would not let us
+      // read your progress" rather than "check your connection".
       await expect(
         mutateDocument((document) => {
           document.game.totalXp = 0;
         })
-      ).rejects.toThrow(/unreadable/);
+      ).rejects.toMatchObject({ code: 'storage_unavailable' });
     });
 
     // Once storage answers again, the save is still there.

@@ -38,6 +38,7 @@ const gameState = (overrides: Partial<GameState> = {}): GameState => ({
   streakFreezes: 0,
   lessonsCompleted: 4,
   perfectLessons: 1,
+  lastFreeRefillAt: null,
   dailyXp: 0,
   weeklyXp: 120,
   hasSubscription: false,

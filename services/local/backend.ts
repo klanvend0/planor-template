@@ -86,6 +86,7 @@ function toGameState(document: LocalDocument, now: number): GameState {
     streakFreezes: game.streakFreezes,
     lessonsCompleted: game.lessonsCompleted,
     perfectLessons: game.perfectLessons,
+    lastFreeRefillAt: game.lastFreeRefillAt,
     dailyXp: xpOn(document, today),
     // The server sums `earned_on > today - 7`, which is today plus six days.
     weeklyXp: xpSince(document, dayBefore(today, 7)),

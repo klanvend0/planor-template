@@ -16,6 +16,7 @@ export type AppErrorCode =
   | 'rate_limited'
   | 'subscription_required'
   | 'store_unavailable'
+  | 'storage_unavailable'
   | 'answer_too_short'
   | 'unknown';
 
@@ -82,6 +83,8 @@ export function errorMessageKey(code: AppErrorCode): TranslationKeys {
       return 'errors.subscription_required';
     case 'store_unavailable':
       return 'paywall.unavailable';
+    case 'storage_unavailable':
+      return 'errors.storage_unavailable';
     case 'answer_too_short':
       return 'errors.answer_too_short';
     default:
