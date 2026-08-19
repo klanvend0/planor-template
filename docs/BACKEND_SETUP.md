@@ -9,6 +9,7 @@ one, so you can bring them up gradually.
 | Supabase project + migrations | The app runs entirely on the device (see below)                |
 | RevenueCat                    | Everyone is a free user; the paywall shows "store unavailable" |
 | RevenueCat webhook            | Subscribers still get the app, but AI grading refuses them     |
+| RevenueCat REST key           | A purchase waits for the webhook before the server agrees      |
 | AI provider key               | The explain-the-code question returns "grader unavailable"     |
 | Apple client secret           | Account deletion works but does not revoke the Apple grant     |
 
@@ -66,6 +67,7 @@ See [OAUTH_SETUP.md](./OAUTH_SETUP.md). The redirect URL is `codeling://auth/cal
 npx supabase functions deploy grade-explanation
 npx supabase functions deploy delete-account
 npx supabase functions deploy apple-token-exchange
+npx supabase functions deploy sync-subscription
 npx supabase functions deploy revenuecat-webhook --no-verify-jwt
 ```
 
@@ -84,9 +86,18 @@ npm run supabase:secrets:set \
   AI_MODEL=gemini-2.5-flash-lite \
   REVENUECAT_WEBHOOK_SECRET=$(openssl rand -hex 32) \
   REVENUECAT_API_KEY=sk_... \
+  REVENUECAT_ENTITLEMENT=pro \
   APPLE_CLIENT_ID=com.planor.codeling \
   APPLE_CLIENT_SECRET=...
 ```
+
+---
+
+`REVENUECAT_API_KEY` is the v1 _secret_ key, not the public SDK key. Two
+functions use it: the webhook, to resolve a transfer's target, and
+`sync-subscription`, which the app calls the moment a purchase or a restore
+succeeds so the server stops disagreeing with the store while the webhook is in
+flight. Without it both fall back to waiting for the webhook.
 
 ---
 

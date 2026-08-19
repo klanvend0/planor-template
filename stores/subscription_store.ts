@@ -26,6 +26,7 @@ import {
   restore as restorePurchases,
   type SubscriptionSnapshot,
 } from '@/services/purchases_service';
+import { syncSubscription } from '@/services/subscription_service';
 import { useGameStore } from '@/stores/game_store';
 
 type SubscriptionStoreState = {
@@ -121,6 +122,11 @@ export const useSubscriptionStore = create<SubscriptionStoreState & Subscription
         if (outcome.status === 'purchased') {
           set({ snapshot: outcome.snapshot, isPurchasing: false });
           publish(outcome.snapshot);
+          // The UI is unlocked by the snapshot above, but the server reads its
+          // own mirror. Close that gap before the learner tries to use what
+          // they just bought; if it fails, the webhook is still coming.
+          await syncSubscription();
+          await useGameStore.getState().refresh({ silent: true });
           return 'purchased';
         }
         set({ isPurchasing: false });
@@ -137,6 +143,10 @@ export const useSubscriptionStore = create<SubscriptionStoreState & Subscription
         const snapshot = await restorePurchases();
         set({ snapshot, isRestoring: false });
         publish(snapshot);
+        if (snapshot?.isSubscribed) {
+          await syncSubscription();
+          await useGameStore.getState().refresh({ silent: true });
+        }
         return snapshot?.isSubscribed ?? false;
       } catch (error) {
         set({ isRestoring: false, error: toAppError(error, 'store_unavailable') });
