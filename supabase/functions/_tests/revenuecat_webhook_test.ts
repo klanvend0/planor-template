@@ -9,11 +9,21 @@
  * @module supabase/functions/_tests/revenuecat_webhook_test
  */
 
-import { assert, assertEquals, loadFunction, startSupabaseStub, stubFetch } from './harness.ts';
+import {
+  assert,
+  assertEquals,
+  loadFunction,
+  startSupabaseStub,
+  stubFetch,
+  type RecordedRequest,
+  type Reply,
+} from './harness.ts';
 
 const SECRET = 'shared-secret';
+const SERVICE_ROLE = 'service-role-key';
 const LEARNER = '11111111-1111-1111-1111-111111111111';
 const PREVIOUS_OWNER = '22222222-2222-2222-2222-222222222222';
+const SECOND_WINNER = '33333333-3333-3333-3333-333333333333';
 const REVENUECAT = 'https://api.revenuecat.com';
 
 const EXPIRES_MS = Date.parse('2099-01-01T00:00:00Z');
@@ -32,7 +42,9 @@ type World = {
   /** Rows the transfer's source lookup finds for the accounts being left. */
   source?: Row[];
   /** What PostgREST answers the upsert with, for the failure paths. */
-  upsert?: { status?: number; body?: unknown };
+  upsert?: Reply | ((request: RecordedRequest) => Reply);
+  /** What PostgREST answers the transfer's revocation with. */
+  revoke?: Reply;
   environment?: Record<string, string>;
   revenuecat?: Parameters<typeof stubFetch>[1];
 };
@@ -68,6 +80,54 @@ function transfer(overrides: Record<string, unknown> = {}): Record<string, unkno
   };
 }
 
+/** What the mirror already holds for the account a transfer is moving away from. */
+function sourceRow(overrides: Row = {}): Row {
+  return {
+    product_id: 'codeling_pro_annual',
+    store: 'APP_STORE',
+    status: 'active',
+    period_type: 'NORMAL',
+    current_period_end: EXPIRES_AT,
+    trial_end: null,
+    will_renew: true,
+    environment: 'PRODUCTION',
+    ...overrides,
+  };
+}
+
+/** The REST API's answer for a subscriber who owns the tracked entitlement. */
+function storeHolds(entitlement: Row, subscriptions: Row = {}): World['revenuecat'] {
+  return {
+    [`GET ${REVENUECAT}/v1/subscribers/*`]: {
+      body: { subscriber: { entitlements: { pro: entitlement }, subscriptions } },
+    },
+  };
+}
+
+/**
+ * Every column a mirror row may name.
+ *
+ * PostgREST rejects an insert naming a column the table does not have, so the
+ * set of keys is as much a part of the contract as the values in them.
+ */
+const MIRROR_COLUMNS = [
+  'current_period_end',
+  'entitlement',
+  'environment',
+  'last_event_at',
+  'period_type',
+  'product_id',
+  'raw_event',
+  'rc_app_user_id',
+  'rc_event_id',
+  'status',
+  'store',
+  'trial_end',
+  'updated_at',
+  'user_id',
+  'will_renew',
+];
+
 function delivery(event: unknown, secret: string | null = SECRET): Request {
   return new Request('http://localhost/revenuecat-webhook', {
     method: 'POST',
@@ -98,7 +158,7 @@ async function withWorld(world: World, run: (module: Module, harness: Harness) =
         ? { body: world.source ?? [] }
         : { body: world.existing ?? [] },
     'POST /rest/v1/subscriptions': world.upsert ?? { status: 201, body: [] },
-    'PATCH /rest/v1/subscriptions': { status: 200, body: [] },
+    'PATCH /rest/v1/subscriptions': world.revoke ?? { status: 200, body: [] },
   });
   const restore = stubFetch(harness, world.revenuecat ?? {});
   try {
@@ -106,7 +166,7 @@ async function withWorld(world: World, run: (module: Module, harness: Harness) =
     // next: `Deno.env` outlives the module that read it.
     const module = await loadFunction<Module>('../revenuecat-webhook/index.ts', {
       SUPABASE_URL: harness.url,
-      SUPABASE_SERVICE_ROLE_KEY: 'service-role-key',
+      SUPABASE_SERVICE_ROLE_KEY: SERVICE_ROLE,
       REVENUECAT_WEBHOOK_SECRET: SECRET,
       REVENUECAT_ENTITLEMENT: 'pro',
       REVENUECAT_API_KEY: '',
@@ -133,6 +193,18 @@ Deno.test('refuses a delivery with no shared secret, and one that gets it wrong'
     // A prefix of the real secret is still the wrong secret.
     const partial = await module.handleRevenueCatWebhook(delivery(purchase(), SECRET.slice(0, -1)));
     assertEquals(partial.status, 401);
+
+    // Only the `Bearer` scheme is stripped before the comparison, so a header
+    // carrying the secret under any other scheme is not a way in.
+    const otherScheme = await module.handleRevenueCatWebhook(
+      new Request('http://localhost/revenuecat-webhook', {
+        method: 'POST',
+        headers: { Authorization: `Basic ${SECRET}` },
+        body: JSON.stringify({ event: purchase() }),
+      })
+    );
+    assertEquals(otherScheme.status, 401);
+    assertEquals(await otherScheme.json(), { error: 'unauthorized' });
 
     assertEquals(harness.requests.length, 0, 'a refused delivery must not touch the mirror');
   });
@@ -194,7 +266,19 @@ Deno.test('writes what an initial purchase says, and nothing it does not', async
     assertEquals(write.search, '?on_conflict=user_id');
     assertEquals(write.headers.prefer, 'resolution=merge-duplicates');
 
+    // The mirror is written past RLS, so both calls have to carry the service
+    // role key rather than any other credential the function has to hand.
+    for (const request of [lookup, write]) {
+      assertEquals(request.headers.authorization, `Bearer ${SERVICE_ROLE}`);
+      assertEquals(request.headers.apikey, SERVICE_ROLE);
+    }
+
     const row = write.body as Row;
+    assertEquals(
+      Object.keys(row).sort(),
+      MIRROR_COLUMNS,
+      'the row names these columns and no others'
+    );
     assertEquals(row.user_id, LEARNER);
     assertEquals(row.rc_app_user_id, LEARNER);
     assertEquals(row.entitlement, 'pro');
@@ -225,6 +309,57 @@ Deno.test('reads a trial purchase as trialing, with the trial end filled in', as
     assertEquals(row.trial_end, EXPIRES_AT);
     assertEquals(row.current_period_end, EXPIRES_AT);
     assertEquals(row.will_renew, true);
+  });
+});
+
+Deno.test('makes a learner pro on every event type that grants the entitlement', async () => {
+  const granting = [
+    'RENEWAL',
+    'UNCANCELLATION',
+    'PRODUCT_CHANGE',
+    'NON_RENEWING_PURCHASE',
+    'TEMPORARY_ENTITLEMENT_GRANT',
+  ];
+
+  await withWorld({}, async (module, harness) => {
+    for (const type of granting) {
+      const response = await module.handleRevenueCatWebhook(
+        delivery(purchase({ type, id: `evt-${type.toLowerCase()}` }))
+      );
+      assertEquals(await response.json(), { ok: true, status: 'active', user_id: LEARNER }, type);
+    }
+
+    assertEquals(
+      writes(harness).map((row) => row.status),
+      granting.map(() => 'active'),
+      'each of these unlocks pro'
+    );
+    assertEquals(
+      writes(harness).map((row) => row.will_renew),
+      granting.map(() => true)
+    );
+
+    // A trial reached through one of them is still a trial.
+    const trial = await module.handleRevenueCatWebhook(
+      delivery(purchase({ type: 'RENEWAL', id: 'evt-renewal-trial', period_type: 'TRIAL' }))
+    );
+    assertEquals(await trial.json(), { ok: true, status: 'trialing', user_id: LEARNER });
+    assertEquals(writes(harness)[granting.length].trial_end, EXPIRES_AT);
+  });
+});
+
+Deno.test('tracks whichever entitlement the project is configured for', async () => {
+  await withWorld({ environment: { REVENUECAT_ENTITLEMENT: 'coach' } }, async (module, harness) => {
+    const ours = await module.handleRevenueCatWebhook(
+      delivery(purchase({ id: 'evt-coach', entitlement_ids: ['coach'] }))
+    );
+    assertEquals(await ours.json(), { ok: true, status: 'active', user_id: LEARNER });
+    assertEquals(writes(harness)[0].entitlement, 'coach');
+
+    // `pro` is somebody else's entitlement on this project.
+    const elsewhere = await module.handleRevenueCatWebhook(delivery(purchase()));
+    assertEquals(await elsewhere.json(), { ok: true, ignored: 'other_entitlement' });
+    assertEquals(writes(harness).length, 1);
   });
 });
 
@@ -263,6 +398,26 @@ Deno.test('never lets an event older than the applied one overwrite it', async (
   );
 });
 
+Deno.test('stamps a delivery that carries no timestamp with the moment it arrived', async () => {
+  await withWorld({}, async (module, harness) => {
+    const before = Date.now();
+    const response = await module.handleRevenueCatWebhook(
+      delivery(purchase({ id: 'evt-untimed', event_timestamp_ms: undefined }))
+    );
+    const after = Date.now();
+
+    assertEquals(await response.json(), { ok: true, status: 'active', user_id: LEARNER });
+
+    // The next delivery's stale guard compares itself against this, so it has
+    // to be the moment the event was handled and not a placeholder.
+    const stamped = Date.parse(String(writes(harness)[0].last_event_at));
+    assert(
+      stamped >= before && stamped <= after,
+      `last_event_at ${writes(harness)[0].last_event_at} is not the arrival time`
+    );
+  });
+});
+
 Deno.test('leaves a cancellation entitled until its period ends, an expiration not', async () => {
   await withWorld({}, async (module, harness) => {
     const cancelled = await module.handleRevenueCatWebhook(
@@ -296,6 +451,16 @@ Deno.test('holds a billing issue in grace, since the retry window is still paid 
 
     assertEquals(await response.json(), { ok: true, status: 'grace', user_id: LEARNER });
     assertEquals(writes(harness)[0].will_renew, true, 'the store is still trying to charge');
+
+    // The same event once the retries have run past the paid period: the grace
+    // it stands for is over, so the learner is no longer entitled.
+    const lapsed = await module.handleRevenueCatWebhook(
+      delivery(
+        purchase({ type: 'BILLING_ISSUE', id: 'evt-billing-lapsed', expiration_at_ms: ENDED_MS })
+      )
+    );
+    assertEquals(await lapsed.json(), { ok: true, status: 'expired', user_id: LEARNER });
+    assertEquals(writes(harness)[1].status, 'expired');
   });
 });
 
@@ -400,6 +565,35 @@ Deno.test('ignores an app user id that is not a supabase user, and finds one tha
   });
 });
 
+Deno.test('takes the original app user id when the current one is anonymous', async () => {
+  await withWorld({}, async (module, harness) => {
+    // After an alias merge RevenueCat keeps sending the anonymous id it started
+    // with, and names the signed-in learner as the original.
+    const merged = await module.handleRevenueCatWebhook(
+      delivery(
+        purchase({
+          id: 'evt-merged',
+          app_user_id: '$RCAnonymousID:8f3a1c',
+          original_app_user_id: LEARNER,
+        })
+      )
+    );
+    assertEquals(await merged.json(), { ok: true, status: 'active', user_id: LEARNER });
+    assertEquals(writes(harness)[0].user_id, LEARNER);
+    assertEquals(writes(harness)[0].rc_app_user_id, '$RCAnonymousID:8f3a1c');
+
+    // When both are real accounts the current id is the one that owns the
+    // subscription; the original is only a fallback.
+    const both = await module.handleRevenueCatWebhook(
+      delivery(
+        purchase({ id: 'evt-both', app_user_id: LEARNER, original_app_user_id: PREVIOUS_OWNER })
+      )
+    );
+    assertEquals(await both.json(), { ok: true, status: 'active', user_id: LEARNER });
+    assertEquals(writes(harness)[1].user_id, LEARNER);
+  });
+});
+
 Deno.test(
   'moves the entitlement on a transfer: the winner granted, the loser revoked',
   async () => {
@@ -446,7 +640,19 @@ Deno.test(
         assertEquals(harness.outbound[0].path, `${REVENUECAT}/v1/subscribers/${LEARNER}`);
         assertEquals(harness.outbound[0].headers.authorization, 'Bearer sk_test');
 
+        // What the losing accounts hold is read newest-first and one row deep:
+        // a customer transferring away from several accounts moves the
+        // subscription that was touched last, not whichever row comes back.
+        const sourceLookup = harness.requests[1];
+        assertEquals(sourceLookup.method, 'GET');
+        assertEquals(
+          decodeURIComponent(sourceLookup.search),
+          '?select=product_id,store,status,period_type,current_period_end,trial_end,will_renew,' +
+            `environment&user_id=in.(${PREVIOUS_OWNER})&order=updated_at.desc&limit=1`
+        );
+
         const granted = writes(harness)[0];
+        assertEquals(Object.keys(granted).sort(), MIRROR_COLUMNS);
         assertEquals(granted.user_id, LEARNER);
         assertEquals(granted.entitlement, 'pro');
         assertEquals(granted.status, 'active');
@@ -730,6 +936,180 @@ Deno.test('grants from the mirror when the store cannot be reached at all', asyn
       assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
       assertEquals(writes(harness)[0].status, 'active');
       assertEquals(writes(harness)[0].product_id, 'codeling_pro_annual');
+    }
+  );
+});
+
+Deno.test('carries a trial across a transfer, trial end and all', async () => {
+  await withWorld(
+    {
+      environment: { REVENUECAT_API_KEY: 'sk_test' },
+      source: [sourceRow()],
+      revenuecat: storeHolds(
+        { expires_date: '2099-06-01T00:00:00Z', product_identifier: 'codeling_pro_monthly' },
+        { codeling_pro_monthly: { period_type: 'trial' } }
+      ),
+    },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+
+      const granted = writes(harness)[0];
+      assertEquals(granted.status, 'trialing', 'the winner is still inside the free days');
+      assertEquals(granted.period_type, 'trial');
+      assertEquals(granted.trial_end, '2099-06-01T00:00:00Z');
+      assertEquals(granted.current_period_end, '2099-06-01T00:00:00Z');
+      assertEquals(granted.will_renew, true);
+      assertEquals(revokes(harness).length, 1);
+    }
+  );
+});
+
+Deno.test('reads an entitlement the store says has already run out as expired', async () => {
+  await withWorld(
+    {
+      environment: { REVENUECAT_API_KEY: 'sk_test' },
+      // Nothing live on the losing account either, so the store's answer stands.
+      source: [
+        sourceRow({
+          status: 'expired',
+          current_period_end: '2020-01-01T00:00:00.000Z',
+          will_renew: false,
+        }),
+      ],
+      revenuecat: storeHolds(
+        { expires_date: '2020-01-01T00:00:00Z', product_identifier: 'codeling_pro_monthly' },
+        { codeling_pro_monthly: { period_type: 'normal' } }
+      ),
+    },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 0 });
+
+      const granted = writes(harness)[0];
+      assertEquals(granted.status, 'expired', 'a date in the past unlocks nothing');
+      assertEquals(granted.current_period_end, '2020-01-01T00:00:00Z');
+      assertEquals(granted.trial_end, null);
+      assertEquals(granted.will_renew, false);
+      assertEquals(revokes(harness).length, 0, 'nothing moved, so nothing is taken away');
+    }
+  );
+});
+
+Deno.test('treats an entitlement the store gives no expiry for as a lifetime one', async () => {
+  await withWorld(
+    {
+      environment: { REVENUECAT_API_KEY: 'sk_test' },
+      source: [sourceRow()],
+      revenuecat: storeHolds({ product_identifier: 'codeling_pro_lifetime' }, {}),
+    },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+
+      const granted = writes(harness)[0];
+      assertEquals(granted.status, 'active');
+      assertEquals(granted.product_id, 'codeling_pro_lifetime');
+      assertEquals(granted.current_period_end, null, 'a lifetime purchase never ends');
+      assertEquals(revokes(harness).length, 1);
+    }
+  );
+});
+
+Deno.test('takes the environment a transfer names over the one the mirror holds', async () => {
+  const store = storeHolds(
+    { expires_date: '2099-01-01T00:00:00Z', product_identifier: 'codeling_pro_monthly' },
+    { codeling_pro_monthly: { period_type: 'normal' } }
+  );
+
+  await withWorld(
+    {
+      environment: { REVENUECAT_API_KEY: 'sk_test' },
+      source: [sourceRow({ environment: 'PRODUCTION' })],
+      revenuecat: store,
+    },
+    async (module, harness) => {
+      // The store's answer carries no environment of its own, so a sandbox
+      // transfer of a production row is a sandbox row.
+      const sandbox = await module.handleRevenueCatWebhook(
+        delivery(transfer({ environment: 'SANDBOX' }))
+      );
+      assertEquals(await sandbox.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+      assertEquals(writes(harness)[0].environment, 'SANDBOX');
+
+      // Only an event naming none falls back to the row being moved.
+      const silent = await module.handleRevenueCatWebhook(
+        delivery(transfer({ id: 'evt-transfer-silent', environment: undefined }))
+      );
+      assertEquals(await silent.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+      assertEquals(writes(harness)[1].environment, 'PRODUCTION');
+    }
+  );
+
+  // The same precedence when the mirror is all there is to go on.
+  await withWorld(
+    { source: [sourceRow({ environment: 'PRODUCTION' })] },
+    async (module, harness) => {
+      const sandbox = await module.handleRevenueCatWebhook(
+        delivery(transfer({ environment: 'SANDBOX' }))
+      );
+      assertEquals(await sandbox.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+      assertEquals(writes(harness)[0].environment, 'SANDBOX');
+    }
+  );
+});
+
+Deno.test('grants every account a transfer names, and revokes once one of them lands', async () => {
+  await withWorld(
+    {
+      source: [sourceRow()],
+      // The first winner deleted their account between the purchase and the
+      // transfer; the second is live.
+      upsert: (request) =>
+        (request.body as Row).user_id === LEARNER
+          ? {
+              status: 409,
+              body: {
+                code: '23503',
+                message:
+                  'insert or update on table "subscriptions" violates foreign key constraint',
+                details: null,
+                hint: null,
+              },
+            }
+          : { status: 201, body: [] },
+    },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(
+        delivery(transfer({ transferred_to: [LEARNER, SECOND_WINNER] }))
+      );
+
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+      assertEquals(
+        writes(harness).map((row) => row.user_id),
+        [LEARNER, SECOND_WINNER],
+        'a grant that cannot land is no reason to skip the rest'
+      );
+      assertEquals(revokes(harness).length, 1, 'one grant that landed is enough to move it');
+    }
+  );
+});
+
+Deno.test('asks for a retry when the transfer grant lands but the revoke fails', async () => {
+  await withWorld(
+    { source: [sourceRow()], revoke: { status: 500, body: { message: 'upstream is down' } } },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+      // Answering 200 here would stop RevenueCat ever redelivering, leaving the
+      // subscription live on both accounts with nothing to correct it.
+      assertEquals(response.status, 500);
+      assertEquals(await response.json(), { error: 'persist_failed' });
+      assertEquals(writes(harness).length, 1, 'the grant itself did land');
+      assertEquals(revokes(harness).length, 1);
     }
   );
 });
