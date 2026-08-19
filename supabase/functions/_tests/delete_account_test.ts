@@ -4,8 +4,9 @@
  * This is the one function that has to destroy something: App Store Review
  * 5.1.1(v) is not satisfied by a handler that answers `ok` while the row lives
  * on. So no test here trusts the response body on its own — each one drives the
- * exported handler and then asserts on the admin call that reached the stub,
- * and on the revoke request that reached Apple.
+ * exported handler and then asserts on what left the function: the admin delete
+ * that reached the stub, the revoke that reached Apple, or — on the paths where
+ * nothing may be destroyed — the absence of both.
  *
  * @module supabase/functions/_tests/delete_account_test
  */
@@ -43,6 +44,14 @@ function post(token: string | null = 'learner-jwt'): Request {
   return new Request('http://localhost/delete-account', {
     method: 'POST',
     headers: token === null ? {} : { Authorization: `Bearer ${token}` },
+  });
+}
+
+/** A caller who sends an Authorization header that is not a bearer token. */
+function postWithHeader(authorization: string): Request {
+  return new Request('http://localhost/delete-account', {
+    method: 'POST',
+    headers: { Authorization: authorization },
   });
 }
 
@@ -88,6 +97,21 @@ Deno.test('refuses a caller without a token, and touches nothing at all', async 
   });
 });
 
+Deno.test('refuses a caller whose authorization header is not a bearer token', async () => {
+  await withWorld({}, async (module, harness) => {
+    // A missing header would not prove this: an empty token never leaves the
+    // auth client, so the prefix guard would go untested either way.
+    const response = await module.handleDeleteAccount(postWithHeader('Basic sekrit'));
+    assertEquals(response.status, 401);
+    assertEquals(await response.json(), { error: 'unauthorized' });
+    assertEquals(
+      harness.requests.length,
+      0,
+      'a header in the wrong scheme is not a credential, and must reach no backend'
+    );
+  });
+});
+
 Deno.test('refuses a token the auth server does not recognise', async () => {
   await withWorld(
     { routes: { 'GET /auth/v1/user': { status: 401, body: { message: 'invalid jwt' } } } },
@@ -106,6 +130,8 @@ Deno.test('deletes the auth user outright, which is what the guideline asks for'
     async (module, harness) => {
       const response = await module.handleDeleteAccount(post());
       assertEquals(response.status, 200);
+      // The app parses this answer, so the declared type is part of the contract.
+      assertEquals(response.headers.get('Content-Type'), 'application/json');
       assertEquals(await response.json(), { ok: true, apple: 'revoked' });
 
       // The caller's own JWT is what identifies them; nothing else names the user.
@@ -142,6 +168,7 @@ Deno.test('revokes the apple grant with the stored token before the account goes
     },
     async (module, harness) => {
       const response = await module.handleDeleteAccount(post());
+      assertEquals(response.status, 200);
       assertEquals(await response.json(), { ok: true, apple: 'revoked' });
 
       const lookup = harness.requests.find(
@@ -168,6 +195,47 @@ Deno.test('revokes the apple grant with the stored token before the account goes
   );
 });
 
+/**
+ * The body of a `create table`, parenthesis-balanced.
+ *
+ * Stopping at the first `);` would truncate the moment a column takes an
+ * argument — `numeric(10, 2)` — and the assertion downstream would then fail
+ * for a reason that has nothing to do with what it is checking.
+ */
+function tableBody(sql: string, table: string): string | undefined {
+  const start = sql.indexOf(`create table if not exists public.${table} (`);
+  if (start === -1) return undefined;
+  const open = sql.indexOf('(', start);
+  let depth = 0;
+  for (let index = open; index < sql.length; index += 1) {
+    if (sql[index] === '(') depth += 1;
+    else if (sql[index] === ')') {
+      depth -= 1;
+      if (depth === 0) return sql.slice(open + 1, index);
+    }
+  }
+  return undefined;
+}
+
+/** One column out of that body, split on the commas between columns only. */
+function columnDefinition(body: string, column: string): string | undefined {
+  const columns: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const character of body) {
+    if (character === '(') depth += 1;
+    else if (character === ')') depth -= 1;
+    if (character === ',' && depth === 0) {
+      columns.push(current);
+      current = '';
+      continue;
+    }
+    current += character;
+  }
+  columns.push(current);
+  return columns.map((entry) => entry.trim()).find((entry) => entry.startsWith(`${column} `));
+}
+
 Deno.test(
   'takes the apple credential row with it through the cascade, not a delete of its own',
   async () => {
@@ -177,7 +245,10 @@ Deno.test(
         apple: { [REVOKE]: { body: {} } },
       },
       async (module, harness) => {
-        await module.handleDeleteAccount(post());
+        const response = await module.handleDeleteAccount(post());
+        assertEquals(response.status, 200);
+        assertEquals(await response.json(), { ok: true, apple: 'revoked' });
+        assertEquals(deletion(harness)?.path, `/auth/v1/admin/users/${LEARNER}`);
 
         const touched = harness.requests.filter(
           (request) => request.path === '/rest/v1/apple_credentials'
@@ -199,12 +270,16 @@ Deno.test(
         files.push(await Deno.readTextFile(new URL(entry.name, migrations)));
       }
     }
-    const table = files
-      .join('\n')
-      .match(/create table if not exists public\.apple_credentials \(([\s\S]*?)\);/)?.[1];
-    assert(table !== undefined, 'apple_credentials should be created by a migration');
+    const body = tableBody(files.join('\n'), 'apple_credentials');
+    assert(body !== undefined, 'apple_credentials should be created by a migration');
+    const userId = columnDefinition(body, 'user_id');
+    assert(userId !== undefined, 'apple_credentials should key its rows by user_id');
     assert(
-      /user_id uuid primary key references auth\.users \(id\) on delete cascade/.test(table),
+      /references\s+auth\.users\s*\(\s*id\s*\)/i.test(userId),
+      'apple_credentials.user_id must reference auth.users, or the delete cannot reach it'
+    );
+    assert(
+      /on\s+delete\s+cascade/i.test(userId),
       'apple_credentials.user_id must cascade, or a deleted account leaves its refresh token behind'
     );
   }
@@ -218,6 +293,23 @@ Deno.test('deletes a learner who never signed in with apple', async () => {
     assertEquals(harness.outbound.length, 0, 'nothing to revoke means no call to Apple');
     assertEquals(deletion(harness)?.path, `/auth/v1/admin/users/${LEARNER}`);
   });
+});
+
+Deno.test('skips the revoke when the stored credential carries no token', async () => {
+  // A row written before the token landed, or one whose token was cleared:
+  // sending Apple an empty string would only earn a refusal.
+  for (const stored of [null, '']) {
+    await withWorld(
+      { credential: { body: [{ refresh_token: stored }] }, apple: { [REVOKE]: { body: {} } } },
+      async (module, harness) => {
+        const response = await module.handleDeleteAccount(post());
+        assertEquals(response.status, 200);
+        assertEquals(await response.json(), { ok: true, apple: 'skipped' });
+        assertEquals(harness.outbound.length, 0, 'an empty token is nothing to revoke');
+        assertEquals(deletion(harness)?.path, `/auth/v1/admin/users/${LEARNER}`);
+      }
+    );
+  }
 });
 
 Deno.test('skips revocation when no apple client credentials are configured', async () => {
@@ -265,12 +357,11 @@ Deno.test('deletes the account even when apple cannot be reached at all', async 
       // A transport failure, which `stubFetch` has no way to express: its
       // handlers can only answer, and this branch needs `fetch` itself to reject.
       const stubbed = globalThis.fetch;
-      globalThis.fetch = async (
-        input: string | URL | Request,
-        init?: RequestInit
-      ): Promise<Response> => {
+      globalThis.fetch = (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
         const url = new URL(input instanceof Request ? input.url : String(input));
-        if (url.hostname === 'appleid.apple.com') throw new TypeError('connection refused');
+        if (url.hostname === 'appleid.apple.com') {
+          return Promise.reject(new TypeError('connection refused'));
+        }
         return stubbed(input, init);
       };
 

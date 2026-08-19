@@ -22,14 +22,25 @@ import {
 const LEARNER = '11111111-1111-1111-1111-111111111111';
 const OTHER_LEARNER = '22222222-2222-2222-2222-222222222222';
 
-/** Apple's `sub` is per-app and per-user; it is what an identity row stores. */
-const APPLE_SUB = '000123.9f8e7d6c5b4a.1200';
-const OTHER_APPLE_SUB = '000987.1a2b3c4d5e6f.0800';
+/**
+ * Apple's `sub` is per-app and per-user; it is what an identity row stores.
+ *
+ * The three are deliberately different lengths. Base64 of the payload they sit
+ * in lands on a different multiple-of-four boundary for each, so between them
+ * the id_tokens the tests decode cover a payload that needed two pad characters
+ * put back, one that needed one, and one that needed none.
+ */
+const APPLE_SUB = '000123.9f8e7d6c5b4af.1200';
+const LINKED_APPLE_SUB = '000456.3c2b1a0f9e8d.1600';
+const OTHER_APPLE_SUB = '000987.1a2b3c4d5e6f.080';
 
 const APPLE = 'https://appleid.apple.com';
 const CLIENT_ID = 'com.planor.codeling';
 const CLIENT_SECRET = 'signed.client.secret';
 const REFRESH_TOKEN = 'rt_apple_9d1c';
+
+/** Expo web reads these responses cross-origin, so every one of them needs this. */
+const ANY_ORIGIN = '*';
 
 type Module = { handleAppleTokenExchange: (request: Request) => Promise<Response> };
 type Harness = Awaited<ReturnType<typeof startSupabaseStub>>;
@@ -48,8 +59,9 @@ type World = {
 
 /**
  * An id_token as Apple sends one: three dots' worth of base64url, of which the
- * function only ever reads the middle. The padding is stripped, because Apple
- * strips it and the function has to put it back before decoding.
+ * function only ever reads the middle. A JWT travels with its `=` padding
+ * stripped, so the fixture strips it too and the claims come back off whatever
+ * length that leaves.
  */
 function idToken(sub: string): string {
   const payload = btoa(JSON.stringify({ iss: APPLE, aud: CLIENT_ID, sub }))
@@ -82,18 +94,23 @@ function appleTokens(overrides: Row = {}): Row {
 
 /** A string body is passed through, so a test can send something that is not JSON. */
 function post(body: unknown = { authorizationCode: 'c_abc123' }, token = 'learner-jwt'): Request {
+  return withHeaders({ Authorization: `Bearer ${token}` }, body);
+}
+
+/** Sends the headers verbatim, for the callers whose credential is not a Bearer token. */
+function withHeaders(
+  headers: Record<string, string>,
+  body: unknown = { authorizationCode: 'c_abc123' }
+): Request {
   return new Request('http://localhost/apple-token-exchange', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
+    headers,
     body: typeof body === 'string' ? body : JSON.stringify(body),
   });
 }
 
 function anonymous(body: unknown = { authorizationCode: 'c_abc123' }): Request {
-  return new Request('http://localhost/apple-token-exchange', {
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  return withHeaders({}, body);
 }
 
 /** Rows the function sent to `apple_credentials`, in the order it sent them. */
@@ -101,6 +118,11 @@ function writes(harness: Harness): Row[] {
   return harness.requests
     .filter((request) => request.path === '/rest/v1/apple_credentials')
     .map((request) => request.body as Row);
+}
+
+/** Every time the function asked GoTrue who the caller is. */
+function lookups(harness: Harness): RecordedRequest[] {
+  return harness.requests.filter((request) => request.path === '/auth/v1/user');
 }
 
 function exchange(harness: Harness): RecordedRequest | undefined {
@@ -144,6 +166,7 @@ Deno.test('exchanges the code with Apple and files the refresh token for the cal
 
     assertEquals(response.status, 200);
     assertEquals(await response.json(), { ok: true });
+    assertEquals(response.headers.get('access-control-allow-origin'), ANY_ORIGIN);
 
     const sent = exchange(harness);
     assert(sent, 'apple was never asked to exchange the code');
@@ -152,12 +175,14 @@ Deno.test('exchanges the code with Apple and files the refresh token for the cal
       sent.headers['content-type']?.startsWith('application/x-www-form-urlencoded'),
       `apple was sent ${sent.headers['content-type']}, which its token endpoint does not take`
     );
-    assertEquals(form(sent), {
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      code: 'c_abc123',
-      grant_type: 'authorization_code',
-    });
+    // Field by field, so reordering the form leaves the suite green but a wrong
+    // or missing value does not.
+    const fields = form(sent);
+    assertEquals(fields.client_id, CLIENT_ID);
+    assertEquals(fields.client_secret, CLIENT_SECRET);
+    assertEquals(fields.code, 'c_abc123');
+    assertEquals(fields.grant_type, 'authorization_code');
+    assertEquals(Object.keys(fields).sort(), ['client_id', 'client_secret', 'code', 'grant_type']);
 
     const write = harness.requests.find((request) => request.path === '/rest/v1/apple_credentials');
     // supabase-js upserts as `on_conflict=user_id` with merge-duplicates, so a
@@ -177,12 +202,59 @@ Deno.test('exchanges the code with Apple and files the refresh token for the cal
   });
 });
 
-Deno.test('refuses a caller without a token, and one whose token is not a user', async () => {
+Deno.test('picks the Apple identity out of a learner who has linked other providers', async () => {
+  await withWorld(
+    {
+      // Signed up with Google, added Apple later: the Apple identity is not the
+      // first one, and the Google one carries an id that is not an Apple sub.
+      user: learner({
+        identities: [
+          { provider: 'google', id: 'g-987654321', user_id: LEARNER },
+          { provider: 'apple', id: LINKED_APPLE_SUB, user_id: LEARNER },
+        ],
+      }),
+      apple: {
+        [`POST ${APPLE}/auth/token`]: {
+          body: appleTokens({ id_token: idToken(LINKED_APPLE_SUB) }),
+        },
+      },
+    },
+    async (module, harness) => {
+      const response = await module.handleAppleTokenExchange(post());
+
+      assertEquals(response.status, 200);
+      assertEquals(await response.json(), { ok: true });
+
+      const rows = writes(harness);
+      assertEquals(rows.length, 1);
+      assertEquals(rows[0].user_id, LEARNER);
+      assertEquals(rows[0].refresh_token, REFRESH_TOKEN);
+    }
+  );
+});
+
+Deno.test('refuses a credential that is missing, not a Bearer token, or not a user', async () => {
   await withWorld({}, async (module, harness) => {
     const missing = await module.handleAppleTokenExchange(anonymous());
 
     assertEquals(missing.status, 401);
     assertEquals(await missing.json(), { error: 'unauthorized' });
+    assertEquals(exchange(harness), undefined);
+    assertEquals(writes(harness), []);
+  });
+
+  await withWorld({}, async (module, harness) => {
+    // A scheme the function does not accept: the value behind it is a token
+    // GoTrue would honour, so only the scheme check can turn this away.
+    const wrongScheme = await module.handleAppleTokenExchange(
+      withHeaders({ Authorization: 'Basic learner-jwt' })
+    );
+
+    assertEquals(wrongScheme.status, 401);
+    assertEquals(await wrongScheme.json(), { error: 'unauthorized' });
+    assertEquals(wrongScheme.headers.get('access-control-allow-origin'), ANY_ORIGIN);
+    // Refused outright, rather than handed to GoTrue to see what it makes of it.
+    assertEquals(lookups(harness), []);
     assertEquals(exchange(harness), undefined);
     assertEquals(writes(harness), []);
   });
@@ -205,11 +277,13 @@ Deno.test('refuses a request that carries no authorization code', async () => {
     assertEquals(await empty.json(), { error: 'code_required' });
 
     const blank = await module.handleAppleTokenExchange(post({ authorizationCode: '' }));
+    assertEquals(blank.status, 400);
     assertEquals(await blank.json(), { error: 'code_required' });
 
     // A device that sent the wrong shape is refused rather than having its
     // value coerced into a code Apple would reject anyway.
     const wrongType = await module.handleAppleTokenExchange(post({ authorizationCode: 12345 }));
+    assertEquals(wrongType.status, 400);
     assertEquals(await wrongType.json(), { error: 'code_required' });
 
     const notJson = await module.handleAppleTokenExchange(post('not json at all'));
@@ -237,6 +311,7 @@ Deno.test('reports Apple rejecting the code, and stores nothing', async () => {
       assertEquals(response.status, 502);
       // Apple's own wording never reaches the device; it only goes to the log.
       assertEquals(await response.json(), { error: 'exchange_failed' });
+      assertEquals(response.headers.get('access-control-allow-origin'), ANY_ORIGIN);
       assert(exchange(harness), 'the code was never offered to apple');
       assertEquals(writes(harness), []);
     }
@@ -256,6 +331,7 @@ Deno.test('says so when Apple answers without a refresh token, and stores nothin
 
       assertEquals(response.status, 502);
       assertEquals(await response.json(), { error: 'no_refresh_token' });
+      assert(exchange(harness), 'the code was never offered to apple');
       assertEquals(writes(harness), []);
     }
   );
@@ -281,8 +357,7 @@ Deno.test('files the token under the caller from the token, never a body user id
 
     // The id can only have come from the token, because the token is the only
     // thing the function asked GoTrue about.
-    const lookup = harness.requests.find((request) => request.path === '/auth/v1/user');
-    assertEquals(lookup?.headers.authorization, 'Bearer learner-jwt');
+    assertEquals(lookups(harness)[0]?.headers.authorization, 'Bearer learner-jwt');
 
     // Not one byte of the caller's suggestion left the function, in any request.
     const traffic = JSON.stringify([...harness.requests, ...harness.outbound]);
@@ -311,9 +386,35 @@ Deno.test("refuses an authorization code that belongs to another learner's Apple
   );
 });
 
-Deno.test('refuses a caller who has no Apple identity, or a token Apple did not sign', async () => {
+Deno.test(
+  'refuses a caller who has no Apple identity, whatever id their other identities carry',
+  async () => {
+    await withWorld(
+      // The id is the Apple sub itself, so a comparison that ignores which
+      // provider the identity came from would let this caller through.
+      { user: learner({ identities: [{ provider: 'email', id: APPLE_SUB, user_id: LEARNER }] }) },
+      async (module, harness) => {
+        const response = await module.handleAppleTokenExchange(post());
+
+        assertEquals(response.status, 403);
+        assertEquals(await response.json(), { error: 'identity_mismatch' });
+        assertEquals(writes(harness), []);
+      }
+    );
+
+    await withWorld({ user: learner({ identities: [] }) }, async (module, harness) => {
+      const response = await module.handleAppleTokenExchange(post());
+
+      assertEquals(response.status, 403);
+      assertEquals(await response.json(), { error: 'identity_mismatch' });
+      assertEquals(writes(harness), []);
+    });
+  }
+);
+
+Deno.test('refuses a code whose claims it cannot read', async () => {
   await withWorld(
-    { user: learner({ identities: [{ provider: 'email', id: LEARNER, user_id: LEARNER }] }) },
+    { apple: { [`POST ${APPLE}/auth/token`]: { body: appleTokens({ id_token: undefined }) } } },
     async (module, harness) => {
       const response = await module.handleAppleTokenExchange(post());
 
@@ -324,21 +425,30 @@ Deno.test('refuses a caller who has no Apple identity, or a token Apple did not 
   );
 
   await withWorld(
-    { apple: { [`POST ${APPLE}/auth/token`]: { body: appleTokens({ id_token: undefined }) } } },
-    async (module, harness) => {
-      const response = await module.handleAppleTokenExchange(post());
-
-      assertEquals(response.status, 403);
-      assertEquals(writes(harness), []);
-    }
-  );
-
-  await withWorld(
     { apple: { [`POST ${APPLE}/auth/token`]: { body: appleTokens({ id_token: 'not.a.jwt' }) } } },
     async (module, harness) => {
       const response = await module.handleAppleTokenExchange(post());
 
       assertEquals(response.status, 403);
+      assertEquals(await response.json(), { error: 'identity_mismatch' });
+      assertEquals(writes(harness), []);
+    }
+  );
+
+  await withWorld(
+    // Readable base64, but no `sub` to compare the caller's identity against.
+    {
+      apple: {
+        [`POST ${APPLE}/auth/token`]: {
+          body: appleTokens({ id_token: `eyJhbGciOiJSUzI1NiJ9.${btoa('{"iss":"x"}')}.signature` }),
+        },
+      },
+    },
+    async (module, harness) => {
+      const response = await module.handleAppleTokenExchange(post());
+
+      assertEquals(response.status, 403);
+      assertEquals(await response.json(), { error: 'identity_mismatch' });
       assertEquals(writes(harness), []);
     }
   );
@@ -347,11 +457,14 @@ Deno.test('refuses a caller who has no Apple identity, or a token Apple did not 
 Deno.test('tells the device the token was not filed when the write fails', async () => {
   await withWorld(
     { upsert: { status: 500, body: { message: 'upstream is down' } } },
-    async (module) => {
+    async (module, harness) => {
       const response = await module.handleAppleTokenExchange(post());
 
       assertEquals(response.status, 500);
       assertEquals(await response.json(), { error: 'persist_failed' });
+      // The 500 has to be the write failing, not something giving up earlier.
+      assert(exchange(harness), 'the code was never offered to apple');
+      assertEquals(writes(harness).length, 1);
     }
   );
 });
@@ -366,10 +479,14 @@ Deno.test('stands down when the Apple secrets are not configured', async () => {
     assertEquals(writes(harness), []);
   });
 
-  await withWorld({ environment: { APPLE_CLIENT_ID: '' } }, async (module) => {
+  await withWorld({ environment: { APPLE_CLIENT_ID: '' } }, async (module, harness) => {
     const response = await module.handleAppleTokenExchange(post());
 
     assertEquals(response.status, 503);
+    assertEquals(await response.json(), { error: 'not_configured' });
+    // Apple would refuse an empty client_id anyway, so it is never asked.
+    assertEquals(exchange(harness), undefined);
+    assertEquals(writes(harness), []);
   });
 });
 
@@ -381,6 +498,7 @@ Deno.test('answers the browser preflight and turns away any method but POST', as
 
     assertEquals(preflight.status, 200);
     assertEquals(preflight.headers.get('access-control-allow-methods'), 'POST, OPTIONS');
+    assertEquals(preflight.headers.get('access-control-allow-origin'), ANY_ORIGIN);
 
     const read = await module.handleAppleTokenExchange(
       new Request('http://localhost/apple-token-exchange', { method: 'GET' })
@@ -388,6 +506,7 @@ Deno.test('answers the browser preflight and turns away any method but POST', as
 
     assertEquals(read.status, 405);
     assertEquals(await read.json(), { error: 'method_not_allowed' });
+    assertEquals(read.headers.get('access-control-allow-origin'), ANY_ORIGIN);
     assertEquals(writes(harness), []);
   });
 });
