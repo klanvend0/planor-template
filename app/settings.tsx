@@ -12,8 +12,8 @@ import { router } from 'expo-router';
 import * as Application from 'expo-application';
 import * as StoreReview from 'expo-store-review';
 import { ArrowLeft, ChevronRight } from 'lucide-react-native';
-import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Switch, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, AppState, Pressable, ScrollView, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Kicker } from '@/components/kicker';
@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import { deleteAccount } from '@/services/account_service';
 import {
   cancelDailyReminder,
+  hasNotificationPermission,
   requestNotificationPermission,
   scheduleDailyReminder,
 } from '@/services/notifications_service';
@@ -114,6 +115,25 @@ export default function SettingsScreen() {
     });
   };
 
+  // The learner's preference and the OS permission are two different facts.
+  // The switch shows both: it is only on when the reminder can actually fire,
+  // and the preference itself is never quietly rewritten.
+  const [reminderPermission, setReminderPermission] = useState(true);
+
+  useEffect(() => {
+    const check = () => {
+      void hasNotificationPermission().then(setReminderPermission);
+    };
+    check();
+    const subscription = AppState.addEventListener('change', (next) => {
+      // Coming back from the OS settings app is when this changes.
+      if (next === 'active') check();
+    });
+    return () => subscription.remove();
+  }, []);
+
+  const remindersLive = settings.remindersEnabled && reminderPermission;
+
   const toggleReminders = async (enabled: boolean) => {
     if (!enabled) {
       settings.setReminders(false);
@@ -123,6 +143,7 @@ export default function SettingsScreen() {
     }
 
     const granted = await requestNotificationPermission();
+    setReminderPermission(granted);
     if (!granted) {
       Alert.alert(t('settings.reminders'), t('settings.reminders_denied'));
       return;
@@ -199,7 +220,11 @@ export default function SettingsScreen() {
       const restored = await restore();
       Alert.alert(
         t('settings.restore'),
-        restored ? t('paywall.restore_done') : t('paywall.restore_none')
+        restored
+          ? t('paywall.restore_done')
+          : USES_LOCAL_BACKEND
+            ? t('paywall.restore_none_local')
+            : t('paywall.restore_none_store')
       );
     } catch {
       Alert.alert(t('settings.restore'), t('paywall.unavailable'));
@@ -297,9 +322,14 @@ export default function SettingsScreen() {
           />
           <Row
             label={t('settings.reminders')}
+            value={
+              settings.remindersEnabled && !reminderPermission
+                ? t('settings.reminders_denied')
+                : undefined
+            }
             right={
               <Switch
-                value={settings.remindersEnabled}
+                value={remindersLive}
                 onValueChange={(value) => void toggleReminders(value)}
                 accessibilityLabel={t('settings.reminders')}
               />

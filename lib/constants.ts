@@ -8,6 +8,8 @@
  * @module lib/constants
  */
 
+import { Platform } from 'react-native';
+
 /** Units of every course that are playable without a subscription. */
 export const FREE_UNIT_LIMIT = 2;
 
@@ -46,7 +48,10 @@ export const LINKS = {
   terms: process.env.EXPO_PUBLIC_TERMS_URL ?? 'https://codeling.app/terms',
   privacy: process.env.EXPO_PUBLIC_PRIVACY_URL ?? 'https://codeling.app/privacy',
   support: process.env.EXPO_PUBLIC_SUPPORT_URL ?? 'mailto:support@codeling.app',
-  manageSubscription: 'https://apps.apple.com/account/subscriptions',
+  manageSubscription:
+    Platform.OS === 'android'
+      ? 'https://play.google.com/store/account/subscriptions'
+      : 'https://apps.apple.com/account/subscriptions',
 } as const;
 
 /** App Store id, used by the "rate this app" action. Fill in after first submit. */

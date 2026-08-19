@@ -249,7 +249,11 @@ export default function PaywallScreen() {
       const restored = await restore();
       Alert.alert(
         t('paywall.title'),
-        restored ? t('paywall.restore_done') : t('paywall.restore_none')
+        restored
+          ? t('paywall.restore_done')
+          : USES_LOCAL_BACKEND
+            ? t('paywall.restore_none_local')
+            : t('paywall.restore_none_store')
       );
       if (restored) close();
     } catch {
@@ -405,9 +409,13 @@ export default function PaywallScreen() {
             ? eligibleForTrial
               ? t('paywall.local_notice', { days: trialDays })
               : t('paywall.local_notice_no_trial')
-            : eligibleForTrial
-              ? t('paywall.legal')
-              : t('paywall.legal_no_trial')}
+            : Platform.OS === 'android'
+              ? eligibleForTrial
+                ? t('paywall.legal_android')
+                : t('paywall.legal_no_trial_android')
+              : eligibleForTrial
+                ? t('paywall.legal')
+                : t('paywall.legal_no_trial')}
         </Text>
 
         <View className="flex-row items-center justify-center gap-6">

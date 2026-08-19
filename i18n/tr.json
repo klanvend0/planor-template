@@ -25,7 +25,6 @@
     "sign_in": "Giriş Yap",
     "sign_out": "Çıkış Yap",
     "sign_in_with_google": "Google ile devam et",
-    "sign_in_with_apple": "Apple ile devam et",
     "sign_in_title": "İlerlemeni kaydet",
     "sign_in_subtitle": "Giriş yap ki serin, XP'n ve derslerin her cihazda seninle olsun.",
     "start_local": "Öğrenmeye başla",
@@ -316,7 +315,6 @@
     "cta_trial": "%{days} günüm ücretsiz başlasın",
     "cta_buy": "Abone ol",
     "restore": "Satın alımları geri yükle",
-    "restore_none": "Bu Apple kimliğinde önceki bir satın alım bulunamadı.",
     "restore_done": "Aboneliğin geri geldi.",
     "terms": "Kullanım Koşulları",
     "privacy": "Gizlilik Politikası",
@@ -337,7 +335,11 @@
     "purchase_done": "Artık Pro üyesin. Her şey açık.",
     "legal_no_trial": "Ücret, satın alma onayıyla birlikte Apple kimliğinden tahsil edilir. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin.",
     "local_notice": "Demo modu: hiçbir ücret alınmaz. Pro yalnızca bu cihazda açılır ve deneme %{days} gün sonra gerçekten biter.",
-    "local_notice_no_trial": "Demo modu: hiçbir ücret alınmaz. Pro yalnızca bu cihazda açılır ve süre gerçekten dolar."
+    "local_notice_no_trial": "Demo modu: hiçbir ücret alınmaz. Pro yalnızca bu cihazda açılır ve süre gerçekten dolar.",
+    "legal_android": "Ücret, deneme süresi bitiminde Google Play hesabından tahsil edilir. Dönem bitmeden en az 24 saat önce iptal edilmezse abonelik otomatik yenilenir. Google Play abonelik ayarlarından yönetebilir veya iptal edebilirsin.",
+    "legal_no_trial_android": "Ücret, satın alma onayında Google Play hesabından tahsil edilir. Dönem bitmeden en az 24 saat önce iptal edilmezse abonelik otomatik yenilenir. Google Play abonelik ayarlarından yönetebilir veya iptal edebilirsin.",
+    "restore_none_store": "Bu hesapta önceki bir satın alma bulunamadı.",
+    "restore_none_local": "Pro bu cihazda tutuluyor, geri yüklenecek bir şey yok."
   },
   "settings": {
     "title": "Ayarlar",

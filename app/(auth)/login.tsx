@@ -15,6 +15,7 @@
  * @module app/(auth)/login
  */
 
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Platform, View } from 'react-native';
@@ -136,14 +137,25 @@ export default function LoginScreen() {
           />
         ) : (
           <>
+            {/* Apple's own button, not a lookalike: Guideline 4.8 and the Sign
+                in with Apple guidelines require its mark, its wording and its
+                proportions, which a themed button cannot carry. */}
             {Platform.OS === 'ios' ? (
-              <GameButton
-                label={t('auth.sign_in_with_apple')}
-                size="lg"
-                busy={busy === 'apple'}
-                disabled={busy !== null}
-                onPress={() => void handle('apple', signInWithApple)}
-              />
+              <View
+                pointerEvents={busy === null ? 'auto' : 'none'}
+                style={{ opacity: busy === null ? 1 : 0.6 }}>
+                <AppleAuthentication.AppleAuthenticationButton
+                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
+                  buttonStyle={
+                    colorScheme === 'dark'
+                      ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+                      : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                  }
+                  cornerRadius={12}
+                  style={{ height: 52, width: '100%' }}
+                  onPress={() => void handle('apple', signInWithApple)}
+                />
+              </View>
             ) : null}
 
             <GameButton

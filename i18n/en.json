@@ -25,7 +25,6 @@
     "sign_in": "Sign In",
     "sign_out": "Sign Out",
     "sign_in_with_google": "Continue with Google",
-    "sign_in_with_apple": "Continue with Apple",
     "sign_in_title": "Save your progress",
     "sign_in_subtitle": "Sign in so your streak, XP and lessons follow you everywhere.",
     "start_local": "Start learning",
@@ -316,7 +315,6 @@
     "cta_trial": "Start my %{days} free days",
     "cta_buy": "Subscribe",
     "restore": "Restore purchases",
-    "restore_none": "No previous purchase found on this Apple ID.",
     "restore_done": "Your subscription is back.",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy",
@@ -337,7 +335,11 @@
     "purchase_done": "You are Pro. Everything is unlocked.",
     "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings.",
     "local_notice": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the trial really does end after %{days} days.",
-    "local_notice_no_trial": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the period really does end."
+    "local_notice_no_trial": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the period really does end.",
+    "legal_android": "Payment is charged to your Google Play account at the end of the free trial. The subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your Google Play subscription settings.",
+    "legal_no_trial_android": "Payment is charged to your Google Play account at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your Google Play subscription settings.",
+    "restore_none_store": "No previous purchase found on this account.",
+    "restore_none_local": "Pro lives on this device, so there is nothing to restore."
   },
   "settings": {
     "title": "Settings",

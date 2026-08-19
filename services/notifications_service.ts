@@ -59,12 +59,15 @@ export async function hasNotificationPermission(): Promise<boolean> {
  *
  * @param hour - Local hour, 0-23.
  * @param streakDays - Current streak, so the copy can reference it.
+ * @returns Whether a reminder is now scheduled. False means the OS refused,
+ * which the settings screen has to show rather than leaving a switch on that
+ * does nothing.
  */
-export async function scheduleDailyReminder(hour: number, streakDays: number): Promise<void> {
+export async function scheduleDailyReminder(hour: number, streakDays: number): Promise<boolean> {
   await cancelDailyReminder();
 
   const granted = await hasNotificationPermission();
-  if (!granted) return;
+  if (!granted) return false;
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('reminders', {
@@ -91,6 +94,8 @@ export async function scheduleDailyReminder(hour: number, streakDays: number): P
       channelId: Platform.OS === 'android' ? 'reminders' : undefined,
     },
   });
+
+  return true;
 }
 
 /** Remove the scheduled reminder, e.g. when the learner turns them off. */
