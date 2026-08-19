@@ -687,6 +687,11 @@ Deno.test('gives the slot back when the provider errors', async () => {
       assertEquals(release.length, 1, 'the claimed slot is released');
       assertEquals(release[0].body, { p_user_id: LEARNER });
       assertEquals(calls(harness, 'POST', '/rest/v1/ai_reviews').length, 0, 'nothing to log');
+
+      // Asked once. A provider that answered with an error is not a provider
+      // that answered emptily, and retrying a 500 only doubles the load on
+      // something already struggling — and the learner's wait with it.
+      assertEquals(harness.outbound.length, 1);
     }
   );
 });

@@ -25,10 +25,10 @@ const OTHER_LEARNER = '22222222-2222-2222-2222-222222222222';
 /**
  * Apple's `sub` is per-app and per-user; it is what an identity row stores.
  *
- * The three are deliberately different lengths. Base64 of the payload they sit
- * in lands on a different multiple-of-four boundary for each, so between them
- * the id_tokens the tests decode cover a payload that needed two pad characters
- * put back, one that needed one, and one that needed none.
+ * The three are deliberately different lengths, so the payloads they sit in end
+ * on a different multiple-of-four boundary. That covers the decoder's arithmetic
+ * but cannot prove the re-padding itself matters: `atob` accepts an unpadded
+ * string, so putting the `=` back is belt and braces on this runtime either way.
  */
 const APPLE_SUB = '000123.9f8e7d6c5b4af.1200';
 const LINKED_APPLE_SUB = '000456.3c2b1a0f9e8d.1600';
@@ -65,6 +65,23 @@ type World = {
  */
 function idToken(sub: string): string {
   const payload = btoa(JSON.stringify({ iss: APPLE, aud: CLIENT_ID, sub }))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+  return `eyJhbGciOiJSUzI1NiJ9.${payload}.signature`;
+}
+
+/**
+ * An id_token carrying a claim that forces the base64url alphabet.
+ *
+ * `~` and `?` encode to `+` and `/` in standard base64, which is exactly what
+ * base64url replaces with `-` and `_`. Nothing in Apple's own claims reaches
+ * those bytes, so without a token like this the two substitutions in the
+ * decoder are never executed — and a token that needs them would be read as
+ * belonging to nobody, refusing a sign-in that is perfectly valid.
+ */
+function idTokenWithAwkwardClaims(sub: string): string {
+  const payload = btoa(JSON.stringify({ iss: APPLE, aud: CLIENT_ID, sub, nonce: 'a~bb?' }))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '');
@@ -509,4 +526,55 @@ Deno.test('answers the browser preflight and turns away any method but POST', as
     assertEquals(read.headers.get('access-control-allow-origin'), ANY_ORIGIN);
     assertEquals(writes(harness), []);
   });
+});
+
+Deno.test('reads claims out of a token that needs the base64url alphabet', async () => {
+  await withWorld(
+    {
+      apple: {
+        [`POST ${APPLE}/auth/token`]: {
+          body: appleTokens({ id_token: idTokenWithAwkwardClaims(APPLE_SUB) }),
+        },
+      },
+    },
+    async (module, harness) => {
+      const response = await module.handleAppleTokenExchange(post());
+
+      assertEquals(response.status, 200);
+      assertEquals(await response.json(), { ok: true });
+      assertEquals(writes(harness)[0]?.refresh_token, REFRESH_TOKEN);
+    }
+  );
+});
+
+Deno.test('turns away a header that only mentions the Bearer scheme', async () => {
+  await withWorld({}, async (module, harness) => {
+    const response = await module.handleAppleTokenExchange(
+      new Request('http://localhost/apple-token-exchange', {
+        method: 'POST',
+        // Not a Bearer token: the scheme has to start the header, not appear in
+        // it, or a header naming any scheme at all would be let through.
+        headers: { Authorization: 'Basic Bearer learner-jwt' },
+        body: JSON.stringify({ code: 'c_apple_1' }),
+      })
+    );
+
+    assertEquals(response.status, 401);
+    assertEquals(harness.requests.length, 0);
+    assertEquals(harness.outbound.length, 0);
+  });
+});
+
+Deno.test('stores nothing when Apple answers with a refresh token that is not text', async () => {
+  await withWorld(
+    { apple: { [`POST ${APPLE}/auth/token`]: { body: appleTokens({ refresh_token: 12345 }) } } },
+    async (module, harness) => {
+      const response = await module.handleAppleTokenExchange(post());
+
+      // A number written into a text column is a row that cannot revoke
+      // anything later, which is the only reason the token is kept at all.
+      assertEquals(response.status, 502);
+      assertEquals(writes(harness).length, 0);
+    }
+  );
 });

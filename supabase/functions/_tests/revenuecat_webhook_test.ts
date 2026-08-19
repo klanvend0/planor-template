@@ -1150,3 +1150,69 @@ Deno.test(
     );
   }
 );
+
+Deno.test('files the winner of a transfer under the same key as any other row', async () => {
+  await withWorld({ source: [sourceRow()] }, async (module, harness) => {
+    await module.handleRevenueCatWebhook(delivery(transfer()));
+
+    const grant = harness.requests.find(
+      (request) => request.method === 'POST' && request.path === '/rest/v1/subscriptions'
+    );
+    // `user_id` is the only column the table is unique on. Conflicting on
+    // anything else makes PostgREST answer 42P10 and the grant never lands,
+    // which RevenueCat then retries for as long as it keeps the event.
+    assertEquals(grant?.search, '?on_conflict=user_id');
+    assertEquals((grant?.body as Row).rc_app_user_id, LEARNER);
+    assertEquals((grant?.body as Row).user_id, LEARNER);
+  });
+});
+
+Deno.test('reads the duplicate guard against the account being transferred to', async () => {
+  await withWorld({ source: [sourceRow()] }, async (module, harness) => {
+    await module.handleRevenueCatWebhook(delivery(transfer()));
+
+    const guard = harness.requests.find(
+      (request) => request.method === 'GET' && request.search.includes('rc_event_id')
+    );
+    // Reading the loser's row instead would compare this event against a
+    // history that belongs to somebody else, and drop transfers as duplicates.
+    assertEquals(guard?.search, `?select=rc_event_id%2Clast_event_at&user_id=eq.${LEARNER}`);
+  });
+});
+
+Deno.test('moves a subscription that is in its billing grace period', async () => {
+  await withWorld(
+    {
+      environment: { REVENUECAT_API_KEY: 'sk_test' },
+      source: [sourceRow({ status: 'grace', will_renew: false })],
+      // The store has not caught up, so the mirror is what moves.
+      revenuecat: {
+        [`GET ${REVENUECAT}/v1/subscribers/*`]: {
+          body: { subscriber: { entitlements: {}, subscriptions: {} } },
+        },
+      },
+    },
+    async (module, harness) => {
+      const response = await module.handleRevenueCatWebhook(delivery(transfer()));
+
+      // Grace is still access: the learner is a day late paying, not gone.
+      assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 1, to: 1 });
+      assertEquals(writes(harness)[0].status, 'grace');
+      assertEquals(revokes(harness).length, 1);
+    }
+  );
+});
+
+Deno.test('ignores an anonymous account on either side of a transfer', async () => {
+  await withWorld({ source: [sourceRow()] }, async (module, harness) => {
+    const response = await module.handleRevenueCatWebhook(
+      delivery(transfer({ transferred_from: ['$RCAnonymousID:8f3a1c'] }))
+    );
+
+    // `user_id` is a uuid column: sending it an anonymous RevenueCat id makes
+    // PostgREST answer 400, which would turn every such transfer into a
+    // permanent retry.
+    assertEquals(await response.json(), { ok: true, handled: 'transfer', from: 0, to: 1 });
+    assertEquals(revokes(harness).length, 0);
+  });
+});
