@@ -99,6 +99,15 @@ functions use it: the webhook, to resolve a transfer's target, and
 succeeds so the server stops disagreeing with the store while the webhook is in
 flight. Without it both fall back to waiting for the webhook.
 
+Sandbox purchases count by default, and they have to: App Store review and every
+TestFlight tester buy in the sandbox, so refusing those events would show the
+reviewer a subscription they just paid for and an app that still says "Free
+plan". A sandbox purchase cannot be made from an App Store build, so nothing is
+given away. If you keep a separate project where only production purchases may
+ever count, set `REVENUECAT_IGNORE_SANDBOX=true` there — the webhook and
+`sync-subscription` both read it, and the mirror records `environment` either
+way so revenue reporting can still tell them apart.
+
 ---
 
 ## 3. The AI grader

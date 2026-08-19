@@ -33,12 +33,12 @@ const CORS_HEADERS = {
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
 const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
 /**
- * Sandbox purchases are free to make — a TestFlight tester or anyone with a
- * sandbox Apple ID can "buy" Pro. The webhook refuses them for that reason, and
- * so must this: reading the same entitlement over REST would otherwise be a way
- * around the guard. Set `REVENUECAT_ALLOW_SANDBOX=true` on a staging project.
+ * Whether to throw sandbox entitlements away, matching the webhook exactly —
+ * reading the same entitlement over REST must not be a way around whatever the
+ * webhook decided. Off by default so App Store review and TestFlight testers
+ * get what they paid for; `REVENUECAT_IGNORE_SANDBOX=true` turns it on.
  */
-const ALLOW_SANDBOX = (Deno.env.get('REVENUECAT_ALLOW_SANDBOX') ?? '') === 'true';
+const IGNORE_SANDBOX = (Deno.env.get('REVENUECAT_IGNORE_SANDBOX') ?? '') === 'true';
 
 type SubscriptionStatus = 'trialing' | 'active' | 'expired';
 
@@ -108,7 +108,7 @@ async function fetchEntitlement(appUserId: string): Promise<
   const source = subscription ?? lastPurchase ?? null;
 
   const sandbox = source?.is_sandbox === true;
-  if (sandbox && !ALLOW_SANDBOX) {
+  if (sandbox && IGNORE_SANDBOX) {
     console.warn('[sync-subscription] sandbox entitlement ignored', { productId });
     return nothing;
   }

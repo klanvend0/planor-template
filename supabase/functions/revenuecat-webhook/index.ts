@@ -52,10 +52,18 @@ const WEBHOOK_SECRET = Deno.env.get('REVENUECAT_WEBHOOK_SECRET') ?? '';
 const ENTITLEMENT = Deno.env.get('REVENUECAT_ENTITLEMENT') ?? 'pro';
 const REVENUECAT_API_KEY = Deno.env.get('REVENUECAT_API_KEY') ?? '';
 /**
- * Sandbox purchases are free and anyone with a sandbox Apple ID can make them,
- * so they are ignored unless a build explicitly opts in for testing.
+ * Whether to throw sandbox entitlements away.
+ *
+ * Off by default, and that is deliberate: App Store review buys in the sandbox,
+ * and so does every TestFlight tester. Refusing those events would leave the
+ * reviewer looking at a subscription they just paid for and an app that still
+ * says "Free plan" — a rejection, not a saving. A sandbox purchase also cannot
+ * be made from an App Store build, so accepting them gives nothing away.
+ *
+ * Set `REVENUECAT_IGNORE_SANDBOX=true` on a project where only production
+ * purchases should ever count.
  */
-const ALLOW_SANDBOX = (Deno.env.get('REVENUECAT_ALLOW_SANDBOX') ?? '') === 'true';
+const IGNORE_SANDBOX = (Deno.env.get('REVENUECAT_IGNORE_SANDBOX') ?? '') === 'true';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -239,9 +247,9 @@ Deno.serve(async (request: Request) => {
     { auth: { persistSession: false } }
   );
 
-  // Sandbox events would otherwise hand out real entitlements for free.
+  // Kept, unless this project is configured to count production purchases only.
   const environment = (event.environment ?? '').toUpperCase();
-  if (environment && environment !== 'PRODUCTION' && !ALLOW_SANDBOX) {
+  if (IGNORE_SANDBOX && environment && environment !== 'PRODUCTION') {
     return json({ ok: true, ignored: 'sandbox_event' });
   }
 

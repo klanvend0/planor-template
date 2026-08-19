@@ -157,6 +157,11 @@ A demo account is not required — sign-in is Apple/Google only, and a reviewer
 can use their own Apple ID — but if you provide one, note that it will not have
 an active subscription unless you grant it one in RevenueCat.
 
+The reviewer's purchase runs in the App Store sandbox, and the backend counts
+sandbox entitlements for exactly that reason (see docs/BACKEND_SETUP.md). Leave
+`REVENUECAT_IGNORE_SANDBOX` unset on the project the submitted build points at,
+or Pro will not unlock for the reviewer even though their purchase succeeded.
+
 ---
 
 ## 8. Before every release
