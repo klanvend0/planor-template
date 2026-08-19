@@ -128,17 +128,18 @@ Copy the generated secret for the next step.
 
 Open `app.json` and ensure these values are set:
 
-```json
-{
-  "expo": {
-    "ios": {
-      "bundleIdentifier": "com.planor.codeling",
-      "usesAppleSignIn": true,
-      "appleTeamId": "__APPLE_TEAM_ID__"
-    }
-  }
-}
+`app.json` already sets `usesAppleSignIn`. The two values that belong to your
+Apple account come from the environment instead, so nothing in the repo has to
+change:
+
+```bash
+# .env
+IOS_BUNDLE_ID=com.your-company.codeling
+APPLE_TEAM_ID=ABCDE12345
 ```
+
+`app.config.ts` reads both and fills them into the iOS config; without them the
+bundle identifier falls back to the one in `app.json` and no team is set.
 
 ### Step 6: Build for iOS
 

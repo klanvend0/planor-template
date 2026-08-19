@@ -34,13 +34,13 @@ nothing is charged" where the billing terms should be.
 
 ## 1. Placeholders to replace
 
-| Where      | Key                                                | Currently                              |
-| ---------- | -------------------------------------------------- | -------------------------------------- |
-| `app.json` | `expo.ios.bundleIdentifier`                        | `com.planor.codeling`                  |
-| `app.json` | `expo.ios.appleTeamId`                             | `__APPLE_TEAM_ID__`                    |
-| `eas.json` | `submit.production.ios` (`appleId`, `ascAppId`)    | empty — `eas submit` prompts otherwise |
-| `.env`     | `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_PRIVACY_URL` | codeling.app placeholders              |
-| `.env`     | `EXPO_PUBLIC_APP_STORE_ID`                         | empty (fill in after the first submit) |
+| Where      | Key                                                | Currently                               |
+| ---------- | -------------------------------------------------- | --------------------------------------- |
+| `.env`     | `IOS_BUNDLE_ID`                                    | `com.planor.codeling` from `app.json`   |
+| `.env`     | `APPLE_TEAM_ID`                                    | unset — required for Sign in with Apple |
+| `eas.json` | `submit.production.ios` (`appleId`, `ascAppId`)    | empty — `eas submit` prompts otherwise  |
+| `.env`     | `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_PRIVACY_URL` | codeling.app placeholders               |
+| `.env`     | `EXPO_PUBLIC_APP_STORE_ID`                         | empty (fill in after the first submit)  |
 
 The Terms and Privacy URLs must resolve to real pages **before** review: they are
 linked from the paywall and from Settings, and a reviewer will open both.

@@ -19,6 +19,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   // when an id is explicitly provided, or a build would blank the linked one.
   const projectId = process.env.EAS_PROJECT_ID;
 
+  // The two values that are specific to whoever ships this app. They live in
+  // the environment rather than in app.json so that setting up a real build is
+  // a `.env` change like everything else, not a diff against the repo.
+  const bundleIdentifier = process.env.IOS_BUNDLE_ID || baseConfig.ios?.bundleIdentifier;
+  const appleTeamId = process.env.APPLE_TEAM_ID || baseConfig.ios?.appleTeamId;
+
   return {
     ...baseConfig,
     // Merge any dynamic config from the default config context
@@ -26,6 +32,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     // Ensure the name and slug are always set from app.json
     name: baseConfig.name,
     slug: baseConfig.slug,
+    ios: {
+      ...baseConfig.ios,
+      ...config.ios,
+      bundleIdentifier,
+      appleTeamId,
+    },
     extra: {
       ...baseConfig.extra,
       ...config.extra,
