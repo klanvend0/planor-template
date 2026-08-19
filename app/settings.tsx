@@ -113,6 +113,7 @@ export default function SettingsScreen() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const gameState = useGameStore((state) => state.state);
   const restore = useSubscriptionStore((state) => state.restore);
+  const snapshot = useSubscriptionStore((state) => state.snapshot);
   const subscriptionSignOut = useSubscriptionStore((state) => state.signOut);
 
   const isPro = gameState?.hasSubscription ?? false;
@@ -125,9 +126,9 @@ export default function SettingsScreen() {
     });
   };
 
-  // The learner's preference and the OS permission are two different facts.
-  // The switch shows both: it is only on when the reminder can actually fire,
-  // and the preference itself is never quietly rewritten.
+  // The learner's preference and the OS permission are two different facts. The
+  // switch shows the preference alone (see the reminders row below); this is
+  // the other half, re-read whenever the app comes back from the settings app.
   const [reminderPermission, setReminderPermission] = useState(true);
 
   useEffect(() => {
@@ -196,11 +197,24 @@ export default function SettingsScreen() {
   };
 
   const confirmDelete = () => {
-    // Name the store the subscription is actually in. Telling an Android
-    // learner to cancel in the App Store leaves them charged and looking in the
-    // wrong place; on the local backend there is no store at all.
-    const store = t(Platform.OS === 'android' ? 'settings.store_google' : 'settings.store_apple');
-    Alert.alert(t('settings.delete_title'), t('settings.delete_body', { store }), [
+    // Only warn about a subscription there is one to warn about: the demo
+    // backend has no store behind it, and a learner on the free plan has
+    // nothing to cancel. When there is one, name the store that actually holds
+    // it — RevenueCat's management URL knows, and one account can be signed in
+    // on both platforms, so the device in hand is only the last resort.
+    const managementUrl = snapshot?.managementUrl ?? '';
+    const store = managementUrl.includes('play.google.com')
+      ? t('settings.store_google')
+      : managementUrl.includes('apple.com')
+        ? t('settings.store_apple')
+        : t(Platform.OS === 'android' ? 'settings.store_google' : 'settings.store_apple');
+
+    const body =
+      isPro && !USES_LOCAL_BACKEND
+        ? t('settings.delete_body_subscribed', { store })
+        : t('settings.delete_body');
+
+    Alert.alert(t('settings.delete_title'), body, [
       { text: t('common.cancel'), style: 'cancel' },
       {
         text: t('settings.delete_confirm'),
@@ -246,13 +260,22 @@ export default function SettingsScreen() {
   };
 
   const rateApp = async () => {
-    if (await StoreReview.hasAction()) {
-      await StoreReview.requestReview();
-      return;
+    // `hasAction()` only says the platform supports the prompt. Play still
+    // refuses the flow for a build it did not install (a sideloaded APK, an
+    // internal-distribution build), and rejects — so the fallback below has to
+    // be reachable from a failure, not only from an unsupported platform.
+    try {
+      if (await StoreReview.hasAction()) {
+        await StoreReview.requestReview();
+        return;
+      }
+    } catch (error) {
+      console.warn('[settings] in-app review unavailable', error);
     }
-    // No in-app prompt available (already reviewed, or no store id yet): fall
-    // back to this platform's own listing, and only then to support. Sending an
-    // Android learner to the App Store would be a dead end.
+
+    // No in-app prompt: fall back to this platform's own listing, and only then
+    // to support. Sending an Android learner to the App Store would be a dead
+    // end.
     const listing =
       Platform.OS === 'android'
         ? Application.applicationId

@@ -11,6 +11,7 @@
 
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
+import { Platform } from 'react-native';
 
 /**
  * Open a URL.
@@ -42,6 +43,14 @@ export async function openExternal(url: string): Promise<void> {
  * thing the learner tapped for.
  */
 export async function openStoreUrl(url: string): Promise<void> {
+  // On the web there is no store app to hand it to, and `Linking.openURL` is a
+  // same-tab navigation — it would unload the app and everything it is holding.
+  // A new tab leaves the learner's session where it was.
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined') window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+
   try {
     await Linking.openURL(url);
   } catch (error) {

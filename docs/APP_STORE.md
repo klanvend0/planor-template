@@ -167,9 +167,8 @@ or Pro will not unlock for the reviewer even though their purchase succeeded.
 ## 8. Before every release
 
 ```bash
-npm run typecheck
-npm test
-npm run content:check     # runs every code snippet in the question bank
+npm run verify            # types, formatting, tests, i18n and the question bank
+npm run db:check          # the RPCs, against a throwaway PostgreSQL
 npm run expo:doctor
 ```
 

@@ -25,6 +25,32 @@
 
 set check_function_bodies = off;
 
+-- Every function below is recreated by this file, so any copy an older run of
+-- it left behind is dropped first. `create or replace` cannot change a
+-- function's return type or add an argument — it would either fail outright or
+-- leave a second overload that a call by argument name then matches ambiguously
+-- (PostgREST answers PGRST203). Dropping is a no-op on a fresh database; the
+-- triggers and policies that cascade away with these are recreated below.
+do $$
+declare
+  v_function record;
+begin
+  for v_function in
+    select p.oid::regprocedure as signature
+      from pg_proc p
+      join pg_namespace n on n.oid = p.pronamespace
+     where n.nspname = 'public'
+       and p.proname in (
+         'handle_new_user', 'touch_updated_at', 'settle_hearts', 'has_active_subscription',
+         'record_answer', 'complete_lesson', 'get_game_state', 'refill_hearts',
+         'get_mistake_questions', 'record_practice', 'claim_ai_review', 'release_ai_review'
+       )
+  loop
+    execute format('drop function if exists %s cascade', v_function.signature);
+  end loop;
+end;
+$$;
+
 -- ---------------------------------------------------------------------------
 -- profiles
 -- ---------------------------------------------------------------------------
@@ -43,6 +69,14 @@ create table if not exists public.profiles (
 );
 
 comment on table public.profiles is 'One row per user: preferences captured during onboarding.';
+
+-- This file is the schema's baseline and is edited in place until the first
+-- release, so it has to be safe to apply over a database that already holds an
+-- older copy of it: `create table if not exists` does not add a column that
+-- appeared later. Every statement below is a no-op on a database built from the
+-- file as it now stands. After the first release these belong in their own
+-- migration instead — `npm run supabase:migration:new`.
+alter table public.profiles drop column if exists avatar_url;
 
 -- ---------------------------------------------------------------------------
 -- game_state
@@ -67,6 +101,9 @@ create table if not exists public.game_state (
 
 comment on table public.game_state is 'Server-authoritative gamification state; mutated only through RPCs.';
 comment on column public.game_state.hearts is 'Hearts left. Regenerates one per 30 minutes up to 5; subscribers are never charged.';
+
+alter table public.game_state
+  add column if not exists last_free_refill_at timestamptz;
 
 -- ---------------------------------------------------------------------------
 -- lesson_progress
@@ -112,6 +149,9 @@ create table if not exists public.question_attempts (
   created_at timestamptz not null default now()
 );
 
+alter table public.question_attempts
+  add column if not exists attempt_id uuid;
+
 create index if not exists question_attempts_user_created_idx
   on public.question_attempts (user_id, created_at desc);
 create index if not exists question_attempts_user_question_idx
@@ -141,6 +181,9 @@ create table if not exists public.xp_events (
   earned_on date not null default (now() at time zone 'utc')::date,
   created_at timestamptz not null default now()
 );
+
+alter table public.xp_events
+  add column if not exists run_id uuid;
 
 create index if not exists xp_events_user_day_idx on public.xp_events (user_id, earned_on desc);
 create unique index if not exists xp_events_run_idx
@@ -176,6 +219,10 @@ create table if not exists public.subscriptions (
   raw_event jsonb
 );
 
+alter table public.subscriptions
+  add column if not exists rc_event_id text,
+  add column if not exists last_event_at timestamptz;
+
 create index if not exists subscriptions_rc_app_user_idx on public.subscriptions (rc_app_user_id);
 
 comment on table public.subscriptions is 'Mirror of RevenueCat entitlements, written only by the webhook (service role).';
@@ -207,8 +254,13 @@ create table if not exists public.lesson_catalog (
   updated_at timestamptz not null default now()
 );
 
+alter table public.lesson_catalog
+  add column if not exists premium_question_count smallint not null default 0,
+  add column if not exists premium_xp integer not null default 0;
+
 alter table public.lesson_catalog enable row level security;
 
+drop policy if exists "the catalog is readable by signed in users" on public.lesson_catalog;
 create policy "the catalog is readable by signed in users"
   on public.lesson_catalog for select to authenticated
   using (true);
@@ -262,34 +314,42 @@ alter table public.subscriptions enable row level security;
 alter table public.question_rubrics enable row level security;
 alter table public.ai_reviews enable row level security;
 
+drop policy if exists "profiles are self service" on public.profiles;
 create policy "profiles are self service"
   on public.profiles for all to authenticated
   using (auth.uid() = id) with check (auth.uid() = id);
 
+drop policy if exists "game state is readable by its owner" on public.game_state;
 create policy "game state is readable by its owner"
   on public.game_state for select to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "lesson progress is readable by its owner" on public.lesson_progress;
 create policy "lesson progress is readable by its owner"
   on public.lesson_progress for select to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "question attempts are readable by their owner" on public.question_attempts;
 create policy "question attempts are readable by their owner"
   on public.question_attempts for select to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "xp events are readable by their owner" on public.xp_events;
 create policy "xp events are readable by their owner"
   on public.xp_events for select to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "subscriptions are readable by their owner" on public.subscriptions;
 create policy "subscriptions are readable by their owner"
   on public.subscriptions for select to authenticated
   using (auth.uid() = user_id);
 
+drop policy if exists "rubrics are readable by signed in users" on public.question_rubrics;
 create policy "rubrics are readable by signed in users"
   on public.question_rubrics for select to authenticated
   using (true);
 
+drop policy if exists "ai reviews are readable by their owner" on public.ai_reviews;
 create policy "ai reviews are readable by their owner"
   on public.ai_reviews for select to authenticated
   using (auth.uid() = user_id);
@@ -660,14 +720,19 @@ begin
     v_state.streak_freezes := least(2, v_state.streak_freezes + 1)::smallint;
   end if;
 
+  -- Every column here is also an OUT column of this function, so anything read
+  -- on the right-hand side has to name the table: a bare `total_xp` is
+  -- ambiguous to PL/pgSQL and the statement fails at run time.
   update public.game_state set
-    total_xp = total_xp + v_award + v_perfect_bonus + v_streak_bonus,
+    total_xp = game_state.total_xp + v_award + v_perfect_bonus + v_streak_bonus,
     streak_days = v_state.streak_days,
-    longest_streak = greatest(longest_streak, v_state.streak_days),
+    longest_streak = greatest(game_state.longest_streak, v_state.streak_days),
     streak_freezes = v_state.streak_freezes,
-    last_active_date = greatest(coalesce(last_active_date, v_played), v_played),
-    lessons_completed = lessons_completed + case when v_first and v_score >= 50 then 1 else 0 end,
-    perfect_lessons = perfect_lessons + case when v_score = 100 and v_perfect_bonus > 0 then 1 else 0 end,
+    last_active_date = greatest(coalesce(game_state.last_active_date, v_played), v_played),
+    lessons_completed = game_state.lessons_completed
+      + case when v_first and v_score >= 50 then 1 else 0 end,
+    perfect_lessons = game_state.perfect_lessons
+      + case when v_score = 100 and v_perfect_bonus > 0 then 1 else 0 end,
     updated_at = now()
   where user_id = v_user
   returning * into v_state;
@@ -886,6 +951,8 @@ declare
   v_state public.game_state%rowtype;
   v_daily integer;
   v_paid integer;
+  -- 0 means the insert hit the run-id index rather than writing a new event.
+  v_recorded integer;
 begin
   if v_user is null then
     raise exception 'authentication required' using errcode = '28000';
@@ -922,10 +989,28 @@ begin
   v_award := greatest(0, least(p_correct * 5, 50 - v_already));
 
   if v_award > 0 then
+    -- The select above cannot see a row that a concurrent call has inserted but
+    -- not yet committed, so the index is what actually decides. Losing the race
+    -- means the run is already paid: answer with what it paid, do not raise.
     insert into public.xp_events (user_id, amount, source, run_id)
-    values (v_user, v_award, 'practice', p_run_id);
+    values (v_user, v_award, 'practice', p_run_id)
+    on conflict (user_id, run_id) where run_id is not null do nothing;
+
+    get diagnostics v_recorded = row_count;
+
+    if v_recorded = 0 then
+      select amount into v_paid from public.xp_events
+        where user_id = v_user and run_id = p_run_id;
+      select coalesce(sum(amount), 0)::integer into v_daily
+        from public.xp_events where user_id = v_user and earned_on = v_today;
+      return query select coalesce(v_paid, 0), v_state.total_xp, v_daily;
+      return;
+    end if;
+
+    -- `total_xp` is also an OUT column of this function, so the right-hand side
+    -- has to name the table or PL/pgSQL cannot tell which one is meant.
     update public.game_state
-      set total_xp = total_xp + v_award, updated_at = now()
+      set total_xp = game_state.total_xp + v_award, updated_at = now()
       where user_id = v_user
       returning * into v_state;
   end if;
@@ -963,6 +1048,7 @@ create table if not exists public.ai_review_quota (
 
 alter table public.ai_review_quota enable row level security;
 
+drop policy if exists "quota is readable by its owner" on public.ai_review_quota;
 create policy "quota is readable by its owner"
   on public.ai_review_quota for select to authenticated
   using (auth.uid() = user_id);

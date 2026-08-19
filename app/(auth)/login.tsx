@@ -150,7 +150,9 @@ export default function LoginScreen() {
                 accessible={busy !== null}
                 accessibilityRole={busy !== null ? 'button' : undefined}
                 accessibilityLabel={busy !== null ? t('auth.sign_in_with_apple') : undefined}
-                accessibilityState={busy !== null ? { disabled: true, busy: true } : undefined}
+                accessibilityState={
+                  busy !== null ? { disabled: true, busy: busy === 'apple' } : undefined
+                }
                 style={{ opacity: busy === null ? 1 : 0.6 }}>
                 <AppleAuthentication.AppleAuthenticationButton
                   buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}

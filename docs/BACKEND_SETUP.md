@@ -46,6 +46,20 @@ XP, hearts and streaks are only ever changed by those functions. The tables
 themselves grant `select` to their owner and nothing else, so a modified client
 cannot mint XP.
 
+`npm run db:check` runs those functions against a throwaway PostgreSQL and
+compares what they pay to `lib/scoring.ts`. Worth running after any change to
+the schema: PL/pgSQL compiles a function body when it is called, not when it is
+installed, so a broken RPC applies perfectly and then fails for every learner.
+
+Until the first release, `20260818120000_init_codeling.sql` is a baseline that
+is edited in place, and it is written so that applying it again upgrades a
+database created from an older copy of it (`db push` skips a migration whose
+version it has already recorded, so re-run the file directly:
+`psql "$DATABASE_URL" -f supabase/migrations/20260818120000_init_codeling.sql`,
+or start clean with `npx supabase db reset`). Once real learners have data in
+it, that stops: every change from then on belongs in its own migration
+(`npm run supabase:migration:new`).
+
 Whenever the question bank changes, regenerate the rubric seed and push it:
 
 ```bash
