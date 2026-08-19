@@ -19,6 +19,7 @@ import { GameButton } from '@/components/game_button';
 import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { EXPLANATION_MAX_CHARS, EXPLANATION_MIN_CHARS } from '@/lib/constants';
 import type { ExplainCodeQuestion } from '@/lib/content_schema';
 import { useTranslation } from '@/hooks/use_translation';
@@ -157,7 +158,9 @@ export function ExplainCodeView({
     <View className="gap-5">
       <View className="flex-row items-center gap-2">
         <Icon as={Sparkles} size={18} className="text-primary" />
-        <Kicker className="text-sm tracking-wide text-primary">{t('explain.title')}</Kicker>
+        <Kicker className="text-sm tracking-wide text-primary">
+          {USES_LOCAL_BACKEND ? t('explain.local_title') : t('explain.title')}
+        </Kicker>
       </View>
 
       <QuestionPrompt>{pick(question.prompt, locale)}</QuestionPrompt>

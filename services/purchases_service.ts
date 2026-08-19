@@ -26,8 +26,10 @@ import Purchases, {
   type PurchasesPackage,
 } from 'react-native-purchases';
 
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { AppError } from '@/lib/errors';
 import { DEFAULT_OFFERING_ID, ENTITLEMENT_ID } from '@/lib/constants';
+import * as localStore from '@/services/local/store';
 
 export type SubscriptionSnapshot = {
   isSubscribed: boolean;
@@ -59,6 +61,9 @@ function blockedByExpoGo(key: string): boolean {
 
 /** True when a usable RevenueCat API key exists for this build. */
 export function isPurchasesAvailable(): boolean {
+  // With no backend at all the device stands in for the store too, so the
+  // paywall is a real screen rather than a permanent "unavailable" notice.
+  if (USES_LOCAL_BACKEND) return true;
   const key = apiKey();
   return typeof key === 'string' && key.length > 0 && !blockedByExpoGo(key);
 }
@@ -76,7 +81,7 @@ export function isPurchasesConfigured(): boolean {
  * pass an email: it leaks into webhooks and exports and changes over time.
  */
 export async function configurePurchases(appUserId?: string): Promise<void> {
-  if (configured || !isPurchasesAvailable()) return;
+  if (USES_LOCAL_BACKEND || configured || !isPurchasesAvailable()) return;
 
   try {
     if (__DEV__) await Purchases.setLogLevel(LOG_LEVEL.WARN);
@@ -91,6 +96,7 @@ export async function configurePurchases(appUserId?: string): Promise<void> {
 
 /** Attach the store account to a Supabase user after sign-in. */
 export async function identifyUser(appUserId: string): Promise<SubscriptionSnapshot | null> {
+  if (USES_LOCAL_BACKEND) return localStore.localSnapshot();
   if (!configured) {
     await configurePurchases(appUserId);
     if (!configured) return null;
@@ -106,7 +112,9 @@ export async function identifyUser(appUserId: string): Promise<SubscriptionSnaps
 
 /** Detach the store account on sign-out, returning to an anonymous id. */
 export async function forgetUser(): Promise<void> {
-  if (!configured) return;
+  // The entitlement belongs to the device, not to a store account: there is
+  // nobody to detach, and the learner keeps what they unlocked.
+  if (USES_LOCAL_BACKEND || !configured) return;
   try {
     // logOut() throws when the current id is already anonymous.
     if (await Purchases.isAnonymous()) return;
@@ -132,6 +140,7 @@ export function toSnapshot(info: CustomerInfo): SubscriptionSnapshot {
 
 /** Current entitlement state, or null when purchases are unavailable. */
 export async function getSubscriptionSnapshot(): Promise<SubscriptionSnapshot | null> {
+  if (USES_LOCAL_BACKEND) return localStore.localSnapshot();
   if (!configured) return null;
   try {
     const info = await Purchases.getCustomerInfo();
@@ -146,6 +155,7 @@ export async function getSubscriptionSnapshot(): Promise<SubscriptionSnapshot | 
 export function onSubscriptionChange(
   listener: (snapshot: SubscriptionSnapshot) => void
 ): () => void {
+  if (USES_LOCAL_BACKEND) return localStore.onLocalSubscriptionChange(listener);
   if (!configured) return () => {};
 
   const handler = (info: CustomerInfo) => listener(toSnapshot(info));
@@ -157,6 +167,7 @@ export function onSubscriptionChange(
 
 /** The offering the paywall renders, or null when the store is unreachable. */
 export async function getCurrentOffering(): Promise<PurchasesOffering | null> {
+  if (USES_LOCAL_BACKEND) return localStore.localOffering();
   if (!configured) return null;
   try {
     const offerings = await Purchases.getOfferings();
@@ -179,6 +190,9 @@ export type PurchaseOutcome =
  * @throws {AppError} `store_unavailable` when StoreKit refuses the purchase.
  */
 export async function purchase(pkg: PurchasesPackage): Promise<PurchaseOutcome> {
+  if (USES_LOCAL_BACKEND) {
+    return { status: 'purchased', snapshot: await localStore.localPurchase(pkg) };
+  }
   if (!configured) throw new AppError('store_unavailable', 'RevenueCat is not configured');
 
   try {
@@ -202,6 +216,8 @@ export async function purchase(pkg: PurchasesPackage): Promise<PurchaseOutcome> 
  * @returns The entitlement state after restoring, or null when unavailable.
  */
 export async function restore(): Promise<SubscriptionSnapshot | null> {
+  // Nothing left the device, so restoring is reading back what it already has.
+  if (USES_LOCAL_BACKEND) return localStore.localSnapshot();
   if (!configured) throw new AppError('store_unavailable', 'RevenueCat is not configured');
   const info = await Purchases.restorePurchases();
   return toSnapshot(info);
@@ -225,6 +241,7 @@ export async function checkTrialEligibility(
   productIds: string[]
 ): Promise<Record<string, boolean>> {
   const unknown = Object.fromEntries(productIds.map((id) => [id, false]));
+  if (USES_LOCAL_BACKEND) return localStore.localTrialEligibility(productIds);
   if (!configured || productIds.length === 0) return unknown;
 
   if (Platform.OS !== 'ios') {

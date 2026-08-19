@@ -23,6 +23,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useProfileStats } from '@/hooks/use_profile_stats';
 import { useTranslation } from '@/hooks/use_translation';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { LINKS } from '@/lib/constants';
 import { openExternal } from '@/lib/links';
 import { ACHIEVEMENTS, isUnlocked, leagueFromWeeklyXp, levelFromXp } from '@/lib/gamification';
@@ -136,7 +137,9 @@ export default function ProfileScreen() {
             variant={isPro ? 'ghost' : 'primary'}
             size="sm"
             onPress={() =>
-              isPro ? void openExternal(LINKS.manageSubscription) : router.push('/paywall')
+              isPro && !USES_LOCAL_BACKEND
+                ? void openExternal(LINKS.manageSubscription)
+                : router.push('/paywall')
             }
           />
         </View>

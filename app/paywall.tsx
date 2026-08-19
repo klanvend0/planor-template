@@ -27,6 +27,7 @@ import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
 import { track } from '@/lib/analytics';
 import { LINKS, TRIAL_DAYS } from '@/lib/constants';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { AppError, errorMessageKey } from '@/lib/errors';
 import { localeUpper } from '@/lib/i18n';
 import { openExternal } from '@/lib/links';
@@ -360,8 +361,14 @@ export default function PaywallScreen() {
           onPress={() => void purchase()}
         />
 
+        {/* The billing terms Apple requires are a lie when nothing is billed,
+            so the demo build says what it actually does instead. */}
         <Text className="text-center text-[11px] leading-4 text-muted-foreground">
-          {eligibleForTrial ? t('paywall.legal') : t('paywall.legal_no_trial')}
+          {USES_LOCAL_BACKEND
+            ? t('paywall.local_notice', { days: trialDays })
+            : eligibleForTrial
+              ? t('paywall.legal')
+              : t('paywall.legal_no_trial')}
         </Text>
 
         <View className="flex-row items-center justify-center gap-6">

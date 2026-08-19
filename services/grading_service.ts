@@ -10,9 +10,13 @@
 
 import { FunctionsHttpError } from '@supabase/supabase-js';
 
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { AppError } from '@/lib/errors';
 import type { SupportedLocale } from '@/lib/i18n';
 import { supabase } from '@/lib/supabase';
+import { getQuestion } from '@/services/content_service';
+import { recordAiReview, readSubscription } from '@/services/local/backend';
+import { gradeLocally } from '@/services/local/grader';
 
 export type ExplanationVerdict = 'correct' | 'partial' | 'incorrect';
 
@@ -59,6 +63,8 @@ export async function gradeExplanation(params: {
   answer: string;
   locale: SupportedLocale;
 }): Promise<ExplanationReview> {
+  if (USES_LOCAL_BACKEND) return gradeOnDevice(params);
+
   const { data, error } = await supabase.functions.invoke('grade-explanation', {
     body: {
       questionId: params.questionId,
@@ -91,4 +97,30 @@ export async function gradeExplanation(params: {
     corrections: Array.isArray(payload.corrections) ? payload.corrections : [],
     missedPoints: Array.isArray(payload.missedPoints) ? payload.missedPoints : [],
   };
+}
+
+/**
+ * Mark the explanation here, against the key points the question ships.
+ *
+ * The entitlement is checked for the same reason the edge function checks it:
+ * this is the paid feature, and the screen that offers it has to behave the
+ * same way in both builds.
+ */
+async function gradeOnDevice(params: {
+  questionId: string;
+  answer: string;
+  locale: SupportedLocale;
+}): Promise<ExplanationReview> {
+  if (!(await readSubscription())) {
+    throw new AppError('subscription_required', 'Pro subscription required');
+  }
+
+  const question = getQuestion(params.questionId);
+  if (!question || question.type !== 'explain_code') {
+    throw new AppError('unknown', `no rubric for ${params.questionId}`);
+  }
+
+  const review = gradeLocally(params.answer, question.keyPoints[params.locale], params.locale);
+  await recordAiReview(params.questionId, review.verdict);
+  return review;
 }

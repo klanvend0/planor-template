@@ -197,10 +197,13 @@ export async function completeLesson(
 ): Promise<LessonResult> {
   const { document, result } = await mutateDocument((current) => {
     // The bundled lesson is the catalog: how many questions it has and what it
-    // pays come from the content, never from the caller.
+    // pays come from the content, never from the caller. An id that is not in
+    // the bundle cannot be scored at all — treating it as a one-question lesson
+    // would bank a 100% and a first completion for a lesson nobody played.
     const lesson = getLesson(params.lessonId);
-    const questions = lesson?.questions.length ?? 1;
-    const baseXp = lesson ? getLessonBaseXp(lesson) : 0;
+    if (!lesson) throw new Error(`unknown lesson: ${params.lessonId}`);
+    const questions = lesson.questions.length;
+    const baseXp = getLessonBaseXp(lesson);
 
     const score = scoreFor(params.correct, questions);
     const previous = current.lessons[params.lessonId];
@@ -273,6 +276,16 @@ export async function recordPractice(
   params: { correct: number; total: number },
   now: number = Date.now()
 ): Promise<{ xpAwarded: number; totalXp: number; dailyXp: number }> {
+  // The same bounds the RPC refuses on: a practice run is at most one deck.
+  if (
+    params.total <= 0 ||
+    params.total > 50 ||
+    params.correct < 0 ||
+    params.correct > params.total
+  ) {
+    throw new Error('implausible practice payload');
+  }
+
   const { document, result } = await mutateDocument((current) => {
     const today = toIsoDate(now);
     const alreadyFromPractice = current.xpEvents

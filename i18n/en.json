@@ -180,7 +180,11 @@
     "locked_title": "AI feedback is a Pro feature",
     "locked_body": "Write an explanation in your own words and an AI tells you exactly what you understood and what you missed.",
     "locked_cta": "Unlock Pro",
-    "locked_skip": "Skip this question"
+    "locked_skip": "Skip this question",
+    "local_title": "Checked on your device",
+    "local_correct": "You covered %{covered} of the %{total} things this code does.",
+    "local_partial": "You covered %{covered} of %{total}. What you left out is below.",
+    "local_incorrect": "That does not describe this code yet. Read the comments again, then say what each line does."
   },
   "results": {
     "title_perfect": "Flawless",
@@ -326,7 +330,8 @@
     "per_six_month": "%{price} / 6 months",
     "per_once": "%{price} once",
     "purchase_done": "You are Pro. Everything is unlocked.",
-    "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings."
+    "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings.",
+    "local_notice": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the trial really does end after %{days} days."
   },
   "settings": {
     "title": "Settings",

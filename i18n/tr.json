@@ -180,7 +180,11 @@
     "locked_title": "Yapay zekâ değerlendirmesi Pro'da",
     "locked_body": "Kodu kendi cümlelerinle anlat; yapay zekâ neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin.",
     "locked_cta": "Pro'yu aç",
-    "locked_skip": "Bu soruyu geç"
+    "locked_skip": "Bu soruyu geç",
+    "local_title": "Cihazında kontrol edildi",
+    "local_correct": "Bu kodun yaptığı %{total} şeyden %{covered} tanesini anlattın.",
+    "local_partial": "%{total} şeyden %{covered} tanesini anlattın. Atladıkların aşağıda.",
+    "local_incorrect": "Bu, kodu henüz anlatmıyor. Yorum satırlarını tekrar oku, sonra her satırın ne yaptığını söyle."
   },
   "results": {
     "title_perfect": "Kusursuz",
@@ -326,7 +330,8 @@
     "per_six_month": "%{price} / 6 ay",
     "per_once": "tek seferlik %{price}",
     "purchase_done": "Artık Pro üyesin. Her şey açık.",
-    "legal_no_trial": "Ücret, satın alma onayıyla birlikte Apple kimliğinden tahsil edilir. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin."
+    "legal_no_trial": "Ücret, satın alma onayıyla birlikte Apple kimliğinden tahsil edilir. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin.",
+    "local_notice": "Demo modu: hiçbir ücret alınmaz. Pro yalnızca bu cihazda açılır ve deneme %{days} gün sonra gerçekten biter."
   },
   "settings": {
     "title": "Ayarlar",

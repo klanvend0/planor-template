@@ -97,6 +97,26 @@ describe('lessons', () => {
   });
 });
 
+describe('bad input', () => {
+  it('refuses a lesson id that is not in the bundle', async () => {
+    await expect(
+      backend.completeLesson(
+        { lessonId: 'ghost-lesson', unitId: UNIT, courseId: 'python', correct: 1 },
+        NOW
+      )
+    ).rejects.toThrow(/unknown lesson/);
+    expect((await backend.fetchGameState(NOW)).totalXp).toBe(0);
+    expect(await backend.fetchLessonProgress('python')).toEqual([]);
+  });
+
+  it('refuses a practice payload the server would refuse', async () => {
+    await expect(backend.recordPractice({ correct: 0, total: 0 }, NOW)).rejects.toThrow();
+    await expect(backend.recordPractice({ correct: 9, total: 6 }, NOW)).rejects.toThrow();
+    await expect(backend.recordPractice({ correct: 60, total: 60 }, NOW)).rejects.toThrow();
+    expect((await backend.fetchGameState(NOW)).totalXp).toBe(0);
+  });
+});
+
 describe('streak', () => {
   it('extends day by day and pays on the seventh', async () => {
     for (let index = 0; index < 6; index += 1) {

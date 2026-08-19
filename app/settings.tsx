@@ -21,6 +21,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
 import { signOut } from '@/lib/auth';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { APP_STORE_ID, LINKS } from '@/lib/constants';
 import { errorMessageKey, toAppError } from '@/lib/errors';
 import { openExternal } from '@/lib/links';
@@ -317,7 +318,9 @@ export default function SettingsScreen() {
             label={t('settings.subscription')}
             value={isPro ? t('profile.pro_member') : t('profile.free_member')}
             onPress={() =>
-              isPro ? void openExternal(LINKS.manageSubscription) : router.push('/paywall')
+              isPro && !USES_LOCAL_BACKEND
+                ? void openExternal(LINKS.manageSubscription)
+                : router.push('/paywall')
             }
           />
           <Row label={t('settings.restore')} onPress={() => void restorePurchases()} />

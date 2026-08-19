@@ -85,6 +85,8 @@ export type LocalDocument = {
   attempts: LocalAttempt[];
   xpEvents: LocalXpEvent[];
   subscription: LocalSubscription | null;
+  /** When the introductory offer was taken; the store allows it once. */
+  trialUsedAt: string | null;
   aiReviews: { questionId: string; verdict: ExplanationVerdict; at: string }[];
 };
 
@@ -117,6 +119,7 @@ export function emptyDocument(now: number = Date.now()): LocalDocument {
     attempts: [],
     xpEvents: [],
     subscription: null,
+    trialUsedAt: null,
     aiReviews: [],
   };
 }
