@@ -255,7 +255,11 @@ async function grade(params: {
   };
 }
 
-Deno.serve(async (request: Request) => {
+/**
+ * The function itself. Exported so `supabase/functions/_tests` can call it
+ * directly; the runtime reaches it through `Deno.serve` below.
+ */
+export async function handleGradeExplanation(request: Request): Promise<Response> {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
   if (!AI_API_KEY) return json({ error: 'grader_unconfigured' }, 503);
@@ -368,4 +372,6 @@ Deno.serve(async (request: Request) => {
   }
 
   return json({ ...result, latencyMs });
-});
+}
+
+Deno.serve(handleGradeExplanation);

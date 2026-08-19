@@ -1,0 +1,7 @@
+{
+  "//": "Config for `npm run functions:check` only. Supabase ignores directories whose name starts with an underscore, so nothing here is deployed. The import map exists because some networks cannot reach JSR; the package is the same one either way.",
+  "imports": {
+    "jsr:@supabase/supabase-js@2": "npm:@supabase/supabase-js@2"
+  },
+  "lock": false
+}

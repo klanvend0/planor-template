@@ -56,7 +56,11 @@ function readClaims(idToken: string): { sub?: string } | null {
   }
 }
 
-Deno.serve(async (request: Request) => {
+/**
+ * The function itself. Exported so `supabase/functions/_tests` can call it
+ * directly; the runtime reaches it through `Deno.serve` below.
+ */
+export async function handleAppleTokenExchange(request: Request): Promise<Response> {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
@@ -143,4 +147,6 @@ Deno.serve(async (request: Request) => {
   }
 
   return json({ ok: true });
-});
+}
+
+Deno.serve(handleAppleTokenExchange);

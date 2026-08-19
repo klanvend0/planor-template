@@ -213,7 +213,11 @@ async function shouldApply(
   return { apply: true };
 }
 
-Deno.serve(async (request: Request) => {
+/**
+ * The function itself. Exported so `supabase/functions/_tests` can call it
+ * directly; the runtime reaches it through `Deno.serve` below.
+ */
+export async function handleRevenueCatWebhook(request: Request): Promise<Response> {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
   if (!WEBHOOK_SECRET) {
     console.error('[revenuecat-webhook] REVENUECAT_WEBHOOK_SECRET is not set');
@@ -424,4 +428,6 @@ Deno.serve(async (request: Request) => {
   }
 
   return json({ ok: true, status, user_id: userId });
-});
+}
+
+Deno.serve(handleRevenueCatWebhook);
