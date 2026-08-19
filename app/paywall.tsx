@@ -194,8 +194,12 @@ export default function PaywallScreen() {
   // Android is left to the product's own free phase: Play filters offers by
   // eligibility before returning them, and `checkTrialEligibility` reports
   // nothing there.
+  // Someone who already subscribed is not a prospect: the screen stops selling
+  // and says where they stand. Reachable from settings and from the profile.
+  const alreadyPro = snapshot?.isSubscribed ?? false;
   const storeTrialDays = selected ? packageTrialDays(selected) : null;
   const eligibleForTrial =
+    !alreadyPro &&
     selected !== null &&
     storeTrialDays !== null &&
     // In local mode the eligibility map is the device's own record of whether
@@ -285,7 +289,9 @@ export default function PaywallScreen() {
             {t('paywall.title')}
           </Text>
           <Text className="text-center text-[15px] leading-6 text-muted-foreground">
-            {t('paywall.subtitle')}
+            {eligibleForTrial
+              ? t('paywall.subtitle_trial', { days: trialDays })
+              : t('paywall.subtitle')}
           </Text>
         </View>
 
@@ -365,7 +371,11 @@ export default function PaywallScreen() {
       </ScrollView>
 
       <View className="gap-3 px-6 pt-2" style={{ paddingBottom: insets.bottom + 12 }}>
-        {selected ? (
+        {alreadyPro ? (
+          <Text className="text-center font-mono text-[13px] leading-5 text-accent">
+            {t('paywall.already_pro')}
+          </Text>
+        ) : selected ? (
           <Text className="text-center font-mono text-[13px] leading-5 text-accent">
             {eligibleForTrial
               ? t('paywall.trial_line', { days: trialDays, price: priceLine(selected, t) })
@@ -375,12 +385,16 @@ export default function PaywallScreen() {
 
         <GameButton
           label={
-            eligibleForTrial ? t('paywall.cta_trial', { days: trialDays }) : t('paywall.cta_buy')
+            alreadyPro
+              ? t('common.close')
+              : eligibleForTrial
+                ? t('paywall.cta_trial', { days: trialDays })
+                : t('paywall.cta_buy')
           }
           size="lg"
           busy={isPurchasing}
-          disabled={!selected || snapshot?.isSubscribed}
-          onPress={() => void purchase()}
+          disabled={!selected && !alreadyPro}
+          onPress={() => (alreadyPro ? close() : void purchase())}
         />
 
         {/* The billing terms Apple requires are a lie when nothing is billed,

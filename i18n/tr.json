@@ -292,7 +292,8 @@
   },
   "paywall": {
     "title": "Codeling Pro",
-    "subtitle": "Her şey açık, ilk üç gün ücretsiz.",
+    "subtitle": "Her şey açık.",
+    "subtitle_trial": "Her şey açık, ilk %{days} gün ücretsiz.",
     "features": {
       "ai": "Yazdığın her açıklamaya yapay zekâ geri bildirimi",
       "hearts": "Sınırsız can; yanlış cevap seni durdurmaz",

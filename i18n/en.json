@@ -292,7 +292,8 @@
   },
   "paywall": {
     "title": "Codeling Pro",
-    "subtitle": "Everything unlocked, three days free.",
+    "subtitle": "Everything unlocked.",
+    "subtitle_trial": "Everything unlocked, %{days} days free.",
     "features": {
       "ai": "AI feedback on every explanation you write",
       "hearts": "Unlimited hearts, so a wrong answer never stops you",
