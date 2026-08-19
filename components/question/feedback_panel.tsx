@@ -13,6 +13,7 @@ import { View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { GameButton } from '@/components/game_button';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
@@ -61,14 +62,15 @@ export function FeedbackPanel({
 
       {!isCorrect && correctAnswer ? (
         <View className="gap-0.5">
-          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
-            {t('lesson.correct_answer')}
-          </Text>
+          <Kicker className="tracking-wide">{t('lesson.correct_answer')}</Kicker>
           <Text className="font-mono text-[15px] text-foreground">{correctAnswer}</Text>
         </View>
       ) : null}
 
-      <Text className="text-[15px] leading-6 text-foreground">{explanation}</Text>
+      <View className="gap-0.5">
+        <Kicker className="tracking-wide">{t('lesson.why')}</Kicker>
+        <Text className="text-[15px] leading-6 text-foreground">{explanation}</Text>
+      </View>
 
       {/* After a wrong answer the neutral button leads: the primary action
           colour never shares a frame with an error state. */}

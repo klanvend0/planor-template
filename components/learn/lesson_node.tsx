@@ -32,6 +32,8 @@ export type LessonNodeProps = {
   stars?: number;
   /** True for the lesson the learner should do next. */
   isCurrent?: boolean;
+  /** Already-localized "Start" / "Continue" / "Review", for the screen reader. */
+  actionLabel?: string;
   onPress: () => void;
   /** Horizontal offset in points, to draw the path as a gentle zig-zag. */
   offset?: number;
@@ -42,6 +44,7 @@ export function LessonNode({
   status,
   stars = 0,
   isCurrent = false,
+  actionLabel,
   onPress,
   offset = 0,
 }: LessonNodeProps) {
@@ -77,7 +80,9 @@ export function LessonNode({
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={title}
+          // The node itself is wordless — shape and colour carry the state —
+          // so the state has to be spoken.
+          accessibilityLabel={actionLabel ? `${title} — ${actionLabel}` : title}
           accessibilityState={{ disabled: status === 'locked' }}
           onPress={() => {
             void tapFeedback();

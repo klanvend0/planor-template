@@ -8,14 +8,14 @@ Everything marked **code** is already handled in the repo; everything marked
 
 ## 1. Placeholders to replace
 
-| Where | Key | Currently |
-| --- | --- | --- |
-| `app.json` | `expo.ios.bundleIdentifier` | `com.planor.codeling` |
-| `app.json` | `expo.ios.appleTeamId` | `__APPLE_TEAM_ID__` |
-| `eas.json` | `submit.production.ios.appleId` | `__APPLE_ID_EMAIL__` |
-| `eas.json` | `submit.production.ios.ascAppId` | `__APP_STORE_CONNECT_APP_ID__` |
-| `.env` | `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_PRIVACY_URL` | codeling.app placeholders |
-| `.env` | `EXPO_PUBLIC_APP_STORE_ID` | empty (fill in after the first submit) |
+| Where      | Key                                                | Currently                              |
+| ---------- | -------------------------------------------------- | -------------------------------------- |
+| `app.json` | `expo.ios.bundleIdentifier`                        | `com.planor.codeling`                  |
+| `app.json` | `expo.ios.appleTeamId`                             | `__APPLE_TEAM_ID__`                    |
+| `eas.json` | `submit.production.ios.appleId`                    | `__APPLE_ID_EMAIL__`                   |
+| `eas.json` | `submit.production.ios.ascAppId`                   | `__APP_STORE_CONNECT_APP_ID__`         |
+| `.env`     | `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_PRIVACY_URL` | codeling.app placeholders              |
+| `.env`     | `EXPO_PUBLIC_APP_STORE_ID`                         | empty (fill in after the first submit) |
 
 The Terms and Privacy URLs must resolve to real pages **before** review: they are
 linked from the paywall and from Settings, and a reviewer will open both.

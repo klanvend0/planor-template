@@ -2,18 +2,27 @@
   "id": "js-u06",
   "courseId": "javascript",
   "index": 6,
-  "title": { "en": "Your Own Functions", "tr": "Kendi Fonksiyonlarınız" },
+  "title": {
+    "en": "Your Own Functions",
+    "tr": "Kendi Fonksiyonların"
+  },
   "description": {
-    "en": "Write reusable code blocks with function declarations, parameters, and return values. Learn arrow functions and variable scope.",
-    "tr": "Function deklarasyonları, parametreler ve dönüş değerleriyle yeniden kullanılabilir kod blokları yazın. Arrow fonksiyonları ve değişken kapsamını öğrenin."
+    "en": "Write your own functions with parameters, return values, arrow syntax, and default parameters.",
+    "tr": "Kendi fonksiyonlarını parametreler, dönüş değerleri, arrow söz dizimi ve varsayılan parametrelerle yazın."
   },
   "lessons": [
     {
       "id": "js-u06-l1",
       "index": 1,
-      "title": { "en": "Function Declarations", "tr": "Fonksiyon Deklarasyonları" },
+      "title": {
+        "en": "Function Declarations",
+        "tr": "Fonksiyon Tanımlama"
+      },
       "concept": {
-        "headline": { "en": "Define and call a function", "tr": "Bir fonksiyonu tanımla ve çağır" },
+        "headline": {
+          "en": "Define and call a function",
+          "tr": "Bir fonksiyonu tanımla ve çağır"
+        },
         "body": {
           "en": "A function is a reusable block of code that you write once and then call by name whenever you need it. You define a function with the keyword function, give it a name, put parentheses, and then write the code inside curly braces. Calling a function means typing its name followed by parentheses, which runs the code inside.",
           "tr": "Bir fonksiyon, bir kez yazıp ihtiyaç duyduğunda adıyla çağırabildiğin yeniden kullanılabilir bir kod bloğudur. function anahtar sözcüğü ile bir fonksiyon tanımlarsın, ona isim verirsin, parantez koyarsın ve ardından küme parantezleri içine kodu yazarsın. Bir fonksiyonu çağırmak, adını parantez ile yazarak içindeki kodu çalıştırmak demektir."
@@ -37,7 +46,13 @@
           },
           "code": "function say() {\n  console.log(\"Hi\");\n}\n\nsay();",
           "options": [
-            { "id": "a", "text": { "en": "Prints Hi", "tr": "Hi yazdırır" } },
+            {
+              "id": "a",
+              "text": {
+                "en": "Prints Hi",
+                "tr": "Hi yazdırır"
+              }
+            },
             {
               "id": "b",
               "text": {
@@ -45,8 +60,20 @@
                 "tr": "Bir fonksiyon tanımlar ama çalıştırmaz"
               }
             },
-            { "id": "c", "text": { "en": "Prints say", "tr": "say yazdırır" } },
-            { "id": "d", "text": { "en": "Gives an error", "tr": "Hata verir" } }
+            {
+              "id": "c",
+              "text": {
+                "en": "Prints say",
+                "tr": "say yazdırır"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Gives an error",
+                "tr": "Hata verir"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -63,10 +90,34 @@
             "tr": "Hangi satır hello adında bir fonksiyonu doğru tanımlar?"
           },
           "options": [
-            { "id": "a", "text": { "en": "hello() {}", "tr": "hello() {}" } },
-            { "id": "b", "text": { "en": "function hello() {}", "tr": "function hello() {}" } },
-            { "id": "c", "text": { "en": "function hello", "tr": "function hello" } },
-            { "id": "d", "text": { "en": "hello = function", "tr": "hello = function" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "hello() {}",
+                "tr": "hello() {}"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "function hello() {}",
+                "tr": "function hello() {}"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "function hello",
+                "tr": "function hello"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "hello = function",
+                "tr": "hello = function"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -83,8 +134,16 @@
             "tr": "Çağrıldığında Go yazdıracak şekilde fonksiyon tanımını tamamla."
           },
           "codeTemplate": "function start() {\n  console.log(___);\n}\n\nstart();",
-          "blanks": [{ "id": "1", "answer": "\"Go\"", "distractors": ["Go", "\"go\"", "print"] }],
-          "verify": { "stdout": "Go\n" },
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "\"Go\"",
+              "distractors": ["Go", "\"go\"", "print"]
+            }
+          ],
+          "verify": {
+            "stdout": "Go\n"
+          },
           "explanation": {
             "en": "Text passed to console.log must be inside double quotes. Without quotes, JavaScript looks for a variable called Go.",
             "tr": "console.log'a geçilen metin çift tırnak içinde olmalı. Tırnaksız, JavaScript Go adında bir değişken arar."
@@ -93,16 +152,18 @@
         {
           "id": "js-u06-l1-q4",
           "type": "type_code",
-          "difficulty": "medium",
+          "difficulty": "easy",
           "prompt": {
             "en": "Write the lines to define a function named announce that prints Start.",
             "tr": "Start yazdıran announce adında bir fonksiyon tanımlamak için satırları yaz."
           },
           "expected": "function announce() {\n  console.log(\"Start\");\n}\n\nannounce();",
-          "verify": { "stdout": "Start\n" },
+          "verify": {
+            "stdout": "Start\n"
+          },
           "explanation": {
             "en": "After defining the function, you must call it with announce() to make it run and print the output.",
-            "tr": "Fonksiyonu tanımladıktan sonra, çalıştırılması ve çıktı yazması için announce() ile çağırmalısın."
+            "tr": "Fonksiyonu tanımladıktan sonra, içindeki kodun çalışıp çıktı yazması için onu announce() ile çağırmalısın."
           }
         },
         {
@@ -113,12 +174,15 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": ["function test() {", "  console.log(\"yes\");", "tst();", "}"],
-          "buggyLineIndex": 2,
+          "codeLines": ["function test() {", "  console.log(\"yes\");", "}", "tst();"],
+          "buggyLineIndex": 3,
           "fix": "test();",
+          "verify": {
+            "raises": "ReferenceError"
+          },
           "explanation": {
-            "en": "The function is named test but called as tst, which is a typo. JavaScript looks for a function called tst that does not exist.",
-            "tr": "Fonksiyon test adındadır ama tst diye çağrılır; bu bir yazım hatasıdır. JavaScript olmayan tst adında bir fonksiyon arar."
+            "en": "The function is named test, but the call on line 4 says tst — a typo. JavaScript cannot find a function called tst, so it throws a ReferenceError.",
+            "tr": "Fonksiyon test olarak adlandırılır, ama 4. satırdaki çağrı tst yazıyor; bu bir yazım hatası. JavaScript tst adında bir fonksiyon bulamaz ve ReferenceError verir."
           }
         },
         {
@@ -159,12 +223,18 @@
     {
       "id": "js-u06-l2",
       "index": 2,
-      "title": { "en": "Parameters and Return", "tr": "Parametreler ve Dönüş" },
+      "title": {
+        "en": "Parameters and Return",
+        "tr": "Parametreler ve Dönüş"
+      },
       "concept": {
-        "headline": { "en": "Pass data in and get data back", "tr": "Veri gir, veri al" },
+        "headline": {
+          "en": "Pass data in and get data back",
+          "tr": "Veri gir, veri al"
+        },
         "body": {
           "en": "A function can take input through parameters, which are names inside the parentheses that act like variables. When you call the function, you provide values for those parameters, called arguments. A function can also return a value using the keyword return, which sends data back to wherever the function was called.",
-          "tr": "Bir fonksiyon, parantez içindeki isimler olan parametreler aracılığıyla girdi alabilir ve bunlar değişkenler gibi davranır. Fonksiyonu çağırırken bu parametrelere argüman diye verilen değerler sağlarsın. Bir fonksiyon return anahtar sözcüğü ile bir değer döndürebilir, bu da fonksiyonun çağrıldığı yere veri geri gönderir."
+          "tr": "Bir fonksiyon, parantez içindeki isimler olan parametreler aracılığıyla girdi alabilir ve bunlar değişkenler gibi davranır. Fonksiyonu çağırırken bu parametrelere argüman denen değerler verirsin. Bir fonksiyon return anahtar sözcüğü ile bir değer döndürebilir, bu da fonksiyonun çağrıldığı yere veri geri gönderir."
         },
         "example": {
           "code": "function add(a, b) {\n  return a + b;\n}\n\nconst result = add(3, 5);\nconsole.log(result);",
@@ -185,10 +255,34 @@
           },
           "code": "function greet(name) {\n  console.log(\"Hello \" + name);\n}\n\ngreet(\"Alice\");",
           "options": [
-            { "id": "a", "text": { "en": "Hello Alice", "tr": "Hello Alice" } },
-            { "id": "b", "text": { "en": "name", "tr": "name" } },
-            { "id": "c", "text": { "en": "Hello name", "tr": "Hello name" } },
-            { "id": "d", "text": { "en": "Alice", "tr": "Alice" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "Hello Alice",
+                "tr": "Hello Alice"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "name",
+                "tr": "name"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Hello name",
+                "tr": "Hello name"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Alice",
+                "tr": "Alice"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -202,18 +296,42 @@
           "difficulty": "easy",
           "prompt": {
             "en": "Which correctly calls the function square with the argument 4?",
-            "tr": "Hangi satır square fonksiyonunu 4 argümanı ile doğru çağırır?"
+            "tr": "Hangi satır, square fonksiyonunu 4 argümanıyla doğru şekilde çağırır?"
           },
           "options": [
-            { "id": "a", "text": { "en": "square 4", "tr": "square 4" } },
-            { "id": "b", "text": { "en": "square(4)", "tr": "square(4)" } },
-            { "id": "c", "text": { "en": "function square(4)", "tr": "function square(4)" } },
-            { "id": "d", "text": { "en": "square()", "tr": "square()" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "square 4",
+                "tr": "square 4"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "square(4)",
+                "tr": "square(4)"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "function square(4)",
+                "tr": "function square(4)"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "square()",
+                "tr": "square()"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
             "en": "When calling a function, use the name followed by parentheses containing the argument. square(4) is the correct syntax.",
-            "tr": "Bir fonksiyonu çağırırken, isimi ve argümanı içeren parantezleri kullanırsın. square(4) doğru söz dizimidir."
+            "tr": "Bir fonksiyonu çağırırken, adını ve argümanını içeren parantezleri kullanırsın. square(4) doğru söz dizimidir."
           }
         },
         {
@@ -226,12 +344,18 @@
           },
           "codeTemplate": "function sum(x, y) {\n  ___ x + y;\n}\n\nconst answer = sum(10, 20);\nconsole.log(answer);",
           "blanks": [
-            { "id": "1", "answer": "return", "distractors": ["console.log", "print", "const"] }
+            {
+              "id": "1",
+              "answer": "return",
+              "distractors": ["console.log", "print", "const"]
+            }
           ],
-          "verify": { "stdout": "30\n" },
+          "verify": {
+            "stdout": "30\n"
+          },
           "explanation": {
             "en": "return sends a value back from a function. Without return, the function does not give the sum back to the caller.",
-            "tr": "return bir fonksiyondan değer geri gönderir. return olmadan fonksiyon toplama yapıcıya toplamı geri vermez."
+            "tr": "return bir fonksiyondan değer geri gönderir. return olmadan fonksiyon, toplamı çağrıldığı yere geri göndermez."
           }
         },
         {
@@ -245,7 +369,7 @@
           "expected": "function multiply(a, b) {\n  return a * b;\n}",
           "explanation": {
             "en": "The function takes two parameters a and b, multiplies them with *, and returns the result using the return keyword.",
-            "tr": "Fonksiyon a ve b iki parametresini alır, * ile çarpar ve return anahtar sözcüğü ile sonucu döndürür."
+            "tr": "Fonksiyon a ve b adında iki parametre alır, bunları * ile çarpar ve sonucu return anahtar sözcüğüyle döndürür."
           }
         },
         {
@@ -258,16 +382,19 @@
           },
           "codeLines": [
             "function double(num) {",
-            "  console.log(num * 2)",
+            "  console.log(nums * 2);",
             "  return num * 2;",
             "}",
             "double(5);"
           ],
           "buggyLineIndex": 1,
           "fix": "  console.log(num * 2);",
+          "verify": {
+            "raises": "ReferenceError"
+          },
           "explanation": {
-            "en": "Line 2 is missing a semicolon at the end. While JavaScript often works without it, the standard is to include semicolons after statements.",
-            "tr": "Satır 2'nin sonunda noktalı virgül eksik. JavaScript çoğu zaman olmadan da çalışsa da, standart satırların sonuna noktalı virgül koymaktır."
+            "en": "The parameter is named num, but line 2 reads nums — a typo. JavaScript cannot find a variable called nums, so it throws a ReferenceError before printing anything.",
+            "tr": "Parametre num olarak adlandırılır, ama 2. satırda nums yazıyor; bu bir yazım hatası. JavaScript nums adında bir değişken bulamaz ve hiçbir şey yazdırmadan ReferenceError verir."
           }
         },
         {
@@ -279,28 +406,28 @@
             "tr": "100-200 karakterle bu kodun ne yaptığını ve ne yazdırdığını anlat."
           },
           "code": {
-            "en": "// Calculates the price after tax\nfunction withTax(price) {\n  return price * 1.1;\n}\n\nconst total = withTax(100);\nconsole.log(total);",
-            "tr": "// Vergi sonrası fiyatı hesaplar\nfunction withTax(price) {\n  return price * 1.1;\n}\n\nconst total = withTax(100);\nconsole.log(total);"
+            "en": "// Calculates the price after tax\nfunction withTax(price) {\n  return price * 1.2;\n}\n\nconst total = withTax(100);\nconsole.log(total);",
+            "tr": "// Vergi sonrası fiyatı hesaplar\nfunction withTax(price) {\n  return price * 1.2;\n}\n\nconst total = withTax(100);\nconsole.log(total);"
           },
           "keyPoints": {
             "en": [
-              "defines a function withTax that multiplies the input by 1.1",
+              "defines a function withTax that multiplies the input by 1.2",
               "calls the function with 100",
-              "stores the result (110) in total and prints it"
+              "stores the result (120) in total and prints it"
             ],
             "tr": [
-              "girdileri 1.1 ile çarpan withTax fonksiyonunu tanımlar",
+              "girdileri 1.2 ile çarpan withTax fonksiyonunu tanımlar",
               "fonksiyonu 100 ile çağırır",
-              "sonucu (110) total'de saklar ve yazdırır"
+              "sonucu (120) total'de saklar ve yazdırır"
             ]
           },
           "sampleAnswer": {
-            "en": "It defines a function called withTax that takes a price and returns it multiplied by 1.1 to add a 10% tax. It calls the function with 100, gets back 110, stores it, and prints 110.",
-            "tr": "withTax adında bir fonksiyon tanımlar; fiyatı alıp 1.1 ile çarparak %10 vergi ekler. Fonksiyonu 100 ile çağırır, 110 alır, saklar ve yazdırır."
+            "en": "It defines a function called withTax that takes a price and returns it multiplied by 1.2 to add a 20% tax. It calls the function with 100, gets back 120, stores it, and prints 120.",
+            "tr": "withTax adında bir fonksiyon tanımlar; fiyatı alıp 1.2 ile çarparak %20 vergi ekler. Fonksiyonu 100 ile çağırır, 120 alır, saklar ve yazdırır."
           },
           "explanation": {
-            "en": "The parameter price receives the argument 100. Multiplying by 1.1 adds 10%, so return sends back 110. That value is stored in total and printed.",
-            "tr": "Parametre price argüman 100'ü alır. 1.1 ile çarpmak %10 ekler, return 110 geri gönderir. Bu değer total'de saklanır ve yazdırılır."
+            "en": "The parameter price receives the argument 100. Multiplying by 1.2 adds 20%, so return sends back 120. That value is stored in total and printed.",
+            "tr": "Parametre price argüman 100'ü alır. 1.2 ile çarpmak %20 ekler, return 120 geri gönderir. Bu değer total'de saklanır ve yazdırılır."
           }
         }
       ]
@@ -308,7 +435,10 @@
     {
       "id": "js-u06-l3",
       "index": 3,
-      "title": { "en": "Arrow Functions", "tr": "Arrow Fonksiyonları" },
+      "title": {
+        "en": "Arrow Functions",
+        "tr": "Arrow Fonksiyonları"
+      },
       "concept": {
         "headline": {
           "en": "A shorter way to write functions",
@@ -316,13 +446,13 @@
         },
         "body": {
           "en": "Arrow functions are a modern, shorter syntax for writing functions. They use the => symbol (read as 'arrow') instead of the function keyword. An arrow function looks like this: const name = (parameters) => { code }. If there is only one parameter, you can omit the parentheses. If the code is a single return statement, you can put it on one line and skip the braces.",
-          "tr": "Arrow fonksiyonları, fonksiyon yazmanın modern, daha kısa bir söz dizimidir. function anahtar sözcüğü yerine => sembolünü (ok okunur) kullanırlar. Bir arrow fonksiyon şöyle görünür: const name = (parameters) => { code }. Eğer tek bir parametre varsa parantezleri atabilirsin. Kod tek bir return cümlesi ise, bunu tek satıra koyabilir ve küme parantezlerini atlayabilirsin."
+          "tr": "Arrow fonksiyonları, fonksiyon yazmanın modern, daha kısa bir söz dizimidir. function anahtar sözcüğü yerine => sembolünü (ok okunur) kullanırlar. Bir arrow fonksiyonu şöyle görünür: const name = (parameters) => { code }. Eğer tek bir parametre varsa parantezleri atabilirsin. Kod tek bir return cümlesi ise, bunu tek satıra koyabilir ve küme parantezlerini atlayabilirsin."
         },
         "example": {
           "code": "const add = (a, b) => {\n  return a + b;\n};\n\nconsole.log(add(2, 3));",
           "caption": {
             "en": "An arrow function called add that returns the sum of two numbers.",
-            "tr": "İki sayının toplamını döndüren add adında bir arrow fonksiyon."
+            "tr": "İki sayının toplamını döndüren, add adında bir arrow fonksiyonu."
           }
         }
       },
@@ -337,15 +467,39 @@
           },
           "code": "const double = (x) => {\n  return x * 2;\n};\n\nconsole.log(double(5));",
           "options": [
-            { "id": "a", "text": { "en": "10", "tr": "10" } },
-            { "id": "b", "text": { "en": "5", "tr": "5" } },
-            { "id": "c", "text": { "en": "(x)", "tr": "(x)" } },
-            { "id": "d", "text": { "en": "double", "tr": "double" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "10",
+                "tr": "10"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "5",
+                "tr": "5"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "(x)",
+                "tr": "(x)"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "double",
+                "tr": "double"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
             "en": "The arrow function double takes x (which is 5) and returns x * 2, which is 10. The result is printed.",
-            "tr": "Arrow fonksiyon double, x'i (5 olan) alır ve x * 2 yani 10'u döndürür. Sonuç yazdırılır."
+            "tr": "Arrow fonksiyonu double, x'i (5 olan) alır ve x * 2 yani 10'u döndürür. Sonuç yazdırılır."
           }
         },
         {
@@ -359,22 +513,37 @@
           "options": [
             {
               "id": "a",
-              "text": { "en": "const square = x => x * x;", "tr": "const square = x => x * x;" }
+              "text": {
+                "en": "const square = x => x * x;",
+                "tr": "const square = x => x * x;"
+              }
             },
             {
               "id": "b",
-              "text": { "en": "function square(x) => x * x;", "tr": "function square(x) => x * x;" }
+              "text": {
+                "en": "function square(x) => x * x;",
+                "tr": "function square(x) => x * x;"
+              }
             },
             {
               "id": "c",
-              "text": { "en": "const square x => x * x;", "tr": "const square x => x * x;" }
+              "text": {
+                "en": "const square x => x * x;",
+                "tr": "const square x => x * x;"
+              }
             },
-            { "id": "d", "text": { "en": "square = (x) => x * x", "tr": "square = (x) => x * x" } }
+            {
+              "id": "d",
+              "text": {
+                "en": "square = (x) => x * x",
+                "tr": "square = (x) => x * x"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
             "en": "An arrow function needs const, the name, =, parameter(s), =>, and the code. Option a has all the required parts in the right order.",
-            "tr": "Bir arrow fonksiyon const, isim, =, parametre(ler), => ve kodu gerektirir. Seçenek a bütün gerekli parçaları doğru sırada içerir."
+            "tr": "Bir arrow fonksiyonu const, isim, =, parametre(ler), => ve kodu gerektirir. Seçenek a bütün gerekli parçaları doğru sırada içerir."
           }
         },
         {
@@ -383,14 +552,22 @@
           "difficulty": "medium",
           "prompt": {
             "en": "Complete the arrow function so it doubles the input.",
-            "tr": "Girdiyi ikiye katı yapacak şekilde arrow fonksiyonu tamamla."
+            "tr": "Girdiyi ikiye katlayacak şekilde arrow fonksiyonunu tamamla."
           },
           "codeTemplate": "const double = (n) ___ {\n  return n * 2;\n};\n\nconsole.log(double(7));",
-          "blanks": [{ "id": "1", "answer": "=>", "distractors": ["=", "->", "function"] }],
-          "verify": { "stdout": "14\n" },
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "=>",
+              "distractors": ["=", "->", "function"]
+            }
+          ],
+          "verify": {
+            "stdout": "14\n"
+          },
           "explanation": {
             "en": "The arrow symbol => separates the parameter from the function body. It reads as 'arrow' and is the key part of arrow function syntax.",
-            "tr": "Arrow sembolü => parametreyi fonksiyon gövdesinden ayırır. Ok olarak okunur ve arrow fonksiyon söz diziminin temel parçasıdır."
+            "tr": "Arrow sembolü => parametreyi fonksiyon gövdesinden ayırır. Ok olarak okunur ve arrow fonksiyonu söz diziminin temel parçasıdır."
           }
         },
         {
@@ -399,13 +576,13 @@
           "difficulty": "medium",
           "prompt": {
             "en": "Write an arrow function named greet that takes a name and returns a greeting string like Hello, Alice.",
-            "tr": "Bir isim alan ve Hello, Alice gibi bir selamlama dizisi döndüren greet adında bir arrow fonksiyon yaz."
+            "tr": "Bir isim alan ve Hello, Alice gibi bir selamlama dizisi döndüren greet adında bir arrow fonksiyonu yaz."
           },
           "expected": "const greet = (name) => {\n  return \"Hello, \" + name;\n};",
           "acceptable": ["const greet = (name) => { return `Hello, ${name}`; };"],
           "explanation": {
             "en": "An arrow function uses const, the name, =, parameter in parentheses, =>, and the body in braces. The return keyword sends the greeting back.",
-            "tr": "Bir arrow fonksiyon const, isim, =, parantez içinde parametre, =>, ve küme parantezleri içinde gövde kullanır. return anahtar sözcüğü selamlamayı geri gönderir."
+            "tr": "Bir arrow fonksiyonu const, isim, =, parantez içinde parametre, =>, ve küme parantezleri içinde gövde kullanır. return anahtar sözcüğü selamlamayı geri gönderir."
           }
         },
         {
@@ -416,17 +593,12 @@
             "en": "Which line is wrong?",
             "tr": "Hangi satır hatalı?"
           },
-          "codeLines": [
-            "const add = (a, b) => {",
-            "  return a + b",
-            "}",
-            "console.log(add(3, 4));"
-          ],
+          "codeLines": ["const add = (a, b) => {", "  a + b;", "};", "console.log(add(3, 4));"],
           "buggyLineIndex": 1,
           "fix": "  return a + b;",
           "explanation": {
-            "en": "Line 2 is missing a semicolon at the end of the return statement. JavaScript allows it sometimes, but it is good practice to always include it.",
-            "tr": "Satır 2'nin return cümlesinin sonunda noktalı virgül eksik. JavaScript bazen izin veriyor ama her zaman koymak iyi bir uygulamadır."
+            "en": "Inside curly braces, an arrow function needs an explicit return, or it returns undefined. Line 2 just evaluates a + b without sending the value back.",
+            "tr": "Küme parantezli bir arrow fonksiyonda return yazılmazsa undefined döner. 2. satır sadece a + b değerini hesaplar, sonucu geri göndermez."
           }
         },
         {
@@ -455,11 +627,11 @@
           },
           "sampleAnswer": {
             "en": "A regular function uses the function keyword and a name, while an arrow function uses const and assigns the function to a variable. Arrow functions are shorter syntax but both work the same way.",
-            "tr": "Düzenli bir fonksiyon function anahtar sözcüğü ve isim kullanır; arrow fonksiyon const kullanır ve fonksiyonu bir değişkene atar. Arrow fonksiyonlar daha kısa söz dizimidirler ama her ikisi de aynı şekilde çalışır."
+            "tr": "Düzenli fonksiyon function anahtar sözcüğü ve isim kullanır; arrow fonksiyonu ise const ile bir değişkene atanır. Arrow fonksiyonları daha kısa yazılır ama ikisi de aynı şekilde çalışır."
           },
           "explanation": {
             "en": "Arrow functions are a modern alternative to regular functions. They use => instead of the function keyword, but they work the same way and both can take parameters and return values.",
-            "tr": "Arrow fonksiyonlar düzenli fonksiyonların modern bir alternatifidir. function anahtar sözcüğü yerine => kullanırlar ama aynı şekilde çalışırlar ve her ikisi de parametre alabilir ve değer döndürebilir."
+            "tr": "Arrow fonksiyonları düzenli fonksiyonların modern bir alternatifidir. function anahtar sözcüğü yerine => kullanırlar ama aynı şekilde çalışırlar ve her ikisi de parametre alabilir ve değer döndürebilir."
           }
         }
       ]
@@ -467,15 +639,18 @@
     {
       "id": "js-u06-l4",
       "index": 4,
-      "title": { "en": "Default Parameters and Scope", "tr": "Varsayılan Parametreler ve Kapsam" },
+      "title": {
+        "en": "Default Parameters and Scope",
+        "tr": "Varsayılan Parametre ve Kapsam"
+      },
       "concept": {
         "headline": {
           "en": "Defaults and where variables live",
           "tr": "Varsayılanlar ve değişkenlerin nerede yaşadığı"
         },
         "body": {
-          "en": "A default parameter is a value that a parameter takes if no argument is passed when the function is called. You write it with = inside the parentheses, like function greet(name = \"Friend\"). Scope is the region of code where a variable exists. Variables declared inside a function with let or const only exist inside that function. Variables declared outside a function at the top level exist everywhere (global scope). This prevents name collisions and makes code cleaner.",
-          "tr": "Bir varsayılan parametre, fonksiyon çağrılırken argüman geçilmezse parametrenin aldığı değerdir. Parantezleri içinde = ile yazarsın, mesela function greet(name = \"Friend\"). Kapsam (scope), bir değişkenin var olduğu kod bölgesidir. let veya const ile bir fonksiyon içinde tanımlanan değişkenler sadece o fonksiyon içinde vardır. Üst seviyede bir fonksiyonun dışında tanımlanan değişkenler her yerde (genel kapsam) vardır. Bu, isim çatışmalarını önler ve kodu temiz kılar."
+          "en": "A default parameter is a value a parameter takes when no argument is passed, written with = in the parentheses, like function greet(name = \"Friend\"). Scope is where a variable exists: variables made inside a function with let or const only exist there, while ones made outside exist everywhere.",
+          "tr": "Bir varsayılan parametre, argüman geçilmezse parametrenin aldığı değerdir; parantez içinde = ile yazılır, örneğin function greet(name = \"Friend\"). Kapsam, bir değişkenin var olduğu yerdir: fonksiyon içinde let veya const ile tanımlanan değişkenler sadece orada, dışında tanımlananlar ise her yerde vardır."
         },
         "example": {
           "code": "function greet(name = \"Friend\") {\n  console.log(\"Hello, \" + name);\n}\n\ngreet();\ngreet(\"Alice\");",
@@ -496,10 +671,34 @@
           },
           "code": "function say(msg = \"Hi\") {\n  console.log(msg);\n}\n\nsay();\nsay(\"Bye\");",
           "options": [
-            { "id": "a", "text": { "en": "Hi\\nBye", "tr": "Hi\\nBye" } },
-            { "id": "b", "text": { "en": "msg\\nmsg", "tr": "msg\\nmsg" } },
-            { "id": "c", "text": { "en": "Bye\\nBye", "tr": "Bye\\nBye" } },
-            { "id": "d", "text": { "en": "Hi\\nHi", "tr": "Hi\\nHi" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "Hi\\nBye",
+                "tr": "Hi\\nBye"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "msg\\nmsg",
+                "tr": "msg\\nmsg"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "Bye\\nBye",
+                "tr": "Bye\\nBye"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Hi\\nHi",
+                "tr": "Hi\\nHi"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -517,10 +716,34 @@
           },
           "code": "function inner() {\n  const x = 10;\n  console.log(x);\n}\n\ninner();\nconsole.log(x);",
           "options": [
-            { "id": "a", "text": { "en": "10\\n10", "tr": "10\\n10" } },
-            { "id": "b", "text": { "en": "10, then an error", "tr": "10, sonra bir hata" } },
-            { "id": "c", "text": { "en": "An error immediately", "tr": "Hemen bir hata" } },
-            { "id": "d", "text": { "en": "Nothing", "tr": "Hiçbir şey" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "10\\n10",
+                "tr": "10\\n10"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "10, then an error",
+                "tr": "10, sonra bir hata"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "An error immediately",
+                "tr": "Hemen bir hata"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "Nothing",
+                "tr": "Hiçbir şey"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -537,11 +760,19 @@
             "tr": "count için 5 varsayılan değerini kullanacak şekilde fonksiyonu tamamla."
           },
           "codeTemplate": "function repeat(msg, count ___ 5) {\n  for (let i = 0; i < count; i++) {\n    console.log(msg);\n  }\n}\n\nrepeat(\"hi\");",
-          "blanks": [{ "id": "1", "answer": "=", "distractors": ["==", "===", "=>"] }],
-          "verify": { "stdout": "hi\nhi\nhi\nhi\nhi\n" },
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "=",
+              "distractors": ["==", "===", "=>"]
+            }
+          ],
+          "verify": {
+            "stdout": "hi\nhi\nhi\nhi\nhi\n"
+          },
           "explanation": {
             "en": "The = sign inside parentheses sets a default value. When repeat is called without a count argument, it defaults to 5.",
-            "tr": "Parantezleri içindeki = işareti varsayılan değeri ayarlar. repeat, count argümanı olmadan çağrıldığında, 5'e varsayılanır."
+            "tr": "Parantez içindeki = işareti varsayılan değeri ayarlar. repeat, count argümanı olmadan çağrıldığında varsayılan olarak 5 kullanılır."
           }
         },
         {
@@ -564,7 +795,7 @@
           "difficulty": "hard",
           "prompt": {
             "en": "Put the lines in the right order to make a function that doubles a number with a default of 5.",
-            "tr": "Bir sayıyı ikiye katı yapan, varsayılan 5 olan bir fonksiyon yapmak için satırları doğru sırada koy."
+            "tr": "Bir sayıyı ikiye katlayan, varsayılan değeri 5 olan bir fonksiyon oluşturmak için satırları doğru sırada koy."
           },
           "lines": [
             "const double = (n = 5) => {",
@@ -573,10 +804,12 @@
             "console.log(double());",
             "console.log(double(10));"
           ],
-          "verify": { "stdout": "10\n20\n" },
+          "verify": {
+            "stdout": "10\n20\n"
+          },
           "explanation": {
             "en": "The arrow function is defined with a default parameter n = 5. The first call uses the default, the second uses the passed value.",
-            "tr": "Arrow fonksiyon varsayılan parametre n = 5 ile tanımlanır. İlk çağrı varsayılanı, ikinci çağrı geçilen değeri kullanır."
+            "tr": "Arrow fonksiyonu varsayılan parametre n = 5 ile tanımlanır. İlk çağrı varsayılanı, ikinci çağrı geçilen değeri kullanır."
           }
         },
         {
@@ -604,12 +837,12 @@
             ]
           },
           "sampleAnswer": {
-            "en": "Scope means where a variable can be used. x is global (everywhere), y is local (inside the function only). Inside test(), both can be printed as 15, but outside only x prints as 5 because y does not exist there.",
-            "tr": "Kapsam, bir değişkenin nerede kullanılabileceği anlamına gelir. x genel (her yerde), y yerel (sadece fonksiyon içinde). test() içinde her ikisi de 15 olarak yazdırılabilir, ama dışında sadece x 5 olarak yazdırılır çünkü y orada yoktur."
+            "en": "Scope means where a variable can be used. x is global, so it works everywhere; y is local to test() and only exists there. Inside, x + y is 15; outside, only x (5) exists.",
+            "tr": "Kapsam, bir değişkenin nerede kullanılabileceğidir. x genel olduğu için her yerde çalışır; y ise sadece test() içinde vardır. İçeride x + y 15'tir, dışarıda sadece x (5) vardır."
           },
           "explanation": {
-            "en": "Variables declared inside a function only exist inside that function. Global variables declared outside a function are accessible everywhere, even inside functions. This keeps code organized and prevents accidental name conflicts.",
-            "tr": "Bir fonksiyon içinde tanımlanan değişkenler sadece o fonksiyon içinde vardır. Bir fonksiyonun dışında tanımlanan genel değişkenler her yerde, hatta fonksiyonlar içinde de erişilebilirdir. Bu, kodu düzenli tutar ve isim çatışmalarını önler."
+            "en": "A variable declared inside a function only exists there, while one declared outside is global and reachable everywhere, even inside functions. This avoids accidental name clashes.",
+            "tr": "Fonksiyon içinde tanımlanan bir değişken sadece orada vardır; dışında tanımlanan genel değişkenler ise her yerde, hatta fonksiyonlar içinde bile erişilebilir. Bu, isim çatışmalarını önler."
           }
         }
       ]

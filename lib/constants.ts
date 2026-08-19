@@ -28,6 +28,14 @@ export const EXPLANATION_MAX_CHARS = 200;
 export const PRACTICE_SESSION_SIZE = 10;
 
 /**
+ * The score a lesson has to reach to count as cleared.
+ *
+ * Mirrors the same threshold in `complete_lesson`; both have to move together
+ * or the map and the server disagree about what is finished.
+ */
+export const PASS_SCORE = 50;
+
+/**
  * Legal and support links.
  *
  * Apple requires functional Terms of Use (EULA) and Privacy Policy links on any

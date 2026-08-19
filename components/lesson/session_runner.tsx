@@ -21,6 +21,7 @@ import { ResultsView } from '@/components/lesson/results_view';
 import { ExplainCodeView } from '@/components/question/explain_code_view';
 import { FeedbackPanel } from '@/components/question/feedback_panel';
 import { QuestionView } from '@/components/question/question_view';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
@@ -237,9 +238,9 @@ export function SessionRunner({
         contentContainerClassName="px-6 pb-8 pt-2"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive">
-        <Text className="mb-4 font-strong text-xs uppercase tracking-widest text-muted-foreground">
+        <Kicker className="mb-4">
           {t('lesson.question_of', { current: session.position, total: session.total })}
-        </Text>
+        </Kicker>
 
         {isExplain ? (
           <ExplainCodeView
@@ -273,7 +274,9 @@ export function SessionRunner({
         <View style={{ paddingBottom: insets.bottom + 8 }}>
           <FeedbackPanel
             isCorrect={session.lastResult.isCorrect}
-            correctAnswer={session.lastResult.isCorrect ? null : expectedAnswerText(question)}
+            correctAnswer={
+              session.lastResult.isCorrect ? null : expectedAnswerText(question, locale)
+            }
             explanation={localized(question.explanation, locale)}
             busy={session.isFinishing}
             onContinue={() => void session.next()}

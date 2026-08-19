@@ -10,7 +10,7 @@
 
 import { create } from 'zustand';
 
-import { FREE_UNIT_LIMIT } from '@/lib/constants';
+import { FREE_UNIT_LIMIT, PASS_SCORE } from '@/lib/constants';
 import { toAppError, type AppError } from '@/lib/errors';
 import type { CourseId } from '@/lib/content_schema';
 import { getCourseLessons, getUnits } from '@/services/content_service';
@@ -73,7 +73,7 @@ export const useProgressStore = create<ProgressStoreState & ProgressStoreActions
             lessonId,
             unitId,
             courseId,
-            status: bestScore >= 50 ? 'completed' : 'in_progress',
+            status: bestScore >= PASS_SCORE ? 'completed' : 'in_progress',
             bestScore,
             stars: Math.max(previous?.stars ?? 0, result.stars),
             attempts: (previous?.attempts ?? 0) + 1,

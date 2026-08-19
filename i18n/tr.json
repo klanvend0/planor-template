@@ -1,25 +1,16 @@
 {
   "app": {
-    "name": "Codeling",
-    "tagline": "Günde bir bulmacayla kod öğren"
+    "name": "Codeling"
   },
   "common": {
     "continue": "Devam",
     "next": "İleri",
     "back": "Geri",
-    "skip": "Geç",
     "done": "Tamam",
     "cancel": "Vazgeç",
     "close": "Kapat",
-    "retry": "Tekrar dene",
-    "save": "Kaydet",
     "loading": "Yükleniyor",
-    "confirm": "Onayla",
-    "delete": "Sil",
-    "later": "Sonra bakarım",
-    "got_it": "Anladım",
-    "xp": "XP",
-    "of": "/"
+    "xp": "XP"
   },
   "errors": {
     "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
@@ -27,8 +18,7 @@
     "subscription_required": "Bu bir Pro özelliği.",
     "rate_limited": "Biraz hızlısın. Bir dakika sonra tekrar dene.",
     "sign_in_required": "Devam etmek için giriş yapmalısın.",
-    "answer_too_short": "Düzgün değerlendirebilmemiz için en az 100 karakter yaz.",
-    "answer_too_long": "200 karakteri geçmemeye çalış."
+    "answer_too_short": "Düzgün değerlendirebilmemiz için en az 100 karakter yaz."
   },
   "auth": {
     "sign_in": "Giriş Yap",
@@ -39,11 +29,8 @@
     "sign_in_subtitle": "Giriş yap ki serin, XP'n ve derslerin her cihazda seninle olsun.",
     "terms_notice": "Devam ederek Kullanım Koşulları'nı ve Gizlilik Politikası'nı kabul etmiş olursun.",
     "google_error": "Google girişi tamamlanamadı.",
-    "google_no_token": "Google'dan kimlik anahtarı gelmedi.",
-    "google_not_configured": "Google girişi henüz yapılandırılmamış.",
     "apple_error": "Apple girişi tamamlanamadı.",
     "apple_not_available": "Bu cihazda Apple ile giriş kullanılamıyor.",
-    "sign_in_cancelled": "Giriş iptal edildi.",
     "sign_out_error": "Çıkış yapılamadı.",
     "sign_out_confirm_title": "Çıkış yapılsın mı?",
     "sign_out_confirm_body": "İlerlemen hesabında saklı kalır."
@@ -159,7 +146,6 @@
     "question_of": "%{current}/%{total}",
     "check": "Kontrol et",
     "continue": "Devam",
-    "skip_question": "Geç",
     "correct": "Doğru",
     "incorrect": "Tam değil",
     "correct_answer": "Cevap",
@@ -173,10 +159,7 @@
     "type_here": "Cevabını yaz",
     "which_line": "Hatalı satıra dokun",
     "reorder": "Satırlara doğru sırayla dokun",
-    "reorder_reset": "Sıfırla",
-    "choose_answer": "Cevabı seç",
-    "concept_cta": "Anladım, alıştırmaya geçelim",
-    "hint": "İpucu"
+    "concept_cta": "Anladım, alıştırmaya geçelim"
   },
   "explain": {
     "title": "Bu kodu anlat",
@@ -192,12 +175,10 @@
     "corrections": "Düzeltilmesi gerekenler",
     "missed": "Atladığın noktalar",
     "sample_title": "Şöyle de anlatılabilir",
-    "show_sample": "Örnek cevabı göster",
     "locked_title": "Yapay zekâ değerlendirmesi Pro'da",
     "locked_body": "Kodu kendi cümlelerinle anlat; yapay zekâ neyi doğru anladığını ve neyi kaçırdığını tek tek söylesin.",
     "locked_cta": "Pro'yu aç",
-    "locked_skip": "Bu soruyu geç",
-    "offline": "Yapay zekâ değerlendirmesi için bağlantı gerekiyor."
+    "locked_skip": "Bu soruyu geç"
   },
   "results": {
     "title_perfect": "Kusursuz",
@@ -241,6 +222,7 @@
     "longest_streak": "En uzun seri",
     "lessons_completed": "Ders",
     "perfect_lessons": "Kusursuz ders",
+    "weekly_xp": "Bu haftaki XP",
     "league": "Lig",
     "league_progress": "Bu hafta %{xp} XP",
     "leagues": {
@@ -304,7 +286,6 @@
   "paywall": {
     "title": "Codeling Pro",
     "subtitle": "Her şey açık, ilk üç gün ücretsiz.",
-    "trial_badge": "%{days} gün ücretsiz",
     "features": {
       "ai": "Yazdığın her açıklamaya yapay zekâ geri bildirimi",
       "hearts": "Sınırsız can; yanlış cevap seni durdurmaz",
@@ -319,7 +300,6 @@
     "per_month": "%{price} / ay",
     "per_year": "%{price} / yıl",
     "best_value": "En avantajlı",
-    "save_percent": "%%{percent} tasarruf",
     "trial_line": "%{days} gün ücretsiz, sonrasında %{price}. İstediğin an iptal et.",
     "no_trial_line": "%{price}. İstediğin an iptal et.",
     "cta_trial": "%{days} günüm ücretsiz başlasın",
@@ -331,13 +311,9 @@
     "privacy": "Gizlilik Politikası",
     "legal": "Ücret, deneme süresi bitiminde Apple kimliğinden tahsil edilir. Dönem bitiminden en az 24 saat önce iptal edilmezse abonelik otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin.",
     "purchase_failed": "Satın alma tamamlanamadı.",
-    "purchase_cancelled": "Satın alma iptal edildi.",
     "already_pro": "Zaten Pro üyesin.",
     "close": "Şimdi değil",
     "unavailable": "Mağazaya şu an ulaşılamıyor. Lütfen sonra tekrar dene.",
-    "period_week": "/ hafta",
-    "period_month": "/ ay",
-    "period_year": "/ yıl",
     "plan_two_month": "2 ayda bir",
     "plan_three_month": "3 aylık",
     "plan_six_month": "6 ayda bir",
@@ -347,10 +323,6 @@
     "per_three_month": "%{price} / 3 ay",
     "per_six_month": "%{price} / 6 ay",
     "per_once": "tek seferlik %{price}",
-    "period_two_month": "/ 2 ay",
-    "period_three_month": "/ 3 ay",
-    "period_six_month": "/ 6 ay",
-    "period_once": "tek seferlik",
     "purchase_done": "Artık Pro üyesin. Her şey açık.",
     "legal_no_trial": "Ücret, satın alma onayıyla birlikte Apple kimliğinden tahsil edilir. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik yenilenir. Aboneliği App Store hesap ayarlarından yönetebilir veya iptal edebilirsin."
   },
@@ -368,7 +340,6 @@
     "theme_light": "Açık",
     "theme_dark": "Koyu",
     "haptics": "Titreşim",
-    "sound": "Ses efektleri",
     "reminders": "Günlük hatırlatma",
     "reminder_time": "Hatırlatma saati",
     "reminders_denied": "Bildirimler iOS Ayarları'ndan kapalı.",
@@ -390,15 +361,5 @@
     "reminder_title": "Serin seni bekliyor",
     "reminder_body": "Tek bir ders, %{count} günlük seriyi ayakta tutar.",
     "reminder_body_zero": "Başlamak için beş dakika yeter."
-  },
-  "course": {
-    "python": {
-      "title": "Python",
-      "tagline": "Programlamaya en tatlı giriş"
-    },
-    "javascript": {
-      "title": "JavaScript",
-      "tagline": "Her tarayıcının konuştuğu dil"
-    }
   }
 }

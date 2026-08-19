@@ -17,6 +17,7 @@ import { SessionRunner } from '@/components/lesson/session_runner';
 import { Text } from '@/components/ui/text';
 import { useLessonSession } from '@/hooks/use_lesson_session';
 import { useTranslation } from '@/hooks/use_translation';
+import { PASS_SCORE } from '@/lib/constants';
 import { getLessonLocation, getNextLesson } from '@/services/content_service';
 import { useProgressStore } from '@/stores/progress_store';
 
@@ -26,7 +27,9 @@ export default function LessonScreen() {
   const applyResult = useProgressStore((state) => state.applyResult);
 
   const location = getLessonLocation(lessonId ?? '');
-  const recorded = useRef(false);
+  // Keyed by lesson id rather than a bare flag: finishing one lesson can hand
+  // the screen straight to the next one without remounting it.
+  const recorded = useRef<string | null>(null);
 
   // A lesson id that no longer exists (content shrank in an update) must not
   // crash the app; the hook below needs a location, so bail out first.
@@ -64,15 +67,15 @@ function LessonPlayer({
   lessonId: string;
   location: NonNullable<ReturnType<typeof getLessonLocation>>;
   applyResult: ReturnType<typeof useProgressStore.getState>['applyResult'];
-  recorded: { current: boolean };
+  recorded: { current: string | null };
 }) {
   const { t } = useTranslation();
   const session = useLessonSession(location);
 
   // Fold the result into local progress exactly once.
   useEffect(() => {
-    if (session.phase !== 'finished' || !session.outcome || recorded.current) return;
-    recorded.current = true;
+    if (session.phase !== 'finished' || !session.outcome || recorded.current === lessonId) return;
+    recorded.current = lessonId;
     applyResult({
       lessonId,
       unitId: location.unit.id,
@@ -82,14 +85,27 @@ function LessonPlayer({
   }, [applyResult, lessonId, location, recorded, session.outcome, session.phase]);
 
   const next = getNextLesson(lessonId);
+  // Roll straight into the next lesson, but only inside the same unit: units are
+  // where the premium gate sits, and finishing one is worth landing back on the
+  // map for. A failed run goes back too — there is nothing to continue from.
+  const continues =
+    next !== null &&
+    next.unit.id === location.unit.id &&
+    (session.outcome?.score ?? 0) >= PASS_SCORE;
 
   return (
     <SessionRunner
       session={session}
       location={location}
-      finishLabel={next ? t('results.continue') : t('common.done')}
+      finishLabel={continues ? t('results.next_lesson') : t('common.done')}
       onExit={() => router.back()}
-      onFinish={() => router.back()}
+      onFinish={() => {
+        if (continues) {
+          router.replace({ pathname: '/lesson/[lessonId]', params: { lessonId: next.lesson.id } });
+          return;
+        }
+        router.back();
+      }}
     />
   );
 }

@@ -2,7 +2,10 @@
   "id": "js-u03",
   "courseId": "javascript",
   "index": 3,
-  "title": { "en": "Text and Numbers", "tr": "Metinler ve Sayılar" },
+  "title": {
+    "en": "Text and Numbers",
+    "tr": "Metinler ve Sayılar"
+  },
   "description": {
     "en": "Join strings together, work with text properties, master math operators, and round numbers with precision.",
     "tr": "Metinleri birleştir, metin özellikleriyle çalış, matematik işlemlerini kullan ve sayıları yuvarla."
@@ -11,7 +14,10 @@
     {
       "id": "js-u03-l1",
       "index": 1,
-      "title": { "en": "Joining Strings", "tr": "Metinleri Birleştirme" },
+      "title": {
+        "en": "Joining Strings",
+        "tr": "Metinleri Birleştirme"
+      },
       "concept": {
         "headline": {
           "en": "Combine strings with + or template literals",
@@ -34,13 +40,40 @@
           "id": "js-u03-l1-q1",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
           "code": "console.log(\"Hello\" + \" \" + \"World\");",
           "options": [
-            { "id": "a", "text": { "en": "Hello World", "tr": "Hello World" } },
-            { "id": "b", "text": { "en": "Hello + World", "tr": "Hello + World" } },
-            { "id": "c", "text": { "en": "HelloWorld", "tr": "HelloWorld" } },
-            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "Hello World",
+                "tr": "Hello World"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Hello + World",
+                "tr": "Hello + World"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "HelloWorld",
+                "tr": "HelloWorld"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "An error",
+                "tr": "Bir hata"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -113,7 +146,9 @@
               ]
             }
           ],
-          "verify": { "stdout": "Welcome, Ada!\n" },
+          "verify": {
+            "stdout": "Welcome, Ada!\n"
+          },
           "explanation": {
             "en": "Template literals use backticks and the ${name} syntax. Regular double quotes do not allow this syntax for variable insertion.",
             "tr": "Template literals backtick kullanır ve ${name} söz dizimi gerekir. Normal çift tırnaklar değişken ekleme için bu söz dizimini desteklemez."
@@ -130,7 +165,9 @@
           "code": "let person = \"Sam\";",
           "expected": "console.log(`Good morning, ${person}!`);",
           "acceptable": ["console.log( `Good morning, ${person}!` );"],
-          "verify": { "stdout": "Good morning, Sam!\n" },
+          "verify": {
+            "stdout": "Good morning, Sam!\n"
+          },
           "explanation": {
             "en": "Template literals with backticks are cleaner than using + multiple times. Both work, but template literals are easier to read.",
             "tr": "Backtick ile template literals birden fazla + kullanmaktan daha temizdir. Her ikisi çalışır ama template literals okunması daha kolaydır."
@@ -140,7 +177,10 @@
           "id": "js-u03-l1-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": [
             "let animal = \"cat\";",
             "console.log(`I have a pet ${animal}`);",
@@ -148,7 +188,9 @@
           ],
           "buggyLineIndex": 2,
           "fix": "console.log(`I really love my ${animal}`);",
-          "verify": { "raises": "ReferenceError" },
+          "verify": {
+            "raises": "ReferenceError"
+          },
           "explanation": {
             "en": "The variable pet was never defined. Inside a template literal, when you use a variable that does not exist, JavaScript raises a ReferenceError.",
             "tr": "pet değişkeni tanımlanmadı. Template literal içinde olmayan bir değişken kullanırsanız JavaScript ReferenceError verir."
@@ -192,14 +234,17 @@
     {
       "id": "js-u03-l2",
       "index": 2,
-      "title": { "en": "String Length and Indexing", "tr": "Metin Uzunluğu ve İndeksleme" },
+      "title": {
+        "en": "String Length and Indexing",
+        "tr": "Metin Uzunluğu ve İndeksleme"
+      },
       "concept": {
         "headline": {
           "en": "Access string length and individual characters",
           "tr": "Metin uzunluğuna ve bireysel karakterlere erişim"
         },
         "body": {
-          "en": "Every string has a .length property that tells you how many characters it contains. You can access individual characters using square brackets with an index number: the first character is at index 0, the second is at 1, and so on. This is called indexing. You can also use string methods like .toUpperCase() to convert the string, .toLowerCase() to make it lowercase, or .slice(start, end) to extract a piece of the string.",
+          "en": "Every string has a .length property that tells you how many characters it contains. You can access individual characters using square brackets with an index number: the first character is at index 0, the second is at 1, and so on. This is called indexing. String methods change a copy: .toUpperCase() and .toLowerCase() switch the case, and .slice(start, end) takes a piece of it.",
           "tr": "Her metnin kaç karakter içerdiğini söyleyen bir .length özelliği vardır. Kare parantez içinde bir indeks numarası kullanarak bireysel karakterlere erişebilirsin: ilk karakter 0 indeksinde, ikinci 1 indeksinde vb. Buna indeksleme denir. .toUpperCase() gibi metin metotlarını da kullanabilirsin: .toLowerCase() ile küçük harfe çevirebilir veya .slice(start, end) ile metnin bir parçasını çıkarabilirsin."
         },
         "example": {
@@ -215,13 +260,40 @@
           "id": "js-u03-l2-q1",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
           "code": "let text = \"cat\";\nconsole.log(text.length);",
           "options": [
-            { "id": "a", "text": { "en": "3", "tr": "3" } },
-            { "id": "b", "text": { "en": "cat", "tr": "cat" } },
-            { "id": "c", "text": { "en": "length", "tr": "length" } },
-            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "3",
+                "tr": "3"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "cat",
+                "tr": "cat"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "length",
+                "tr": "length"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "An error",
+                "tr": "Bir hata"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -238,10 +310,34 @@
             "tr": "\"hello\" metninin ilk karakteri nedir?"
           },
           "options": [
-            { "id": "a", "text": { "en": "hello", "tr": "hello" } },
-            { "id": "b", "text": { "en": "h", "tr": "h" } },
-            { "id": "c", "text": { "en": "e", "tr": "e" } },
-            { "id": "d", "text": { "en": "undefined", "tr": "undefined" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "hello",
+                "tr": "hello"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "h",
+                "tr": "h"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "e",
+                "tr": "e"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "undefined",
+                "tr": "undefined"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -258,8 +354,16 @@
             "tr": "2 indeksindeki karaktere erişmek için kodu tamamla."
           },
           "codeTemplate": "let word = \"JavaScript\";\nconsole.log(word[___]);",
-          "blanks": [{ "id": "1", "answer": "2", "distractors": ["1", "3", "\"2\""] }],
-          "verify": { "stdout": "v\n" },
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "2",
+              "distractors": ["1", "3", "\"2\""]
+            }
+          ],
+          "verify": {
+            "stdout": "v\n"
+          },
           "explanation": {
             "en": "Index 2 means the third character (counting from 0). In \"JavaScript\", that is v.",
             "tr": "2 indeksi üçüncü karakteri ifade eder (0'dan sayarak). \"JavaScript\"'te bu v'dir."
@@ -276,7 +380,9 @@
           "code": "let phrase = \"hello world\";",
           "expected": "console.log(phrase.toUpperCase());",
           "acceptable": ["console.log( phrase.toUpperCase() );"],
-          "verify": { "stdout": "HELLO WORLD\n" },
+          "verify": {
+            "stdout": "HELLO WORLD\n"
+          },
           "explanation": {
             "en": ".toUpperCase() is a method that converts all characters to uppercase letters. Similarly, .toLowerCase() makes all letters lowercase.",
             "tr": ".toUpperCase() tüm karakterleri büyük harfe çeviren bir metottur. Benzer şekilde, .toLowerCase() tüm harfleri küçük harfe yapar."
@@ -286,7 +392,10 @@
           "id": "js-u03-l2-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": ["let name = \"Alice\";", "console.log(name[0]);", "console.log(name[10]);"],
           "buggyLineIndex": 2,
           "fix": "console.log(name[4]);",
@@ -333,7 +442,10 @@
     {
       "id": "js-u03-l3",
       "index": 3,
-      "title": { "en": "Math Operators and Order", "tr": "Matematik İşlemleri Sırası" },
+      "title": {
+        "en": "Math Operators and Order",
+        "tr": "Matematik İşlemleri Sırası"
+      },
       "concept": {
         "headline": {
           "en": "Multiply and divide; control order with parentheses",
@@ -356,13 +468,40 @@
           "id": "js-u03-l3-q1",
           "type": "multiple_choice",
           "difficulty": "easy",
-          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
           "code": "console.log(2 + 3 * 4);",
           "options": [
-            { "id": "a", "text": { "en": "14", "tr": "14" } },
-            { "id": "b", "text": { "en": "20", "tr": "20" } },
-            { "id": "c", "text": { "en": "9", "tr": "9" } },
-            { "id": "d", "text": { "en": "23", "tr": "23" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "14",
+                "tr": "14"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "20",
+                "tr": "20"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "9",
+                "tr": "9"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "23",
+                "tr": "23"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -374,13 +513,40 @@
           "id": "js-u03-l3-q2",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
           "code": "console.log((5 - 2) * 3);",
           "options": [
-            { "id": "a", "text": { "en": "9", "tr": "9" } },
-            { "id": "b", "text": { "en": "11", "tr": "11" } },
-            { "id": "c", "text": { "en": "6", "tr": "6" } },
-            { "id": "d", "text": { "en": "4", "tr": "4" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "9",
+                "tr": "9"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "11",
+                "tr": "11"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "6",
+                "tr": "6"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "4",
+                "tr": "4"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -397,8 +563,16 @@
             "tr": "30 yazdıracak şekilde ifadeyi tamamla."
           },
           "codeTemplate": "console.log((___ + 2) * 5);",
-          "blanks": [{ "id": "1", "answer": "4", "distractors": ["6", "2", "10"] }],
-          "verify": { "stdout": "30\n" },
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "4",
+              "distractors": ["6", "2", "10"]
+            }
+          ],
+          "verify": {
+            "stdout": "30\n"
+          },
           "explanation": {
             "en": "Working backward: 30 / 5 = 6, so the parentheses must equal 6. 6 - 2 = 4, so the blank is 4.",
             "tr": "Geriye doğru: 30 / 5 = 6, bu yüzden parantezler 6 olmalı. 6 - 2 = 4, bu yüzden boşluk 4'tür."
@@ -414,7 +588,9 @@
           },
           "expected": "console.log(100 / 4 + 5);",
           "acceptable": ["console.log( 100 / 4 + 5 );", "console.log(100/4+5);"],
-          "verify": { "stdout": "30\n" },
+          "verify": {
+            "stdout": "30\n"
+          },
           "explanation": {
             "en": "Division and addition are evaluated left to right at their priority level. Division happens first, then addition: 100 / 4 = 25, then 25 + 5 = 30.",
             "tr": "Bölme ve toplama öncelik seviyelerine göre soldan sağa değerlendirilir. Bölme önce yapılır, sonra toplama: 100 / 4 = 25, sonra 25 + 5 = 30."
@@ -479,7 +655,10 @@
     {
       "id": "js-u03-l4",
       "index": 4,
-      "title": { "en": "Remainder and Rounding", "tr": "Kalan ve Yuvarlama" },
+      "title": {
+        "en": "Remainder and Rounding",
+        "tr": "Kalan ve Yuvarlama"
+      },
       "concept": {
         "headline": {
           "en": "Find remainders with %; round numbers with Math functions",
@@ -502,13 +681,40 @@
           "id": "js-u03-l4-q1",
           "type": "multiple_choice",
           "difficulty": "medium",
-          "prompt": { "en": "What does this code print?", "tr": "Bu kod ne yazdırır?" },
+          "prompt": {
+            "en": "What does this code print?",
+            "tr": "Bu kod ne yazdırır?"
+          },
           "code": "console.log(17 % 5);",
           "options": [
-            { "id": "a", "text": { "en": "2", "tr": "2" } },
-            { "id": "b", "text": { "en": "3", "tr": "3" } },
-            { "id": "c", "text": { "en": "5", "tr": "5" } },
-            { "id": "d", "text": { "en": "12", "tr": "12" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "2",
+                "tr": "2"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "3",
+                "tr": "3"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "5",
+                "tr": "5"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "12",
+                "tr": "12"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -539,7 +745,13 @@
                 "tr": "Math.round en yakın sayıya yuvarlar; Math.floor her zaman aşağı yuvarlar"
               }
             },
-            { "id": "c", "text": { "en": "They do the same thing", "tr": "Aynı şeyi yaparlar" } },
+            {
+              "id": "c",
+              "text": {
+                "en": "They do the same thing",
+                "tr": "Aynı şeyi yaparlar"
+              }
+            },
             {
               "id": "d",
               "text": {
@@ -570,7 +782,9 @@
               "distractors": ["Math.floor", "Math.ceil", "toFixed"]
             }
           ],
-          "verify": { "stdout": "5\n" },
+          "verify": {
+            "stdout": "5\n"
+          },
           "explanation": {
             "en": "Math.round(4.8) = 5 because 4.8 is closer to 5 than to 4. Math.floor would give 4, Math.ceil would give 5.",
             "tr": "Math.round(4.8) = 5 çünkü 4.8 4'ten 5'e daha yakın. Math.floor 4 verirdi, Math.ceil 5 verirdi."
@@ -589,7 +803,9 @@
             "console.log( (19.99 * 1.08).toFixed(2) );",
             "console.log((19.99*1.08).toFixed(2));"
           ],
-          "verify": { "stdout": "21.59\n" },
+          "verify": {
+            "stdout": "21.59\n"
+          },
           "explanation": {
             "en": "Parentheses force the multiplication to finish first, giving 21.589199999999998. toFixed(2) then rounds that to two decimal places: 21.59.",
             "tr": "Parantezler önce çarpmanın bitmesini sağlar, sonuç 21.589199999999998 olur. toFixed(2) bunu iki ondalık basamağa yuvarlayıp 21.59 yapar."

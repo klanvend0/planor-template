@@ -21,6 +21,7 @@ import { Flame, Heart, Infinity as InfinityIcon, Zap } from 'lucide-react-native
 
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { useTranslation } from '@/hooks/use_translation';
 import { MAX_HEARTS } from '@/lib/gamification';
 import { DURATION, METER, POP_SPRING } from '@/lib/motion';
 import { themeTokens } from '@/lib/theme';
@@ -83,6 +84,7 @@ export function HeartsIndicator({
   unlimited?: boolean;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const scale = useSharedValue(1);
 
   useEffect(() => {
@@ -95,7 +97,17 @@ export function HeartsIndicator({
   const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   return (
-    <Animated.View style={style} className={cn('flex-row items-center gap-1.5', className)}>
+    <Animated.View
+      style={style}
+      className={cn('flex-row items-center gap-1.5', className)}
+      // A bare numeral reads as "5" to VoiceOver, which says nothing about what
+      // is running out; the plural key spells it out.
+      accessible
+      accessibilityLabel={
+        unlimited
+          ? t('learn.hearts_unlimited')
+          : t('learn.hearts_left', { count: Math.max(0, hearts) })
+      }>
       <Icon as={Heart} size={20} className="text-destructive" fill="currentColor" />
       {unlimited ? (
         <Icon as={InfinityIcon} size={18} className="text-destructive" />
@@ -133,9 +145,15 @@ export function StreakBadge({
   className?: string;
   size?: 'sm' | 'md';
 }) {
+  const { t } = useTranslation();
   const alive = days > 0;
   return (
-    <View className={cn('flex-row items-center gap-1.5', className)}>
+    <View
+      className={cn('flex-row items-center gap-1.5', className)}
+      accessible
+      accessibilityLabel={
+        alive ? t('learn.streak_days', { count: days }) : t('learn.streak_start')
+      }>
       <Icon
         as={Flame}
         size={size === 'sm' ? 18 : 20}
@@ -156,8 +174,12 @@ export function StreakBadge({
 
 /** Total or daily XP. */
 export function XpPill({ xp, className }: { xp: number; className?: string }) {
+  const { t } = useTranslation();
   return (
-    <View className={cn('flex-row items-center gap-1.5', className)}>
+    <View
+      className={cn('flex-row items-center gap-1.5', className)}
+      accessible
+      accessibilityLabel={`${xp} ${t('common.xp')}`}>
       <Icon as={Zap} size={18} className="text-xp" fill="currentColor" />
       <Text className="font-num text-base text-foreground">{xp}</Text>
     </View>
@@ -180,6 +202,7 @@ export function LevelRing({
   size?: number;
   scheme?: 'light' | 'dark';
 }) {
+  const { t } = useTranslation();
   const tokens = themeTokens(scheme);
   const strokeWidth = size * 0.09;
   const radius = (size - strokeWidth) / 2;
@@ -187,7 +210,11 @@ export function LevelRing({
   const clamped = Math.max(0, Math.min(1, progress));
 
   return (
-    <View style={{ width: size, height: size }} className="items-center justify-center">
+    <View
+      style={{ width: size, height: size }}
+      className="items-center justify-center"
+      accessible
+      accessibilityLabel={t('profile.level', { level })}>
       <Svg width={size} height={size} style={{ position: 'absolute' }}>
         <Circle
           cx={size / 2}

@@ -28,7 +28,6 @@ type SettingsState = {
   locale: SupportedLocale;
   colorScheme: ColorSchemePreference;
   hapticsEnabled: boolean;
-  soundEnabled: boolean;
   remindersEnabled: boolean;
   /** Local hour (0-23) for the daily reminder. */
   reminderHour: number;
@@ -46,7 +45,6 @@ type SettingsActions = {
   setLocale: (locale: SupportedLocale) => Promise<void>;
   setColorScheme: (scheme: ColorSchemePreference) => void;
   setHapticsEnabled: (enabled: boolean) => void;
-  setSoundEnabled: (enabled: boolean) => void;
   setReminders: (enabled: boolean, hour?: number) => void;
   setActiveCourse: (course: CourseId) => void;
   setDailyGoal: (goal: DailyGoal) => void;
@@ -61,7 +59,6 @@ const initialState: SettingsState = {
   locale: getLocale(),
   colorScheme: 'system',
   hapticsEnabled: true,
-  soundEnabled: true,
   remindersEnabled: false,
   reminderHour: 19,
   activeCourse: 'python',
@@ -83,7 +80,6 @@ export const useSettingsStore = create<SettingsState & SettingsActions>()(
       },
       setColorScheme: (colorScheme) => set({ colorScheme }),
       setHapticsEnabled: (hapticsEnabled) => set({ hapticsEnabled }),
-      setSoundEnabled: (soundEnabled) => set({ soundEnabled }),
       setReminders: (remindersEnabled, hour) =>
         set((state) => ({
           remindersEnabled,

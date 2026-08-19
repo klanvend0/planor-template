@@ -68,7 +68,9 @@ export async function scheduleDailyReminder(hour: number, streakDays: number): P
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('reminders', {
-      name: 'Daily reminder',
+      // The channel name is what Android shows in its own settings list, so it
+      // has to be in the learner's language like everything else.
+      name: t('settings.reminders'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
   }

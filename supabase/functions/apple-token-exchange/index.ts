@@ -46,10 +46,10 @@ function json(body: unknown, status = 200): Response {
 function readClaims(idToken: string): { sub?: string } | null {
   try {
     const payload = idToken.split('.')[1];
-    const padded = payload.replace(/-/g, '+').replace(/_/g, '/').padEnd(
-      payload.length + ((4 - (payload.length % 4)) % 4),
-      '='
-    );
+    const padded = payload
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+      .padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
     return JSON.parse(atob(padded));
   } catch {
     return null;

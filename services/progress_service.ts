@@ -55,7 +55,12 @@ export type Profile = {
 
 export type LessonResult = {
   totalXp: number;
+  /** Everything paid for the run: base XP plus both bonuses. */
   xpAwarded: number;
+  /** The share of `xpAwarded` paid for a flawless run, 0 when there was none. */
+  perfectBonus: number;
+  /** The share of `xpAwarded` paid for reaching a seven-day streak mark. */
+  streakBonus: number;
   streakDays: number;
   hearts: number;
   stars: number;
@@ -158,6 +163,8 @@ export async function completeLesson(params: {
   return {
     totalXp: row.total_xp,
     xpAwarded: row.xp_awarded,
+    perfectBonus: row.perfect_bonus,
+    streakBonus: row.streak_bonus,
     streakDays: row.streak_days,
     hearts: row.hearts,
     stars: row.stars,

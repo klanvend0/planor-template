@@ -13,9 +13,11 @@ import { View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 import { GameButton } from '@/components/game_button';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { useSettingsStore } from '@/stores/settings_store';
 import { cn } from '@/lib/utils';
 import type { LessonResult } from '@/services/progress_service';
 
@@ -48,9 +50,7 @@ function StatTile({
             tone === 'streak' && 'text-streak'
           )}
         />
-        <Text className="font-strong text-[11px] uppercase tracking-wide text-muted-foreground">
-          {label}
-        </Text>
+        <Kicker className="text-[11px] tracking-wide">{label}</Kicker>
       </View>
       <Text className="font-num text-[22px] text-foreground">{value}</Text>
     </View>
@@ -73,6 +73,8 @@ export function ResultsView({
   continueLabel?: string;
 }) {
   const { t } = useTranslation();
+  const dailyGoal = useSettingsStore((state) => state.dailyGoalXp);
+  const goalHit = result.dailyXp >= dailyGoal;
 
   const title =
     result.score === 100
@@ -82,6 +84,13 @@ export function ResultsView({
         : result.score >= 50
           ? t('results.title_ok')
           : t('results.title_retry');
+
+  // The bonuses are already inside `xpAwarded`; listing them separately is the
+  // only way the learner learns that a flawless run pays more than a passing one.
+  const bonuses = [
+    { label: t('results.perfect_bonus'), amount: result.perfectBonus },
+    { label: t('results.streak_bonus'), amount: result.streakBonus },
+  ].filter((bonus) => bonus.amount > 0);
 
   const minutes = Math.floor(elapsedMs / 60000);
   const seconds = Math.floor((elapsedMs % 60000) / 1000);
@@ -129,6 +138,26 @@ export function ResultsView({
               tone="streak"
             />
           </View>
+
+          {bonuses.length > 0 ? (
+            <View className="gap-2 rounded-2xl border border-border bg-card px-4 py-3">
+              {bonuses.map((bonus) => (
+                <View key={bonus.label} className="flex-row items-center justify-between">
+                  <Text className="text-[14px] text-muted-foreground">{bonus.label}</Text>
+                  <Text className="font-num text-[15px] text-xp">{`+${bonus.amount}`}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {goalHit ? (
+            <View className="flex-row items-center gap-2 rounded-2xl border-2 border-xp/40 bg-xp/10 px-4 py-3">
+              <Icon as={Zap} size={20} className="text-xp" fill="currentColor" />
+              <Text className="flex-1 font-strong text-[15px] text-foreground">
+                {t('results.daily_goal_hit')}
+              </Text>
+            </View>
+          ) : null}
 
           {!isPractice && result.streakDays > 0 ? (
             <View className="flex-row items-center gap-2 rounded-2xl border-2 border-streak/40 bg-streak/10 px-4 py-3">

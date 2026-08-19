@@ -108,6 +108,8 @@ beforeEach(() => {
   mockFinishLesson.mockResolvedValue({
     totalXp: 20,
     xpAwarded: 20,
+    perfectBonus: 0,
+    streakBonus: 0,
     streakDays: 1,
     hearts: 5,
     stars: 3,
@@ -192,7 +194,9 @@ describe('useLessonSession', () => {
 
     await waitFor(() => expect(result.current.phase).toBe('finished'));
     // Right on the second attempt does not count towards the score.
-    expect(mockFinishLesson).toHaveBeenCalledWith(expect.objectContaining({ correct: 0, total: 1 }));
+    expect(mockFinishLesson).toHaveBeenCalledWith(
+      expect.objectContaining({ correct: 0, total: 1 })
+    );
   });
 
   it('only ever re-queues a question once', async () => {

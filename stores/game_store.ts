@@ -80,7 +80,8 @@ function localLessonResult(
   }
 ): LessonResult {
   const score = Math.round((params.correct / Math.max(1, params.total)) * 100);
-  const awarded = Math.round(params.baseXp * (score / 100)) + (score === 100 ? 10 : 0);
+  const perfectBonus = score === 100 ? 10 : 0;
+  const awarded = Math.round(params.baseXp * (score / 100)) + perfectBonus;
   const today = new Date().toISOString().slice(0, 10);
   const streak =
     state?.lastActiveDate === today ? (state?.streakDays ?? 0) : (state?.streakDays ?? 0) + 1;
@@ -88,6 +89,10 @@ function localLessonResult(
   return {
     totalXp: (state?.totalXp ?? 0) + awarded,
     xpAwarded: awarded,
+    perfectBonus,
+    // The seven-day bonus depends on server-held streak history, so the
+    // optimistic result never promises one; the real figure lands on sync.
+    streakBonus: 0,
     streakDays: streak,
     hearts: state?.hearts ?? MAX_HEARTS,
     stars: score === 100 ? 3 : score >= 80 ? 2 : score >= 50 ? 1 : 0,

@@ -18,10 +18,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GameButton } from '@/components/game_button';
 import { LevelRing, StreakBadge } from '@/components/game_hud';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useProfileStats } from '@/hooks/use_profile_stats';
 import { useTranslation } from '@/hooks/use_translation';
+import { LINKS } from '@/lib/constants';
+import { openExternal } from '@/lib/links';
 import { ACHIEVEMENTS, isUnlocked, leagueFromWeeklyXp, levelFromXp } from '@/lib/gamification';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth_store';
@@ -30,16 +33,14 @@ import { useGameStore } from '@/stores/game_store';
 function StatCell({ label, value }: { label: string; value: string }) {
   return (
     <View className="flex-1 gap-1 rounded-2xl border border-border bg-card px-3 py-3">
-      <Text className="font-strong text-[11px] uppercase tracking-wide text-muted-foreground">
-        {label}
-      </Text>
+      <Kicker className="text-[11px] tracking-wide">{label}</Kicker>
       <Text className="font-num text-[20px] text-foreground">{value}</Text>
     </View>
   );
 }
 
 export default function ProfileScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const insets = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
 
@@ -54,6 +55,15 @@ export default function ProfileScreen() {
       void reload();
     }, [refreshGame, reload])
   );
+
+  // `created_at` is when the account was made, which is the only "learning
+  // since" the app can prove.
+  const memberSince = user?.created_at
+    ? new Intl.DateTimeFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(user.created_at))
+    : null;
 
   const level = levelFromXp(stats.totalXp);
   const league = leagueFromWeeklyXp(gameState?.weeklyXp ?? 0);
@@ -98,6 +108,11 @@ export default function ProfileScreen() {
                 next: level.level + 1,
               })}
             </Text>
+            {memberSince ? (
+              <Text className="text-xs text-muted-foreground">
+                {t('profile.member_since', { date: memberSince })}
+              </Text>
+            ) : null}
           </View>
           <StreakBadge days={gameState?.streakDays ?? 0} />
         </View>
@@ -116,20 +131,19 @@ export default function ProfileScreen() {
               {isPro ? t('paywall.subtitle') : t('paywall.features.ai')}
             </Text>
           </View>
-          {!isPro ? (
-            <GameButton
-              label={t('paywall.cta_buy')}
-              size="sm"
-              onPress={() => router.push('/paywall')}
-            />
-          ) : null}
+          <GameButton
+            label={isPro ? t('profile.manage_plan') : t('paywall.cta_buy')}
+            variant={isPro ? 'ghost' : 'primary'}
+            size="sm"
+            onPress={() =>
+              isPro ? void openExternal(LINKS.manageSubscription) : router.push('/paywall')
+            }
+          />
         </View>
 
         {/* Stats */}
         <View className="gap-3">
-          <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
-            {t('profile.stats')}
-          </Text>
+          <Kicker>{t('profile.stats')}</Kicker>
           <View className="flex-row gap-3">
             <StatCell label={t('profile.total_xp')} value={String(stats.totalXp)} />
             <StatCell label={t('profile.current_streak')} value={String(stats.streakDays)} />
@@ -141,16 +155,14 @@ export default function ProfileScreen() {
               value={String(stats.lessonsCompleted)}
             />
             <StatCell label={t('profile.perfect_lessons')} value={String(stats.perfectLessons)} />
-            <StatCell label={t('common.xp')} value={String(gameState?.weeklyXp ?? 0)} />
+            <StatCell label={t('profile.weekly_xp')} value={String(gameState?.weeklyXp ?? 0)} />
           </View>
         </View>
 
         {/* League */}
         <View className="gap-3 rounded-3xl border border-border bg-card px-5 py-5">
           <View className="flex-row items-center justify-between">
-            <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
-              {t('profile.league')}
-            </Text>
+            <Kicker>{t('profile.league')}</Kicker>
             <Text className="font-strong text-xs text-muted-foreground">
               {t('profile.league_progress', { xp: gameState?.weeklyXp ?? 0 })}
             </Text>
@@ -171,9 +183,7 @@ export default function ProfileScreen() {
         {/* Achievements */}
         <View className="gap-3">
           <View className="flex-row items-center justify-between">
-            <Text className="font-strong text-xs uppercase tracking-widest text-muted-foreground">
-              {t('profile.achievements')}
-            </Text>
+            <Kicker>{t('profile.achievements')}</Kicker>
             <Text className="font-strong text-xs text-muted-foreground">
               {t('profile.achievements_progress', {
                 unlocked: ACHIEVEMENTS.filter((achievement) => isUnlocked(achievement, stats))
@@ -194,6 +204,14 @@ export default function ProfileScreen() {
               return (
                 <View
                   key={achievement.id}
+                  accessible
+                  // Locked badges look different but read identically, so the
+                  // state goes into the label.
+                  accessibilityLabel={
+                    unlocked
+                      ? t(achievement.titleKey)
+                      : `${t(achievement.titleKey)} — ${t('achievements.locked')}`
+                  }
                   className={cn(
                     'w-[31%] items-center gap-2 rounded-2xl border-2 px-2 py-3',
                     unlocked ? 'border-warning/50 bg-warning/10' : 'border-border bg-card'

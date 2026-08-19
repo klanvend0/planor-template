@@ -299,6 +299,8 @@ export function useLessonSession(
         setOutcome({
           totalXp: practice.totalXp,
           xpAwarded: practice.xpAwarded,
+          perfectBonus: 0,
+          streakBonus: 0,
           streakDays: gameState?.streakDays ?? 0,
           hearts: gameState?.hearts ?? 0,
           stars: starsForScore(score),

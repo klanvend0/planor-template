@@ -57,6 +57,9 @@ function listUnitFiles(): string[] {
       if (/^unit_\d{2}\.json$/.test(entry)) files.push(join(dir, entry));
     }
   }
+  // The authoring reference is checked with everything else: an example that
+  // does not pass the rules it documents is worse than no example.
+  files.push(join(CONTENT_DIR, 'example_unit.json'));
   return files;
 }
 
@@ -130,6 +133,27 @@ function checkCopy(
   }
 }
 
+/**
+ * Enforce a copy budget from content/AUTHORING.md.
+ *
+ * These are the numbers the authoring guide hands to whoever writes a unit, and
+ * they exist for layout: a title that runs to three lines on an iPhone SE, or a
+ * concept body nobody scrolls, is a defect the schema cannot see.
+ */
+function checkLength(
+  file: string,
+  where: string,
+  value: { en: string; tr: string },
+  min: number,
+  max: number
+): void {
+  for (const [locale, text] of Object.entries(value)) {
+    if (text.length < min || text.length > max) {
+      fail(file, `${where}.${locale}`, `must be ${min}-${max} chars, got ${text.length}`);
+    }
+  }
+}
+
 function checkQuestion(
   file: string,
   language: 'python' | 'javascript',
@@ -140,6 +164,7 @@ function checkQuestion(
 
   checkCopy(file, `${where}.prompt`, question.prompt, true);
   checkCopy(file, `${where}.explanation`, question.explanation, true);
+  checkLength(file, `${where}.explanation`, question.explanation, 80, 220);
 
   const syntaxTargets: { label: string; code: string }[] = [];
   let runnable: { code: string; expectStdout?: string; expectRaises?: string } | null = null;
@@ -156,6 +181,17 @@ function checkQuestion(
       for (const blank of question.blanks) filled = filled.replace('___', blank.answer);
       syntaxTargets.push({ label: 'filled template', code: filled });
       for (const blank of question.blanks) {
+        for (const distractor of blank.distractors) {
+          // A distractor is a token, not a sentence: the chips have to fit the
+          // token bank without wrapping.
+          if (distractor.length > 32) {
+            fail(
+              file,
+              `${where}.blanks.${blank.id}`,
+              `distractor "${distractor}" is ${distractor.length} chars, max 32`
+            );
+          }
+        }
         if (blank.distractors.includes(blank.answer)) {
           fail(file, `${where}.blanks.${blank.id}`, 'a distractor duplicates the answer');
         }
@@ -197,16 +233,9 @@ function checkQuestion(
       syntaxTargets.push({ label: 'code.en', code: question.code.en });
       syntaxTargets.push({ label: 'code.tr', code: question.code.tr });
       checkCopy(file, `${where}.sampleAnswer`, question.sampleAnswer, true);
-      for (const locale of ['en', 'tr'] as const) {
-        const answer = question.sampleAnswer[locale];
-        if (answer.length < 60 || answer.length > 260) {
-          fail(
-            file,
-            `${where}.sampleAnswer.${locale}`,
-            `must be 60-260 chars, got ${answer.length}`
-          );
-        }
-      }
+      // The prompt asks the learner for 100-200 characters, so the model answer
+      // has to be an example of exactly that.
+      checkLength(file, `${where}.sampleAnswer`, question.sampleAnswer, 100, 200);
       const stripComments = (code: string) =>
         code
           .split('\n')
@@ -273,6 +302,8 @@ function checkUnit(file: string, unit: Unit, seenIds: Set<string>): void {
   }
   checkCopy(file, `${unit.id}.title`, unit.title, true);
   checkCopy(file, `${unit.id}.description`, unit.description, true);
+  checkLength(file, `${unit.id}.title`, unit.title, 1, 40);
+  checkLength(file, `${unit.id}.description`, unit.description, 60, 120);
 
   unit.lessons.forEach((lesson, lessonIndex) => {
     if (lesson.index !== lessonIndex + 1)
@@ -288,16 +319,16 @@ function checkUnit(file: string, unit: Unit, seenIds: Set<string>): void {
     checkCopy(file, `${lesson.id}.concept.body`, lesson.concept.body, true);
     checkCopy(file, `${lesson.id}.concept.example.caption`, lesson.concept.example.caption, true);
 
-    for (const locale of ['en', 'tr'] as const) {
-      const body = lesson.concept.body[locale];
-      if (body.length < 120 || body.length > 520) {
-        fail(
-          file,
-          `${lesson.id}.concept.body.${locale}`,
-          `must be 120-520 chars, got ${body.length}`
-        );
-      }
-    }
+    checkLength(file, `${lesson.id}.title`, lesson.title, 1, 32);
+    checkLength(file, `${lesson.id}.concept.headline`, lesson.concept.headline, 1, 60);
+    checkLength(file, `${lesson.id}.concept.body`, lesson.concept.body, 180, 420);
+    checkLength(
+      file,
+      `${lesson.id}.concept.example.caption`,
+      lesson.concept.example.caption,
+      1,
+      90
+    );
 
     const exampleError = checkSyntax(language, lesson.concept.example.code);
     if (exampleError) fail(file, `${lesson.id}.concept.example`, `does not parse: ${exampleError}`);

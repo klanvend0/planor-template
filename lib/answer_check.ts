@@ -8,7 +8,8 @@
  * @module lib/answer_check
  */
 
-import type { Question } from '@/lib/content_schema';
+import { localized, type Question } from '@/lib/content_schema';
+import type { SupportedLocale } from '@/lib/i18n';
 
 /** What the learner produced, discriminated by question type. */
 export type AnswerInput =
@@ -109,12 +110,17 @@ export function codeMatches(actual: string, expected: string): boolean {
   return normalizeCode(actual) === normalizeCode(expected);
 }
 
-/** Human-readable form of the correct answer, used in the feedback sheet. */
-export function expectedAnswerText(question: Question): string {
+/**
+ * Human-readable form of the correct answer, for the feedback sheet.
+ *
+ * @param locale - The learner's language. Option text and sample answers are
+ * localized; code is the same in every language.
+ */
+export function expectedAnswerText(question: Question, locale: SupportedLocale = 'en'): string {
   switch (question.type) {
     case 'multiple_choice': {
       const option = question.options.find((entry) => entry.id === question.answerId);
-      return option ? option.text.en : '';
+      return option ? localized(option.text, locale) : '';
     }
     case 'fill_blank': {
       let filled = question.codeTemplate;
@@ -128,7 +134,7 @@ export function expectedAnswerText(question: Question): string {
     case 'order_lines':
       return question.lines.join('\n');
     case 'explain_code':
-      return question.sampleAnswer.en;
+      return localized(question.sampleAnswer, locale);
   }
 }
 

@@ -247,6 +247,8 @@ export interface Database {
         Returns: {
           total_xp: number;
           xp_awarded: number;
+          perfect_bonus: number;
+          streak_bonus: number;
           streak_days: number;
           hearts: number;
           stars: number;

@@ -8,6 +8,7 @@
  * @module lib/gamification
  */
 
+import { PASS_SCORE } from '@/lib/constants';
 import type { TranslationKeys } from '@/lib/i18n';
 
 /** XP needed to go from `level` to `level + 1`. Grows linearly, not brutally. */
@@ -227,7 +228,7 @@ export function isUnlocked(achievement: Achievement, stats: AchievementStats): b
 export function starsForScore(score: number): 0 | 1 | 2 | 3 {
   if (score >= 100) return 3;
   if (score >= 80) return 2;
-  if (score >= 50) return 1;
+  if (score >= PASS_SCORE) return 1;
   return 0;
 }
 

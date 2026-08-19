@@ -48,6 +48,8 @@ beforeEach(() => {
   completeLessonMock.mockResolvedValue({
     totalXp: 90,
     xpAwarded: 90,
+    perfectBonus: 0,
+    streakBonus: 0,
     streakDays: 1,
     hearts: 5,
     stars: 3,

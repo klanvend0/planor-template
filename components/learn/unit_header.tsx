@@ -11,6 +11,7 @@
 import { Crown } from 'lucide-react-native';
 import { View } from 'react-native';
 
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { cn } from '@/lib/utils';
@@ -41,6 +42,7 @@ export function UnitHeader({
   progressLabel: string;
 }) {
   const ratio = total === 0 ? 0 : done / total;
+  const accent = courseId === 'python' ? 'text-course-python' : 'text-course-javascript';
 
   return (
     <View
@@ -49,20 +51,12 @@ export function UnitHeader({
         courseId === 'python' ? 'bg-course-python/15' : 'bg-course-javascript/15'
       )}>
       <View className="flex-row items-center justify-between">
-        <Text
-          className={cn(
-            'font-strong text-xs uppercase tracking-widest',
-            courseId === 'python' ? 'text-course-python' : 'text-course-javascript'
-          )}>
-          {unitLabel}
-        </Text>
+        <Kicker className={accent}>{unitLabel}</Kicker>
 
-        {locked ? (
+        {locked && lockedLabel ? (
           <View className="flex-row items-center gap-1.5 rounded-full bg-warning/20 px-2.5 py-1">
             <Icon as={Crown} size={13} className="text-warning" />
-            <Text className="font-strong text-[11px] uppercase tracking-wide text-warning">
-              {lockedLabel}
-            </Text>
+            <Kicker className="text-[11px] tracking-wide text-warning">{lockedLabel}</Kicker>
           </View>
         ) : (
           <Text className="font-strong text-xs text-muted-foreground">{progressLabel}</Text>

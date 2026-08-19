@@ -496,7 +496,10 @@
           "options": [
             {
               "id": "a",
-              "text": { "en": "Prints Hello, then prints undefined", "tr": "Hello yazdırır, sonra undefined yazdırır" }
+              "text": {
+                "en": "Prints Hello, then prints undefined",
+                "tr": "Hello yazdırır, sonra undefined yazdırır"
+              }
             },
             {
               "id": "b",
@@ -507,7 +510,10 @@
             },
             {
               "id": "c",
-              "text": { "en": "Prints Hello, then prints mesage", "tr": "Hello yazdırır, sonra mesage yazdırır" }
+              "text": {
+                "en": "Prints Hello, then prints mesage",
+                "tr": "Hello yazdırır, sonra mesage yazdırır"
+              }
             },
             {
               "id": "d",
@@ -569,7 +575,11 @@
             "en": "Which line contains a typo that breaks the code?",
             "tr": "Hangi satırda kodu kıran yazım hatası var?"
           },
-          "codeLines": ["console.log(\"Start\");", "consol.log(\"Middle\");", "console.log(\"End\");"],
+          "codeLines": [
+            "console.log(\"Start\");",
+            "consol.log(\"Middle\");",
+            "console.log(\"End\");"
+          ],
           "buggyLineIndex": 1,
           "fix": "console.log(\"Middle\");",
           "verify": { "raises": "ReferenceError" },

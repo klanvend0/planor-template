@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
@@ -39,9 +40,7 @@ import { useSubscriptionStore } from '@/stores/subscription_store';
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <View className="gap-2">
-      <Text className="px-1 font-strong text-xs uppercase tracking-widest text-muted-foreground">
-        {title}
-      </Text>
+      <Kicker className="px-1">{title}</Kicker>
       <View className="overflow-hidden rounded-2xl border border-border bg-card">{children}</View>
     </View>
   );
@@ -151,7 +150,13 @@ export default function SettingsScreen() {
           // The reminder talks about a streak this device can no longer see.
           await cancelDailyReminder();
           await subscriptionSignOut();
-          await signOut();
+          const result = await signOut();
+          if (!result.success) {
+            // The session is still live, so sending them to the login screen
+            // would only show them signed in again.
+            Alert.alert(t('settings.sign_out'), t('auth.sign_out_error'));
+            return;
+          }
           router.replace('/(auth)/login');
         },
       },
@@ -173,7 +178,13 @@ export default function SettingsScreen() {
             settings.reset();
             router.replace('/(onboarding)');
           } catch (error) {
-            Alert.alert(t('settings.delete_account'), t(errorMessageKey(toAppError(error).code)));
+            // Being offline is retryable and worth saying; anything else needs a
+            // human, which is what delete_failed tells them.
+            const code = toAppError(error).code;
+            Alert.alert(
+              t('settings.delete_account'),
+              code === 'network' ? t(errorMessageKey(code)) : t('settings.delete_failed')
+            );
           } finally {
             setDeleting(false);
           }

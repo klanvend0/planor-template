@@ -11,7 +11,13 @@
 import type { TranslationKeys } from '@/lib/i18n';
 
 export type AppErrorCode =
-  'network' | 'auth' | 'rate_limited' | 'subscription_required' | 'store_unavailable' | 'unknown';
+  | 'network'
+  | 'auth'
+  | 'rate_limited'
+  | 'subscription_required'
+  | 'store_unavailable'
+  | 'answer_too_short'
+  | 'unknown';
 
 /** A failure that already knows how it should be shown to the learner. */
 export class AppError extends Error {
@@ -76,6 +82,8 @@ export function errorMessageKey(code: AppErrorCode): TranslationKeys {
       return 'errors.subscription_required';
     case 'store_unavailable':
       return 'paywall.unavailable';
+    case 'answer_too_short':
+      return 'errors.answer_too_short';
     default:
       return 'errors.generic';
   }

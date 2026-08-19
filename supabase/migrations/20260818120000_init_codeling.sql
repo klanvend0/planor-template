@@ -492,6 +492,8 @@ create or replace function public.complete_lesson(
 returns table (
   total_xp integer,
   xp_awarded integer,
+  perfect_bonus integer,
+  streak_bonus integer,
   streak_days integer,
   hearts smallint,
   stars smallint,
@@ -640,9 +642,13 @@ begin
   select coalesce(sum(amount), 0)::integer into v_daily
     from public.xp_events where user_id = v_user and earned_on = v_today;
 
+  -- The bonuses come back broken out as well as folded into the award, so the
+  -- results screen can show the learner what the extra XP was for.
   return query select
     v_state.total_xp,
     (v_award + v_perfect_bonus + v_streak_bonus),
+    v_perfect_bonus,
+    v_streak_bonus,
     v_state.streak_days,
     v_state.hearts,
     v_stars,

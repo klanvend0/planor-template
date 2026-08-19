@@ -291,7 +291,7 @@ values
     $q$js-u03$q$,
     $q$javascript$q$,
     6,
-    75
+    70
   ),
   (
     $q$js-u03-l2$q$,
@@ -375,7 +375,7 @@ values
     $q$js-u06$q$,
     $q$javascript$q$,
     6,
-    75
+    70
   ),
   (
     $q$js-u06-l2$q$,
@@ -1189,46 +1189,46 @@ console.log(name.toLowerCase());$q$,
     $q$javascript$q$,
     $q$js-u03-l3$q$,
     $q$// First calculation
-console.log(2 + 3 * 4);
+console.log(20 - 8 / 4);
 // Second calculation
-console.log((2 + 3) * 4);$q$,
+console.log((20 - 8) / 4);$q$,
     $q$// İlk hesaplama
-console.log(2 + 3 * 4);
+console.log(20 - 8 / 4);
 // İkinci hesaplama
-console.log((2 + 3) * 4);$q$,
-    $q$["first line: multiplication happens before addition","second line: parentheses force addition first","parentheses change the order of operations"]$q$::jsonb,
-    $q$["ilk satır: çarpma toplamadan önce olur","ikinci satır: parantezler toplamayı önce yapmaya zorlar","parantezler işlem sırasını değiştirir"]$q$::jsonb
+console.log((20 - 8) / 4);$q$,
+    $q$["first line: division happens before subtraction","second line: parentheses force subtraction first","parentheses change the order of operations"]$q$::jsonb,
+    $q$["ilk satır: bölme çıkarmadan önce olur","ikinci satır: parantezler çıkarmayı önce yapmaya zorlar","parantezler işlem sırasını değiştirir"]$q$::jsonb
   ),
   (
     $q$js-u03-l4-q6$q$,
     $q$javascript$q$,
     $q$js-u03-l4$q$,
-    $q$// Check divisibility and round a calculation
-let price = 9.99;
+    $q$// Convert a price to cents and round it
+let price = 19.99;
 console.log(price * 100);
 console.log(Math.round(price * 100));
 console.log((price * 100).toFixed(0));$q$,
-    $q$// Bölünebilirliği kontrol et ve bir hesaplamayı yuvarla
-let price = 9.99;
+    $q$// Bir fiyatı sent'e çevirip yuvarla
+let price = 19.99;
 console.log(price * 100);
 console.log(Math.round(price * 100));
 console.log((price * 100).toFixed(0));$q$,
-    $q$["multiplies 9.99 by 100 to get cents","uses Math.round to round the result","uses toFixed to show only whole numbers"]$q$::jsonb,
-    $q$["9.99'u 100 ile çarparak sent cinsine çevirir","sonucu yuvarlamak için Math.round kullanır","sadece tam sayıları göstermek için toFixed kullanır"]$q$::jsonb
+    $q$["multiplies 19.99 by 100, which lands on 1998.9999999999998 due to floating-point rounding","uses Math.round to clean the result up to the nearest integer, 1999","uses toFixed(0) to format the same result as the string \"1999\""]$q$::jsonb,
+    $q$["19.99'u 100 ile çarpar, kayan nokta yuvarlama hatası yüzünden sonuç 1998.9999999999998 çıkar","Math.round ile sonucu en yakın tam sayı olan 1999'a temizler","toFixed(0) ile aynı sonucu \"1999\" string'i olarak biçimlendirir"]$q$::jsonb
   ),
   (
     $q$js-u04-l1-q6$q$,
     $q$javascript$q$,
     $q$js-u04-l1$q$,
     $q$// Checks if the user is old enough
-age = 16;
+let age = 16;
 if (age >= 13) {
   console.log("Welcome");
 } else {
   console.log("Too young");
 }$q$,
     $q$// Kullanıcının yeterince yaşlı olup olmadığını kontrol eder
-age = 16;
+let age = 16;
 if (age >= 13) {
   console.log("Welcome");
 } else {
@@ -1242,14 +1242,14 @@ if (age >= 13) {
     $q$javascript$q$,
     $q$js-u04-l2$q$,
     $q$// Detects when the password is correct
-password = "secret123";
+let password = "secret123";
 if (password === "secret123") {
   console.log("Access granted");
 } else {
   console.log("Wrong password");
 }$q$,
-    $q$// Şifreler doğru olduğunda algılar
-password = "secret123";
+    $q$// Şifre doğru olduğunda algılar
+let password = "secret123";
 if (password === "secret123") {
   console.log("Access granted");
 } else {
@@ -1263,8 +1263,8 @@ if (password === "secret123") {
     $q$javascript$q$,
     $q$js-u04-l3$q$,
     $q$// Determines discount level
-price = 100;
-isMember = true;
+let price = 100;
+let isMember = true;
 if (price > 50 && isMember) {
   console.log("20% off");
 } else if (price > 50) {
@@ -1273,8 +1273,8 @@ if (price > 50 && isMember) {
   console.log("No discount");
 }$q$,
     $q$// İndirim seviyesini belirler
-price = 100;
-isMember = true;
+let price = 100;
+let isMember = true;
 if (price > 50 && isMember) {
   console.log("20% off");
 } else if (price > 50) {
@@ -1290,14 +1290,14 @@ if (price > 50 && isMember) {
     $q$javascript$q$,
     $q$js-u04-l4$q$,
     $q$// Suggests an action based on inventory
-inventory = 5;
-message = inventory > 0 ? "In stock" : "Out of stock";
+let inventory = 5;
+let message = inventory > 0 ? "In stock" : "Out of stock";
 if (message) {
   console.log(message);
 }$q$,
     $q$// Envantere dayalı olarak bir eylem önerir
-inventory = 5;
-message = inventory > 0 ? "In stock" : "Out of stock";
+let inventory = 5;
+let message = inventory > 0 ? "In stock" : "Out of stock";
 if (message) {
   console.log(message);
 }$q$,
@@ -1311,7 +1311,7 @@ if (message) {
     $q$// Store three measurements and print the first
 let temps = [72, 68, 75];
 console.log(temps[0]);$q$,
-    $q$// Üç ölçümü depolamak ve ilkini yazdırmak
+    $q$// Üç ölçümü depola ve ilkini yazdır
 let temps = [72, 68, 75];
 console.log(temps[0]);$q$,
     $q$["creates an array of three temperature values","accesses the element at index 0","prints that value"]$q$::jsonb,
@@ -1326,7 +1326,7 @@ let cart = [];
 cart.push("milk");
 cart.push("bread");
 console.log(cart.length);$q$,
-    $q$// Satın alımlar listesi oluştur
+    $q$// Alışveriş listesi oluştur
 let cart = [];
 cart.push("milk");
 cart.push("bread");
@@ -1363,7 +1363,7 @@ for (let score of scores) {
 let scores = [85, 92, 78, 88, 95];
 let needsWork = scores.filter(s => s < 85);
 console.log(needsWork);$q$,
-    $q$// İyileştirmeye ihtiyaç duyar puanları bul
+    $q$// İyileştirmeye ihtiyaç duyan puanları bul
 let scores = [85, 92, 78, 88, 95];
 let needsWork = scores.filter(s => s < 85);
 console.log(needsWork);$q$,
@@ -1395,20 +1395,20 @@ startGame();$q$,
     $q$js-u06-l2$q$,
     $q$// Calculates the price after tax
 function withTax(price) {
-  return price * 1.1;
+  return price * 1.2;
 }
 
 const total = withTax(100);
 console.log(total);$q$,
     $q$// Vergi sonrası fiyatı hesaplar
 function withTax(price) {
-  return price * 1.1;
+  return price * 1.2;
 }
 
 const total = withTax(100);
 console.log(total);$q$,
-    $q$["defines a function withTax that multiplies the input by 1.1","calls the function with 100","stores the result (110) in total and prints it"]$q$::jsonb,
-    $q$["girdileri 1.1 ile çarpan withTax fonksiyonunu tanımlar","fonksiyonu 100 ile çağırır","sonucu (110) total'de saklar ve yazdırır"]$q$::jsonb
+    $q$["defines a function withTax that multiplies the input by 1.2","calls the function with 100","stores the result (120) in total and prints it"]$q$::jsonb,
+    $q$["girdileri 1.2 ile çarpan withTax fonksiyonunu tanımlar","fonksiyonu 100 ile çağırır","sonucu (120) total'de saklar ve yazdırır"]$q$::jsonb
   ),
   (
     $q$js-u06-l3-q6$q$,

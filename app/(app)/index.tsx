@@ -3,7 +3,8 @@
  *
  * The home screen: a scrolling path of lessons grouped into units, with the
  * day's state pinned to the top (streak, hearts, daily goal). Tapping a node
- * starts the lesson; tapping a locked premium unit opens the paywall.
+ * starts the lesson; tapping a locked premium unit opens the paywall, and
+ * tapping one that is still out of order says why.
  *
  * @module app/(app)/index
  */
@@ -11,13 +12,14 @@
 import { router, useFocusEffect } from 'expo-router';
 import { ChevronDown, Settings } from 'lucide-react-native';
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GameButton } from '@/components/game_button';
 import { HeartsIndicator, ProgressBar, StreakBadge } from '@/components/game_hud';
 import { LessonNode } from '@/components/learn/lesson_node';
 import { pathOffset, UnitHeader } from '@/components/learn/unit_header';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
@@ -89,6 +91,14 @@ export default function LearnScreen() {
     setRefreshing(false);
   };
 
+  /** What tapping this node will do, for the screen reader. */
+  const actionLabel = (status: ReturnType<typeof lessonStatus>, isNext: boolean): string => {
+    if (status === 'completed') return t('learn.review_lesson');
+    if (status === 'premium_locked') return t('paywall.title');
+    if (status === 'locked') return t('learn.locked_title');
+    return isNext ? t('learn.continue_lesson') : t('learn.start_lesson');
+  };
+
   const openLesson = (
     lessonId: string,
     status: ReturnType<typeof lessonStatus>,
@@ -98,7 +108,12 @@ export default function LearnScreen() {
       router.push('/paywall');
       return;
     }
-    if (status === 'locked') return;
+    if (status === 'locked') {
+      // A node that does nothing when tapped reads as a broken button, so the
+      // rule that locked it is stated instead.
+      Alert.alert(t('learn.locked_title'), t('learn.locked_body'));
+      return;
+    }
     track('lesson_started', { lesson_id: lessonId, course: activeCourse, unit: unitId });
     router.push({ pathname: '/lesson/[lessonId]', params: { lessonId } });
   };
@@ -158,9 +173,7 @@ export default function LearnScreen() {
         {/* Continue card */}
         {nextLesson ? (
           <View className="gap-3 rounded-3xl border-2 border-primary/30 bg-primary/10 px-5 py-5">
-            <Text className="font-strong text-xs uppercase tracking-widest text-primary">
-              {t(greetingKey())}
-            </Text>
+            <Kicker className="text-primary">{t(greetingKey())}</Kicker>
             <Text className="font-display text-[22px] leading-7 text-foreground">
               {localized(nextLesson.title, locale)}
             </Text>
@@ -190,10 +203,11 @@ export default function LearnScreen() {
                 lockedLabel={t('paywall.title')}
                 courseId={activeCourse}
                 unitLabel={t('learn.unit', { index: unit.index })}
-                progressLabel={t('learn.unit_progress', {
-                  done: progress.done,
-                  total: progress.total,
-                })}
+                progressLabel={
+                  progress.done === progress.total && progress.total > 0
+                    ? t('learn.unit_complete')
+                    : t('learn.unit_progress', { done: progress.done, total: progress.total })
+                }
               />
 
               <View className="items-center gap-3">
@@ -209,6 +223,7 @@ export default function LearnScreen() {
                     <LessonNode
                       key={lesson.id}
                       title={localized(lesson.title, locale)}
+                      actionLabel={actionLabel(status, lesson.id === nextId)}
                       status={status}
                       stars={byLesson[lesson.id]?.stars ?? 0}
                       isCurrent={lesson.id === nextId}

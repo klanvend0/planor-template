@@ -1,25 +1,16 @@
 {
   "app": {
-    "name": "Codeling",
-    "tagline": "Learn to code, one puzzle a day"
+    "name": "Codeling"
   },
   "common": {
     "continue": "Continue",
     "next": "Next",
     "back": "Back",
-    "skip": "Skip",
     "done": "Done",
     "cancel": "Cancel",
     "close": "Close",
-    "retry": "Try again",
-    "save": "Save",
     "loading": "Loading",
-    "confirm": "Confirm",
-    "delete": "Delete",
-    "later": "Maybe later",
-    "got_it": "Got it",
-    "xp": "XP",
-    "of": "of"
+    "xp": "XP"
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -27,8 +18,7 @@
     "subscription_required": "This is a Pro feature.",
     "rate_limited": "You are going fast. Give it a minute and try again.",
     "sign_in_required": "Please sign in to continue.",
-    "answer_too_short": "Write at least 100 characters so we can grade it properly.",
-    "answer_too_long": "Keep it under 200 characters."
+    "answer_too_short": "Write at least 100 characters so we can grade it properly."
   },
   "auth": {
     "sign_in": "Sign In",
@@ -39,11 +29,8 @@
     "sign_in_subtitle": "Sign in so your streak, XP and lessons follow you everywhere.",
     "terms_notice": "By continuing you agree to our Terms of Use and Privacy Policy.",
     "google_error": "Google sign-in did not complete.",
-    "google_no_token": "No ID token received from Google.",
-    "google_not_configured": "Google Sign-In is not configured yet.",
     "apple_error": "Apple sign-in did not complete.",
     "apple_not_available": "Apple Sign-In is not available on this device.",
-    "sign_in_cancelled": "Sign-in was cancelled.",
     "sign_out_error": "Could not sign out.",
     "sign_out_confirm_title": "Sign out?",
     "sign_out_confirm_body": "Your progress is saved to your account."
@@ -159,7 +146,6 @@
     "question_of": "%{current} of %{total}",
     "check": "Check",
     "continue": "Continue",
-    "skip_question": "Skip",
     "correct": "Correct",
     "incorrect": "Not quite",
     "correct_answer": "Answer",
@@ -173,10 +159,7 @@
     "type_here": "Type your answer",
     "which_line": "Tap the line with the bug",
     "reorder": "Tap the lines in the right order",
-    "reorder_reset": "Reset",
-    "choose_answer": "Choose the answer",
-    "concept_cta": "Got it, let's practice",
-    "hint": "Hint"
+    "concept_cta": "Got it, let's practice"
   },
   "explain": {
     "title": "Explain this code",
@@ -192,12 +175,10 @@
     "corrections": "What to fix",
     "missed": "What you missed",
     "sample_title": "One way to say it",
-    "show_sample": "Show a model answer",
     "locked_title": "AI feedback is a Pro feature",
     "locked_body": "Write an explanation in your own words and an AI tells you exactly what you understood and what you missed.",
     "locked_cta": "Unlock Pro",
-    "locked_skip": "Skip this question",
-    "offline": "AI feedback needs a connection."
+    "locked_skip": "Skip this question"
   },
   "results": {
     "title_perfect": "Flawless",
@@ -241,6 +222,7 @@
     "longest_streak": "Longest streak",
     "lessons_completed": "Lessons",
     "perfect_lessons": "Perfect lessons",
+    "weekly_xp": "XP this week",
     "league": "League",
     "league_progress": "%{xp} XP this week",
     "leagues": {
@@ -304,7 +286,6 @@
   "paywall": {
     "title": "Codeling Pro",
     "subtitle": "Everything unlocked, three days free.",
-    "trial_badge": "%{days} days free",
     "features": {
       "ai": "AI feedback on every explanation you write",
       "hearts": "Unlimited hearts, so a wrong answer never stops you",
@@ -319,7 +300,6 @@
     "per_month": "%{price} / month",
     "per_year": "%{price} / year",
     "best_value": "Best value",
-    "save_percent": "Save %{percent}%",
     "trial_line": "%{days} days free, then %{price}. Cancel any time.",
     "no_trial_line": "%{price}. Cancel any time.",
     "cta_trial": "Start my %{days} free days",
@@ -331,13 +311,9 @@
     "privacy": "Privacy Policy",
     "legal": "Payment is charged to your Apple ID at the end of the free trial. The subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings.",
     "purchase_failed": "The purchase did not go through.",
-    "purchase_cancelled": "Purchase cancelled.",
     "already_pro": "You are already a Pro member.",
     "close": "Not now",
     "unavailable": "The store is unavailable right now. Please try again later.",
-    "period_week": "/ week",
-    "period_month": "/ month",
-    "period_year": "/ year",
     "plan_two_month": "Every 2 months",
     "plan_three_month": "Quarterly",
     "plan_six_month": "Every 6 months",
@@ -347,10 +323,6 @@
     "per_three_month": "%{price} / 3 months",
     "per_six_month": "%{price} / 6 months",
     "per_once": "%{price} once",
-    "period_two_month": "/ 2 months",
-    "period_three_month": "/ 3 months",
-    "period_six_month": "/ 6 months",
-    "period_once": "one time",
     "purchase_done": "You are Pro. Everything is unlocked.",
     "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings."
   },
@@ -368,7 +340,6 @@
     "theme_light": "Light",
     "theme_dark": "Dark",
     "haptics": "Haptics",
-    "sound": "Sound effects",
     "reminders": "Daily reminder",
     "reminder_time": "Reminder time",
     "reminders_denied": "Notifications are off in iOS Settings.",
@@ -390,15 +361,5 @@
     "reminder_title": "Your streak is waiting",
     "reminder_body": "One lesson keeps the %{count} day streak alive.",
     "reminder_body_zero": "Five minutes is all it takes to start."
-  },
-  "course": {
-    "python": {
-      "title": "Python",
-      "tagline": "The friendliest way into programming"
-    },
-    "javascript": {
-      "title": "JavaScript",
-      "tagline": "The language every browser speaks"
-    }
   }
 }

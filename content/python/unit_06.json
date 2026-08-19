@@ -851,7 +851,7 @@
           },
           "explanation": {
             "en": "The accumulator pattern works with strings too. You build up a result by repeatedly adding to a variable. message = message + word is the key operation.",
-            "tr": "Biriktirim kalıbı metinlerle de çalışır. Bir değişkene tekrar tekrar ekleyerek sonuç oluşturursunuz. message = message + word anahtar işlemdir."
+            "tr": "Biriktirim kalıbı metinlerle de çalışır. Bir değişkene tekrar tekrar ekleyerek sonuç oluşturursun. message = message + word anahtar işlemdir."
           }
         }
       ]

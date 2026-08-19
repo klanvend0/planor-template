@@ -25,7 +25,7 @@ English inside Turkish sentences, because that is how Turkish developers speak.
   "id": "py-u01", // "<course-prefix>-u<NN>", prefix: py | js
   "courseId": "python", // "python" | "javascript"
   "index": 1, // 1-based, matches the filename
-  "title": { "en": "...", "tr": "..." },
+  "title": { "en": "...", "tr": "..." }, // <= 40 chars per locale
   "description": { "en": "...", "tr": "..." }, // 60-120 chars per locale
   "lessons": [/* exactly 4 lessons */],
 }
@@ -106,7 +106,7 @@ Distractors must be _plausible_ — the mistakes a beginner actually makes — n
 ```
 
 The app builds a shuffled token bank out of every answer + every distractor, so
-distractors must be short tokens (<= 16 chars) that look like they could belong.
+distractors must be short tokens (<= 32 chars) that look like they could belong.
 
 ## `type_code`
 
@@ -208,3 +208,7 @@ input, uses randomness, or refers to a variable that is not defined in the snipp
 6. Teaching anything the course has not introduced yet — a unit may only rely on itself
    and the units before it.
 7. Emoji, markdown, or HTML inside any content string.
+8. Copy outside the character budgets above. Every one of them is enforced by
+   `npm run content:check`, per locale: unit title <= 40, unit description 60-120,
+   lesson title <= 32, headline <= 60, body 180-420, caption <= 90, explanation
+   80-220, `sampleAnswer` 100-200, `fill_blank` distractor <= 32.

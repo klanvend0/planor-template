@@ -123,9 +123,7 @@ function main(): void {
     '',
     'delete from public.lesson_catalog',
     'where lesson_id not in (',
-    units
-      .flatMap((unit) => unit.lessons.map((lesson) => `  ${literal(lesson.id)}`))
-      .join(',\n'),
+    units.flatMap((unit) => unit.lessons.map((lesson) => `  ${literal(lesson.id)}`)).join(',\n'),
     ');',
     '',
     'insert into public.question_rubrics',

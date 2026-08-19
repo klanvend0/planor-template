@@ -68,11 +68,18 @@ export default function LoginScreen() {
       }
       if (result.reason === 'cancelled') return;
 
+      // The provider's message is English and technical ("No identity token
+      // received from Apple"), so it goes to the log and the learner is told
+      // what happened in their own language.
+      if (result.error) console.warn(`[login] ${provider} sign-in failed`, result.error);
+
       Alert.alert(
         t('auth.sign_in'),
         result.reason === 'unavailable'
           ? t('auth.apple_not_available')
-          : (result.error ?? t('errors.generic'))
+          : provider === 'apple'
+            ? t('auth.apple_error')
+            : t('auth.google_error')
       );
     } finally {
       setBusy(null);

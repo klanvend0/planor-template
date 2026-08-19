@@ -16,6 +16,7 @@ import { TextInput, View } from 'react-native';
 
 import { CodeBlock } from '@/components/code_block';
 import { GameButton } from '@/components/game_button';
+import { Kicker } from '@/components/kicker';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { EXPLANATION_MAX_CHARS, EXPLANATION_MIN_CHARS } from '@/lib/constants';
@@ -84,9 +85,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.corrections.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
-            {t('explain.corrections')}
-          </Text>
+          <Kicker className="tracking-wide">{t('explain.corrections')}</Kicker>
           {review.corrections.map((correction, index) => (
             <Text key={index} className="text-sm leading-5 text-foreground">
               {'• '}
@@ -98,9 +97,7 @@ function VerdictBanner({ review }: { review: ExplanationReview }) {
 
       {review.missedPoints.length > 0 ? (
         <View className="gap-1 pt-1">
-          <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
-            {t('explain.missed')}
-          </Text>
+          <Kicker className="tracking-wide">{t('explain.missed')}</Kicker>
           {review.missedPoints.map((point, index) => (
             <Text key={index} className="text-sm leading-5 text-foreground">
               {'• '}
@@ -160,9 +157,7 @@ export function ExplainCodeView({
     <View className="gap-5">
       <View className="flex-row items-center gap-2">
         <Icon as={Sparkles} size={18} className="text-primary" />
-        <Text className="font-strong text-sm uppercase tracking-wide text-primary">
-          {t('explain.title')}
-        </Text>
+        <Kicker className="text-sm tracking-wide text-primary">{t('explain.title')}</Kicker>
       </View>
 
       <QuestionPrompt>{pick(question.prompt, locale)}</QuestionPrompt>
@@ -175,9 +170,7 @@ export function ExplainCodeView({
           </View>
           <VerdictBanner review={review} />
           <View className="gap-1">
-            <Text className="font-strong text-xs uppercase tracking-wide text-muted-foreground">
-              {t('explain.sample_title')}
-            </Text>
+            <Kicker className="tracking-wide">{t('explain.sample_title')}</Kicker>
             <Text className="text-[15px] leading-6 text-muted-foreground">
               {pick(question.sampleAnswer, locale)}
             </Text>

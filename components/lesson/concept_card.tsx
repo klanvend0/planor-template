@@ -12,6 +12,7 @@ import { View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { CodeBlock } from '@/components/code_block';
+import { Kicker } from '@/components/kicker';
 import { Text } from '@/components/ui/text';
 import type { Lesson } from '@/lib/content_schema';
 import { localized } from '@/lib/content_schema';
@@ -30,9 +31,7 @@ export function ConceptCard({
   return (
     <Animated.View entering={FadeInDown.duration(260)} className="gap-6">
       <View className="gap-2">
-        <Text className="font-strong text-xs uppercase tracking-widest text-primary">
-          {localized(lesson.title, locale)}
-        </Text>
+        <Kicker className="text-primary">{localized(lesson.title, locale)}</Kicker>
         <Text className="font-display text-[26px] leading-8 text-foreground">
           {localized(lesson.concept.headline, locale)}
         </Text>

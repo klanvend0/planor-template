@@ -2,24 +2,30 @@
   "id": "py-u08",
   "courseId": "python",
   "index": 8,
-  "title": { "en": "Your Own Functions", "tr": "Kendi Fonksiyonlarınız" },
+  "title": {
+    "en": "Your Own Functions",
+    "tr": "Kendi Fonksiyonların"
+  },
   "description": {
     "en": "Learn how to create and use functions to organize and reuse your code.",
-    "tr": "Kodunuzu organize etmek ve tekrar kullanmak için fonksiyonlar oluşturmayı öğrenin."
+    "tr": "Kodunu organize etmek ve tekrar kullanmak için fonksiyonlar oluşturmayı öğrenin."
   },
   "lessons": [
     {
       "id": "py-u08-l1",
       "index": 1,
-      "title": { "en": "Defining and Calling", "tr": "Tanımlama ve Çağırma" },
+      "title": {
+        "en": "Defining and Calling",
+        "tr": "Tanımlama ve Çağırma"
+      },
       "concept": {
         "headline": {
           "en": "def creates a function, then call it by name",
-          "tr": "def bir fonksiyon oluşturur, sonra adıyla çağırırsınız"
+          "tr": "def bir fonksiyon oluşturur, sonra adıyla çağırırsın"
         },
         "body": {
           "en": "A function is a block of code with a name that you can run whenever you want. You define it once with def, followed by the name and parentheses and a colon, then indent the lines that belong inside. After that, you call it by writing its name with parentheses. Every time you call it, Python runs all the lines inside.",
-          "tr": "Fonksiyon, istediğiniz zaman çalıştırabileceğiniz, adı olan bir kod bloğudur. Onu def ile, ardından isim, parantezler ve iki nokta ile tanımlarsınız, sonra içine ait satırları girintili yazarsınız. Daha sonra adını parantezle yazarak çağırırsınız. Her çağırdığınızda Python içindeki tüm satırları çalıştırır."
+          "tr": "Fonksiyon, istediğin zaman çalıştırabileceğin, adı olan bir kod bloğudur. Onu def ile, ardından isim, parantezler ve iki nokta ile tanımlarsın, sonra içine ait satırları girintili yazarsın. Daha sonra adını parantezle yazarak çağırırsın. Her çağırdığında Python içindeki tüm satırları çalıştırır."
         },
         "example": {
           "code": "def greet():\n    print(\"Hello!\")\n\ngreet()\ngreet()",
@@ -48,18 +54,30 @@
             },
             {
               "id": "b",
-              "text": { "en": "Creates a new function", "tr": "Yeni bir fonksiyon oluşturur" }
+              "text": {
+                "en": "Creates a new function",
+                "tr": "Yeni bir fonksiyon oluşturur"
+              }
             },
-            { "id": "c", "text": { "en": "Defines a variable", "tr": "Bir değişken tanımlar" } },
+            {
+              "id": "c",
+              "text": {
+                "en": "Defines a variable",
+                "tr": "Bir değişken tanımlar"
+              }
+            },
             {
               "id": "d",
-              "text": { "en": "Prints something to the screen", "tr": "Ekrana bir şeyler yazdırır" }
+              "text": {
+                "en": "Prints something to the screen",
+                "tr": "Ekrana bir şeyler yazdırır"
+              }
             }
           ],
           "answerId": "b",
           "explanation": {
             "en": "def stands for define, which means to create a new function that you can call later.",
-            "tr": "def, İngilizce 'define' (tanımlamak) kelimesinden gelir; daha sonra çağırabileceğiniz yeni bir fonksiyon oluşturmanızı sağlar."
+            "tr": "def, İngilizce 'define' (tanımlamak) kelimesinden gelir; daha sonra çağırabileceğin yeni bir fonksiyon oluşturmanızı sağlar."
           }
         },
         {
@@ -68,18 +86,42 @@
           "difficulty": "easy",
           "prompt": {
             "en": "How do you run a function after defining it?",
-            "tr": "Bir fonksiyonu tanımladıktan sonra nasıl çalıştırırsınız?"
+            "tr": "Bir fonksiyonu tanımladıktan sonra nasıl çalıştırırsın?"
           },
           "options": [
-            { "id": "a", "text": { "en": "def myfunction", "tr": "def myfunction" } },
-            { "id": "b", "text": { "en": "myfunction:", "tr": "myfunction:" } },
-            { "id": "c", "text": { "en": "myfunction()", "tr": "myfunction()" } },
-            { "id": "d", "text": { "en": "call myfunction", "tr": "call myfunction" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "def myfunction",
+                "tr": "def myfunction"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "myfunction:",
+                "tr": "myfunction:"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "myfunction()",
+                "tr": "myfunction()"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "call myfunction",
+                "tr": "call myfunction"
+              }
+            }
           ],
           "answerId": "c",
           "explanation": {
             "en": "You call a function by typing its name followed by parentheses. The parentheses tell Python to run the function.",
-            "tr": "Bir fonksiyonu adıyla ve parantez koyarak çağırırsınız. Parantez Python'a fonksiyonu çalıştırmasını söyler."
+            "tr": "Bir fonksiyonu adıyla ve parantez koyarak çağırırsın. Parantez Python'a fonksiyonu çalıştırmasını söyler."
           }
         },
         {
@@ -98,10 +140,12 @@
               "distractors": ["say_hello", "hello", "print(\"hello\")"]
             }
           ],
-          "verify": { "stdout": "hello\n" },
+          "verify": {
+            "stdout": "hello\n"
+          },
           "explanation": {
             "en": "To run a function, type its name followed by parentheses. Without the parentheses, Python just sees the name as a reference, not a call.",
-            "tr": "Bir fonksiyonu çalıştırmak için adını parantezler ile yazarsınız. Parantez olmadan Python sadece ismi bir referans olarak görür, çağrı değil."
+            "tr": "Bir fonksiyonu çalıştırmak için adını parantezler ile yazarsın. Parantez olmadan Python sadece ismi bir referans olarak görür, çağrı değil."
           }
         },
         {
@@ -114,7 +158,9 @@
           },
           "code": "def greet():\n    print(\"Hi there\")",
           "expected": "greet()",
-          "verify": { "stdout": "Hi there\n" },
+          "verify": {
+            "stdout": "Hi there\n"
+          },
           "explanation": {
             "en": "greet() has no parameters, so calling it needs only empty parentheses. That runs every line inside the function.",
             "tr": "greet() hiç parametre almaz, bu yüzden çağırmak için sadece boş parantez yeterlidir. Bu, fonksiyon içindeki her satırı çalıştırır."
@@ -124,11 +170,16 @@
           "id": "py-u08-l1-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": ["def hello():", "print(\"Hello\")", "hello()"],
           "buggyLineIndex": 1,
           "fix": "    print(\"Hello\")",
-          "verify": { "raises": "IndentationError" },
+          "verify": {
+            "raises": "IndentationError"
+          },
           "explanation": {
             "en": "The line inside the function must be indented more than the def line. Without indentation, Python doesn't know it belongs inside the function.",
             "tr": "Fonksiyon içindeki satır def satırından daha fazla girinti ile yazılmalıdır. Girinti olmadan Python bunun fonksiyon içine ait olduğunu bilmez."
@@ -164,7 +215,7 @@
           },
           "explanation": {
             "en": "Once you define a function, you can call it as many times as you want. Each call runs all the code inside it.",
-            "tr": "Bir fonksiyonu tanımladıktan sonra onu istediğiniz kadar çağırabilirsiniz. Her çağrı içindeki tüm kodu çalıştırır."
+            "tr": "Bir fonksiyonu tanımladıktan sonra onu istediğin kadar çağırabilirsin. Her çağrı içindeki tüm kodu çalıştırır."
           }
         }
       ]
@@ -172,7 +223,10 @@
     {
       "id": "py-u08-l2",
       "index": 2,
-      "title": { "en": "Parameters and Arguments", "tr": "Parametreler ve Argümanlar" },
+      "title": {
+        "en": "Parameters and Arguments",
+        "tr": "Parametreler ve Argümanlar"
+      },
       "concept": {
         "headline": {
           "en": "Parameters let a function receive values",
@@ -180,7 +234,7 @@
         },
         "body": {
           "en": "A parameter is a variable inside a function that receives a value when you call it. You list parameters in the parentheses when you define the function with def. When you call the function, you put the actual values (called arguments) in the parentheses. The function then uses those values inside.",
-          "tr": "Parametre, fonksiyonu çağırdığınızda bir değer alan, fonksiyon içindeki bir değişkendir. Fonksiyonu def ile tanımlarken parametreleri parantez içinde listelersiniz. Fonksiyonu çağırırken parantez içine gerçek değerleri (argümanlar denir) koyarsınız. Fonksiyon bu değerleri içeride kullanır."
+          "tr": "Parametre, fonksiyonu çağırdığında bir değer alan, fonksiyon içindeki bir değişkendir. Fonksiyonu def ile tanımlarken parametreleri parantez içinde listelersin. Fonksiyonu çağırırken parantez içine gerçek değerleri (argümanlar denir) koyarsın. Fonksiyon bu değerleri içeride kullanır."
         },
         "example": {
           "code": "def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(\"Alice\")\ngreet(\"Bob\")",
@@ -200,8 +254,20 @@
             "tr": "def add(x, y): fonksiyonunda x ve y nedir?"
           },
           "options": [
-            { "id": "a", "text": { "en": "Arguments", "tr": "Argümanlar" } },
-            { "id": "b", "text": { "en": "Parameters", "tr": "Parametreler" } },
+            {
+              "id": "a",
+              "text": {
+                "en": "Arguments",
+                "tr": "Argümanlar"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "Parameters",
+                "tr": "Parametreler"
+              }
+            },
             {
               "id": "c",
               "text": {
@@ -220,7 +286,7 @@
           "answerId": "b",
           "explanation": {
             "en": "The names in parentheses after def are called parameters. They receive values when you call the function.",
-            "tr": "def'ten sonra parantez içindeki isimler parametreler denir. Fonksiyonu çağırdığınızda değer alırlar."
+            "tr": "def'ten sonra parantez içindeki isimler parametreler denir. Fonksiyonu çağırdığında değer alırlar."
           }
         },
         {
@@ -233,15 +299,39 @@
           },
           "code": "def double(num):\n    print(num * 2)",
           "options": [
-            { "id": "a", "text": { "en": "5", "tr": "5" } },
-            { "id": "b", "text": { "en": "10", "tr": "10" } },
-            { "id": "c", "text": { "en": "num * 2", "tr": "num * 2" } },
-            { "id": "d", "text": { "en": "num", "tr": "num" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "5",
+                "tr": "5"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "10",
+                "tr": "10"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "num * 2",
+                "tr": "num * 2"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "num",
+                "tr": "num"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
             "en": "When you call double(5), the parameter num receives the value 5. Then the function prints 5 * 2, which is 10.",
-            "tr": "double(5) çağırdığınızda, num parametresi 5 değerini alır. Sonra fonksiyon 5 * 2'yi yazdırır, bu 10'dur."
+            "tr": "double(5) çağırdığında, num parametresi 5 değerini alır. Sonra fonksiyon 5 * 2'yi yazdırır, bu 10'dur."
           }
         },
         {
@@ -254,12 +344,18 @@
           },
           "codeTemplate": "def make_loud(word):\n    print(word + \"!!!\")\n\nmake_loud(___)",
           "blanks": [
-            { "id": "1", "answer": "\"shout\"", "distractors": ["shout", "'shout", "word"] }
+            {
+              "id": "1",
+              "answer": "\"shout\"",
+              "distractors": ["shout", "'shout", "word"]
+            }
           ],
-          "verify": { "stdout": "shout!!!\n" },
+          "verify": {
+            "stdout": "shout!!!\n"
+          },
           "explanation": {
             "en": "The argument is the actual value you pass when calling the function. The parameter (in this case word) receives that value.",
-            "tr": "Argüman, fonksiyonu çağırdığınızda geçen gerçek değerdir. Parametre (bu durumda word) bu değeri alır."
+            "tr": "Argüman, fonksiyonu çağırdığında geçen gerçek değerdir. Parametre (bu durumda word) bu değeri alır."
           }
         },
         {
@@ -272,24 +368,31 @@
           },
           "code": "def make_sound(sound):\n    print(sound)",
           "expected": "make_sound(\"Moo\")",
-          "verify": { "stdout": "Moo\n" },
+          "verify": {
+            "stdout": "Moo\n"
+          },
           "explanation": {
             "en": "When you call a function with arguments, put the values in the parentheses. The parameter receives that value.",
-            "tr": "Bir fonksiyonu argümanlarla çağırdığınızda değerleri parantez içine koyarsınız. Parametre bu değeri alır."
+            "tr": "Bir fonksiyonu argümanlarla çağırdığında değerleri parantez içine koyarsın. Parametre bu değeri alır."
           }
         },
         {
           "id": "py-u08-l2-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": ["def add(x, y):", "    total = x + y", "print(total)", "add(3, 4)"],
           "buggyLineIndex": 2,
           "fix": "    print(total)",
-          "verify": { "raises": "NameError" },
+          "verify": {
+            "raises": "NameError"
+          },
           "explanation": {
             "en": "The variable total is created inside the function, so it only exists there. You cannot use it outside the function. Trying to print(total) outside the function causes a NameError.",
-            "tr": "total değişkeni fonksiyon içinde oluşturuldu, bu nedenle sadece orada vardır. Onu fonksiyon dışında kullanamazsınız. Fonksiyon dışında print(total) yapmaya çalışmak NameError verir."
+            "tr": "total değişkeni fonksiyon içinde oluşturuldu, bu nedenle sadece orada vardır. Onu fonksiyon dışında kullanamazsın. Fonksiyon dışında print(total) yapmaya çalışmak NameError verir."
           }
         },
         {
@@ -322,7 +425,7 @@
           },
           "explanation": {
             "en": "Functions can take multiple parameters separated by commas. Each parameter receives its own argument when you call the function.",
-            "tr": "Fonksiyonlar virgülle ayrılan birden çok parametre alabilir. Her parametre fonksiyonu çağırdığınızda kendi argümanını alır."
+            "tr": "Fonksiyonlar virgülle ayrılan birden çok parametre alabilir. Her parametre fonksiyonu çağırdığında kendi argümanını alır."
           }
         }
       ]
@@ -330,7 +433,10 @@
     {
       "id": "py-u08-l3",
       "index": 3,
-      "title": { "en": "Return Values", "tr": "Dönüş Değerleri" },
+      "title": {
+        "en": "Return Values",
+        "tr": "Dönüş Değerleri"
+      },
       "concept": {
         "headline": {
           "en": "return sends a value back to the caller",
@@ -338,7 +444,7 @@
         },
         "body": {
           "en": "A function can compute a value and send it back to where it was called. You do this with the return keyword followed by the value. When Python sees return, it stops running the function and sends that value back. You can store the returned value in a variable or use it right away in an expression.",
-          "tr": "Bir fonksiyon bir değer hesaplayıp onu çağırıldığı yere geri gönderebilir. Bunu return anahtar kelimesi ve ardından değer ile yaparsınız. Python return gördüğünde fonksiyonu çalıştırmayı durdurur ve bu değeri geri gönderir. Dönen değeri bir değişkende saklayabilir veya bunu hemen bir ifadede kullanabilirsiniz."
+          "tr": "Bir fonksiyon bir değer hesaplayıp onu çağırıldığı yere geri gönderebilir. Bunu return anahtar kelimesi ve ardından değer ile yaparsın. Python return gördüğünde fonksiyonu çalıştırmayı durdurur ve bu değeri geri gönderir. Dönen değeri bir değişkende saklayabilir veya bunu hemen bir ifadede kullanabilirsin."
         },
         "example": {
           "code": "def add(x, y):\n    return x + y\n\nresult = add(3, 4)\nprint(result)",
@@ -367,21 +473,30 @@
             },
             {
               "id": "b",
-              "text": { "en": "Prints a value to the screen", "tr": "Ekrana bir değer yazdırır" }
+              "text": {
+                "en": "Prints a value to the screen",
+                "tr": "Ekrana bir değer yazdırır"
+              }
             },
             {
               "id": "c",
-              "text": { "en": "Calls the function again", "tr": "Fonksiyonu tekrar çağırır" }
+              "text": {
+                "en": "Calls the function again",
+                "tr": "Fonksiyonu tekrar çağırır"
+              }
             },
             {
               "id": "d",
-              "text": { "en": "Creates a new variable", "tr": "Yeni bir değişken oluşturur" }
+              "text": {
+                "en": "Creates a new variable",
+                "tr": "Yeni bir değişken oluşturur"
+              }
             }
           ],
           "answerId": "a",
           "explanation": {
             "en": "return exits the function and sends a value back to where it was called, which you can then use.",
-            "tr": "return fonksiyondan çıkış yapıp çağırıldığı yere bir değer geri gönderir; bu değeri daha sonra kullanabilirsiniz."
+            "tr": "return fonksiyondan çıkış yapıp çağırıldığı yere bir değer geri gönderir; bu değeri daha sonra kullanabilirsin."
           }
         },
         {
@@ -396,11 +511,32 @@
           "options": [
             {
               "id": "a",
-              "text": { "en": "Nothing, it just prints", "tr": "Hiçbir şey, sadece yazdırır" }
+              "text": {
+                "en": "Nothing, it just prints",
+                "tr": "Hiçbir şey, sadece yazdırır"
+              }
             },
-            { "id": "b", "text": { "en": "The value x * x", "tr": "x * x değeri" } },
-            { "id": "c", "text": { "en": "The variable x", "tr": "x değişkeni" } },
-            { "id": "d", "text": { "en": "An error", "tr": "Bir hata" } }
+            {
+              "id": "b",
+              "text": {
+                "en": "The value x * x",
+                "tr": "x * x değeri"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "The variable x",
+                "tr": "x değişkeni"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "An error",
+                "tr": "Bir hata"
+              }
+            }
           ],
           "answerId": "b",
           "explanation": {
@@ -439,17 +575,22 @@
           },
           "code": "def multiply(a, b):\n    return a * b",
           "expected": "answer = multiply(3, 4)",
-          "verify": { "stdout": "" },
+          "verify": {
+            "stdout": ""
+          },
           "explanation": {
             "en": "You capture a returned value by assigning it to a variable. Then you can use that variable later.",
-            "tr": "Dönen değeri bir değişkene atayarak yakala. Sonra bu değişkeni daha sonra kullanabilirsiniz."
+            "tr": "Dönen değeri bir değişkene atayarak yakala. Sonra bu değişkeni daha sonra kullanabilirsin."
           }
         },
         {
           "id": "py-u08-l3-q5",
           "type": "spot_bug",
           "difficulty": "medium",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": [
             "def get_half(x):",
             "    half = x / 2",
@@ -501,7 +642,10 @@
     {
       "id": "py-u08-l4",
       "index": 4,
-      "title": { "en": "Defaults and Scope", "tr": "Varsayılanlar ve Kapsam" },
+      "title": {
+        "en": "Defaults and Scope",
+        "tr": "Varsayılanlar ve Kapsam"
+      },
       "concept": {
         "headline": {
           "en": "Default parameters and variable scope",
@@ -509,7 +653,7 @@
         },
         "body": {
           "en": "You can give a parameter a default value so you do not have to provide it every time you call the function. Write the default after an equals sign in the parameter list. Variables created inside a function only exist inside that function (they have function scope). Variables outside functions exist everywhere. Understanding scope helps you avoid errors like using a variable that does not exist where you need it.",
-          "tr": "Bir parametreye varsayılan değer verebilirsiniz, böylece fonksiyonu her çağırdığınızda onu vermek zorunda kalmazsınız. Varsayılanı parametre listesinde eşittir işaretinden sonra yazarsınız. Fonksiyon içinde oluşturulan değişkenler sadece o fonksiyon içinde var olur (fonksiyon kapsamı vardır). Fonksiyon dışındaki değişkenler her yerde vardır. Kapsamı anlamak, var olmayan bir değişkeni kullanmaktan doğan hatalardan kaçınmanıza yardımcı olur."
+          "tr": "Bir parametreye varsayılan değer verebilirsin, böylece fonksiyonu her çağırdığında onu vermek zorunda kalmazsın. Varsayılanı parametre listesinde eşittir işaretinden sonra yazarsın. Fonksiyon içinde oluşturulan değişkenler sadece o fonksiyonun içinde vardır (fonksiyon kapsamı). Dışarıdakiler her yerde geçerlidir. Kapsamı bilmek, olmayan bir değişkeni kullanma hatasından korur."
         },
         "example": {
           "code": "def greet(name=\"Friend\"):\n    print(\"Hello, \" + name)\n\ngreet()\ngreet(\"Alice\")",
@@ -561,7 +705,7 @@
           "answerId": "b",
           "explanation": {
             "en": "When you define a parameter with a default value, the function can be called without that argument, and it will use the default.",
-            "tr": "Bir parametreyi varsayılan bir değerle tanımladığınızda, fonksiyon bu argüman olmadan çağrılabilir ve varsayılanı kullanır."
+            "tr": "Bir parametreyi varsayılan bir değerle tanımladığında, fonksiyon bu argüman olmadan çağrılabilir ve varsayılanı kullanır."
           }
         },
         {
@@ -574,10 +718,34 @@
           },
           "code": "def show_number(num=5):\n    print(num)\n\nshow_number()\nshow_number(10)",
           "options": [
-            { "id": "a", "text": { "en": "5\n10", "tr": "5\n10" } },
-            { "id": "b", "text": { "en": "10\n5", "tr": "10\n5" } },
-            { "id": "c", "text": { "en": "5\n5", "tr": "5\n5" } },
-            { "id": "d", "text": { "en": "num\n10", "tr": "num\n10" } }
+            {
+              "id": "a",
+              "text": {
+                "en": "5\n10",
+                "tr": "5\n10"
+              }
+            },
+            {
+              "id": "b",
+              "text": {
+                "en": "10\n5",
+                "tr": "10\n5"
+              }
+            },
+            {
+              "id": "c",
+              "text": {
+                "en": "5\n5",
+                "tr": "5\n5"
+              }
+            },
+            {
+              "id": "d",
+              "text": {
+                "en": "num\n10",
+                "tr": "num\n10"
+              }
+            }
           ],
           "answerId": "a",
           "explanation": {
@@ -594,7 +762,13 @@
             "tr": "Fonksiyonu varsayılan parametre değeri ile tamamla."
           },
           "codeTemplate": "def multiply(x, y___):\n    return x * y",
-          "blanks": [{ "id": "1", "answer": "=2", "distractors": ["==2", "= 2", ": 2"] }],
+          "blanks": [
+            {
+              "id": "1",
+              "answer": "=2",
+              "distractors": ["==2", "= 2", ": 2"]
+            }
+          ],
           "explanation": {
             "en": "Use = (not ==) to give a parameter a default value. == is for comparisons, not for assigning defaults in a def line.",
             "tr": "Parametreye varsayılan değer vermek için = kullanın (== değil). == karşılaştırma içindir, def satırında varsayılan atamak için değil."
@@ -609,7 +783,9 @@
             "tr": "number parametresini alan ve varsayılan olarak 2'nin kuvvetine yükselten, ancak ikinci argüman geçirirseniz farklı bir kuvvete yükseltebilen power adında bir fonksiyon yaz."
           },
           "expected": "def power(x, p=2):\n    return x ** p",
-          "verify": { "stdout": "" },
+          "verify": {
+            "stdout": ""
+          },
           "explanation": {
             "en": "A default parameter lets you call the function with fewer arguments. Here power(3) means power(3, 2) and power(3, 3) is different.",
             "tr": "Varsayılan parametre fonksiyonu daha az argümanla çağırmanızı sağlar. Burada power(3), power(3, 2) anlamındadır ve power(3, 3) farklıdır."
@@ -619,7 +795,10 @@
           "id": "py-u08-l4-q5",
           "type": "spot_bug",
           "difficulty": "hard",
-          "prompt": { "en": "Which line is wrong?", "tr": "Hangi satır hatalı?" },
+          "prompt": {
+            "en": "Which line is wrong?",
+            "tr": "Hangi satır hatalı?"
+          },
           "codeLines": [
             "def compute():",
             "    result = 10 * 5",
@@ -628,7 +807,9 @@
           ],
           "buggyLineIndex": 3,
           "fix": "print(compute())",
-          "verify": { "raises": "NameError" },
+          "verify": {
+            "raises": "NameError"
+          },
           "explanation": {
             "en": "The variable result only exists inside the compute function (function scope). Outside the function, Python does not know what result is. You need to call the function to get its return value.",
             "tr": "result değişkeni sadece compute fonksiyonu içinde var olur (fonksiyon kapsamı). Fonksiyon dışında Python result'in ne olduğunu bilmez. Dönüş değerini almak için fonksiyonu çağırmanız gerekir."
@@ -664,7 +845,7 @@
           },
           "explanation": {
             "en": "Default parameters make functions flexible. You can call them with fewer arguments and still get the expected behavior.",
-            "tr": "Varsayılan parametreler fonksiyonları esnek yapar. Bunları daha az argümanla çağırabilir ve yine de beklenen davranışı alabilirsiniz."
+            "tr": "Varsayılan parametreler fonksiyonları esnek yapar. Bunları daha az argümanla çağırabilir ve yine de beklenen davranışı alabilirsin."
           }
         }
       ]

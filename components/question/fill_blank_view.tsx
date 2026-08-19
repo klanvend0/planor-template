@@ -87,7 +87,14 @@ export function FillBlankView({
     <QuestionShell
       prompt={pick(question.prompt, locale)}
       language={language}
-      hint={disabled ? undefined : t('lesson.tap_to_fill')}>
+      // Once something is placed, the useful instruction is how to take it back.
+      hint={
+        disabled
+          ? undefined
+          : filled.some((entry) => entry !== null)
+            ? t('lesson.tap_to_remove')
+            : t('lesson.tap_to_fill')
+      }>
       {/* The snippet, with tappable chips where the blanks are. */}
       <View className="overflow-hidden rounded-xl border border-code-border bg-code py-3">
         <ScrollView

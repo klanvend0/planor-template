@@ -37,6 +37,11 @@ function errorFromStatus(status: number, code: string | undefined): AppError {
     return new AppError('rate_limited', 'Too many gradings, slow down');
   }
   if (status === 401) return new AppError('auth', 'Session expired');
+  // The screen counts characters too, but the server is the one that decides,
+  // and "Something went wrong" would be a lie about a fixable answer.
+  if (code === 'answer_too_short') {
+    return new AppError('answer_too_short', 'Explanation below the minimum length');
+  }
   return new AppError('unknown', code ?? `grading failed (${status})`);
 }
 

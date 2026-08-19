@@ -83,7 +83,9 @@ function sourceFiles(): string[] {
 function main(): void {
   const dictionaries = new Map<string, Map<string, string>>();
   for (const locale of LOCALES) {
-    const raw = JSON.parse(readFileSync(join(ROOT, 'i18n', `${locale}.json`), 'utf8')) as Dictionary;
+    const raw = JSON.parse(
+      readFileSync(join(ROOT, 'i18n', `${locale}.json`), 'utf8')
+    ) as Dictionary;
     dictionaries.set(locale, flatten(raw));
   }
 
