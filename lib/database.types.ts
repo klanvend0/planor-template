@@ -155,6 +155,9 @@ export interface Database {
           course_id: CourseIdColumn;
           question_count: number;
           base_xp: number;
+          /** How much of the lesson only subscribers are shown. */
+          premium_question_count: number;
+          premium_xp: number;
           updated_at: string;
         };
         Insert: never;
