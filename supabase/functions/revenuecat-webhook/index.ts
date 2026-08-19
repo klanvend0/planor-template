@@ -250,8 +250,15 @@ Deno.serve(async (request: Request) => {
     : new Date().toISOString();
   const eventType = (event.type ?? '').toUpperCase();
 
-  // A transfer moves the entitlement between accounts and carries no state, so
-  // the losing ids are revoked and the winning id is re-read from the API.
+  // A transfer moves the entitlement between accounts and carries no state of
+  // its own, so the winning id has to be granted from somewhere else and the
+  // losing ids revoked.
+  //
+  // Order matters more than anything else here. Revoking first and granting
+  // second means any failure in between leaves the paying customer with access
+  // on neither account, silently, because a 200 stops RevenueCat retrying. So
+  // the grant is committed first: the worst case becomes a customer briefly
+  // entitled on both accounts, which `current_period_end` ends on its own.
   if (eventType === 'TRANSFER') {
     const from = (event.transferred_from ?? []).filter((id) => UUID_PATTERN.test(id));
     const to = (event.transferred_to ?? []).filter((id) => UUID_PATTERN.test(id));
@@ -263,8 +270,84 @@ Deno.serve(async (request: Request) => {
       if (!decision.apply) return json({ ok: true, ignored: decision.reason });
     }
 
-    if (from.length > 0) {
-      await client
+    // What is being moved. The REST API is the better source when a key is
+    // configured, but the mirror already holds the subscription being
+    // transferred, so a missing key is not a reason to strand anyone.
+    const { data: sourceRows } = await client
+      .from('subscriptions')
+      .select(
+        'product_id, store, status, period_type, current_period_end, trial_end, will_renew, environment'
+      )
+      .in('user_id', from.length > 0 ? from : ['00000000-0000-0000-0000-000000000000'])
+      .order('updated_at', { ascending: false })
+      .limit(1);
+    const source = sourceRows?.[0] ?? null;
+
+    let granted = 0;
+    for (const userId of to) {
+      const state = await fetchSubscriberState(userId);
+
+      const row = state
+        ? {
+            product_id: state.productId,
+            store: source?.store ?? null,
+            status: state.status,
+            period_type: state.periodType,
+            current_period_end: state.expiresAt,
+            trial_end: state.periodType === 'trial' ? state.expiresAt : null,
+            will_renew: state.status === 'active' || state.status === 'trialing',
+            environment: event.environment ?? source?.environment ?? null,
+          }
+        : source
+          ? {
+              product_id: source.product_id,
+              store: source.store,
+              status: source.status,
+              period_type: source.period_type,
+              current_period_end: source.current_period_end,
+              trial_end: source.trial_end,
+              will_renew: source.will_renew,
+              environment: event.environment ?? source.environment,
+            }
+          : null;
+
+      if (!row) {
+        // Neither the API nor the mirror can say what this account should own.
+        // Granting nothing and revoking nothing leaves the customer with access
+        // on the account that already had it, which is the safe side.
+        console.error(
+          '[revenuecat-webhook] transfer target unresolvable; both accounts left as they were',
+          { event: event.id, to: userId }
+        );
+        return json({ ok: true, ignored: 'transfer_unresolvable' });
+      }
+
+      const { error: grantError } = await client.from('subscriptions').upsert(
+        {
+          user_id: userId,
+          rc_app_user_id: userId,
+          entitlement: ENTITLEMENT,
+          ...row,
+          rc_event_id: event.id ?? null,
+          last_event_at: eventAt,
+          updated_at: new Date().toISOString(),
+          raw_event: event as unknown as Record<string, unknown>,
+        },
+        { onConflict: 'user_id' }
+      );
+
+      if (grantError) {
+        // A deleted account cannot be granted anything; every other failure is
+        // worth a retry, and must not revoke the source in the meantime.
+        if (grantError.code === '23503') continue;
+        console.error('[revenuecat-webhook] transfer grant failed', grantError);
+        return json({ error: 'persist_failed' }, 500);
+      }
+      granted += 1;
+    }
+
+    if (from.length > 0 && (granted > 0 || to.length === 0)) {
+      const { error: revokeError } = await client
         .from('subscriptions')
         .update({
           status: 'expired',
@@ -274,35 +357,14 @@ Deno.serve(async (request: Request) => {
           updated_at: new Date().toISOString(),
         })
         .in('user_id', from);
-    }
 
-    for (const userId of to) {
-      const state = await fetchSubscriberState(userId);
-      if (!state) {
-        console.warn('[revenuecat-webhook] transfer target left untouched (no API key)', userId);
-        continue;
+      if (revokeError) {
+        console.error('[revenuecat-webhook] transfer revoke failed', revokeError);
+        return json({ error: 'persist_failed' }, 500);
       }
-      await client.from('subscriptions').upsert(
-        {
-          user_id: userId,
-          rc_app_user_id: userId,
-          entitlement: ENTITLEMENT,
-          product_id: state.productId,
-          status: state.status,
-          period_type: state.periodType,
-          current_period_end: state.expiresAt,
-          will_renew: state.status === 'active' || state.status === 'trialing',
-          environment: event.environment ?? null,
-          rc_event_id: event.id ?? null,
-          last_event_at: eventAt,
-          updated_at: new Date().toISOString(),
-          raw_event: event as unknown as Record<string, unknown>,
-        },
-        { onConflict: 'user_id' }
-      );
     }
 
-    return json({ ok: true, handled: 'transfer', from: from.length, to: to.length });
+    return json({ ok: true, handled: 'transfer', from: from.length, to: granted });
   }
 
   const status = statusForEvent(event);

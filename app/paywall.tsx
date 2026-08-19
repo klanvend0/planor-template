@@ -180,11 +180,29 @@ export default function PaywallScreen() {
   }, [packages, selectedId]);
 
   const selected = packages.find((pkg) => pkg.identifier === selectedId) ?? packages[0] ?? null;
-  const eligibleForTrial = selected
-    ? (trialEligibility[selected.product.identifier] ?? false) ||
-      packageTrialDays(selected) !== null
-    : false;
-  const trialDays = selected ? (packageTrialDays(selected) ?? TRIAL_DAYS) : TRIAL_DAYS;
+
+  // Two conditions, both required, because each catches a different way of
+  // promising a trial that will not happen:
+  //
+  //  - the store has to report a free introductory phase on this product, which
+  //    rules out a *paid* introductory offer (iOS reports those as "eligible"
+  //    too, and quoting free days for them is the same misrepresentation);
+  //  - on iOS the offer also has to still be available to this Apple ID, since
+  //    Apple grants one per subscription group and `introPrice` is product
+  //    metadata that says nothing about who has already used it.
+  //
+  // Android is left to the product's own free phase: Play filters offers by
+  // eligibility before returning them, and `checkTrialEligibility` reports
+  // nothing there.
+  const storeTrialDays = selected ? packageTrialDays(selected) : null;
+  const eligibleForTrial =
+    selected !== null &&
+    storeTrialDays !== null &&
+    (Platform.OS !== 'ios' || (trialEligibility[selected.product.identifier] ?? false));
+  // Only ever rendered under `eligibleForTrial`, where the store's own number
+  // exists; the fallback is there so the type does not need a non-null
+  // assertion.
+  const trialDays = storeTrialDays ?? TRIAL_DAYS;
 
   const close = () => router.back();
 
