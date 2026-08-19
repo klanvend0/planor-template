@@ -15,8 +15,11 @@
  *  - no rounded corners baked in — the system applies the squircle;
  *  - separate light, dark and tinted variants (the tinted one is grayscale).
  *
- * The mark's optical centre is exactly (512, 512) and its furthest corner sits
- * 266px out, so it survives every mask — squircle, circle, or watch.
+ * The mark is drawn alone, without a frame around it: iOS already draws the
+ * squircle, and a second border inside it costs a third of the canvas and turns
+ * to mush at 40px. Its optical centre is exactly (512, 512) and its furthest
+ * corner sits 385px out, so it survives every mask — squircle, circle or
+ * watch — while still filling enough of the icon to read on a home screen.
  *
  * @module scripts/build_icons
  */
@@ -32,14 +35,10 @@ const OUT = join(ROOT, 'assets', 'images');
 type Variant = {
   /** Cabinet gradient stops; null renders the mark on transparency. */
   ground: [string, string] | null;
-  /** Screen bezel, dropped on the flat variants. */
-  bezel: { fill: string; outer: string; inner: string } | null;
   bar: string;
   caret: string;
   /** Phosphor bloom behind the mark. */
   glow: boolean;
-  /** CRT scanlines and registration marks. */
-  detail: boolean;
   /** Scale applied to the mark, for masks that crop (Android adaptive). */
   scale: number;
 };
@@ -48,52 +47,42 @@ const VARIANTS: Record<string, Variant> = {
   // The default icon: lit screen in a machined cabinet.
   primary: {
     ground: ['#0E1A21', '#060F14'],
-    bezel: { fill: '#070E12', outer: '#426F80', inner: '#0E2730' },
     bar: '#22F1A5',
     caret: '#2FD7F9',
     glow: true,
-    detail: true,
-    scale: 1,
+    scale: 1.45,
   },
   // iOS dark variant: same geometry, flattened ground, no bloom.
   dark: {
     ground: ['#0B141A', '#0B141A'],
-    bezel: { fill: '#070E12', outer: '#2C4C59', inner: '#0E2730' },
     bar: '#FFFFFF',
     caret: '#FFFFFF',
     glow: false,
-    detail: false,
-    scale: 1,
+    scale: 1.45,
   },
   // iOS tinted: Apple applies the colour, so the artwork is grayscale.
   tinted: {
     ground: ['#101010', '#101010'],
-    bezel: { fill: '#0A0A0A', outer: '#5A5A5A', inner: '#1C1C1C' },
     bar: '#FFFFFF',
     caret: '#D6D6D6',
     glow: false,
-    detail: false,
-    scale: 1,
+    scale: 1.45,
   },
   // Android adaptive foreground: the launcher supplies the background.
   adaptive: {
     ground: null,
-    bezel: null,
     bar: '#22F1A5',
     caret: '#2FD7F9',
     glow: true,
-    detail: false,
-    scale: 0.62,
+    scale: 1.15,
   },
   // Splash: the mark alone, over the plugin's background colour.
   splash: {
     ground: null,
-    bezel: null,
     bar: '#22F1A5',
     caret: '#2FD7F9',
     glow: false,
-    detail: false,
-    scale: 0.78,
+    scale: 1.1,
   },
 };
 
@@ -103,7 +92,7 @@ const SIZE = 1024;
  * Draw the icon.
  *
  * Coordinates come straight from the design spec, so the layers stay readable
- * against it: ground, bezel, glow, mark, CRT detail.
+ * against it: ground, glow, mark.
  */
 function icon(variant: Variant): string {
   const { scale } = variant;
@@ -118,24 +107,6 @@ function icon(variant: Variant): string {
       <rect x="368" y="526" width="252" height="96" rx="12" fill="${variant.bar}"/>
       <rect x="644" y="514" width="104" height="120" rx="8" fill="${variant.caret}"/>
     </g>`
-    : '';
-
-  const bezel = variant.bezel
-    ? `
-  <rect x="176" y="176" width="672" height="672" rx="104" fill="${variant.bezel.fill}"
-        stroke="${variant.bezel.outer}" stroke-width="10"/>
-  <rect x="190" y="190" width="644" height="644" rx="92" fill="none"
-        stroke="${variant.bezel.inner}" stroke-width="3"/>`
-    : '';
-
-  const detail = variant.detail
-    ? `
-  <rect x="200" y="286" width="624" height="18" fill="#FFFFFF" opacity="0.025"/>
-  <rect x="200" y="712" width="624" height="18" fill="#FFFFFF" opacity="0.025"/>
-  <rect x="242" y="242" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
-  <rect x="762" y="242" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
-  <rect x="242" y="762" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>
-  <rect x="762" y="762" width="20" height="20" fill="${variant.caret}" opacity="0.55"/>`
     : '';
 
   const ground = variant.ground
@@ -153,7 +124,7 @@ function icon(variant: Variant): string {
     </filter>
   </defs>
 
-  ${ground}${bezel}
+  ${ground}
 
   <g transform="translate(${translate} ${translate}) scale(${scale})">
     ${glow}
@@ -166,7 +137,6 @@ function icon(variant: Variant): string {
     <!-- the cursor, waiting -->
     <rect x="644" y="514" width="104" height="120" rx="8" fill="${variant.caret}"/>
   </g>
-  ${detail}
 </svg>`;
 }
 
