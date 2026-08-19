@@ -378,7 +378,6 @@ export async function fetchProfile(): Promise<Profile | null> {
   return {
     id: document.user.id,
     displayName: document.profile.displayName,
-    avatarUrl: null,
     locale: document.profile.locale,
     activeCourse: document.profile.activeCourse,
     dailyGoalXp: document.profile.dailyGoalXp,

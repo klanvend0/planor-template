@@ -152,7 +152,6 @@ export default function PaywallScreen() {
     isLoadingOffering,
     isPurchasing,
     isRestoring,
-    storeAvailable,
     loadOffering,
     buy,
     restore,
@@ -315,8 +314,10 @@ export default function PaywallScreen() {
           </View>
         ) : packages.length === 0 ? (
           <View className="gap-2 rounded-2xl border-2 border-border bg-card px-4 py-5">
+            {/* An empty offering has no signal saying whether the key is
+                missing or the network is: both read as the store being out. */}
             <Text className="text-center text-[15px] text-muted-foreground">
-              {storeAvailable ? t('paywall.unavailable') : t('errors.network')}
+              {t('paywall.unavailable')}
             </Text>
           </View>
         ) : (

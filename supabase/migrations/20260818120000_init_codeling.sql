@@ -32,7 +32,6 @@ set check_function_bodies = off;
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   display_name text,
-  avatar_url text,
   locale text not null default 'en' check (locale in ('en', 'tr')),
   active_course text not null default 'python' check (active_course in ('python', 'javascript')),
   daily_goal_xp integer not null default 50 check (daily_goal_xp in (20, 50, 100, 200)),
@@ -303,11 +302,13 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, display_name, avatar_url)
+  -- The provider also hands over an avatar URL. It is not copied here: nothing
+  -- in the app shows one, and data that is never used is data that only has to
+  -- be declared, stored and deleted.
+  insert into public.profiles (id, display_name)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name'),
-    new.raw_user_meta_data ->> 'avatar_url'
+    coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name')
   )
   on conflict (id) do nothing;
 

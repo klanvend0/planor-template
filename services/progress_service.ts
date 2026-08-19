@@ -45,7 +45,6 @@ export type LessonProgress = {
 export type Profile = {
   id: string;
   displayName: string | null;
-  avatarUrl: string | null;
   locale: SupportedLocale;
   activeCourse: CourseId;
   dailyGoalXp: number;
@@ -292,7 +291,6 @@ export async function fetchProfile(userId: string): Promise<Profile | null> {
   return {
     id: data.id,
     displayName: data.display_name,
-    avatarUrl: data.avatar_url,
     locale: data.locale,
     activeCourse: data.active_course,
     dailyGoalXp: data.daily_goal_xp,

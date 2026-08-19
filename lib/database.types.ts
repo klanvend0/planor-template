@@ -25,7 +25,6 @@ export interface Database {
         Row: {
           id: string;
           display_name: string | null;
-          avatar_url: string | null;
           locale: LocaleColumn;
           active_course: CourseIdColumn;
           daily_goal_xp: number;
@@ -38,7 +37,6 @@ export interface Database {
         Insert: {
           id: string;
           display_name?: string | null;
-          avatar_url?: string | null;
           locale?: LocaleColumn;
           active_course?: CourseIdColumn;
           daily_goal_xp?: number;
@@ -48,7 +46,6 @@ export interface Database {
         };
         Update: {
           display_name?: string | null;
-          avatar_url?: string | null;
           locale?: LocaleColumn;
           active_course?: CourseIdColumn;
           daily_goal_xp?: number;
