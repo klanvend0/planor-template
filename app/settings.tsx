@@ -52,12 +52,20 @@ function Row({
   label,
   value,
   onPress,
+  hint,
   destructive = false,
   right,
   last = false,
 }: {
   label: string;
+  /** A short token — "English", "07:00". Anything longer belongs in `hint`. */
   value?: string;
+  /**
+   * A sentence under the label. It lives in the label's column, where it can
+   * wrap: a long string passed as `value` would be laid out at its full width,
+   * squeeze the label to nothing and push the switch out of the card.
+   */
+  hint?: string;
   onPress?: () => void;
   destructive?: boolean;
   right?: React.ReactNode;
@@ -69,11 +77,13 @@ function Row({
         'min-h-[52px] flex-row items-center justify-between gap-3 px-4 py-3',
         !last && 'border-b border-border'
       )}>
-      <Text
-        className={cn('flex-1 text-[16px]', destructive ? 'text-destructive' : 'text-foreground')}>
-        {label}
-      </Text>
-      {value ? <Text className="text-[15px] text-muted-foreground">{value}</Text> : null}
+      <View className="flex-1 gap-0.5">
+        <Text className={cn('text-[16px]', destructive ? 'text-destructive' : 'text-foreground')}>
+          {label}
+        </Text>
+        {hint ? <Text className="text-[13px] text-muted-foreground">{hint}</Text> : null}
+      </View>
+      {value ? <Text className="shrink-0 text-[15px] text-muted-foreground">{value}</Text> : null}
       {right ??
         (onPress ? <Icon as={ChevronRight} size={18} className="text-muted-foreground" /> : null)}
     </View>
@@ -341,7 +351,7 @@ export default function SettingsScreen() {
             // separate fact, said next to it rather than folded into the switch
             // — a switch that renders off can only ever emit "on", which would
             // strand the preference permanently once permission was revoked.
-            value={remindersBlocked ? t('settings.reminders_blocked') : undefined}
+            hint={remindersBlocked ? t('settings.reminders_denied') : undefined}
             right={
               <Switch
                 value={settings.remindersEnabled}
