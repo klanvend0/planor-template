@@ -153,7 +153,7 @@ export default function LoginScreen() {
         )}
 
         <Text className="px-2 pt-2 text-center text-xs leading-5 text-muted-foreground">
-          {USES_LOCAL_BACKEND ? t('auth.local_notice') : t('auth.terms_notice')}
+          {t('auth.terms_notice')}
         </Text>
 
         <View className="flex-row items-center justify-center gap-6 pt-1">

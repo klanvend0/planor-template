@@ -15,7 +15,7 @@
  * @module services/local/backend
  */
 
-import type { CourseId } from '@/lib/content_schema';
+import { XP_BY_DIFFICULTY, type CourseId } from '@/lib/content_schema';
 import { MAX_HEARTS, starsForScore } from '@/lib/gamification';
 import type { SupportedLocale } from '@/lib/i18n';
 import { PASS_SCORE } from '@/lib/constants';
@@ -202,8 +202,19 @@ export async function completeLesson(
     // would bank a 100% and a first completion for a lesson nobody played.
     const lesson = getLesson(params.lessonId);
     if (!lesson) throw new Error(`unknown lesson: ${params.lessonId}`);
-    const questions = lesson.questions.length;
-    const baseXp = getLessonBaseXp(lesson);
+
+    // A free learner is never shown the AI-graded question, so scoring them
+    // against the whole lesson would cap every run they can play below a third
+    // star. They are scored, and paid, over the part they were allowed to play.
+    const premium = isSubscribed(current, now)
+      ? []
+      : lesson.questions.filter((question) => question.type === 'explain_code');
+    const questions = Math.max(1, lesson.questions.length - premium.length);
+    const baseXp = Math.max(
+      0,
+      getLessonBaseXp(lesson) -
+        premium.reduce((sum, question) => sum + XP_BY_DIFFICULTY[question.difficulty], 0)
+    );
 
     const score = scoreFor(params.correct, questions);
     const previous = current.lessons[params.lessonId];

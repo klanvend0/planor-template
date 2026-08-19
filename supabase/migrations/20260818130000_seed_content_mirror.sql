@@ -4,405 +4,519 @@
 -- is worth, and the grading rubric of every explain_code question.
 
 insert into public.lesson_catalog
-  (lesson_id, unit_id, course_id, question_count, base_xp)
+  (lesson_id, unit_id, course_id, question_count, base_xp, premium_question_count, premium_xp)
 values
   (
     $q$py-u01-l1$q$,
     $q$py-u01$q$,
     $q$python$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$py-u01-l2$q$,
     $q$py-u01$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u01-l3$q$,
     $q$py-u01$q$,
     $q$python$q$,
     6,
-    105
+    105,
+    1,
+    25
   ),
   (
     $q$py-u01-l4$q$,
     $q$py-u01$q$,
     $q$python$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$py-u02-l1$q$,
     $q$py-u02$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u02-l2$q$,
     $q$py-u02$q$,
     $q$python$q$,
     6,
-    80
+    80,
+    1,
+    15
   ),
   (
     $q$py-u02-l3$q$,
     $q$py-u02$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u02-l4$q$,
     $q$py-u02$q$,
     $q$python$q$,
     6,
-    100
+    100,
+    1,
+    25
   ),
   (
     $q$py-u03-l1$q$,
     $q$py-u03$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u03-l2$q$,
     $q$py-u03$q$,
     $q$python$q$,
     6,
-    80
+    80,
+    1,
+    15
   ),
   (
     $q$py-u03-l3$q$,
     $q$py-u03$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u03-l4$q$,
     $q$py-u03$q$,
     $q$python$q$,
     6,
-    105
+    105,
+    1,
+    25
   ),
   (
     $q$py-u04-l1$q$,
     $q$py-u04$q$,
     $q$python$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$py-u04-l2$q$,
     $q$py-u04$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u04-l3$q$,
     $q$py-u04$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u04-l4$q$,
     $q$py-u04$q$,
     $q$python$q$,
     6,
-    105
+    105,
+    1,
+    25
   ),
   (
     $q$py-u05-l1$q$,
     $q$py-u05$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u05-l2$q$,
     $q$py-u05$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u05-l3$q$,
     $q$py-u05$q$,
     $q$python$q$,
     6,
-    85
+    85,
+    1,
+    15
   ),
   (
     $q$py-u05-l4$q$,
     $q$py-u05$q$,
     $q$python$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$py-u06-l1$q$,
     $q$py-u06$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u06-l2$q$,
     $q$py-u06$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u06-l3$q$,
     $q$py-u06$q$,
     $q$python$q$,
     6,
-    85
+    85,
+    1,
+    15
   ),
   (
     $q$py-u06-l4$q$,
     $q$py-u06$q$,
     $q$python$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$py-u07-l1$q$,
     $q$py-u07$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u07-l2$q$,
     $q$py-u07$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u07-l3$q$,
     $q$py-u07$q$,
     $q$python$q$,
     6,
-    100
+    100,
+    1,
+    25
   ),
   (
     $q$py-u07-l4$q$,
     $q$py-u07$q$,
     $q$python$q$,
     6,
-    110
+    110,
+    1,
+    25
   ),
   (
     $q$py-u08-l1$q$,
     $q$py-u08$q$,
     $q$python$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$py-u08-l2$q$,
     $q$py-u08$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u08-l3$q$,
     $q$py-u08$q$,
     $q$python$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$py-u08-l4$q$,
     $q$py-u08$q$,
     $q$python$q$,
     6,
-    130
+    130,
+    1,
+    25
   ),
   (
     $q$js-u01-l1$q$,
     $q$js-u01$q$,
     $q$javascript$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$js-u01-l2$q$,
     $q$js-u01$q$,
     $q$javascript$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$js-u01-l3$q$,
     $q$js-u01$q$,
     $q$javascript$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$js-u01-l4$q$,
     $q$js-u01$q$,
     $q$javascript$q$,
     6,
-    115
+    115,
+    1,
+    25
   ),
   (
     $q$js-u02-l1$q$,
     $q$js-u02$q$,
     $q$javascript$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$js-u02-l2$q$,
     $q$js-u02$q$,
     $q$javascript$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$js-u02-l3$q$,
     $q$js-u02$q$,
     $q$javascript$q$,
     6,
-    85
+    85,
+    1,
+    25
   ),
   (
     $q$js-u02-l4$q$,
     $q$js-u02$q$,
     $q$javascript$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$js-u03-l1$q$,
     $q$js-u03$q$,
     $q$javascript$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$js-u03-l2$q$,
     $q$js-u03$q$,
     $q$javascript$q$,
     6,
-    80
+    80,
+    1,
+    15
   ),
   (
     $q$js-u03-l3$q$,
     $q$js-u03$q$,
     $q$javascript$q$,
     6,
-    105
+    105,
+    1,
+    25
   ),
   (
     $q$js-u03-l4$q$,
     $q$js-u03$q$,
     $q$javascript$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$js-u04-l1$q$,
     $q$js-u04$q$,
     $q$javascript$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$js-u04-l2$q$,
     $q$js-u04$q$,
     $q$javascript$q$,
     6,
-    80
+    80,
+    1,
+    15
   ),
   (
     $q$js-u04-l3$q$,
     $q$js-u04$q$,
     $q$javascript$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$js-u04-l4$q$,
     $q$js-u04$q$,
     $q$javascript$q$,
     6,
-    120
+    120,
+    1,
+    25
   ),
   (
     $q$js-u05-l1$q$,
     $q$js-u05$q$,
     $q$javascript$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$js-u05-l2$q$,
     $q$js-u05$q$,
     $q$javascript$q$,
     6,
-    75
+    75,
+    1,
+    15
   ),
   (
     $q$js-u05-l3$q$,
     $q$js-u05$q$,
     $q$javascript$q$,
     6,
-    95
+    95,
+    1,
+    25
   ),
   (
     $q$js-u05-l4$q$,
     $q$js-u05$q$,
     $q$javascript$q$,
     6,
-    110
+    110,
+    1,
+    25
   ),
   (
     $q$js-u06-l1$q$,
     $q$js-u06$q$,
     $q$javascript$q$,
     6,
-    70
+    70,
+    1,
+    15
   ),
   (
     $q$js-u06-l2$q$,
     $q$js-u06$q$,
     $q$javascript$q$,
     6,
-    90
+    90,
+    1,
+    25
   ),
   (
     $q$js-u06-l3$q$,
     $q$js-u06$q$,
     $q$javascript$q$,
     6,
-    90
+    90,
+    1,
+    25
   ),
   (
     $q$js-u06-l4$q$,
     $q$js-u06$q$,
     $q$javascript$q$,
     6,
-    120
+    120,
+    1,
+    25
   )
 on conflict (lesson_id) do update set
   unit_id = excluded.unit_id,
   course_id = excluded.course_id,
   question_count = excluded.question_count,
   base_xp = excluded.base_xp,
+  premium_question_count = excluded.premium_question_count,
+  premium_xp = excluded.premium_xp,
   updated_at = now();
 
 delete from public.lesson_catalog

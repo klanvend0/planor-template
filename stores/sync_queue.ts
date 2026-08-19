@@ -172,6 +172,10 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
     {
       name: 'codeling.sync_queue',
       storage: createJSONStorage(() => AsyncStorage),
+      // Deliberately no `migrate`: a queued payload whose shape has changed
+      // cannot be replayed safely, and dropping an old backlog costs at most a
+      // few unsynced answers. Settings do have one — losing those is not the
+      // same trade.
       version: 1,
       partialize: ({ entries, ownerId }) => ({ entries, ownerId }),
     }

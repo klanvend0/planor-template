@@ -193,6 +193,12 @@ create table if not exists public.lesson_catalog (
   course_id text not null check (course_id in ('python', 'javascript')),
   question_count smallint not null check (question_count between 1 and 20),
   base_xp integer not null check (base_xp between 1 and 500),
+  -- The share of the lesson only subscribers can answer. A free learner is
+  -- never shown those questions, so scoring them against the full lesson would
+  -- cap every run they can play at 83% — no third star, no perfect bonus, ever.
+  premium_question_count smallint not null default 0
+    check (premium_question_count between 0 and 20),
+  premium_xp integer not null default 0 check (premium_xp between 0 and 500),
   updated_at timestamptz not null default now()
 );
 
@@ -558,8 +564,16 @@ begin
   select * into v_catalog from public.lesson_catalog where lesson_id = p_lesson_id;
 
   if found then
-    v_questions := v_catalog.question_count;
-    v_base_xp := v_catalog.base_xp;
+    -- Score a free learner over the questions they were allowed to answer, and
+    -- pay for that share of the lesson. A subscriber who skips the premium
+    -- question is scored over all of it, because they could have answered it.
+    if public.has_active_subscription(v_user) then
+      v_questions := v_catalog.question_count;
+      v_base_xp := v_catalog.base_xp;
+    else
+      v_questions := greatest(1, v_catalog.question_count - v_catalog.premium_question_count);
+      v_base_xp := greatest(0, v_catalog.base_xp - v_catalog.premium_xp);
+    end if;
   else
     -- The catalog has not been seeded (fresh project, or content newer than the
     -- last `npm run content:seed`). Fall back to the client's numbers, clamped

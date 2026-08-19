@@ -6,6 +6,7 @@
  * bundled content, one learner, one device, over several days.
  */
 
+import { XP_BY_DIFFICULTY } from '@/lib/content_schema';
 import { MAX_HEARTS } from '@/lib/gamification';
 import { getLesson, getLessonBaseXp } from '@/services/content_service';
 import * as backend from '@/services/local/backend';
@@ -14,8 +15,15 @@ import { resetDocument } from '@/services/local/document';
 const LESSON = 'py-u01-l1';
 const UNIT = 'py-u01';
 const lesson = getLesson(LESSON)!;
-const QUESTIONS = lesson.questions.length;
-const BASE_XP = getLessonBaseXp(lesson);
+
+// A free learner never sees the AI-graded question, so the lesson they play is
+// the rest of it — which is what they are scored and paid over.
+const PREMIUM = lesson.questions.filter((question) => question.type === 'explain_code');
+const PREMIUM_XP = PREMIUM.reduce((sum, q) => sum + XP_BY_DIFFICULTY[q.difficulty], 0);
+const QUESTIONS = lesson.questions.length - PREMIUM.length;
+const BASE_XP = getLessonBaseXp(lesson) - PREMIUM_XP;
+const FULL_QUESTIONS = lesson.questions.length;
+const FULL_BASE_XP = getLessonBaseXp(lesson);
 
 const DAY = 86_400_000;
 const NOW = Date.parse('2026-08-19T12:00:00Z');
@@ -45,7 +53,7 @@ beforeEach(async () => {
 });
 
 describe('lessons', () => {
-  it('pays the bundled lesson, not what the caller claims', async () => {
+  it('pays the part of the lesson a free learner can play, not what the caller claims', async () => {
     const result = await finish(QUESTIONS);
 
     expect(result.score).toBe(100);
@@ -236,6 +244,31 @@ describe('subscription', () => {
 
     expect((await backend.fetchGameState(NOW)).hasSubscription).toBe(true);
     expect((await backend.fetchGameState(NOW + 2 * DAY)).hasSubscription).toBe(false);
+  });
+
+  it('scores a subscriber over the whole lesson, premium question included', async () => {
+    await backend.grantSubscription({
+      productId: 'local.annual',
+      expiresAt: new Date(NOW + DAY).toISOString(),
+      isTrial: false,
+      willRenew: true,
+    });
+
+    const result = await finish(FULL_QUESTIONS);
+    expect(result.score).toBe(100);
+    expect(result.xpAwarded).toBe(FULL_BASE_XP + 10);
+
+    // The same run without the premium answer is no longer a perfect one for
+    // them: they could have answered it.
+    await backend.deleteAccount();
+    await backend.signIn();
+    await backend.grantSubscription({
+      productId: 'local.annual',
+      expiresAt: new Date(NOW + DAY).toISOString(),
+      isTrial: false,
+      willRenew: true,
+    });
+    expect((await finish(QUESTIONS)).score).toBeLessThan(100);
   });
 
   it('stops hearts being spent while it is open', async () => {

@@ -20,7 +20,7 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-import { lessonXp, unitSchema, type Unit } from '../lib/content_schema.ts';
+import { lessonXp, unitSchema, XP_BY_DIFFICULTY, type Unit } from '../lib/content_schema.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const CONTENT_DIR = join(ROOT, 'content');
@@ -64,6 +64,9 @@ function main(): void {
 
   for (const unit of units) {
     for (const lesson of unit.lessons) {
+      // Premium questions are counted separately so `complete_lesson` can score
+      // a free learner over the part of the lesson they can actually play.
+      const premium = lesson.questions.filter((question) => question.type === 'explain_code');
       catalog.push(
         [
           '  (',
@@ -71,7 +74,9 @@ function main(): void {
           `    ${literal(unit.id)},`,
           `    ${literal(unit.courseId)},`,
           `    ${lesson.questions.length},`,
-          `    ${lessonXp(lesson)}`,
+          `    ${lessonXp(lesson)},`,
+          `    ${premium.length},`,
+          `    ${premium.reduce((sum, question) => sum + XP_BY_DIFFICULTY[question.difficulty], 0)}`,
           '  )',
         ].join('\n')
       );
@@ -111,7 +116,7 @@ function main(): void {
     '-- is worth, and the grading rubric of every explain_code question.',
     '',
     'insert into public.lesson_catalog',
-    '  (lesson_id, unit_id, course_id, question_count, base_xp)',
+    '  (lesson_id, unit_id, course_id, question_count, base_xp, premium_question_count, premium_xp)',
     'values',
     `${catalog.join(',\n')}`,
     'on conflict (lesson_id) do update set',
@@ -119,6 +124,8 @@ function main(): void {
     '  course_id = excluded.course_id,',
     '  question_count = excluded.question_count,',
     '  base_xp = excluded.base_xp,',
+    '  premium_question_count = excluded.premium_question_count,',
+    '  premium_xp = excluded.premium_xp,',
     '  updated_at = now();',
     '',
     'delete from public.lesson_catalog',

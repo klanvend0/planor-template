@@ -96,6 +96,15 @@ export const useSettingsStore = create<SettingsState & SettingsActions>()(
       name: 'codeling.settings',
       storage: createJSONStorage(() => AsyncStorage),
       version: 1,
+      // Without this, bumping the version above throws every learner's
+      // preferences away — locale, course, daily goal and the fact that they
+      // finished onboarding — and drops them back at the first slide. Merging
+      // onto the current defaults keeps whatever an older build stored and
+      // fills in whatever it did not know about.
+      migrate: (persisted) => ({
+        ...initialState,
+        ...(persisted && typeof persisted === 'object' ? persisted : {}),
+      }),
       partialize: ({ hydrated: _hydrated, ...rest }) => rest,
       onRehydrateStorage: () => (state) => {
         // Push the restored locale into i18n before the first screen renders.

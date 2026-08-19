@@ -127,6 +127,13 @@ export function emptyDocument(now: number = Date.now()): LocalDocument {
 let cached: LocalDocument | null = null;
 let loading: Promise<LocalDocument> | null = null;
 let writing: Promise<void> = Promise.resolve();
+/**
+ * Set when storage could not be *read*, which is different from storage being
+ * empty. While it is set nothing may be written: this document is the only copy
+ * of the learner's progress, and persisting a blank stand-in over a save that
+ * is merely unreadable right now would destroy it for good.
+ */
+let readFailed = false;
 
 /**
  * Read the document, hydrating from storage the first time.
@@ -140,19 +147,32 @@ export async function readDocument(): Promise<LocalDocument> {
   if (loading) return loading;
 
   loading = (async () => {
+    let raw: string | null = null;
     try {
-      const raw = await AsyncStorage.getItem(STORAGE_KEY);
+      raw = await AsyncStorage.getItem(STORAGE_KEY);
+      readFailed = false;
+    } catch {
+      // The read failed, not the data. Hand back a stand-in without caching it,
+      // so the next call tries again rather than latching onto the blank.
+      readFailed = true;
+      loading = null;
+      return emptyDocument();
+    }
+
+    try {
       const parsed = raw ? (JSON.parse(raw) as Partial<LocalDocument>) : null;
-      // A document from a future version, or a corrupted one, is discarded
-      // rather than half-read: losing local progress is better than a crash
-      // loop on every launch.
+      // A document from a future version, or a corrupted one, is set aside
+      // rather than half-read: a crash loop on every launch is worse, and the
+      // bytes are kept under one fixed key so they can still be looked at.
+      if (raw && !parsed) await AsyncStorage.setItem(`${STORAGE_KEY}.unreadable`, raw);
       cached = parsed?.version === 1 ? { ...emptyDocument(), ...parsed } : emptyDocument();
     } catch {
+      if (raw) await AsyncStorage.setItem(`${STORAGE_KEY}.unreadable`, raw).catch(() => {});
       cached = emptyDocument();
     } finally {
       loading = null;
     }
-    return cached;
+    return cached!;
   })();
 
   return loading;
@@ -176,6 +196,11 @@ export async function mutateDocument<T>(
   try {
     await previous;
     const document = await readDocument();
+    if (readFailed) {
+      // Writing now would put an empty document over a save that is only
+      // temporarily unreadable.
+      throw new Error('local storage is unreadable; refusing to write over it');
+    }
     const result = change(document);
 
     document.attempts = document.attempts.slice(-MAX_ATTEMPTS);
@@ -193,5 +218,6 @@ export async function mutateDocument<T>(
 export async function resetDocument(): Promise<void> {
   await writing;
   cached = emptyDocument();
+  readFailed = false;
   await AsyncStorage.removeItem(STORAGE_KEY);
 }
