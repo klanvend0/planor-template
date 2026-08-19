@@ -150,7 +150,12 @@ function words(text: string, locale: SupportedLocale): string[] {
   return fold(text, locale)
     .replace(/[^\p{L}\p{N}_]+/gu, ' ')
     .split(/\s+/)
-    .filter((word) => word.length > 1 && !STOPWORDS.has(word));
+    .filter((word) => {
+      if (STOPWORDS.has(word)) return false;
+      // Single characters are noise — except digits, which are usually the
+      // whole point: "prints 6" and "prints 9" are different claims.
+      return word.length > 1 || /\d/.test(word);
+    });
 }
 
 /**
@@ -163,25 +168,35 @@ function words(text: string, locale: SupportedLocale): string[] {
 function sameWord(a: string, b: string): boolean {
   if (a === b) return true;
 
-  // Compare stems rather than whole words: Turkish inflects heavily
-  // ("oluşturur" / "oluşturuyor"), and four shared leading characters is short
-  // enough to catch that while long enough that "değer" and "değişken" stay
-  // different words.
+  // A number or an identifier is a name, not an inflected word: 6 and 9,
+  // is_active and is_admin, temps and temp are each two different things, and
+  // stemming them together would credit an answer that named the wrong one.
+  if (/\d/.test(a) || /\d/.test(b) || a.includes('_') || b.includes('_')) return false;
+
+  // Otherwise compare stems: Turkish inflects heavily ("oluşturur" /
+  // "oluşturuyor"). Four shared leading characters catches that, and requiring
+  // them to be most of the longer word stops "değer" matching "değişken".
   const limit = Math.min(a.length, b.length);
   let shared = 0;
   while (shared < limit && a[shared] === b[shared]) shared += 1;
-  return shared >= 4;
+  return shared >= 4 && shared / Math.max(a.length, b.length) >= 0.6;
 }
 
 function isCovered(point: string, answerWords: string[], locale: SupportedLocale): boolean {
   const needed = words(point, locale);
   if (needed.length === 0) return false;
 
-  const hits = needed.filter((word) => answerWords.some((said) => sameWord(word, said))).length;
-  // A third of the point's own words. Half was too strict against the bundle's
-  // own model answers, which say the same thing in different words; a third
-  // still needs the learner to have named something specific about it.
-  return hits / needed.length >= 1 / 3;
+  const matched = needed.filter((word) => answerWords.some((said) => sameWord(word, said)));
+
+  // One long, exact word is enough on its own: "concatenates" or "sıcaklık" is
+  // not something a learner writes by accident, and demanding a second word
+  // fails answers that say the same thing in fewer words.
+  if (matched.some((word) => word.length >= 7 && answerWords.includes(word))) return true;
+
+  // Otherwise a third of the point's own words, and never fewer than two of
+  // them unless the point is one word long. A third alone let filler score:
+  // with three-word points, one lucky common word carried the whole point.
+  return matched.length >= Math.min(2, needed.length) && matched.length / needed.length >= 1 / 3;
 }
 
 /**

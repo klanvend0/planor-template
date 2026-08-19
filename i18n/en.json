@@ -332,7 +332,8 @@
     "per_once": "%{price} once",
     "purchase_done": "You are Pro. Everything is unlocked.",
     "legal_no_trial": "Payment is charged to your Apple ID at confirmation of purchase. A subscription renews automatically unless it is cancelled at least 24 hours before the period ends. Manage or cancel it in your App Store account settings.",
-    "local_notice": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the trial really does end after %{days} days."
+    "local_notice": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the trial really does end after %{days} days.",
+    "local_notice_no_trial": "Demo mode: nothing is charged. This unlocks Pro on this device only, and the period really does end."
   },
   "settings": {
     "title": "Settings",

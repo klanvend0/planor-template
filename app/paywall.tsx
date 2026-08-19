@@ -198,7 +198,11 @@ export default function PaywallScreen() {
   const eligibleForTrial =
     selected !== null &&
     storeTrialDays !== null &&
-    (Platform.OS !== 'ios' || (trialEligibility[selected.product.identifier] ?? false));
+    // In local mode the eligibility map is the device's own record of whether
+    // the introductory offer has been taken, so it is authoritative on every
+    // platform — there is no Play-side filtering to defer to.
+    ((!USES_LOCAL_BACKEND && Platform.OS !== 'ios') ||
+      (trialEligibility[selected.product.identifier] ?? false));
   // Only ever rendered under `eligibleForTrial`, where the store's own number
   // exists; the fallback is there so the type does not need a non-null
   // assertion.
@@ -383,7 +387,9 @@ export default function PaywallScreen() {
             so the demo build says what it actually does instead. */}
         <Text className="text-center text-[11px] leading-4 text-muted-foreground">
           {USES_LOCAL_BACKEND
-            ? t('paywall.local_notice', { days: trialDays })
+            ? eligibleForTrial
+              ? t('paywall.local_notice', { days: trialDays })
+              : t('paywall.local_notice_no_trial')
             : eligibleForTrial
               ? t('paywall.legal')
               : t('paywall.legal_no_trial')}

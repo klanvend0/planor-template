@@ -78,6 +78,18 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
       return;
     }
 
+    // Registered before the restore attempt, not after it: if `getSession()`
+    // throws (a storage adapter that cannot read), the app would otherwise run
+    // with no listener at all, and a later sign-in would never reach the store.
+    supabase.auth.onAuthStateChange((_event, next) => {
+      set({
+        session: next,
+        user: next?.user ? fromSupabase(next.user) : null,
+        isAuthenticated: !!next,
+        isLoading: false,
+      });
+    });
+
     try {
       const {
         data: { session },
@@ -88,14 +100,6 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
         user: session?.user ? fromSupabase(session.user) : null,
         isAuthenticated: !!session,
         isLoading: false,
-      });
-
-      supabase.auth.onAuthStateChange((_event, next) => {
-        set({
-          session: next,
-          user: next?.user ? fromSupabase(next.user) : null,
-          isAuthenticated: !!next,
-        });
       });
     } catch (error) {
       // A learner who cannot be identified is sent to sign-in, not stranded on

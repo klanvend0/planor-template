@@ -79,6 +79,12 @@ export type LocalSubscription = {
 export type LocalDocument = {
   version: 1;
   user: { id: string; createdAt: string } | null;
+  /**
+   * When this device first started keeping progress. Held outside `user`
+   * because signing out clears who is playing but not what they have done —
+   * and "learning since" is part of what they have done.
+   */
+  startedAt: string | null;
   profile: LocalProfile;
   game: LocalGameState;
   lessons: Record<string, LessonProgress>;
@@ -94,6 +100,7 @@ export function emptyDocument(now: number = Date.now()): LocalDocument {
   return {
     version: 1,
     user: null,
+    startedAt: null,
     profile: {
       displayName: null,
       locale: 'en',

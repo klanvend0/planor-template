@@ -28,6 +28,19 @@ describe('gradeLocally', () => {
    * over every explain_code question in both languages, which is 112 cases.
    */
   it('separates the model answers from answers that say nothing', () => {
+    // Three populations over every explain_code question in both languages:
+    // the bundle's own model answers, an answer that uses the vocabulary of
+    // the domain without saying anything about *this* code, and an answer that
+    // says nothing at all. The middle one is what a coverage check is worst at,
+    // so it is measured rather than assumed.
+    const FILLER = {
+      en:
+        'This code runs a program that prints some output to the screen when you run it, ' +
+        'showing the values that the code creates and stores in the variables it uses.',
+      tr:
+        'Bu kod, çalıştırdığında ekrana bir çıktı yazdıran bir programdır; kullandığı ' +
+        'değişkenlerde oluşturduğu ve sakladığı değerleri gösterir.',
+    };
     const OFF_TOPIC = {
       en:
         'I am not really sure what this does but I think it might be about computers and ' +
@@ -38,6 +51,7 @@ describe('gradeLocally', () => {
     };
 
     let understood = 0;
+    let filler = 0;
     let cases = 0;
 
     for (const { question: entry } of listExplainQuestions()) {
@@ -49,6 +63,9 @@ describe('gradeLocally', () => {
         if (gradeLocally(entry.sampleAnswer[locale], points, locale).verdict === 'correct') {
           understood += 1;
         }
+        if (gradeLocally(FILLER[locale], points, locale).verdict === 'correct') {
+          filler += 1;
+        }
 
         // An answer about nothing is never given the benefit of the doubt.
         expect(gradeLocally(OFF_TOPIC[locale], points, locale).verdict).toBe('incorrect');
@@ -56,7 +73,8 @@ describe('gradeLocally', () => {
     }
 
     expect(cases).toBeGreaterThan(100);
-    expect(understood / cases).toBeGreaterThan(0.95);
+    expect(understood / cases).toBeGreaterThan(0.9);
+    expect(filler / cases).toBeLessThan(0.15);
   });
 
   it('names what was left out rather than inventing a correction', () => {

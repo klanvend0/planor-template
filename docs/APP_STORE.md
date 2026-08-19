@@ -17,14 +17,18 @@ subscription.
 So before any production build:
 
 ```bash
-grep -E 'EXPO_PUBLIC_SUPABASE_(URL|KEY)' .env    # both set, and pointing at production
-npx eas env:list --environment production        # same two present in EAS
+npx eas env:list --environment production        # the two Supabase variables, set
 ```
 
-`eas.json`'s production profile reads them from EAS environment variables, not
-from the local `.env`, so having them on your machine is not enough. The
-paywall's own copy is the tell: a build in local mode says "Demo mode: nothing
-is charged" where the billing terms should be.
+Each build profile in `eas.json` names an EAS environment (`development`,
+`preview`, `production`) and takes its variables from there. A local `.env` is
+not uploaded, so having the values on your machine is not enough — push them
+with `eas env:create --environment production`. Do not add an `env` block to a
+build profile: those values _override_ the environment's, which is how a
+placeholder ends up in a signed build.
+
+The paywall's own copy is the tell: a build in local mode says "Demo mode:
+nothing is charged" where the billing terms should be.
 
 ---
 
@@ -34,8 +38,7 @@ is charged" where the billing terms should be.
 | ---------- | -------------------------------------------------- | -------------------------------------- |
 | `app.json` | `expo.ios.bundleIdentifier`                        | `com.planor.codeling`                  |
 | `app.json` | `expo.ios.appleTeamId`                             | `__APPLE_TEAM_ID__`                    |
-| `eas.json` | `submit.production.ios.appleId`                    | `__APPLE_ID_EMAIL__`                   |
-| `eas.json` | `submit.production.ios.ascAppId`                   | `__APP_STORE_CONNECT_APP_ID__`         |
+| `eas.json` | `submit.production.ios` (`appleId`, `ascAppId`)    | empty — `eas submit` prompts otherwise |
 | `.env`     | `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_PRIVACY_URL` | codeling.app placeholders              |
 | `.env`     | `EXPO_PUBLIC_APP_STORE_ID`                         | empty (fill in after the first submit) |
 

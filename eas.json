@@ -7,45 +7,24 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "environment": "development",
       "ios": {
         "resourceClass": "m-medium",
         "simulator": false
-      },
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://your-project.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_KEY": "your-anon-or-publishable-key",
-        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_xxxxxxxxxxxxxxxxxxxx",
-        "EXPO_PUBLIC_TERMS_URL": "https://codeling.app/terms",
-        "EXPO_PUBLIC_PRIVACY_URL": "https://codeling.app/privacy"
       }
     },
     "preview": {
       "distribution": "internal",
+      "environment": "preview",
       "ios": {
         "resourceClass": "m-medium"
-      },
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://your-project.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_KEY": "your-anon-or-publishable-key",
-        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_xxxxxxxxxxxxxxxxxxxx",
-        "EXPO_PUBLIC_TERMS_URL": "https://codeling.app/terms",
-        "EXPO_PUBLIC_PRIVACY_URL": "https://codeling.app/privacy"
       }
     },
     "production": {
       "autoIncrement": true,
+      "environment": "production",
       "ios": {
         "resourceClass": "m-medium"
-      },
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://your-project.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_KEY": "your-anon-or-publishable-key",
-        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_xxxxxxxxxxxxxxxxxxxx",
-        "EXPO_PUBLIC_POSTHOG_API_KEY": "",
-        "EXPO_PUBLIC_POSTHOG_HOST": "https://eu.i.posthog.com",
-        "EXPO_PUBLIC_TERMS_URL": "https://codeling.app/terms",
-        "EXPO_PUBLIC_PRIVACY_URL": "https://codeling.app/privacy",
-        "EXPO_PUBLIC_SUPPORT_URL": "mailto:support@codeling.app"
       }
     }
   },

@@ -112,7 +112,8 @@ export async function currentUser(): Promise<{ id: string; createdAt: string } |
  */
 export async function signIn(): Promise<{ id: string; createdAt: string }> {
   const { result } = await mutateDocument((document) => {
-    document.user ??= { id: LOCAL_USER_ID, createdAt: new Date().toISOString() };
+    document.startedAt ??= new Date().toISOString();
+    document.user ??= { id: LOCAL_USER_ID, createdAt: document.startedAt };
     return document.user;
   });
   return result;
@@ -384,7 +385,7 @@ export async function fetchProfile(): Promise<Profile | null> {
     reminderHour: document.profile.reminderHour,
     onboardingCompleted: document.profile.onboardingCompleted,
     experienceLevel: document.profile.experienceLevel,
-    createdAt: document.user.createdAt,
+    createdAt: document.startedAt ?? document.user.createdAt,
   };
 }
 

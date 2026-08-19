@@ -69,6 +69,11 @@ export default function LoginScreen() {
       await startLocalSession();
       await syncProfile();
       router.replace('/(app)');
+    } catch (error) {
+      // The device refused to write, so there is no learner to start. Saying so
+      // beats a button that goes quiet.
+      console.warn('[login] could not start a local session', error);
+      Alert.alert(t('auth.sign_in'), t('errors.generic'));
     } finally {
       setBusy(null);
     }

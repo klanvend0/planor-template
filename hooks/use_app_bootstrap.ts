@@ -64,7 +64,21 @@ export function useAppBootstrap(): BootstrapState {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // The queue's owner is read from disk, so nothing may be decided about it
+  // until it is there: on a cold start it is null for a moment, and treating
+  // that as "signed out" throws away every write made offline.
+  const [queueHydrated, setQueueHydrated] = useState(() => useSyncQueue.persist.hasHydrated());
+
   useEffect(() => {
+    if (queueHydrated) return;
+    return useSyncQueue.persist.onFinishHydration(() => setQueueHydrated(true));
+  }, [queueHydrated]);
+
+  useEffect(() => {
+    // Same reasoning for auth: before it answers, `userId` is null for
+    // everybody, signed in or not.
+    if (isAuthLoading || !queueHydrated) return;
+
     if (!userId) {
       identifiedUser.current = null;
       resetAnalytics();
@@ -82,7 +96,7 @@ export function useAppBootstrap(): BootstrapState {
     identifyAnalytics(userId);
     void identify(userId);
     void refreshGame();
-  }, [clearGame, clearProgress, identify, refreshGame, userId]);
+  }, [clearGame, clearProgress, identify, isAuthLoading, queueHydrated, refreshGame, userId]);
 
   // 4. Keep the daily reminder's copy in step with the streak it talks about.
   const remindersEnabled = useSettingsStore((state) => state.remindersEnabled);
