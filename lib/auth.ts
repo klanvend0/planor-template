@@ -18,6 +18,10 @@ import { makeRedirectUri } from 'expo-auth-session';
 import * as Crypto from 'expo-crypto';
 import * as WebBrowser from 'expo-web-browser';
 
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
+import * as local from '@/services/local/backend';
+import { useAuthStore } from '@/stores/auth_store';
+
 import { supabase } from './supabase';
 
 // Ensure WebBrowser sessions are completed properly on Android.
@@ -215,6 +219,14 @@ export async function signInWithGoogleToken(
 
 /** Sign the learner out of Supabase. */
 export async function signOut(): Promise<AuthResult> {
+  if (USES_LOCAL_BACKEND) {
+    // Progress stays on the device; only the "who is playing" marker is cleared,
+    // so signing back in picks the same learner up where they left off.
+    await local.signOut();
+    useAuthStore.getState().clearAuth();
+    return { success: true };
+  }
+
   const { error } = await supabase.auth.signOut();
   if (error) return { success: false, reason: 'failed', error: error.message };
   return { success: true };

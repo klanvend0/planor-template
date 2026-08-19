@@ -27,6 +27,8 @@
     "sign_in_with_apple": "Continue with Apple",
     "sign_in_title": "Save your progress",
     "sign_in_subtitle": "Sign in so your streak, XP and lessons follow you everywhere.",
+    "start_local": "Start learning",
+    "local_notice": "No account needed. Everything you do stays on this device.",
     "terms_notice": "By continuing you agree to our Terms of Use and Privacy Policy.",
     "google_error": "Google sign-in did not complete.",
     "apple_error": "Apple sign-in did not complete.",

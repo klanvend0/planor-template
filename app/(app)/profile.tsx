@@ -58,11 +58,11 @@ export default function ProfileScreen() {
 
   // `created_at` is when the account was made, which is the only "learning
   // since" the app can prove.
-  const memberSince = user?.created_at
+  const memberSince = user?.createdAt
     ? new Intl.DateTimeFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {
         month: 'long',
         year: 'numeric',
-      }).format(new Date(user.created_at))
+      }).format(new Date(user.createdAt))
     : null;
 
   const level = levelFromXp(stats.totalXp);
@@ -96,7 +96,7 @@ export default function ProfileScreen() {
           />
           <View className="flex-1 gap-1">
             <Text className="font-display text-[20px] text-foreground" numberOfLines={1}>
-              {user?.user_metadata?.full_name ?? user?.email ?? t('app.name')}
+              {user?.fullName ?? user?.email ?? t('app.name')}
             </Text>
             <Text className="font-strong text-sm text-muted-foreground">
               {t('profile.level', { level: level.level })}

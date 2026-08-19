@@ -4,6 +4,10 @@
  * Apple and Google only — no passwords to forget. Apple sign-in is listed first
  * on iOS and is mandatory there while Google is offered (App Store Review 4.8).
  *
+ * With no Supabase project configured there is nothing to sign in to, so the
+ * screen offers to start playing on the device instead of showing two buttons
+ * that could only fail.
+ *
  * On success the answers collected during onboarding are pushed into `profiles`,
  * so a learner who signs in on a second device keeps their language, course and
  * daily goal.
@@ -21,6 +25,7 @@ import { GameButton } from '@/components/game_button';
 import { WelcomeIllustration } from '@/components/onboarding/illustrations';
 import { Text } from '@/components/ui/text';
 import { useTranslation } from '@/hooks/use_translation';
+import { USES_LOCAL_BACKEND } from '@/lib/backend_mode';
 import { signInWithApple, signInWithGoogle, type AuthResult } from '@/lib/auth';
 import { LINKS } from '@/lib/constants';
 import { openExternal } from '@/lib/links';
@@ -32,7 +37,8 @@ export default function LoginScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
-  const [busy, setBusy] = useState<'apple' | 'google' | null>(null);
+  const [busy, setBusy] = useState<'apple' | 'google' | 'local' | null>(null);
+  const startLocalSession = useAuthStore((state) => state.startLocalSession);
 
   const settings = useSettingsStore();
 
@@ -54,6 +60,17 @@ export default function LoginScreen() {
       });
     } catch (error) {
       console.warn('[login] profile sync failed', error);
+    }
+  };
+
+  const startLocally = async () => {
+    setBusy('local');
+    try {
+      await startLocalSession();
+      await syncProfile();
+      router.replace('/(app)');
+    } finally {
+      setBusy(null);
     }
   };
 
@@ -98,33 +115,45 @@ export default function LoginScreen() {
             {t('auth.sign_in_title')}
           </Text>
           <Text className="text-center text-[15px] leading-6 text-muted-foreground">
-            {t('auth.sign_in_subtitle')}
+            {USES_LOCAL_BACKEND ? t('auth.local_notice') : t('auth.sign_in_subtitle')}
           </Text>
         </View>
       </View>
 
       <View className="gap-3">
-        {Platform.OS === 'ios' ? (
+        {USES_LOCAL_BACKEND ? (
           <GameButton
-            label={t('auth.sign_in_with_apple')}
+            label={t('auth.start_local')}
             size="lg"
-            busy={busy === 'apple'}
+            busy={busy === 'local'}
             disabled={busy !== null}
-            onPress={() => void handle('apple', signInWithApple)}
+            onPress={() => void startLocally()}
           />
-        ) : null}
+        ) : (
+          <>
+            {Platform.OS === 'ios' ? (
+              <GameButton
+                label={t('auth.sign_in_with_apple')}
+                size="lg"
+                busy={busy === 'apple'}
+                disabled={busy !== null}
+                onPress={() => void handle('apple', signInWithApple)}
+              />
+            ) : null}
 
-        <GameButton
-          label={t('auth.sign_in_with_google')}
-          variant={Platform.OS === 'ios' ? 'secondary' : 'primary'}
-          size="lg"
-          busy={busy === 'google'}
-          disabled={busy !== null}
-          onPress={() => void handle('google', signInWithGoogle)}
-        />
+            <GameButton
+              label={t('auth.sign_in_with_google')}
+              variant={Platform.OS === 'ios' ? 'secondary' : 'primary'}
+              size="lg"
+              busy={busy === 'google'}
+              disabled={busy !== null}
+              onPress={() => void handle('google', signInWithGoogle)}
+            />
+          </>
+        )}
 
         <Text className="px-2 pt-2 text-center text-xs leading-5 text-muted-foreground">
-          {t('auth.terms_notice')}
+          {USES_LOCAL_BACKEND ? t('auth.local_notice') : t('auth.terms_notice')}
         </Text>
 
         <View className="flex-row items-center justify-center gap-6 pt-1">
