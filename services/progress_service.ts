@@ -111,6 +111,11 @@ export async function recordAnswer(params: {
   durationMs?: number;
   /** Practice runs log the attempt but never spend a heart. */
   isPractice?: boolean;
+  /**
+   * This attempt's id, minted once by the caller and reused on every retry.
+   * The server records the attempt under it, so a replay costs no second heart.
+   */
+  attemptId?: string;
 }): Promise<AnswerOutcome> {
   const { data, error } = await supabase.rpc('record_answer', {
     p_question_id: params.question.id,
@@ -121,6 +126,7 @@ export async function recordAnswer(params: {
     p_answer: params.answer ?? null,
     p_duration_ms: params.durationMs ?? null,
     p_practice: params.isPractice ?? false,
+    p_attempt_id: params.attemptId ?? null,
   });
   if (error) throw toAppError(error);
 

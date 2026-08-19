@@ -53,11 +53,13 @@ export function OrderLinesView({
     onChange(next.length === question.lines.length ? { type: 'order_lines', lines: next } : null);
   };
 
-  const remaining = shuffled.filter((line) => {
-    const placedCount = placed.filter((entry) => entry === line).length;
-    const totalCount = shuffled.filter((entry) => entry === line).length;
-    return placedCount < totalCount;
-  });
+  // Each placed line consumes one chip from the bank, not every chip with the
+  // same text: a snippet with two closing braces has to keep the second one
+  // selectable after the first is used.
+  const remaining = placed.reduce((pool, entry) => {
+    const at = pool.indexOf(entry);
+    return at < 0 ? pool : [...pool.slice(0, at), ...pool.slice(at + 1)];
+  }, shuffled);
 
   return (
     <QuestionShell

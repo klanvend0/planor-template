@@ -106,6 +106,7 @@ export interface Database {
           is_correct: boolean;
           answer: string | null;
           duration_ms: number | null;
+          attempt_id: string | null;
           created_at: string;
         };
         Insert: never;
@@ -231,6 +232,7 @@ export interface Database {
           p_answer?: string | null;
           p_duration_ms?: number | null;
           p_practice?: boolean;
+          p_attempt_id?: string | null;
         };
         Returns: { hearts_left: number; unlimited_hearts: boolean }[];
       };

@@ -6,9 +6,11 @@
  * time a call succeeds, which keeps XP and streaks honest without blocking play.
  *
  * Constraints:
- * - Only *idempotent-enough* writes belong here. Replaying `record_answer` twice
- *   costs an extra attempt row, never an extra heart, because the server settles
- *   hearts from its own state.
+ * - Replay has to be free. The queue is at-least-once by construction — an
+ *   entry is dropped only after the write is acknowledged, so a response lost
+ *   after the server committed comes back around. Answers therefore carry an
+ *   `attemptId` the server dedupes on, and `complete_lesson` pays for score
+ *   improvement only, so replaying either one costs nothing.
  * - The queue is capped; the oldest entries are dropped first so a long offline
  *   stretch cannot grow storage without bound.
  *
@@ -40,6 +42,8 @@ export type QueuedAnswer = {
     answer?: string;
     durationMs?: number;
     isPractice?: boolean;
+    /** Minted before the first attempt, so the replay dedupes against it. */
+    attemptId?: string;
   };
 };
 
@@ -141,6 +145,7 @@ export const useSyncQueue = create<SyncQueueState & SyncQueueActions>()(
                   answer: entry.payload.answer,
                   durationMs: entry.payload.durationMs,
                   isPractice: entry.payload.isPractice,
+                  attemptId: entry.payload.attemptId,
                 });
               } else {
                 await completeLesson(entry.payload);

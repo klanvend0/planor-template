@@ -8,8 +8,10 @@
  * @module stores/game_store
  */
 
+import { randomUUID } from 'expo-crypto';
 import { create } from 'zustand';
 
+import { PASS_SCORE } from '@/lib/constants';
 import { MAX_HEARTS, starsForScore } from '@/lib/gamification';
 import { AppError, toAppError } from '@/lib/errors';
 import type { CourseId, Question } from '@/lib/content_schema';
@@ -70,34 +72,71 @@ const emptyState: GameStoreState = {
   pendingSync: false,
 };
 
-/** Local mirror of the server's scoring, used when a write has to be queued. */
+/**
+ * Local mirror of the server's scoring, used when a write has to be queued.
+ *
+ * It follows `complete_lesson`'s rules — improvement-only XP, the perfect and
+ * seven-day bonuses, the streak with its freeze — because the number it
+ * produces is the one the results screen shows. It remains an estimate: the
+ * server scores against `lesson_catalog`, and the cached lesson row this reads
+ * may be missing on a cold offline start, in which case the run is treated as a
+ * first completion.
+ */
 function localLessonResult(
   state: GameState | null,
   params: {
+    lessonId: string;
     correct: number;
     total: number;
     baseXp: number;
   }
 ): LessonResult {
   const score = Math.round((params.correct / Math.max(1, params.total)) * 100);
-  const perfectBonus = score === 100 ? 10 : 0;
-  const awarded = Math.round(params.baseXp * (score / 100)) + perfectBonus;
+
+  const previous = useProgressStore.getState().byLesson[params.lessonId];
+  const bestBefore = previous?.bestScore ?? 0;
+  // The server counts an `in_progress` row as still unfinished, so a failed
+  // first attempt does not spend the first-completion.
+  const isFirstCompletion = previous?.status !== 'completed';
+
+  // XP pays for improvement only: replaying a cleared lesson pays nothing.
+  const award = score > bestBefore ? Math.round(params.baseXp * ((score - bestBefore) / 100)) : 0;
+  const perfectBonus = score === 100 && bestBefore < 100 ? 10 : 0;
+
   const today = new Date().toISOString().slice(0, 10);
-  const streak =
-    state?.lastActiveDate === today ? (state?.streakDays ?? 0) : (state?.streakDays ?? 0) + 1;
+  const lastActive = state?.lastActiveDate ?? null;
+  const daysSince = lastActive
+    ? Math.round(
+        (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${lastActive}T00:00:00Z`)) / 86_400_000
+      )
+    : null;
+  const current = state?.streakDays ?? 0;
+  const streakDays =
+    daysSince === null
+      ? 1
+      : daysSince <= 0
+        ? current
+        : daysSince === 1
+          ? current + 1
+          : daysSince === 2 && (state?.streakFreezes ?? 0) > 0
+            ? current + 1
+            : 1;
+
+  // Only the first lesson of a day can reach a seven-day mark, exactly as the
+  // RPC's `last_active_date is distinct from` guard has it.
+  const streakBonus = lastActive !== today && streakDays > 0 && streakDays % 7 === 0 ? 25 : 0;
+  const awarded = award + perfectBonus + streakBonus;
 
   return {
     totalXp: (state?.totalXp ?? 0) + awarded,
     xpAwarded: awarded,
     perfectBonus,
-    // The seven-day bonus depends on server-held streak history, so the
-    // optimistic result never promises one; the real figure lands on sync.
-    streakBonus: 0,
-    streakDays: streak,
+    streakBonus,
+    streakDays,
     hearts: state?.hearts ?? MAX_HEARTS,
-    stars: score === 100 ? 3 : score >= 80 ? 2 : score >= 50 ? 1 : 0,
+    stars: starsForScore(score),
     score,
-    isFirstCompletion: true,
+    isFirstCompletion,
     dailyXp: (state?.dailyXp ?? 0) + awarded,
   };
 }
@@ -126,9 +165,13 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
   submitAnswer: async (params) => {
     const state = get().state;
     const unlimited = state?.hasSubscription ?? false;
+    // Minted here rather than at enqueue time: the queue entry is only created
+    // after the first call already failed, and the whole point is that the
+    // replay carries the same id as the attempt that may have landed.
+    const attemptId = randomUUID();
 
     try {
-      const outcome = await recordAnswerRpc(params);
+      const outcome = await recordAnswerRpc({ ...params, attemptId });
       set((current) => ({
         state: current.state ? { ...current.state, hearts: outcome.heartsLeft } : current.state,
         pendingSync: false,
@@ -149,6 +192,7 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
           answer: params.answer,
           durationMs: params.durationMs,
           isPractice: params.isPractice,
+          attemptId,
         },
       });
 
@@ -180,7 +224,7 @@ export const useGameStore = create<GameStoreState & GameStoreActions>((set, get)
               dailyXp: result.dailyXp,
               lessonsCompleted:
                 current.state.lessonsCompleted +
-                (result.isFirstCompletion && result.score >= 50 ? 1 : 0),
+                (result.isFirstCompletion && result.score >= PASS_SCORE ? 1 : 0),
               lastActiveDate: new Date().toISOString().slice(0, 10),
             }
           : current.state,

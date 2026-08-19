@@ -127,8 +127,6 @@ export function useLessonSession(
   const firstTryCorrect = useRef(new Set<string>());
   /** Questions already sent to the back of the queue, so they re-queue only once. */
   const requeued = useRef(new Set<string>());
-  /** Questions the learner has seen, for the question counter. */
-  const seen = useRef(new Set<string>());
   /** Questions that will not be asked again — right, or already retried once. */
   const resolved = useRef(new Set<string>());
   /**
@@ -143,15 +141,22 @@ export function useLessonSession(
 
   const question = queue[0] ?? null;
   const total = Math.max(1, sourceQuestions.length - skippedCount);
+  // Where the question on screen sits in the lesson, counted over the questions
+  // actually being asked. Derived from the lesson itself rather than from a set
+  // that grows as answers land, so the number cannot run ahead of the screen
+  // during feedback, and a re-queued question comes back under its own number.
+  const askedIndex = question
+    ? sourceQuestions
+        .filter((entry) => !skipped.current.has(entry.id))
+        .findIndex((entry) => entry.id === question.id)
+    : -1;
 
   const state = useMemo<SessionState>(
     () => ({
       phase,
       question,
       presentation,
-      // During feedback the counter stays on the question being discussed
-      // rather than jumping ahead to the next one.
-      position: Math.min(total, Math.max(1, resolved.current.size + (question ? 1 : 0))),
+      position: askedIndex < 0 ? total : Math.min(total, askedIndex + 1),
       total,
       // Progress counts questions that are done with, so finishing a lesson
       // always fills the bar — even one that took a second attempt.
@@ -168,6 +173,7 @@ export function useLessonSession(
     [
       phase,
       question,
+      askedIndex,
       total,
       lastResult,
       review,
@@ -188,8 +194,6 @@ export function useLessonSession(
   /** Report the answer, spend a heart when needed, and show feedback. */
   const settle = useCallback(
     async (current: Question, result: CheckResult) => {
-      seen.current.add(current.id);
-
       if (result.isCorrect) {
         if (!requeued.current.has(current.id)) firstTryCorrect.current.add(current.id);
         void correctFeedback();
@@ -360,7 +364,6 @@ export function useLessonSession(
 
   const skip = useCallback(() => {
     if (!question) return;
-    seen.current.add(question.id);
     if (!skipped.current.has(question.id)) {
       skipped.current.add(question.id);
       setSkippedCount(skipped.current.size);

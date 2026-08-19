@@ -28,6 +28,15 @@ jest.mock('react-native-purchases', () => ({
   INTRO_ELIGIBILITY_STATUS: { INTRO_ELIGIBILITY_STATUS_ELIGIBLE: 2 },
 }));
 
+jest.mock('expo-crypto', () => {
+  let counter = 0;
+  return {
+    randomUUID: jest.fn(
+      () => `00000000-0000-4000-8000-${String((counter += 1)).padStart(12, '0')}`
+    ),
+  };
+});
+
 jest.mock('expo-haptics', () => ({
   impactAsync: jest.fn(async () => undefined),
   notificationAsync: jest.fn(async () => undefined),

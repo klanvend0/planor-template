@@ -105,6 +105,11 @@ create table if not exists public.question_attempts (
   is_correct boolean not null,
   answer text,
   duration_ms integer check (duration_ms >= 0),
+  -- Minted by the client before the first attempt to write this answer, and
+  -- replayed verbatim by the offline queue. It is what makes `record_answer`
+  -- idempotent: a response lost after the row committed must not cost a second
+  -- heart when the queue retries. Null for any caller that does not send one.
+  attempt_id uuid,
   created_at timestamptz not null default now()
 );
 
@@ -112,6 +117,9 @@ create index if not exists question_attempts_user_created_idx
   on public.question_attempts (user_id, created_at desc);
 create index if not exists question_attempts_user_question_idx
   on public.question_attempts (user_id, question_id);
+create unique index if not exists question_attempts_attempt_idx
+  on public.question_attempts (user_id, attempt_id)
+  where attempt_id is not null;
 create index if not exists question_attempts_mistakes_idx
   on public.question_attempts (user_id, is_correct, created_at desc)
   where is_correct = false;
@@ -414,6 +422,11 @@ $$;
  * A wrong answer costs a heart unless the learner has an active subscription or
  * the answer came from a practice run — practice is a warm-up over questions
  * already met, so it never puts the lesson path out of reach.
+ *
+ * @param p_attempt_id  The client's id for this attempt. Replaying it is free:
+ *                      the row is already there, so no second heart is spent.
+ *                      The offline queue is at-least-once, so it always sends
+ *                      one.
  */
 create or replace function public.record_answer(
   p_question_id text,
@@ -423,7 +436,8 @@ create or replace function public.record_answer(
   p_is_correct boolean,
   p_answer text default null,
   p_duration_ms integer default null,
-  p_practice boolean default false
+  p_practice boolean default false,
+  p_attempt_id uuid default null
 )
 returns table (hearts_left smallint, unlimited_hearts boolean)
 language plpgsql
@@ -434,22 +448,33 @@ declare
   v_user uuid := auth.uid();
   v_unlimited boolean;
   v_hearts smallint;
+  -- `get diagnostics ... row_count` is an integer, and 0 means the insert hit
+  -- the idempotency index rather than writing a new attempt.
+  v_recorded integer;
 begin
   if v_user is null then
     raise exception 'authentication required' using errcode = '28000';
   end if;
 
   insert into public.question_attempts (
-    user_id, question_id, lesson_id, course_id, question_type, is_correct, answer, duration_ms
+    user_id, question_id, lesson_id, course_id, question_type, is_correct, answer, duration_ms,
+    attempt_id
   ) values (
     v_user, p_question_id, p_lesson_id, p_course_id, p_question_type, p_is_correct,
-    left(coalesce(p_answer, ''), 500), p_duration_ms
-  );
+    left(coalesce(p_answer, ''), 500), p_duration_ms, p_attempt_id
+  )
+  on conflict (user_id, attempt_id) where attempt_id is not null do nothing;
+
+  get diagnostics v_recorded = row_count;
 
   v_unlimited := public.has_active_subscription(v_user);
+  -- Hearts still have to settle on a replay: the learner may have been away
+  -- long enough to regenerate some.
   v_hearts := public.settle_hearts(v_user);
 
-  if not p_is_correct and not v_unlimited and not coalesce(p_practice, false) then
+  -- A replay of an answer that already landed returns the current balance
+  -- without charging for it again.
+  if v_recorded > 0 and not p_is_correct and not v_unlimited and not coalesce(p_practice, false) then
     update public.game_state
       set hearts = greatest(0, hearts - 1)::smallint,
           hearts_updated_at = case when hearts = 5 then now() else hearts_updated_at end,
@@ -794,7 +819,7 @@ as $$
   limit least(coalesce(p_limit, 20), 50);
 $$;
 
-grant execute on function public.record_answer(text, text, text, text, boolean, text, integer, boolean) to authenticated;
+grant execute on function public.record_answer(text, text, text, text, boolean, text, integer, boolean, uuid) to authenticated;
 grant execute on function public.complete_lesson(text, text, text, integer, integer, integer, date) to authenticated;
 grant execute on function public.get_game_state() to authenticated;
 grant execute on function public.refill_hearts() to authenticated;

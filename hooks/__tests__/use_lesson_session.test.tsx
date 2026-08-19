@@ -238,6 +238,49 @@ describe('useLessonSession', () => {
     );
   });
 
+  it('counts the question on screen, not the one coming next', async () => {
+    const location = makeLocation([choice('q1'), choice('q2'), choice('q3')]);
+    const { result } = renderHook(() => useLessonSession(location));
+
+    act(() => result.current.begin());
+    expect(result.current.position).toBe(1);
+
+    await act(async () => {
+      await result.current.submit({ type: 'multiple_choice', optionId: 'a' });
+    });
+    // Still on q1: the feedback for it is what the learner is reading.
+    expect(result.current.phase).toBe('feedback');
+    expect(result.current.position).toBe(1);
+
+    await act(async () => {
+      await result.current.next();
+    });
+    expect(result.current.position).toBe(2);
+
+    // A miss does not stall the counter for the rest of the run either.
+    await act(async () => {
+      await result.current.submit({ type: 'multiple_choice', optionId: 'b' });
+    });
+    await act(async () => {
+      await result.current.next();
+    });
+    expect(result.current.question?.id).toBe('q3');
+    expect(result.current.position).toBe(3);
+  });
+
+  it('renumbers around a skipped question', async () => {
+    const location = makeLocation([choice('q1'), choice('q2'), choice('q3')]);
+    const { result } = renderHook(() => useLessonSession(location));
+
+    act(() => result.current.begin());
+    act(() => result.current.skip());
+
+    // q1 left the lesson, so q2 is the first of two.
+    expect(result.current.question?.id).toBe('q2');
+    expect(result.current.total).toBe(2);
+    expect(result.current.position).toBe(1);
+  });
+
   it('stops the lesson when the last heart is spent', async () => {
     mockSubmitAnswer.mockResolvedValue({ heartsLeft: 0, unlimitedHearts: false });
 
