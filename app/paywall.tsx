@@ -348,7 +348,7 @@ export default function PaywallScreen() {
 
                   {isAnnual ? (
                     <View className="rounded-full bg-xp px-2.5 py-1">
-                      <Kicker className="text-[11px] tracking-wide text-success">
+                      <Kicker className="text-[11px] tracking-wide text-xp-foreground">
                         {t('paywall.best_value')}
                       </Kicker>
                     </View>

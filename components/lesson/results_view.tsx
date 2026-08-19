@@ -35,7 +35,8 @@ function StatTile({
   return (
     <View
       className={cn(
-        'flex-1 gap-1 rounded-2xl border-2 px-3 py-3',
+        // Even heights across the row, whatever the label does at this width.
+        'min-h-[86px] flex-1 justify-between rounded-2xl border-2 px-3 py-3',
         tone === 'xp' && 'border-xp/40 bg-xp/10',
         tone === 'success' && 'border-success/40 bg-success/10',
         tone === 'streak' && 'border-streak/40 bg-streak/10'

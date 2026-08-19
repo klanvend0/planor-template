@@ -33,7 +33,9 @@ import { useGameStore } from '@/stores/game_store';
 
 function StatCell({ label, value }: { label: string; value: string }) {
   return (
-    <View className="flex-1 gap-1 rounded-2xl border border-border bg-card px-3 py-3">
+    // A fixed height keeps the row even when one label wraps to two lines and
+    // its neighbours do not.
+    <View className="min-h-[92px] flex-1 justify-between rounded-2xl border border-border bg-card px-3 py-3">
       <Kicker className="text-[11px] tracking-wide">{label}</Kicker>
       <Text className="font-num text-[20px] text-foreground">{value}</Text>
     </View>
@@ -97,7 +99,7 @@ export default function ProfileScreen() {
           />
           <View className="flex-1 gap-1">
             <Text className="font-display text-[20px] text-foreground" numberOfLines={1}>
-              {user?.fullName ?? user?.email ?? t('app.name')}
+              {user?.fullName ?? user?.email ?? t('profile.learner')}
             </Text>
             <Text className="font-strong text-sm text-muted-foreground">
               {t('profile.level', { level: level.level })}

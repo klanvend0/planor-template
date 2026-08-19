@@ -9,6 +9,8 @@
  */
 
 import '@/global.css';
+// Registers `className` on Reanimated's components; must run before any screen.
+import '@/lib/nativewind_interop';
 
 import { Inter_500Medium, Inter_700Bold, Inter_800ExtraBold } from '@expo-google-fonts/inter';
 import {

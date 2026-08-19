@@ -220,6 +220,7 @@
   },
   "profile": {
     "title": "Profil",
+    "learner": "Öğrenci",
     "level": "Seviye %{level}",
     "level_progress": "%{next}. seviyeye %{current}/%{target} XP",
     "stats": "İstatistikler",

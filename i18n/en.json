@@ -220,6 +220,7 @@
   },
   "profile": {
     "title": "Profile",
+    "learner": "Learner",
     "level": "Level %{level}",
     "level_progress": "%{current}/%{target} XP to level %{next}",
     "stats": "Stats",
