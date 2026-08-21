@@ -15,6 +15,7 @@
     "content:check": "node scripts/check_content.mts",
     "db:check": "node scripts/check_schema.mts",
     "functions:check": "node scripts/check_functions.mts",
+    "preview:build": "node scripts/build_preview.mts",
     "icon:build": "node scripts/build_icons.mts",
     "supabase:login": "npx supabase login",
     "supabase:link": "npx supabase link",

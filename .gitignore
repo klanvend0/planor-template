@@ -57,3 +57,5 @@ android/
 *.ipa
 *.apk
 *.adb
+# Single-file preview built by `npm run preview:build`
+preview/
